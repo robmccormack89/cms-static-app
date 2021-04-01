@@ -7,3 +7,4 @@ package-lock.json
 composer.lock
 yarn.lock
 .git
+.ftp-config
