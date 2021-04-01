@@ -11,8 +11,10 @@ $loader = new \Twig\Loader\FilesystemLoader($viewsDir);
 
 $SiteTitle = 'Your Site Title';
 $SomeOtherVariable = 'Lorem Ipsum Dolor';
+$dateYear = date("Y");
 
 $twig = new \Twig\Environment($loader);
 
 $twig->addGlobal('SiteTitle', $SiteTitle);
 $twig->addGlobal('SomeOtherVariable', $SomeOtherVariable);
+$twig->addGlobal('date_year', $dateYear );

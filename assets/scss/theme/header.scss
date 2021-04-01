@@ -1,0 +1,27 @@
+// uk-logo img
+.uk-logo > img {
+  height: 30px;
+}
+// custom dropdown icon
+.fa-angle-down.fa-sm.dropdown-icon {
+  margin-left: 3px;
+  margin-top: 2px;
+}
+// search input icon
+.search-input-icon {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: auto;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  color: $global-muted-color;
+  width: 40px;
+}
+// header logo / tagline
+.header-logo .site-logo, 
+.header-logo .site-tagline {
+  line-height: $global-font-size;
+}

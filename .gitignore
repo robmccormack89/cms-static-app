@@ -8,3 +8,4 @@ composer.lock
 yarn.lock
 .git
 .ftp-config
+notes.md

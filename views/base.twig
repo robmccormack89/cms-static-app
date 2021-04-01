@@ -5,8 +5,52 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ SiteTitle }}</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=PT+Serif&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="/assets/css/base.css">
-    <script src="/assets/js/main/main.js"></script>
+    <link rel="stylesheet" type="text/css" href="/assets/css/global.css">
+    <script src="/assets/js/global/base.min.js"></script>
+    <style>
+      /* font stylings */
+      html,
+      .pt-serif {
+        font-family: 'PT Serif', serif;
+      }
+      .uk-h1, .uk-h2, .uk-h3, .uk-h4, .uk-h5, .uk-h6, 
+      .uk-heading-2xlarge, .uk-heading-large, .uk-heading-medium, .uk-heading-small, .uk-heading-xlarge, h1, h2, h3, h4, h5, h6,
+      .uk-logo {
+        font-family: 'Poppins', sans-serif;
+        letter-spacing: -1px;
+        font-weight: 700;
+        word-spacing: 2px;
+      }
+      .poppins, 
+      .site-tagline, 
+      .uk-article-meta, 
+      .uk-label, 
+      .uk-navbar-item, .uk-navbar-nav>li>a, .uk-navbar-toggle,
+      .uk-button {
+        font-family: 'Poppins', sans-serif;
+      }
+      .uk-label, .uk-light .uk-label {
+        background-color: #f10;
+        color: #fff;
+        font-weight: 700;
+      }
+      .uk-button {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 700;
+        letter-spacing: -1px;
+        word-spacing: 1px;
+      }
+      /* reset bold elements */
+      .uk-text-lead {
+        font-size: 1.3rem;
+      }
+      .uk-light .uk-text-lead {
+        color: #fff;
+      }
+    </style>
   </head>
   
   <body>
@@ -14,10 +58,12 @@
     {% block header %}
       {% include 'header.twig' %}
     {% endblock %}
-      
-    {% block content %}
-      Sorry, Nothing to Display!!
-    {% endblock %}
+    
+    <main id="MainContent" role="main">
+      {% block content %}
+        Sorry, Nothing to Display!!
+      {% endblock %}
+    </main>
 
     {% block footer %}
       {% include 'footer.twig' %}
