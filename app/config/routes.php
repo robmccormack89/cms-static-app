@@ -1,36 +1,28 @@
-
 <?php
 
 require_once('router.php');
 
-// ##################################################
-// ##################################################
-// ##################################################
-
-// Static GET
-// In the URL -> http://localhost
-// The output -> Index
-// get('/', $rts);
-
+// homepage
 $router->get('/', function(){
-  require_once($_SERVER['DOCUMENT_ROOT'] . '/app/core/Core_controller.php');
-  $Core_controller->home();
+  $GLOBALS['Core_controller']->home();
 });
 
-$router->get('/about', function(){
-  require_once($_SERVER['DOCUMENT_ROOT'] . '/app/core/Core_controller.php');
-  $Core_controller->about();
-});
-
-$router->get('/pages/:slug', function($slug){
-  require_once($_SERVER['DOCUMENT_ROOT'] . '/app/core/Core_controller.php');
-  $Core_controller->page($slug);
-  // echo "The slug passed is: $slug ";
-});
-
-// $router->any('/404', function(){
-//   echo $GLOBALS['twig']->render('404.twig');
+// about page
+// $router->get('/about', function(){
+//   require_once($_SERVER['DOCUMENT_ROOT'] . '/app/core/Core_controller.php');
+//   $Core_controller->about();
 // });
+
+// dynamic page
+$router->get('/:slug', function($slug){
+  $GLOBALS['Core_controller']->page($slug);
+  // $Core_controller->page($slug);
+});
+
+// error (goes last)
+$router->any('/404', function(){
+  echo $GLOBALS['twig']->render('404.twig');
+});
 
 // Dynamic GET. Example with 1 variable
 // In the URL -> http://localhost/user/111

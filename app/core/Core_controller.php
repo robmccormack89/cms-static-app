@@ -1,39 +1,72 @@
 <?php
 
 class Core_controller {
+  
+  protected $twig;
+  
+  public function __construct()
+  {    
+      $views = array(
+        '../app/views/',
+        '../app/views/pages',
+        '../app/views/parts'
+      );
+      $loader = new \Twig\Loader\FilesystemLoader($views);
+
+      $this->twig = new \Twig\Environment($loader);
+      
+      $SiteTitle = 'Your Site Title';
+      $SomeOtherVariable = 'Lorem Ipsum Dolor';
+      $dateYear = date("Y");
+      
+      $this->twig->addGlobal('SiteTitle', $SiteTitle);
+      $this->twig->addGlobal('SomeOtherVariable', $SomeOtherVariable);
+      $this->twig->addGlobal('date_year', $dateYear );
+  }
 
   public function home() {
     $context['title'] = 'Homepage';
-    
-    $template = $GLOBALS['twig']->load('homepage.twig');
-    echo $template->render($context);
-  }
-  
-  public function about() {
-    
-    $fruit = new Fruit;
-    $cars = new Cars;
-    $movies = new Movies;
-    $context['fruits'] = $fruit->get_fruit();
-    $context['cars'] = $cars->get_cars();
-    $context['movies'] = $movies->get_movies();
-    
-    $context['title'] = 'About Page';
-    
-    $template = $GLOBALS['twig']->load('about.twig');
-    echo $template->render($context);
+    echo $this->twig->render('homepage.twig', $context);
   }
   
   public function page($slug) {
     
-    $pages = new Page;
-    $context['page'] = $pages->get_page_by_slug($slug);
+    $page = new Page;
+    $reqPage = $page->get_page_by_slug($slug);
     
-    // render the context in  twig 
-    $template = $GLOBALS['twig']->load('page.twig');
-    echo $template->render($context);
+    // if the page requested actually exists
+    if ($reqPage) {
+      // assign the page variable to twig context & render page.twig
+      $context['page'] = $reqPage;
+      // if custom page template exists
+      if ($this->twig->getLoader()->exists('page-'.$slug.'.twig')) {
+        echo $this->twig->render('page-'.$slug.'.twig', $context);
+      } else {
+        // render the default page template
+        echo $this->twig->render('page.twig', $context);
+      }
+    } else {
+      // else, render the 404 template
+      echo $this->twig->render('404.twig');
+    }
+    
   }
   
+  // public function about() {
+  // 
+  //   $fruit = new Fruit;
+  //   $cars = new Cars;
+  //   $movies = new Movies;
+  //   $context['fruits'] = $fruit->get_fruit();
+  //   $context['cars'] = $cars->get_cars();
+  //   $context['movies'] = $movies->get_movies();
+  // 
+  //   $context['title'] = 'About Page';
+  // 
+  //   $template = $this->twig->load('about.twig');
+  //   echo $template->render($context);
+  // }
+  
 }
-
-$Core_controller = new Core_controller;
+// 
+// $Core_controller = new Core_controller;
