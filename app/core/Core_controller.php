@@ -3,33 +3,39 @@
 class Core_controller {
   
   protected $twig;
+  public $site; 
   
   public function __construct()
   {    
-      $views = array(
-        '../app/views/',
-        '../app/views/pages',
-        '../app/views/parts'
-      );
-      $loader = new \Twig\Loader\FilesystemLoader($views);
+    
+    $theSite = new Site;
 
-      $this->twig = new \Twig\Environment($loader);
-      
-      $SiteTitle = 'Your Site Title';
-      $SomeOtherVariable = 'Lorem Ipsum Dolor';
-      $dateYear = date("Y");
-      
-      $this->twig->addGlobal('SiteTitle', $SiteTitle);
-      $this->twig->addGlobal('SomeOtherVariable', $SomeOtherVariable);
-      $this->twig->addGlobal('date_year', $dateYear );
-  }
+    $views = array(
+      '../app/views/',
+      '../app/views/pages',
+      '../app/views/parts'
+    );
+    $loader = new \Twig\Loader\FilesystemLoader($views);
 
-  public function home() {
-    $context['title'] = 'Homepage';
-    echo $this->twig->render('homepage.twig', $context);
+    $this->twig = new \Twig\Environment($loader, [
+      'debug' => true,
+      // ...
+    ]);
+    $this->twig->addExtension(new \Twig\Extension\DebugExtension());
+    
+    $site = $theSite->get_site();
+    
+    $SiteTitle = 'Your Site Title';
+    $SomeOtherVariable = 'Lorem Ipsum Dolor';
+    $dateYear = date("Y");
+    
+    $this->twig->addGlobal('SiteTitle', $SiteTitle);
+    $this->twig->addGlobal('SomeOtherVariable', $SomeOtherVariable);
+    $this->twig->addGlobal('date_year', $dateYear );
+    $this->twig->addGlobal('site', $site );
   }
   
-  public function page($slug) {
+  public function any($slug) {
     
     $page = new Page;
     $reqPage = $page->get_page_by_slug($slug);
@@ -50,6 +56,10 @@ class Core_controller {
       echo $this->twig->render('404.twig');
     }
     
+  }
+  
+  public function error() {
+    echo $this->twig->render('404.twig');
   }
   
   // public function about() {

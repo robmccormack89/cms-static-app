@@ -1,49 +1,27 @@
 {% extends "base.twig" %}
 
 {% block content %}
-  <h2>{{page.title}}</h2>
-  <!-- <section class="cars-section uk-section uk-section-muted">
-    <div class="cars-container uk-container">
-      {% if cars %}
-        <ul class="fruits-list uk-list uk-list-divider">
-          {% for car in cars %}
-            <li>
-              {{car}}
-            </li>
-          {% endfor %}
-        </ul>
-      {% else %}
-        Nothing to see here
-      {% endif %}
-    </div>
-  </section>
-  <section class="fruits-section uk-section uk-container">
-    {% if fruits %}
-      <ul class="fruits-list uk-list uk-list-divider">
-        {% for fruit in fruits %}
-          <li>
-            {{fruit}}
-          </li>
-        {% endfor %}
-      </ul>
-    {% else %}
-      Nothing to see here
-    {% endif %}
-  </section>
-  <section class="movies-section uk-section uk-section-muted">
-    <div class="movies-container uk-container">
-      {% if movies %}
-        <ul class="fruits-list uk-list uk-list-divider">
-          {% for movie in movies %}
-            <li>
-              {{movie.title}}
-            </li>
-          {% endfor %}
-        </ul>
-      {% else %}
-        Nothing to see here
-      {% endif %}
-    </div>
-  </section> -->
+<div id="Single{{page.id}}" class="page-{{page.id}} page uk-section uk-container" data-template="page.twig">
+  <div class="uk-grid-large uk-grid" uk-grid="">
+
+    <section class="left-section uk-width-2-3@m uk-first-column">
+      <article class="uk-article">
+
+        <header class="article-header">
+          <h1 class="uk-article-title">{{page.title}}</h1>
+        </header>
+
+        {% block page_content %}
+          {% include 'sample-content.twig' %}
+        {% endblock %}
+
+      </article>
+    </section>
+
+    {% include 'sidebar.twig' %}
+
+  </div>
+
+</div>
 {% endblock %}
 

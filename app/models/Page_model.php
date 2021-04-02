@@ -8,22 +8,28 @@ class Page {
     // nested array (like an array of post objects)
     $data = array(
       array(
-        "title" => "One",
+        "id" => 1,
+        "title" => "Homepage",
+        "slug" => "index",
+        "author" => "Robert McCormack"
+      ),
+      array(
+        "id" => 2,
+        "title" => "About page",
         "slug" => "about",
-        "director" => "Alfred Hitchcock",
-        "year" => 1954
+        "author" => "Robert McCormack"
       ),
       array(
-        "title" => "Two",
-        "slug" => "two",
-        "director" => "Stanley Kubrick",
-        "year" => 1987
+        "id" => 3,
+        "title" => "Contact",
+        "slug" => "contact",
+        "author" => "Robert McCormack"
       ),
       array(
-        "title" => "Three",
-        "slug" => "three",
-        "director" => "Martin Scorsese",
-        "year" => 1973
+        "id" => 4,
+        "title" => "Policies",
+        "slug" => "policies",
+        "author" => "Robert McCormack"
       )
     );
     return $data;

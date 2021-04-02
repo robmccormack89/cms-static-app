@@ -10,6 +10,8 @@
     <link rel="stylesheet" type="text/css" href="/public/css/base.css">
     <link rel="stylesheet" type="text/css" href="/public/css/global.css">
     <script src="/public/js/global/base.min.js"></script>
+    {% block styles %}
+    {% endblock %}
     <style>
       /* font stylings */
       html,
@@ -69,5 +71,15 @@
       {% include 'footer.twig' %}
     {% endblock %}
 
+    {% block scripts %}
+    {% endblock %}
+    
+    <script type='text/javascript' src='/public/js/global/global.min.js?ver=5.7'></script>
+    <script type='text/javascript' src='/public/js/theme.js?ver=5.7'></script>
+    <script>
+      window.onload = function() {
+        themePaginationScroll()
+      };
+    </script>
   </body>
 </html>

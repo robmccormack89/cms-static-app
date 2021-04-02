@@ -4,7 +4,7 @@ require_once('router.php');
 
 // homepage
 $router->get('/', function(){
-  $GLOBALS['Core_controller']->home();
+  $GLOBALS['Home_controller']->index();
 });
 
 // about page
@@ -15,13 +15,13 @@ $router->get('/', function(){
 
 // dynamic page
 $router->get('/:slug', function($slug){
-  $GLOBALS['Core_controller']->page($slug);
-  // $Core_controller->page($slug);
+  $GLOBALS['Core_controller']->any($slug);
 });
 
 // error (goes last)
 $router->any('/404', function(){
-  echo $GLOBALS['twig']->render('404.twig');
+  // echo $GLOBALS['twig']->render('404.twig');
+  $GLOBALS['Core_controller']->error();
 });
 
 // Dynamic GET. Example with 1 variable
