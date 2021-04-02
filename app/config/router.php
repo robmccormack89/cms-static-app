@@ -1,17 +1,17 @@
 <?php
 
 class Router {
-  
+
   public function get($route, $function_to_call){
     if( $_SERVER['REQUEST_METHOD'] == 'GET' ){ $this->route($route, $function_to_call); }  
   }
   public function post($route, $function_to_call){
-    if( $_SERVER['REQUEST_METHOD'] == 'POST' ){ route($route, $function_to_call); }    
+    if( $_SERVER['REQUEST_METHOD'] == 'POST' ){ $this->route($route, $function_to_call); }    
   }
   public function delete($route, $function_to_call){
-    if( $_SERVER['REQUEST_METHOD'] == 'DELETE' ){ route($route, $function_to_call); }    
+    if( $_SERVER['REQUEST_METHOD'] == 'DELETE' ){ $this->route($route, $function_to_call); }    
   }
-  public function any($route, $function_to_call){ route($route, $function_to_call); }
+  public function any($route, $function_to_call){ $this->route($route, $function_to_call); }
   private function route($route, $function_to_call){
     if($route == "/404"){
       http_response_code(404);
@@ -60,4 +60,4 @@ class Router {
   
 }
 
-$routes = new Router;
+$router = new Router;

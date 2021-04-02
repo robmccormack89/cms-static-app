@@ -1,13 +1,12 @@
 <?php
+require_once '../vendor/autoload.php';
 
-require_once $GLOBALS['root'] . "/vendor/autoload.php";
-
-$viewsDir = array(
-  'views/',
-  'views/pages',
-  'views/parts'
+$views = array(
+  '../app/views/',
+  '../app/views/pages',
+  '../app/views/parts'
 );
-$loader = new \Twig\Loader\FilesystemLoader($viewsDir);
+$loader = new \Twig\Loader\FilesystemLoader($views);
 
 $SiteTitle = 'Your Site Title';
 $SomeOtherVariable = 'Lorem Ipsum Dolor';
