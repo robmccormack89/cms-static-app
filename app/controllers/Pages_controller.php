@@ -18,6 +18,7 @@ class Pages_controller extends Core_controller {
     $context['fruits'] = $fruit->get_fruit();
     $context['cars'] = $cars->get_cars();
     $context['movies'] = $movies->get_movies();
+    // $context['app_protocol'] = APP_PROTOCOL;
     
     // if the page requested actually exists
     if ($reqPage) {

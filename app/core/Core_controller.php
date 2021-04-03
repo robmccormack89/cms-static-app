@@ -35,6 +35,15 @@ class Core_controller {
     $this->twig->addGlobal('SomeOtherVariable', $SomeOtherVariable);
     $this->twig->addGlobal('date_year', $dateYear );
     $this->twig->addGlobal('site', $site );
+    
+    // if (APP_PROTOCOL == "https") {
+    //   if ($_SERVER['HTTPS'] != 'on') {
+    //     $url = "https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+    //     header("Location: https://static.com/", true, 301);
+    //     exit();
+    //   }
+    // }
+    
   }
   
   public function error() {

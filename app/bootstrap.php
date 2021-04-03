@@ -1,6 +1,7 @@
 <?php
 // Load Config file
 require_once 'config/config.php';
+// $ini = parse_ini_file('../app.ini');
 // load vender (twig)
 require_once '../vendor/autoload.php';
 
