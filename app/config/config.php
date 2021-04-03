@@ -1,2 +1,2 @@
 <?php
-define('APP_PROTOCOL', 'http'); // set to https for https!
+$config['app_protocol'] = "http"; // set to https for https!
