@@ -1,27 +1,38 @@
 {% extends "base.twig" %}
 
 {% block content %}
-<div id="Single{{page.id}}" class="page-{{page.id}} page uk-section uk-container" data-template="page.twig">
-  <div class="uk-grid-large uk-grid" uk-grid="">
+  <div id="Single{{page.id}}" class="page-{{page.id}} page uk-section uk-container" data-template="page.twig">
+    <div class="uk-grid-large uk-grid" uk-grid="">
 
-    <section class="left-section uk-width-2-3@m uk-first-column">
-      <article class="uk-article">
+      <section class="left-section uk-width-2-3@m uk-first-column">
+        <article class="uk-article">
 
-        <header class="article-header">
-          <h1 class="uk-article-title">{{page.title}}</h1>
-        </header>
+          <header class="article-header">
+            <h1 class="uk-article-title">{{page.title}}</h1>
+          </header>
+          
+          {% if page.status == 'draft' %}
+            <p>
+              <span class="uk-label uk-label-warning">This page is in Draft mode</span>
+            </p>
+          {% endif %}
+          
+          {% block page_content %}
+            {% if page.content %}
+              {# include page.content #}
+              {% include '_sample-content.twig' %}
+            {% else %}
+              Nothing to see here. Yet...
+            {% endif %}
+          {% endblock %}
 
-        {% block page_content %}
-          {% include 'sample-content.twig' %}
-        {% endblock %}
+        </article>
+      </section>
 
-      </article>
-    </section>
+      {% include 'sidebar.twig' %}
 
-    {% include 'sidebar.twig' %}
+    </div>
 
   </div>
-
-</div>
 {% endblock %}
 

@@ -11,25 +11,29 @@ class Page {
         "id" => 1,
         "title" => "Homepage",
         "slug" => "index",
-        "author" => "Robert McCormack"
+        "status" => "published",
+        "author" => "Robert McCormack",
       ),
       array(
         "id" => 2,
         "title" => "About page",
         "slug" => "about",
-        "author" => "Robert McCormack"
+        "status" => "draft",
+        "content" => "_about-content.twig"
       ),
       array(
         "id" => 3,
         "title" => "Contact",
         "slug" => "contact",
-        "author" => "Robert McCormack"
+        "status" => "published",
+        "content" => ""
       ),
       array(
         "id" => 4,
         "title" => "Policies",
         "slug" => "policies",
-        "author" => "Robert McCormack"
+        "status" => "published",
+        "content" => "_sample-content.twig"
       )
     );
     return $data;

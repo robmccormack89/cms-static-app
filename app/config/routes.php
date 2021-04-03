@@ -15,7 +15,8 @@ $router->get('/', function(){
 
 // dynamic page
 $router->get('/:slug', function($slug){
-  $GLOBALS['Core_controller']->any($slug);
+  $Pages_controller = new Pages_controller;
+  $Pages_controller->any($slug);
 });
 
 // error (goes last)
