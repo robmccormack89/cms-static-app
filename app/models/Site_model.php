@@ -9,11 +9,8 @@ class Site {
   // simple array
   public function get_site()
   {
-    $data = array(
-      "title" => "Static.com",
-      "tagline" => "Json-based Posts/Portfolio CMS",
-      "baseurl" => "http://static.com",
-    );
+    $str = file_get_contents('../public/json/site.json');
+    $data = json_decode($str, true); // decode the JSON into an associative array
     return $data;
   }
   

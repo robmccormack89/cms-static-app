@@ -18,12 +18,11 @@
           {% endif %}
           
           {% block page_content %}
-            {% if page.content %}
-              {% include page.content %}
-              {# include '_sample-content.twig' #}
-            {% else %}
-              Nothing to see here. Yet...
-            {% endif %}
+          
+            {% for movie in movies %}
+              {{movie.title}}
+            {% endfor %}
+            
           {% endblock %}
 
         </article>

@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "title": "Homepage",
+    "slug": "index",
+    "status": "published",
+    "author": "Robert McCormack"
+  },
+  {
+    "id": 2,
+    "title": "About page",
+    "slug": "about",
+    "status": "published",
+    "content": "_about-content.twig"
+  },
+  {
+    "id": 3,
+    "title": "Contact",
+    "slug": "contact",
+    "status": "published",
+    "content": ""
+  },
+  {
+    "id": 4,
+    "title": "Policies",
+    "slug": "policies",
+    "status": "published",
+    "content": "_sample-content.twig"
+  },
+  {
+    "id": 5,
+    "title": "Homepage Draft",
+    "slug": "homepage_draft",
+    "status": "draft",
+    "author": "Robert McCormack",
+    "content": "_homepage_draft-content.twig"
+  }
+]
