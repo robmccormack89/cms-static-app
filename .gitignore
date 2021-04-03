@@ -11,4 +11,4 @@ yarn.lock
 .ftp-config
 notes.md
 beautify.html
-app/cache/
+/app/cache/
