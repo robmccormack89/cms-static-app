@@ -3,7 +3,7 @@
 require_once 'config/config.php';
 // load vender (twig)
 require_once '../vendor/autoload.php';
-
+require_once 'helpers/helpers.php';
 // autoload models
 spl_autoload_register(function ($className) {
   
@@ -32,13 +32,9 @@ spl_autoload_register(function ($className) {
   
 });
 
-require_once('config/cache.php');
-
 // Init Core Library
 $Core_controller = new Core_controller;
 $Home_controller = new Home_controller;
 
 // load routes. Each route runs a controller method
 require_once('config/routes.php');
-
-// require_once('config/cache.php');

@@ -17,6 +17,8 @@ class Home_controller extends Core_controller {
     if ($homePage) {
       // assign the page variable to twig context & render page.twig
       $context['page'] = $homePage;
+      $context['img'] = '/public/img/stock.jpg';
+      
       $this->cache->cacheServe();
       echo $this->twig->render('front.twig', $context);
       $this->cache->cacheFile();

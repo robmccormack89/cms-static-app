@@ -38,6 +38,9 @@ class Core_controller {
     $this->twig->addGlobal('site', $site );
     $this->twig->addGlobal('baseurl', BASE_URL );
     
+    $filter = new \Twig\TwigFilter('cropme', 'imCropAspect');
+    $this->twig->addFilter($filter);
+    
     require_once('../app/config/cache.php');
     $this->cache = new Cache;
 
