@@ -3,7 +3,8 @@
 class Core_controller {
   
   protected $twig;
-  public $site; 
+  public $site;
+  public $cache;
   
   public function __construct()
   {    
@@ -19,7 +20,7 @@ class Core_controller {
     $loader = new \Twig\Loader\FilesystemLoader($views);
 
     $this->twig = new \Twig\Environment($loader, [
-      'cache' => '../app/cache',
+      'cache' => '../app/cache/compilation',
       'debug' => true,
       // ...
     ]);
@@ -35,6 +36,10 @@ class Core_controller {
     $this->twig->addGlobal('SomeOtherVariable', $SomeOtherVariable);
     $this->twig->addGlobal('date_year', $dateYear );
     $this->twig->addGlobal('site', $site );
+    $this->twig->addGlobal('baseurl', BASE_URL );
+    
+    require_once('../app/config/cache.php');
+    $this->cache = new Cache;
 
   }
   

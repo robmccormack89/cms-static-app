@@ -1,7 +1,6 @@
 <?php
 // Load Config file
 require_once 'config/config.php';
-// $ini = parse_ini_file('../app.ini');
 // load vender (twig)
 require_once '../vendor/autoload.php';
 
@@ -32,9 +31,14 @@ spl_autoload_register(function ($className) {
   }
   
 });
+
+require_once('config/cache.php');
+
 // Init Core Library
-$Core_controller  = new Core_controller;
-$Home_controller  = new Home_controller;
+$Core_controller = new Core_controller;
+$Home_controller = new Home_controller;
 
 // load routes. Each route runs a controller method
 require_once('config/routes.php');
+
+// require_once('config/cache.php');

@@ -18,7 +18,7 @@
     "title": "Contact",
     "slug": "contact",
     "status": "published",
-    "content": ""
+    "content": "_sample-content.twig"
   },
   {
     "id": 4,
@@ -34,5 +34,12 @@
     "status": "draft",
     "author": "Robert McCormack",
     "content": "_homepage_draft-content.twig"
+  },
+  {
+    "id": 6,
+    "title": "Hello",
+    "slug": "hello",
+    "status": "published",
+    "content": "_sample-content.twig"
   }
 ]
