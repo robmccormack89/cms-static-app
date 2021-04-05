@@ -29,11 +29,10 @@
   },
   {
     "id": 5,
-    "title": "Homepage Draft",
-    "slug": "homepage_draft",
+    "title": "Test",
+    "slug": "test",
     "status": "draft",
-    "author": "Robert McCormack",
-    "content": "_homepage_draft-content.twig"
+    "author": "Robert McCormack"
   },
   {
     "id": 6,

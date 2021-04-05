@@ -19,9 +19,9 @@ class Home_controller extends Core_controller {
       $context['page'] = $homePage;
       $context['img'] = '/public/img/stock.jpg';
       
-      $this->cache->cacheServe();
+      if ($this->is_cache_enabled) { $this->cache->cacheServe(); }
       echo $this->twig->render('front.twig', $context);
-      $this->cache->cacheFile();
+      if ($this->is_cache_enabled) { $this->cache->cacheFile(); }
     } else {
       // else, render the 404 template
       echo $this->twig->render('404.twig');

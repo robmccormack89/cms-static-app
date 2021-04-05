@@ -1,16 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ configs.language }}">
 
   <head>
-    <meta charset="utf-8">
+    <meta charset="{{ configs.charset }}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ site.title }} | {{site.tagline}}</title>
+    <title>{{ configs.site_title }}</title>
+    <meta name="description" content="{{configs.site_description}}">
+    <!-- google fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=PT+Serif&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <!-- /google fonts -->
+    <!-- theme styles -->
     <link rel="stylesheet" type="text/css" href="/public/css/base.css">
     <link rel="stylesheet" type="text/css" href="/public/css/global.css">
     <script src="/public/js/global/base.min.js"></script>
+    <!-- /theme styles -->
     {% block styles %}
+      <!-- this block is for extending on a per page/template basis for specific page/template styles -->
     {% endblock %}
     <style>
       /* font stylings */
@@ -50,7 +56,7 @@
     </style>
   </head>
   
-  <body>
+  <body class="{{dark_light_def.body_class}}">
 
     {% block header %}
       {% include 'header.twig' %}
@@ -65,16 +71,19 @@
     {% block footer %}
       {% include 'footer.twig' %}
     {% endblock %}
-
-    {% block scripts %}
-    {% endblock %}
     
-    <script type='text/javascript' src='/public/js/global/global.min.js?ver=5.7'></script>
-    <script type='text/javascript' src='/public/js/theme.js?ver=5.7'></script>
+    <!-- theme scripts -->
+    <script type='text/javascript' src='/public/js/global/global.min.js'></script>
+    <script type='text/javascript' src='/public/js/theme.js'></script>
     <script>
       window.onload = function() {
         themePaginationScroll()
       };
     </script>
+    <!-- /theme scripts -->
+    
+    {% block scripts %}
+      <!-- this block is for extending on a per page/template basis for specific page/template scipts -->
+    {% endblock %}
   </body>
 </html>

@@ -5,10 +5,10 @@
     <div class="header-logo uk-navbar-left nav-logo-area">
       <div class="">
         <a class="site-logo uk-logo uk-padding-remove uk-text-bold uk-text-emphasis" href="/">
-          {{site.title}}
+          {{configs.site_title}}
         </a>
         <div>
-          <p class="site-tagline uk-text-small uk-margin-remove">{{site.tagline}}</p>
+          <p class="site-tagline uk-text-small uk-margin-remove">{{configs.site_description}}</p>
         </div>
       </div>
     </div>
@@ -48,8 +48,8 @@
       </ul>
 
       <div class="dark-light-switcher pull-right-15">
-        <a id="DarkSwitch" class="uk-navbar-toggle darklight-switch"><i class="far fa-moon"></i></a>
-        <a id="LightSwitch" class="uk-navbar-toggle darklight-switch" hidden=""><i class="fas fa-sun"></i></a>
+        <a id="DarkSwitch" class="uk-navbar-toggle darklight-switch" {{dark_light_def.moon_link_show_hide}}><i class="far fa-moon"></i></a>
+        <a id="LightSwitch" class="uk-navbar-toggle darklight-switch" {{dark_light_def.sun_link_show_hide}}><i class="fas fa-sun"></i></a>
       </div>
 
     </div>

@@ -1,10 +1,13 @@
 <?php
-// Load Config file
-require_once 'config/config.php';
-// load vender (twig)
+// the config file
+$configs = include('config/config.php');
+// composer vender autoload
 require_once '../vendor/autoload.php';
+// some helper functions, for now. A work in progress...
 require_once 'helpers/helpers.php';
-// autoload models
+// autoload the core, controllers & models
+// class name relates directly to file name, except for models, see file formats.
+// config/helper classes not included in autoload
 spl_autoload_register(function ($className) {
   
   $dirs = array(
@@ -16,8 +19,8 @@ spl_autoload_register(function ($className) {
   $fileFormats = array(
     '%s.php',
     '%s_model.php',
-    'class.%s.php',
-    '%s.inc.php'
+    // 'class.%s.php',
+    // '%s.inc.php'
   );
   
   foreach( $dirs as $dir ) {
@@ -31,10 +34,5 @@ spl_autoload_register(function ($className) {
   }
   
 });
-
-// Init Core Library
-$Core_controller = new Core_controller;
-$Home_controller = new Home_controller;
-
 // load routes. Each route runs a controller method
 require_once('config/routes.php');

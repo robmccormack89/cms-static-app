@@ -1,8 +1,7 @@
 {% extends "base.twig" %}
 
 {% block content %}
-
-  <div id="Single265" class="page-265 page uk-section uk-container" data-template="page.twig">
+  <div class="uk-section uk-container" data-template="404.twig">
     <div class="uk-grid-large uk-grid" uk-grid="">
 
       <section class="left-section uk-width-2-3@m uk-first-column">
@@ -14,7 +13,7 @@
 
           <div class="page-content uk-margin-medium-bottom">
             <p class="">Oops, there is nothing to be found here.</p>
-            <a href="{{site.baseurl}}" class="uk-button uk-button-small uk-button-default uk-margin-top">Back to Homepage</a>
+            <a href="/" class="uk-button uk-button-small uk-button-default uk-margin-top">Back to Homepage</a>
           </div>
 
         </article>
@@ -23,10 +22,6 @@
       {% include 'sidebar.twig' %}
 
     </div>
-
   </div>
-
-
-
 {% endblock %}
 
