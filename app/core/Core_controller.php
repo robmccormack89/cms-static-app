@@ -33,6 +33,8 @@ class Core_controller {
       '../app/views/',
       '../app/views/pages',
       '../app/views/pages/content',
+      '../app/views/posts',
+      '../app/views/posts/content',
       '../app/views/parts'
     );
     $loader = new \Twig\Loader\FilesystemLoader($views);

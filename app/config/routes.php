@@ -22,6 +22,12 @@ $router->get('/:slug', function($slug){
   $Pages_controller->any($slug);
 });
 
+// dynamic posts route
+$router->get('/posts/:slug', function($slug){
+  $Posts_controller = new Posts_controller;
+  $Posts_controller->any($slug);
+});
+
 // error page route (goes last)
 $router->any('/404', function(){
   $Core_controller = new Core_controller;

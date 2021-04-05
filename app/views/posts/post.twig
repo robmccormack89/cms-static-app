@@ -1,14 +1,14 @@
 {% extends "base.twig" %}
 
 {% block content %}
-  <div id="Single{{page.id}}" class="page-{{page.id}} page uk-section uk-container" data-template="page.twig">
+  <div id="Single{{post.id}}" class="page-{{post.id}} page uk-section uk-container" data-template="page.twig">
     <div class="uk-grid-large uk-grid" uk-grid="">
 
       <section class="left-section uk-width-2-3@m uk-first-column">
         <article class="uk-article">
 
           <header class="article-header">
-            <h1 class="uk-article-title">{{page.title}}</h1>
+            <h1 class="uk-article-title">{{post.title}}</h1>
           </header>
           
           {% if page.status == 'draft' %}
@@ -18,8 +18,8 @@
           {% endif %}
           
           {% block page_content %}
-            {% if page.content %}
-              {% include page.content %}
+            {% if post.content %}
+              {% include post.content %}
             {% else %}
               Nothing to see here. Yet...
             {% endif %}
