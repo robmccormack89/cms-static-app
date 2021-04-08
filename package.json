@@ -5,7 +5,6 @@
   "license": "(MIT OR Apache-2.0)",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.14.0",
-    "infinite-scroll": "^4.0.1",
     "uikit": "^3.6.18"
   },
   "devDependencies": {

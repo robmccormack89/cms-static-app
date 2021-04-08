@@ -1,6 +1,3 @@
-// load infinite scroll
-window.InfiniteScroll = require('infinite-scroll');
-
 // global theme functions
 
 // setting & getting cookies

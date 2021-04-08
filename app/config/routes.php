@@ -9,25 +9,25 @@ if ($configs['site_protocol'] == "https") {
 }
 // include the router class. see https://phprouter.com/ for further route setups & information
 require_once('router.php');
-
 // homepage route
 $router->get('/', function(){
   $Home_controller = new Home_controller;
   $Home_controller->index();
 });
-
-// dynamic pages route
-$router->get('/:slug', function($slug){
-  $Pages_controller = new Pages_controller;
-  $Pages_controller->any($slug);
-});
-
 // dynamic posts route
-$router->get('/posts/:slug', function($slug){
-  $Posts_controller = new Posts_controller;
-  $Posts_controller->any($slug);
+$router->get('/blog/:slug', function($slug){
+  $Post_controller = new Post_controller;
+  $Post_controller->any($slug, '');
 });
-
+// dynamic pages route (with sub pages)
+$router->get('/:parent_slug', function($parent_slug){
+  $Single_controller = new Single_controller;
+  $Single_controller->any($parent_slug, '');
+});
+$router->get('/:parent_slug/:child_slug', function($parent_slug, $child_slug){
+  $Single_controller = new Single_controller;
+  $Single_controller->any($parent_slug, $child_slug);
+});
 // error page route (goes last)
 $router->any('/404', function(){
   $Core_controller = new Core_controller;

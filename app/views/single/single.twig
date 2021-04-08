@@ -1,30 +1,28 @@
 {% extends "base.twig" %}
 
 {% block content %}
-  <div id="Single{{page.id}}" class="page-{{page.id}} page uk-section uk-container" data-template="page.twig">
+  <div id="Single{{single.id}}" class="page-{{single.id}} page uk-section uk-container" data-template="single.twig">
     <div class="uk-grid-large uk-grid" uk-grid="">
 
       <section class="left-section uk-width-2-3@m uk-first-column">
         <article class="uk-article">
 
           <header class="article-header">
-            <h1 class="uk-article-title">{{page.title}}</h1>
+            <h1 class="uk-article-title">{{single.title}}</h1>
           </header>
           
-          {% if page.status == 'draft' %}
+          {% if single.status == 'draft' %}
             <p>
               <span class="uk-label uk-label-warning">This page is in Draft mode</span>
             </p>
           {% endif %}
           
           {% block page_content %}
-          
-            {% for movie in movies %}
-              {{movie.title}}
-            {% endfor %}
-            
-            {{app_protocol}}
-            
+            {% if single.content %}
+              {% include single.content %}
+            {% else %}
+              Nothing to see here. Yet...
+            {% endif %}
           {% endblock %}
 
         </article>

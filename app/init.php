@@ -1,13 +1,9 @@
 <?php
-// the config file
-$configs = include('config/config.php');
+// loads configs & helpers some helper functions, for now. A work in progress...
+require_once 'helpers/helpers.php';
 // composer vender autoload
 require_once '../vendor/autoload.php';
-// some helper functions, for now. A work in progress...
-require_once 'helpers/helpers.php';
 // autoload the core, controllers & models
-// class name relates directly to file name, except for models, see file formats.
-// config/helper classes not included in autoload
 spl_autoload_register(function ($className) {
   
   $dirs = array(
@@ -17,8 +13,8 @@ spl_autoload_register(function ($className) {
   );
   
   $fileFormats = array(
-    '%s.php',
-    '%s_model.php',
+    '%s.php'
+    // '%s.php',
     // 'class.%s.php',
     // '%s.inc.php'
   );

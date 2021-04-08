@@ -8,22 +8,6 @@ window.onload = function(){
   
 }
 
-// the default inf scroll pagination; will be called on relevant archives & in quickloads etc
-window.themePaginationScroll = function() {
-  var paginationEle = document.getElementById("ThemePagination");
-  if (paginationEle) {
-    new InfiniteScroll( '.archive-posts', {
-      path: '.next',
-      append: '.item',
-      button: '.view-more-button',
-      scrollThreshold: false,
-      history: false,
-      status: '.page-load-status',
-      hideNav: '.pagination-block'
-    });
-  };
-};
-
 document.querySelectorAll('.darklight-switch').forEach(item => {
   item.addEventListener('mousedown', event => {
     event.preventDefault();

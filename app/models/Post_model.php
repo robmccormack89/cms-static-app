@@ -1,6 +1,6 @@
 <?php
 
-class Post {
+class Post_model {
 
   // some static pages from the json file
   public function the_posts()

@@ -1,6 +1,5 @@
 {
     "require": {
-        "twig/twig": "^3.0",
-        "mmamedov/page-cache": "^2.0"
+        "twig/twig": "^3.0"
     }
 }
