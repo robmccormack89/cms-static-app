@@ -25,8 +25,8 @@ $router->get($GLOBALS['configs']['blog_url'].'/:slug', function($slug){
 });
 // portfolio
 $router->get($GLOBALS['configs']['portfolio_url'], function(){
-  $blog = new Archive_controller;
-  $blog->archive();
+  $portfolio = new Archive_controller;
+  $portfolio->archive();
 });
 // projects
 $router->get($GLOBALS['configs']['portfolio_url'].'/:slug', function($slug){

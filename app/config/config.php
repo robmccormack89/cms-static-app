@@ -15,4 +15,5 @@ return array(
   'visitor_ip' => $_SERVER['REMOTE_ADDR'], // the visitor's IP, done for ya
   'php_cache' => 'disable', // set 'enable' to enable php caching
   'dark_light_mode' => 'light', // default setting for dark light mode, set to 'dark' for dark mode
+  'current_url' => $root.$_SERVER['REQUEST_URI'],
 );

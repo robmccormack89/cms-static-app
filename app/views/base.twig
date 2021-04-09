@@ -4,8 +4,11 @@
   <head>
     <meta charset="{{ configs.charset }}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ configs.site_title }}</title>
-    <meta name="description" content="{{configs.site_description}}">
+    <meta http-equiv="Content-Type" content="text/html; charset={{ configs.charset }}" />
+    {% block seo_meta %}
+      <!-- seo meta should be extended on a per page basis -->
+    {% endblock %}
+
     <!-- theme styles -->
     <link rel="stylesheet" type="text/css" href="/public/css/base.css">
     <link rel="stylesheet" type="text/css" href="/public/css/global.css">

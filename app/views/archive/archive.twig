@@ -1,5 +1,17 @@
 {% extends "base.twig" %}
 
+{% block seo_meta %}
+  <title>{{archive.meta_title|default(archive.title ~ ' | ' ~ configs.site_title)}}</title>
+  <meta name="description" content="{{archive.meta_description|default(archive.description)}}">
+  <link rel="canonical" href="{{configs.current_url}}" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="{{archive.meta_title|default(archive.title ~ ' | ' ~ configs.site_title)}}" />
+  <meta property="og:description" content="{{archive.meta_description|default(archive.description)}}" />
+  <meta property="og:image" content="{{configs.base_url}}{{archive.featured_img.src}}" />
+  <meta property="og:url" content="{{configs.current_url}}" />
+  <meta property="og:site_name" content="{{configs.site_title}}" />
+{% endblock %}
+
 {% block content %}
 
   <div id="Archive{{archive.name}}" class="archive uk-section uk-container" data-template="archive.twig">

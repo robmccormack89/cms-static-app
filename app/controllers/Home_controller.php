@@ -10,9 +10,9 @@ class Home_controller extends Single_controller {
 
   public function index() {
     
-    $context['page'] = $this->page->get_single_by_slug('index', '');
+    $context['single'] = $this->page->get_single_by_slug('index', '');
     
-    if ($context['page']) {
+    if ($context['single']) {
       // render the view template with the context
       $this->render_template('homepage.twig', 'front.twig', 'home.twig', $context);
     } else {

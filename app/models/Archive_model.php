@@ -25,6 +25,15 @@ class Archive_model {
         "name" => "blog",
         "title" => "Blog",
         "description" => "This is my Blog",
+        "meta_title" => "",
+        "meta_description" => "",
+        "featured_img" => array(
+          "src" => "/public/img/stock.jpg",
+          "title" => "My Image",
+          "alt" => "Alt text",
+          "caption" => "A lovely caption",
+          "description" => "Something about the image",
+        ),
         "posts" => $posts
       );
       return $data;
@@ -42,6 +51,15 @@ class Archive_model {
         "name" => "portfolio",
         "title" => "Portfolio",
         "description" => "This is my Portfolio",
+        "meta_title" => "",
+        "meta_description" => "",
+        "featured_img" => array(
+          "src" => "/public/img/stock.jpg",
+          "title" => "My Image",
+          "alt" => "Alt text",
+          "caption" => "A lovely caption",
+          "description" => "Something about the image",
+        ),
         "posts" => $posts
       );
       
