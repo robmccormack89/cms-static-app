@@ -1,6 +1,4 @@
 <?php
-// include the config file
-$configs = include('../app/config/config.php');
 // get objects in array using key->value
 function get_in_array( string $needle, array $haystack, string $column){
   $matches = [];
@@ -17,7 +15,9 @@ function is_page_post_or_project($obj) {
 function is_blog() {
 	$string = $_SERVER['REQUEST_URI'];
   $fresh = str_replace("/","",$string);
-	if ($fresh == 'blog') {
+	$blog = $GLOBALS['configs']['blog_url'];
+	$blog_fresh = str_replace("/","",$blog);
+	if ($fresh == $blog_fresh) {
 		return true;
 	}
 }
@@ -25,7 +25,9 @@ function is_blog() {
 function is_portfolio() {
 	$string = $_SERVER['REQUEST_URI'];
   $fresh = str_replace("/","",$string);
-	if ($fresh == 'portfolio') {
+	$portfolio = $GLOBALS['configs']['portfolio_url'];
+	$portfolio_fresh = str_replace("/","",$portfolio);
+	if ($fresh == $portfolio_fresh) {
 		return true;
 	}
 }

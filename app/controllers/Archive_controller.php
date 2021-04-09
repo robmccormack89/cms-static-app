@@ -11,17 +11,11 @@ class Archive_controller extends Core_controller {
   }
 
   public function type_archive() {
-    $context['archive'] = $this->archive->archive_data();
+    // archive data
+    $data = $this->archive->archive_data();
+    $context['archive'] = $data;
+    
     $this->render_archive($context['archive'], $context);
-  }
-  
-  // custom templates according to archive name
-  public function render_archive($obj, $context) {
-    if ($obj['name'] == 'blog') {
-      $this->render_template('blog.twig', 'archive.twig', '404.twig', $context);
-    } elseif ($obj['name'] == 'portfolio') {
-      $this->render_template('portfolio.twig', 'archive.twig', '404.twig', $context);
-    };
   }
   
 }

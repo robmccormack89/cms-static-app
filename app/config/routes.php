@@ -14,20 +14,21 @@ $router->get('/', function(){
   $homepage = new Home_controller;
   $homepage->index();
 });
-$router->get('/blog', function(){
+$router->get($GLOBALS['configs']['blog_url'], function(){
   $blog = new Archive_controller;
   $blog->type_archive();
 });
 // dynamic posts route
-$router->get('/blog/:slug', function($slug){
+$router->get($GLOBALS['configs']['blog_url'].'/:slug', function($slug){
   $post = new Single_controller;
   $post->any($slug, '');
 });
-// dynamic pages route (with sub pages)
+// dynamic pages route
 $router->get('/:parent_slug', function($parent_slug){
   $page = new Single_controller;
   $page->any($parent_slug, '');
 });
+// dynamic pages route (with sub pages)
 $router->get('/:parent_slug/:child_slug', function($parent_slug, $child_slug){
   $page = new Single_controller;
   $page->any($parent_slug, $child_slug);

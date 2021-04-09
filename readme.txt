@@ -28,6 +28,25 @@ Singlular data & templates:
   
   8. All single objects should have a unique slug.
   
+Archive data & templates:
+
+  1. The custom template hierarchy for archives works as follows:
+
+    a. if request if for a post,
+
+      blog.twig if it exists,
+      else archive.twig if it exists, 
+      else render 404.twig (archive.twig must exist!)
+    
+    b. else request if for a project:
+
+      portfolio.twig if it exists,
+      else archive.twig if it exists, 
+      else render 404.twig (archive.twig must exist!)
+      else render 404.twig (the single.twig must exist!)
+    
+  2. For new types to use a custom template per page setup like above, it must be added to is_page_post_or_project(), see helpers.php.
+  
 Uri Routing:
 
   1. All uri routes are handled by routes.php. If a route doesnt exist here, it wont exist on the site. See https://phprouter.com/ for more info.

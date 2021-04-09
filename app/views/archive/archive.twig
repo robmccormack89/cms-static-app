@@ -1,8 +1,11 @@
-{{archive.title}}</br>
-{{archive.description}}
-<hr>
-<ul>
-{% for post in archive.posts %}
-  <li>{{post.title}}</li>
-{% endfor %}
+<h1>{{archive.title}}</h1>
+<p class="uk-text-meta">
+  {{archive.description}}
+</p>
+<ul class="uk-list uk-list-divider">
+  {% for post in archive.posts %}
+    <li>
+      <a href="{{post.link}}">{{post.title}}</a>
+    </li>
+  {% endfor %}
 </ul>

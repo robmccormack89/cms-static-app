@@ -23,13 +23,4 @@ class Single_controller extends Core_controller {
     
   }
   
-  // custom templates according to type
-  public function render_single($obj, $context) {
-    if (is_page_post_or_project($obj)) {
-      $this->render_template($obj['type'].'-'.$obj['slug'].'.twig', $obj['type'].'.twig', 'single.twig', $context);
-    } else {
-      $this->render_template('single-'.$obj['slug'].'.twig', 'single.twig', '404.twig', $context);
-    };
-  }
-  
 }
