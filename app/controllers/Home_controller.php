@@ -14,7 +14,7 @@ class Home_controller extends Single_controller {
     
     if ($context['page']) {
       // render the view template with the context
-      $this->render_template('', 'front.twig', $context);
+      $this->render_template('homepage.twig', 'front.twig', 'home.twig', $context);
     } else {
       $this->error();
     }

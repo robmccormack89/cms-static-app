@@ -1,0 +1,8 @@
+{{archive.title}}</br>
+{{archive.description}}
+<hr>
+<ul>
+{% for post in archive.posts %}
+  <li>{{post.title}}</li>
+{% endfor %}
+</ul>

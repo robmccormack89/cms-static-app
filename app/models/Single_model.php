@@ -5,7 +5,7 @@ class Single_model {
   // some static pages from the json file
   public function the_singles()
   {
-    $str = file_get_contents('../public/json/pages.json');
+    $str = file_get_contents('../public/json/singles.json');
     $data = json_decode($str, true); // decode the JSON into an associative array
     return $data;
   }

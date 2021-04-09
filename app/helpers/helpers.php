@@ -1,6 +1,27 @@
 <?php
 // include the config file
 $configs = include('../app/config/config.php');
+function is_page_post_or_project($obj) {
+	if ($obj['type'] == 'page' || $obj['type'] == 'post' || $obj['type'] == 'project') {
+		return true;
+	}
+}
+// check if request is for blog archive
+function is_blog() {
+	$string = $_SERVER['REQUEST_URI'];
+  $fresh = str_replace("/","",$string);
+	if ($fresh == 'blog') {
+		return true;
+	}
+}
+// check if request is for portfolio archive
+function is_portfolio() {
+	$string = $_SERVER['REQUEST_URI'];
+  $fresh = str_replace("/","",$string);
+	if ($fresh == 'portfolio') {
+		return true;
+	}
+}
 // check the darklight cookie seting & set some values
 function darklight_cookie_check() {
 	
