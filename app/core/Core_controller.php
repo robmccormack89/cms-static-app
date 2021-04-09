@@ -5,8 +5,7 @@ class Core_controller {
   protected $twig;
   protected $cache;
   
-  public function __construct()
-  {
+  public function __construct() {
     // include caching class & create new cache object.
     require_once('../app/config/cache.php');
     $this->cache = new Cache;
@@ -41,19 +40,19 @@ class Core_controller {
   // renders relevant twig template with context & caching accoring to setting
   public function render_template($custom_template, $default_template, $base_template, $context) {
     if ($this->twig->getLoader()->exists($custom_template)) {
-      if(is_cache_enabled()): $this->cache->cacheServe(); endif;
-      echo $this->twig->render($custom_template, $context);
-      if(is_cache_enabled()): $this->cache->cacheFile(); endif;
+      $this->cache_render($custom_template, $context);
     } elseif ($this->twig->getLoader()->exists($default_template)) {
-      if(is_cache_enabled()): $this->cache->cacheServe(); endif;
-      echo $this->twig->render($default_template, $context);
-      if(is_cache_enabled()): $this->cache->cacheFile(); endif;
+      $this->cache_render($default_template, $context);
     } else {
-      if(is_cache_enabled()): $this->cache->cacheServe(); endif;
-      echo $this->twig->render($base_template, $context);
-      if(is_cache_enabled()): $this->cache->cacheFile(); endif;
+      $this->cache_render($base_template, $context);
     }
   }
+  public function cache_render($the_template, $context) {
+    if(is_cache_enabled()): $this->cache->cacheServe(); endif;
+    echo $this->twig->render($the_template, $context);
+    if(is_cache_enabled()): $this->cache->cacheFile(); endif;
+  }
+  
   // custom singular templates according to type
   public function render_single($obj, $context) {
     if (is_page_post_or_project($obj)) {
