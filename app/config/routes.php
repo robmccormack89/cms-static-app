@@ -23,6 +23,16 @@ $router->get($GLOBALS['configs']['blog_url'].'/:slug', function($slug){
   $post = new Single_controller;
   $post->single($slug, '');
 });
+// portfolio
+$router->get($GLOBALS['configs']['portfolio_url'], function(){
+  $blog = new Archive_controller;
+  $blog->archive();
+});
+// projects
+$router->get($GLOBALS['configs']['portfolio_url'].'/:slug', function($slug){
+  $post = new Single_controller;
+  $post->single($slug, '');
+});
 // dynamic pages route
 $router->get('/:parent_slug', function($parent_slug){
   $page = new Single_controller;

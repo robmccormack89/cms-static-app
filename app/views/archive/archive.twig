@@ -1,11 +1,47 @@
-<h1>{{archive.title}}</h1>
-<p class="uk-text-meta">
-  {{archive.description}}
-</p>
-<ul class="uk-list uk-list-divider">
-  {% for post in archive.posts %}
-    <li>
-      <a href="{{post.link}}">{{post.title}}</a>
-    </li>
-  {% endfor %}
-</ul>
+{% extends "base.twig" %}
+
+{% block content %}
+
+  <div id="Archive{{archive.name}}" class="archive uk-section uk-container" data-template="archive.twig">
+    <div class="uk-grid-large uk-grid" uk-grid="">
+
+      <section class="left-section uk-width-2-3@m uk-first-column">
+
+        <h1 class="uk-article-title">{{archive.title}}</h1>
+        <p class="uk-article-meta">{{archive.description}}</p>
+      
+        {% block page_content %}
+          <div class="archive-posts">
+            {% for post in archive.posts %}
+              <article id="post-{{post.id}}" class="uk-section uk-section-small uk-padding-remove-top item post-{{post.id}} type-{{post.type}}">
+                <header>
+                  <h2 class="uk-margin-remove-adjacent uk-margin-small-top uk-text-bold uk-margin-small-bottom">
+                    <a class="uk-link-reset" href="{{post.link}}">
+                      {{post.title}}
+                    </a>
+                  </h2>
+                  <p class="uk-article-meta uk-margin-small-bottom">
+                    Published in {{post.date|date("F, Y")}}.
+                  </p>
+                </header>
+                <figure class="uk-position-relatve uk-inline uk-margin-remove">
+                  <a href="{{post.link}}">
+                    <img class="theme-border" data-src="{{post.featured_img.src}}" width="800" height="300" alt="{{post.featured_img.alt}}" uk-img>
+                  </a>
+                </figure>
+                <p>{{post.excerpt}}</p>
+                <a href="{{post.link}}" class="uk-button uk-button-default">Read more</a>
+              </article>
+            {% endfor %}
+          </div>
+        {% endblock %}
+
+      </section>
+
+      {% include 'sidebar.twig' %}
+
+    </div>
+
+  </div>
+{% endblock %}
+

@@ -6,10 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ configs.site_title }}</title>
     <meta name="description" content="{{configs.site_description}}">
-    <!-- google fonts -->
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=PT+Serif&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
-    <!-- /google fonts -->
     <!-- theme styles -->
     <link rel="stylesheet" type="text/css" href="/public/css/base.css">
     <link rel="stylesheet" type="text/css" href="/public/css/global.css">
@@ -19,39 +15,10 @@
       <!-- this block is for extending on a per page/template basis for specific page/template styles -->
     {% endblock %}
     <style>
-      /* font stylings */
-      html,
-      .pt-serif {
-        font-family: 'PT Serif', serif;
-      }
-      .uk-h1, .uk-h2, .uk-h3, .uk-h4, .uk-h5, .uk-h6, 
-      .uk-heading-2xlarge, .uk-heading-large, .uk-heading-medium, .uk-heading-small, .uk-heading-xlarge, h1, h2, h3, h4, h5, h6,
-      .uk-logo {
-        font-family: 'Poppins', sans-serif;
-        letter-spacing: -1px;
-        font-weight: 700;
-        word-spacing: 2px;
-      }
-      .poppins, 
-      .site-tagline, 
-      .uk-article-meta, 
-      .uk-label, 
-      .uk-navbar-item, .uk-navbar-nav>li>a, .uk-navbar-toggle,
-      .uk-button {
-        font-family: 'Poppins', sans-serif;
-      }
-      .uk-button {
-        font-family: 'Poppins', sans-serif;
-        font-weight: 700;
-        letter-spacing: -1px;
-        word-spacing: 1px;
-      }
-      /* reset bold elements */
-      .uk-text-lead {
-        font-size: 1.3rem;
-      }
-      .uk-light .uk-text-lead {
-        color: #fff;
+      /* tease */
+      .item img {
+        max-height: 300px;
+        object-fit: cover;
       }
     </style>
   </head>
@@ -76,9 +43,6 @@
     <script type='text/javascript' src='/public/js/global/global.min.js'></script>
     <script type='text/javascript' src='/public/js/theme.js'></script>
     <script>
-      // window.onload = function() {
-      //   themePaginationScroll()
-      // };
     </script>
     <!-- /theme scripts -->
     
