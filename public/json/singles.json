@@ -51,7 +51,7 @@
     "id": 2,
     "title": "About",
     "slug": "about",
-    "status": "published",
+    "status": "draft",
     "author": "Robert McCormack",
     "date_time": "2019-04-04T19:20:30.45+01:00",
     "type": "page",

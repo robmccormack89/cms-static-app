@@ -10,12 +10,14 @@ class Archive_controller extends Core_controller {
     $this->archive = new Archive_model;
   }
 
-  public function type_archive() {
-    // archive data
-    $data = $this->archive->archive_data();
-    $context['archive'] = $data;
-    
-    $this->render_archive($context['archive'], $context);
+  public function archive() {
+    $context['archive'] = $this->archive->get_archive();
+
+    if ($context['archive']) {
+      $this->render_archive($context['archive'], $context);
+    } else {
+      $this->error();
+    }
   }
   
 }

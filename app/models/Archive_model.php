@@ -9,12 +9,12 @@ class Archive_model {
     $this->singles = New Single_model;
   }
   
-  public function archive_data()
+  public function get_archive()
   {
     // if is blog
     if (is_blog()) {
       // get the posts from the singles
-      $blog_posts = get_in_array( 'post', $this->singles->the_singles(), 'type');
+      $blog_posts = get_in_array( 'post', $this->singles->get_singles(), 'type');
       // assign the post link key & value
       foreach ($blog_posts as $post) {
         $post['link'] = $GLOBALS['configs']['blog_url'].'/'.$post['slug'];
@@ -32,7 +32,7 @@ class Archive_model {
     // if is portfolio
     } elseif (is_portfolio()) {
       // get the projects from the singles
-      $portfolio = get_in_array( 'project', $this->singles->the_singles(), 'type');
+      $portfolio = get_in_array( 'project', $this->singles->get_singles(), 'type');
       foreach ($portfolio as $post) {
         $post['link'] = $GLOBALS['configs']['portfolio_url'].'/'.$post['slug'];
         $posts[] = $post;

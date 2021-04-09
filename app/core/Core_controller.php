@@ -29,7 +29,7 @@ class Core_controller {
     $this->twig->addExtension(new \Twig\Extension\DebugExtension());
     // twig globals
     $this->twig->addGlobal('configs', $GLOBALS['configs'] );
-    $this->twig->addGlobal('dark_light_def', darklight_cookie_check());
+    $this->twig->addGlobal('dark_light_def', darklight_cookie());
   }
   
   // call this function in routes for the error page

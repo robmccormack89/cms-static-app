@@ -32,7 +32,7 @@ function is_portfolio() {
 	}
 }
 // check the darklight cookie seting & set some values
-function darklight_cookie_check() {
+function darklight_cookie() {
 	
 	$dark_light_def = '';
 	
@@ -54,20 +54,20 @@ function darklight_cookie_check() {
 	
 }
 // check is given page/post published
-function is_page_published($reqPage) {
+function is_published($reqPage) {
 	if ($reqPage && $reqPage['status'] == 'published') {
 		return true;
 	}
 }
 // check is given page/post an allowed draft
-function is_page_draft_allowed($reqPage) {
+function is_draft_allowed($reqPage) {
 	if ($reqPage && $reqPage['status'] == 'draft' && $GLOBALS['configs']['visitor_ip'] == $GLOBALS['configs']['author_ip']) {
 		return true;
 	}
 }
 // check is given page/post published or an allowed draft
-function is_published_or_author_draft($reqPage) {
-	if (is_page_published($reqPage) || is_page_draft_allowed($reqPage)) {
+function is_published_or_draft_allowed($reqPage) {
+	if (is_published($reqPage) || is_draft_allowed($reqPage)) {
 		return true;
 	}
 }
