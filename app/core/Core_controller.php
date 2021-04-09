@@ -17,7 +17,6 @@ class Core_controller {
       '../app/views/archive',
       '../app/views/parts',
       '../app/views/single',
-      '../app/views/single/content',
       '../app/views/parts'
     );
     $loader = new \Twig\Loader\FilesystemLoader($views);

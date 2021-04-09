@@ -9,21 +9,17 @@
         <article class="uk-article">
 
           <header class="article-header">
-            <h1 class="uk-article-title">{{single.title}}</h1>
+            <h1 class="uk-article-title uk-text-bold">{{single.title}}</h1>
           </header>
           
           {% if single.status == 'draft' %}
-            <p>
+            <p class="uk-margin-bottom">
               <span class="uk-label uk-label-warning">This page is in Draft mode</span>
             </p>
           {% endif %}
           
           {% block page_content %}
-            {% if single.content %}
-              {% include single.content %}
-            {% else %}
-              Nothing to see here. Yet...
-            {% endif %}
+            Nothing to see here. Yet...
           {% endblock %}
 
         </article>
