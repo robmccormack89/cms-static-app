@@ -16,7 +16,7 @@ $router->get('/', function(){
 });
 $router->get('/blog', function(){
   $blog = new Archive_controller;
-  $blog->the_archive();
+  $blog->type_archive();
 });
 // dynamic posts route
 $router->get('/blog/:slug', function($slug){

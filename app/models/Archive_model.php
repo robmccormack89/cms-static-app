@@ -2,43 +2,37 @@
 
 class Archive_model {
   
-  public function the_archive()
+  public $singles;
+  
+  public function __construct()
   {
-    
-    if (is_blog()) {
-      
-      return $this->blog_archive();
-      
-    } elseif (is_portfolio()) {
-      
-      return $this->portfolio_archive();;
-      
-    }
-    
-  }
-  public function blog_archive()
-  {
-    $blog = New Post_model;
-    $blog_posts = $blog->the_posts();
-    
-    return array(
-      "name" => "blog",
-      "title" => "Blog",
-      "description" => "This is my Blog",
-      "posts" => $blog_posts
-    );
-  }
-  public function portfolio_archive()
-  {
-    // nested array (like an array of post objects)
-    $data = array(
-      array(
-        "name" => "portfolio",
-        "title" => "Portfolio",
-        "description" => "This is my portfolio"
-      )
-    );
-    return $data;
+    $this->singles = New Single_model;
   }
   
+  public function archive_data()
+  {
+    // if is blog
+    if (is_blog()) {
+      // get the posts from the singles
+      $blog_posts = get_in_array( 'post', $this->singles->the_singles(), 'type');
+      // return archive data with the posts under archive.posts
+      return array(
+        "name" => "blog",
+        "title" => "Blog",
+        "description" => "This is my Blog",
+        "posts" => $blog_posts
+      );
+    // if is portfolio
+    } elseif (is_portfolio()) {
+      // get the projects from the singles
+      $portfolio = get_in_array( 'project', $this->singles->the_singles(), 'type');
+      // return archive data with the projects under archive.posts
+      return array(
+        "name" => "portfolio",
+        "title" => "Portfolio",
+        "description" => "This is my Portfolio",
+        "posts" => $portfolio
+      );
+    }
+  }
 }

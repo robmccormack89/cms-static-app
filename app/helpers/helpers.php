@@ -1,6 +1,13 @@
 <?php
 // include the config file
 $configs = include('../app/config/config.php');
+// get objects in array using key->value
+function get_in_array( string $needle, array $haystack, string $column){
+  $matches = [];
+  foreach( $haystack as $item )  if( $item[ $column ] === $needle )  $matches[] = $item;
+  return $matches;
+}
+// check if obj is page post or project
 function is_page_post_or_project($obj) {
 	if ($obj['type'] == 'page' || $obj['type'] == 'post' || $obj['type'] == 'project') {
 		return true;
