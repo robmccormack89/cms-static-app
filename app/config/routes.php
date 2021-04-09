@@ -30,8 +30,8 @@ $router->get($GLOBALS['configs']['portfolio_url'], function(){
 });
 // projects
 $router->get($GLOBALS['configs']['portfolio_url'].'/:slug', function($slug){
-  $post = new Single_controller;
-  $post->single($slug, '');
+  $project = new Single_controller;
+  $project->single($slug, '');
 });
 // dynamic pages route
 $router->get('/:parent_slug', function($parent_slug){
