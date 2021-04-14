@@ -8,7 +8,6 @@
     {% block seo_meta %}
       <!-- seo meta should be extended on a per page basis -->
     {% endblock %}
-
     <!-- theme styles -->
     <link rel="stylesheet" type="text/css" href="/public/css/base.css">
     <link rel="stylesheet" type="text/css" href="/public/css/global.css">
@@ -17,13 +16,6 @@
     {% block styles %}
       <!-- this block is for extending on a per page/template basis for specific page/template styles -->
     {% endblock %}
-    <style>
-      /* tease */
-      .item img {
-        max-height: 300px;
-        object-fit: cover;
-      }
-    </style>
   </head>
   
   <body class="{{dark_light_def.body_class}}">

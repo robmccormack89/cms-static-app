@@ -16,4 +16,5 @@ return array(
   'php_cache' => 'disable', // set 'enable' to enable php caching
   'dark_light_mode' => 'light', // default setting for dark light mode, set to 'dark' for dark mode
   'current_url' => $root.$_SERVER['REQUEST_URI'],
+  'placeholder_img_src' => $root.'/public/img/stock.jpg'
 );

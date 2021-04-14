@@ -13,47 +13,49 @@
 {% endblock %}
 
 {% block content %}
+<style>
+  /* tease */
+  .item img {
+    max-height: 400px;
+    object-fit: cover;
+  }
+</style>
 
-  <div id="Archive{{archive.name}}" class="archive uk-section uk-container" data-template="archive.twig">
-    <div class="uk-grid-large uk-grid" uk-grid="">
+<div id="Archive{{archive.title}}" class="archive" data-template="archive.twig">
 
-      <section class="left-section uk-width-2-3@m uk-first-column">
-
-        <h1 class="uk-article-title">{{archive.title}}</h1>
-        <p class="uk-article-meta">{{archive.description}}</p>
-      
-        {% block page_content %}
-          <div class="archive-posts">
-            {% for post in archive.posts %}
-              <article id="post-{{post.id}}" class="uk-section uk-section-small uk-padding-remove-top item post-{{post.id}} type-{{post.type}}">
-                <header>
-                  <h2 class="uk-margin-remove-adjacent uk-margin-small-top uk-text-bold uk-margin-small-bottom">
-                    <a class="uk-link-reset" href="{{post.link}}">
-                      {{post.title}}
-                    </a>
-                  </h2>
-                  <p class="uk-article-meta uk-margin-small-bottom">
-                    Published in {{post.date|date("F, Y")}}.
-                  </p>
-                </header>
-                <figure class="uk-position-relatve uk-inline uk-margin-remove">
-                  <a href="{{post.link}}">
-                    <img class="theme-border" data-src="{{post.featured_img.src}}" width="800" height="300" alt="{{post.featured_img.alt}}" uk-img>
-                  </a>
-                </figure>
-                <p>{{post.excerpt}}</p>
-                <a href="{{post.link}}" class="uk-button uk-button-default">Read more</a>
-              </article>
-            {% endfor %}
-          </div>
-        {% endblock %}
-
-      </section>
-
-      {% include 'sidebar.twig' %}
-
+  <header class="uk-section uk-section-muted uk-section-small uk-text-center theme-border-top theme-border-bottom">
+    <div class="uk-container uk-container-small">
+      <h1 class="uk-article-title uk-text-bold">{{archive.title}}</h1>
+      <hr class="uk-divider-small">
+      <p class="uk-text-lead">{{archive.description}}</p>
     </div>
+  </header>
 
+  <div class="uk-container">
+    
+    <ul class="uk-breadcrumb uk-margin-small-top uk-margin-remove-bottom">
+      <li><a href="/">Home</a></li>
+      <li><span>{{archive.title}}</span></li>
+    </ul>
+    
+    <div class="uk-section uk-section-small">
+      <div class="uk-grid-large uk-grid" uk-grid>
+        
+        <section class="left-section uk-width-2-3@m">
+          {% block page_content %}
+            <div class="archive-posts">
+              {% for post in archive.posts %}
+                {% include 'tease.twig' %}
+              {% endfor %}
+            </div>
+          {% endblock %}
+        </section>
+        
+        {% include 'sidebar.twig' %}
+        
+      </div>
+    </div>
   </div>
+</div>
 {% endblock %}
 

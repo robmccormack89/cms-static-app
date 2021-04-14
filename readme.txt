@@ -58,3 +58,9 @@ Uri Routing:
     /about/test -> (dynamic subpages)
     /blog/lorem-ipsum -> (dynamic posts)
     /blog -> (posts archive)
+
+template elements:
+
+    header
+    footer
+    https://contentberg.theme-sphere.com/

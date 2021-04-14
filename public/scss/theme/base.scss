@@ -4,16 +4,6 @@ html {
   max-width: 100%;
   overflow-x: hidden;
 }
-/* dropcap */
-.uk-dropcap:first-letter, .uk-dropcap>p:first-of-type:first-letter {
-  display: block;
-  margin-right: 10px;
-  margin-top: -10px;
-  float: left;
-  font-size: 4.8em;
-  line-height: 1;
-  margin-bottom: -2px;
-}
 // theme borders
 .theme-border {
   border: 1px solid $global-border;
@@ -36,4 +26,8 @@ html {
 }
 .pull-up-2 {
   margin-top: -2px;
+}
+// line height
+.line-height-1 {
+  line-height: 1rem;
 }

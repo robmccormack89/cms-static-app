@@ -23,8 +23,8 @@ class Archive_model {
       // return archive data with the posts under archive.posts
       $data = array(
         "name" => "blog",
-        "title" => "Blog",
-        "description" => "This is my Blog",
+        "title" => "Articles",
+        "description" => "Posts, tutorials, snippets, musings, notes, and everything else. The archive of everything I've written.",
         "meta_title" => "",
         "meta_description" => "",
         "featured_img" => array(
