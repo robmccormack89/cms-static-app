@@ -2,8 +2,8 @@
 $site_settings = new Settings_model;
 $settings = $site_settings->get_settings();
 $root = (isset($_SERVER['HTTPS']) ? "https://" : "http://") . $_SERVER['HTTP_HOST'];
-$blog_url = '/' . $site_settings->get_blog_url();
-$portfolio_url = '/' . $site_settings->get_portfolio_url();
+$blog_settings = $site_settings->get_blog_settings();
+$portfolio_settings = $site_settings->get_portfolio_settings();
 
 return array(
   'admin_email' => $settings['site_email'], // owners email**
@@ -14,8 +14,10 @@ return array(
   'site_tagline' => $settings['site_tagline'], // site tagline**
   'site_protocol' => $settings['site_protocol'], // http or https, you decide**
   'base_url' => $root, // done for ya
-  'blog_url' => $blog_url, // done for ya
-  'portfolio_url' => $portfolio_url, // done for ya
+  'blog_url' => $blog_settings['blog_url'], // done for ya
+  'post_url' => $blog_settings['post_url'], // done for ya
+  'portfolio_url' => $portfolio_settings['portfolio_url'], // done for ya
+  'project_url' => $portfolio_settings['project_url'], // done for ya
   'author_ip' => $settings['site_ip'], // your ip address! if local, keep the same. If on a server, use that IP**
   'visitor_ip' => $_SERVER['REMOTE_ADDR'], // the visitor's IP, done for ya
   'php_cache' => $settings['site_cache'], // set 'enable' to enable php caching

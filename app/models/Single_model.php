@@ -15,4 +15,18 @@ class Single_model {
     return $page;
   }
   
+  public function get_post_by_slug($slug) {
+    $q = new Jsonq('../public/json/data.json');
+    $post = $q->from('site.blog.posts')->where('slug', '=', $slug)->first();
+
+    return $post;
+  }
+  
+  public function get_project_by_slug($slug) {
+    $q = new Jsonq('../public/json/data.json');
+    $project = $q->from('site.portfolio.projects')->where('slug', '=', $slug)->first();
+
+    return $project;
+  }
+  
 }

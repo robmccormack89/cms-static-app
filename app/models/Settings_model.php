@@ -12,20 +12,22 @@ class Settings_model {
     return $settings;
   }
   
-  public function get_blog_url() {
+  public function get_blog_settings() {
     
     $q = new Jsonq('../public/json/data.json');
-    $name = $q->from('site.blog.name')->get();
+    $blog = $q->from('site.blog.routes')
+    ->get();
 
-    return $name;
+    return $blog;
   }
   
-  public function get_portfolio_url() {
+  public function get_portfolio_settings() {
     
     $q = new Jsonq('../public/json/data.json');
-    $name = $q->from('site.portfolio.name')->get();
+    $portfolio = $q->from('site.portfolio.routes')
+    ->get();
 
-    return $name;
+    return $portfolio;
   }
-  
+
 }

@@ -311,6 +311,10 @@
       "description": "This is my Blog",
       "meta_title": "",
       "meta_description": "",
+      "routes": {
+        "blog_url": "/blog",
+        "post_url": "/blog/post"
+      },
       "featured_img": {
         "src": "/public/img/stock.jpg",
         "title": "My Image",
@@ -465,6 +469,10 @@
       "description": "This is my Portfolio",
       "meta_title": "",
       "meta_description": "",
+      "routes": {
+        "portfolio_url": "/portfolio",
+        "project_url": "/portfolio/project"
+      },
       "featured_img": {
         "src": "/public/img/stock.jpg",
         "title": "My Image",

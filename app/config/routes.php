@@ -20,9 +20,9 @@ $router->get($GLOBALS['configs']['blog_url'], function(){
   $blog->blog();
 });
 // posts
-$router->get($GLOBALS['configs']['blog_url'].'/:slug', function($slug){
+$router->get($GLOBALS['configs']['post_url'].'/:slug', function($slug){
   $post = new Single_controller;
-  $post->post($slug, '');
+  $post->post($slug);
 });
 // portfolio
 $router->get($GLOBALS['configs']['portfolio_url'], function(){
@@ -30,7 +30,7 @@ $router->get($GLOBALS['configs']['portfolio_url'], function(){
   $portfolio->portfolio();
 });
 // projects
-$router->get($GLOBALS['configs']['portfolio_url'].'/:slug', function($slug){
+$router->get($GLOBALS['configs']['project_url'].'/:slug', function($slug){
   $project = new Single_controller;
   $project->project($slug, '');
 });

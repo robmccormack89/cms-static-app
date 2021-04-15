@@ -23,15 +23,15 @@ class Single_controller extends Core_controller {
   
   public function post($slug) {
     $this->post = new Single_model;
-    $context['single'] = $this->post->get_single_by_slug($slug, '');
-    
+    $context['single'] = $this->post->get_post_by_slug($slug);
+
     $this->render_single($context['single'], 'post-'.$context['single']['slug'].'.twig', 'post.twig', 'single.twig', $context);
   }
   
   public function project($slug) {
     $this->project = new Single_model;
-    
-    $context['single'] = $this->project->get_single_by_slug($slug, '');
+    $context['single'] = $this->project->get_project_by_slug($slug);
+
     $this->render_single($context['single'], 'project-'.$context['single']['slug'].'.twig', 'project.twig', 'single.twig', $context);
   }
   

@@ -12,7 +12,7 @@ class Archive_controller extends Core_controller {
     $context['archive'] = $this->blog->posts();
     // set the post link url
     foreach ($context['archive']['posts'] as $post) {
-      $post['link'] = $GLOBALS['configs']['base_url'].'/'.$context['archive']['name'].'/'.$post['slug'];
+      $post['link'] = $GLOBALS['configs']['base_url'].$GLOBALS['configs']['post_url'].'/'.$post['slug'];
       $posts[] = $post;
     }
     // set the archive.posts context from modified above posts
@@ -26,7 +26,7 @@ class Archive_controller extends Core_controller {
     $context['archive'] = $this->portfolio->projects();
     // set the project link url
     foreach ($context['archive']['projects'] as $post) {
-      $post['link'] = $GLOBALS['configs']['base_url'].'/'.$context['archive']['name'].'/'.$post['slug'];
+      $post['link'] = $GLOBALS['configs']['base_url'].$GLOBALS['configs']['project_url'].'/'.$post['slug'];
       $posts[] = $post;
     }
     // set the archive.posts context from modified above posts
