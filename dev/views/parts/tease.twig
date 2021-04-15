@@ -1,0 +1,19 @@
+<article id="post-{{post.id}}" class="uk-section uk-section-small uk-padding-remove-top item post-{{post.id}} type-{{post.type}}">
+  <header>
+    <figure class="uk-position-relatve uk-inline uk-margin-remove">
+      <a class="uk-link-reset" href="{{post.link}}">
+        <img class="" data-src="{{post.featured_img.src|default(configs.placeholder_img_src)}}" width="776" height="400" alt="{{post.featured_img.alt}}" uk-img>
+      </a>
+    </figure>
+    <h2 class="uk-text-bold uk-margin-top">
+      <a class="uk-link-reset" href="{{post.link}}">
+        {{post.title}}
+      </a>
+    </h2>
+    <p class="uk-article-meta">
+      {{post.date|date("F j, Y")}}
+    </p>
+  </header>
+  <p>{{post.excerpt}}</p>
+  <a href="{{post.link}}" class="">Read more</a>
+</article>

@@ -2,22 +2,37 @@
 
 class Single_controller extends Core_controller {
   
-  public $single;
-  
   public function __construct()
   {
     parent::__construct();
-    $this->single = new Single_model;
   }
-
-  public function single($parent_slug, $child_slug) {
-    $context['single'] = $this->single->get_single_by_slug($parent_slug, $child_slug);
+  
+  public function index() {
+    $this->homepage = new Single_model;
+    $context['single'] = $this->homepage->get_single_by_slug('index', '');
     
-    if ($context['single'] && is_published_or_draft_allowed($context['single'])) {
-      $this->render_single($context['single'], $context);
-    } else {
-      $this->error();
-    }
+    $this->render_single($context['single'], 'homepage.twig', 'front.twig', 'home.twig', $context);
+  }
+  
+  public function page($parent_slug, $child_slug) {
+    $this->page = new Single_model;
+    $context['single'] = $this->page->get_single_by_slug($parent_slug, $child_slug);
+    
+    $this->render_single($context['single'], 'page-'.$context['single']['slug'].'.twig', 'page.twig', 'single.twig', $context);
+  }
+  
+  public function post($slug) {
+    $this->post = new Single_model;
+    $context['single'] = $this->post->get_single_by_slug($slug, '');
+    
+    $this->render_single($context['single'], 'post-'.$context['single']['slug'].'.twig', 'post.twig', 'single.twig', $context);
+  }
+  
+  public function project($slug) {
+    $this->project = new Single_model;
+    
+    $context['single'] = $this->project->get_single_by_slug($slug, '');
+    $this->render_single($context['single'], 'project-'.$context['single']['slug'].'.twig', 'project.twig', 'single.twig', $context);
   }
   
 }

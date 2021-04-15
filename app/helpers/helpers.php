@@ -1,4 +1,10 @@
 <?php
+function get_json_data($filename)
+{
+  $str = file_get_contents('../public/json/'.$filename.'.json');
+  $data = json_decode($str, true); // decode the JSON into an associative array
+  return $data;
+}
 // get objects in array using key->value
 function get_in_array( string $needle, array $haystack, string $column){
   $matches = [];

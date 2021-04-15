@@ -11,39 +11,40 @@ if ($configs['site_protocol'] == "https") {
 require_once('router.php');
 // homepage route
 $router->get('/', function(){
-  $homepage = new Home_controller;
+  $homepage = new Single_controller;
   $homepage->index();
 });
+// blog
 $router->get($GLOBALS['configs']['blog_url'], function(){
   $blog = new Archive_controller;
-  $blog->archive();
+  $blog->blog();
 });
-// dynamic posts route
+// posts
 $router->get($GLOBALS['configs']['blog_url'].'/:slug', function($slug){
   $post = new Single_controller;
-  $post->single($slug, '');
+  $post->post($slug, '');
 });
 // portfolio
 $router->get($GLOBALS['configs']['portfolio_url'], function(){
   $portfolio = new Archive_controller;
-  $portfolio->archive();
+  $portfolio->portfolio();
 });
 // projects
 $router->get($GLOBALS['configs']['portfolio_url'].'/:slug', function($slug){
   $project = new Single_controller;
-  $project->single($slug, '');
+  $project->project($slug, '');
 });
-// dynamic pages route
+// pages
 $router->get('/:parent_slug', function($parent_slug){
   $page = new Single_controller;
-  $page->single($parent_slug, '');
+  $page->page($parent_slug, '');
 });
-// dynamic pages route (with sub pages)
+// pages/sub-pages
 $router->get('/:parent_slug/:child_slug', function($parent_slug, $child_slug){
   $page = new Single_controller;
-  $page->single($parent_slug, $child_slug);
+  $page->page($parent_slug, $child_slug);
 });
-// error page route (goes last)
+// error page
 $router->any('/404', function(){
   $core = new Core_controller;
   $core->error();

@@ -1,0 +1,44 @@
+{% extends "base.twig" %}
+
+{% block seo_meta %}
+  <title>{{single.meta_title|default(single.title ~ ' | ' ~ configs.site_title)}}</title>
+  <meta name="description" content="{{single.meta_description|default(single.excerpt)}}">
+  <link rel="canonical" href="{{configs.current_url}}" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="{{single.meta_title|default(single.title ~ ' | ' ~ configs.site_title)}}" />
+  <meta property="og:description" content="{{single.meta_description|default(single.excerpt)}}" />
+  <meta property="og:image" content="{{configs.base_url}}{{single.featured_img.src}}" />
+  <meta property="og:url" content="{{configs.current_url}}" />
+  <meta property="og:site_name" content="{{configs.site_title}}" />
+{% endblock %}
+
+{% block content %}
+  <div id="Single{{single.id}}" class="page-{{single.id}} page uk-section uk-container" data-template="single.twig">
+    <div class="uk-grid-large uk-grid" uk-grid="">
+
+      <section class="left-section uk-width-2-3@m uk-first-column">
+        <article class="uk-article">
+
+          <header class="article-header">
+            <h1 class="uk-article-title uk-text-bold">{{single.title}}</h1>
+          </header>
+          
+          {% if single.status == 'draft' %}
+            <p class="uk-margin-bottom">
+              <span class="uk-label uk-label-warning">This page is in Draft mode</span>
+            </p>
+          {% endif %}
+          
+          {% block page_content %}
+            Nothing to see here. Yet...
+          {% endblock %}
+
+        </article>
+      </section>
+
+      {% include 'sidebar.twig' %}
+
+    </div>
+  </div>
+{% endblock %}
+

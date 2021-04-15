@@ -1,0 +1,27 @@
+{% extends "base.twig" %}
+
+{% block seo_meta %}
+  <title>{{single.meta_title|default(single.title ~ ' | ' ~ configs.site_title)}}</title>
+  <meta name="description" content="{{single.meta_description|default(single.excerpt)}}">
+  <link rel="canonical" href="{{configs.current_url}}" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="{{single.meta_title|default(single.title ~ ' | ' ~ configs.site_title)}}" />
+  <meta property="og:description" content="{{single.meta_description|default(single.excerpt)}}" />
+  <meta property="og:image" content="{{configs.base_url}}{{single.featured_img.src}}" />
+  <meta property="og:url" content="{{configs.current_url}}" />
+  <meta property="og:site_name" content="{{configs.site_title}}" />
+{% endblock %}
+
+{% block content %}
+
+<div data-template="homepage.twig">
+
+  <section class="home-more uk-section uk-section-small home-posts-section">
+    <div class="uk-container">
+      Homepage
+    </div>
+  </section>
+
+</div>
+
+{% endblock %}
