@@ -1,8 +1,4 @@
 <?php
-// loads configs & helpers some helper functions, for now. A work in progress...
-$configs = require_once('config/config.php');
-// loadin helper functions
-require_once 'helpers/helpers.php';
 // composer vender autoload
 require_once '../vendor/autoload.php';
 // autoload the core, controllers & models
@@ -28,5 +24,9 @@ spl_autoload_register(function ($className) {
     }
   }
 });
+// loads configs & helpers some helper functions, for now. A work in progress...
+$configs = require_once('config/config.php');
+// loadin helper functions
+require_once 'helpers/helpers.php';
 // load routes. Each route runs a controller method
 require_once 'config/routes.php';

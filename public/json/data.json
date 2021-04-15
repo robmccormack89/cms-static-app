@@ -19,6 +19,8 @@
       "site_description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
       "site_email": "info@example.com",
       "site_protocol": "http",
+      "site_lang": "en-GB",
+      "site_charset": "UTF-8",
       "site_ip": "127.0.0.1",
       "site_cache": "disable",
       "dark_light_mode": "light",
