@@ -9,17 +9,13 @@ class Archive_controller extends Core_controller {
   
   public function blog($page) {
     $this->blog = new Archive_model;
-    $context['archive'] = $this->blog->posts($page)->blog_archive;
+    $context['archive'] = $this->blog->posts($page)->archive;
     $context['archive']['posts'] = $this->blog->posts($page)->posts;
-
+    
     if ($context['archive']['posts']) {
-      foreach ($context['archive']['posts'] as $post) {
-        $post['link'] = $GLOBALS['configs']['base_url'].$GLOBALS['configs']['post_url'].'/'.$post['slug'];
-        $posts[] = $post;
-      }
-      $context['archive']['posts'] = $posts;
       $this->render_archive($context['archive'], 'blog.twig', 'archive.twig', '404.twig', $context);
-    } else {
+    } 
+    else {
       $this->error();
     }
   }
