@@ -36,6 +36,14 @@ class Core_controller {
   public function error() {
     echo $this->twig->render('404.twig');
   }
+  // a custom renderer for twig, $context & custom caching
+  // check if 1st template arg exists in twig loader, then 2nd template, then falls back to third.
+  // renders relevant twig template with context & caching accoring to setting
+  public function cache_render($template, $context) {
+    if(is_cache_enabled()): $this->cache->cacheServe(); endif;
+    echo $this->twig->render($template, $context);
+    if(is_cache_enabled()): $this->cache->cacheFile(); endif;
+  }
   public function view_render($custom_template, $default_template, $base_template, $context) {
     if ($this->twig->getLoader()->exists($custom_template)) {
       $this->cache_render($custom_template, $context);
@@ -45,9 +53,6 @@ class Core_controller {
       $this->cache_render($base_template, $context);
     }
   }
-  // a custom renderer for twig, $context & custom caching
-  // check if 1st template arg exists in twig loader, then 2nd template, then falls back to third.
-  // renders relevant twig template with context & caching accoring to setting
   public function render_single($single_obj, $custom_template, $default_template, $base_template, $context) {
     if (is_published_or_draft_allowed($single_obj)) {
       $this->view_render($custom_template, $default_template, $base_template, $context);
@@ -62,10 +67,6 @@ class Core_controller {
       $this->error();
     }
   }
-  public function cache_render($the_template, $context) {
-    if(is_cache_enabled()): $this->cache->cacheServe(); endif;
-    echo $this->twig->render($the_template, $context);
-    if(is_cache_enabled()): $this->cache->cacheFile(); endif;
-  }
+
   
 }

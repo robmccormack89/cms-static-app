@@ -17,7 +17,17 @@ $router->get('/', function(){
 // blog
 $router->get($GLOBALS['configs']['blog_url'], function(){
   $blog = new Archive_controller;
-  $blog->blog();
+  $blog->blog('');
+});
+// blog with pagination
+$router->get($GLOBALS['configs']['blog_url'].'/page/:page', function($page){
+  if ($page == 1) {
+    $url = $GLOBALS['configs']['blog_url'];
+    header('Location: ' . $url, true, 301);
+    exit();
+  }
+  $blog = new Archive_controller;
+  $blog->blog($page);
 });
 // posts
 $router->get($GLOBALS['configs']['post_url'].'/:slug', function($slug){

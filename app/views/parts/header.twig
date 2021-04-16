@@ -26,19 +26,19 @@
           {% for item in main_menu.menu_items %}
             <li class="menu-item">
               <a href="{{item.link}}">{{item.title}}</a>
-                {% if item.children %}
-                <div class="uk-navbar-dropdown">
-                  <ul class="uk-nav uk-navbar-dropdown-nav">
-                    {% for child_item in item.children %}
-                      <li><a href="{{child_item.link}}">{{child_item.title}}</a></li>
-                    {% endfor %}  
-                  </ul>
-                </div>
-                {% endif %}
+              {% if item.children %}
+              <div class="uk-navbar-dropdown">
+                <ul class="uk-nav uk-navbar-dropdown-nav">
+                  {% for child_item in item.children %}
+                    <li><a href="{{child_item.link}}">{{child_item.title}}</a></li>
+                  {% endfor %}  
+                </ul>
+              </div>
+              {% endif %}
             </li>
           {% endfor %}  
         {% else %}
-          <li class="menu-item">Add a menu with the slug main-menu to menus.json</li>
+          <li class="menu-item">Add a menu with the slug main-menu to data.json</li>
         {% endif %}
       </ul>
       

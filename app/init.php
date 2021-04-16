@@ -1,7 +1,7 @@
 <?php
-// composer vender autoload
+// composer autoload
 require_once '../vendor/autoload.php';
-// autoload the core, controllers & models
+// spl_autoload_register the core, controllers & models
 spl_autoload_register(function ($className) {
   $dirs = array(
     'core/', // Core classes
@@ -24,9 +24,9 @@ spl_autoload_register(function ($className) {
     }
   }
 });
-// loads configs & helpers some helper functions, for now. A work in progress...
+// load configs
 $configs = require_once('config/config.php');
-// loadin helper functions
+// load helpers
 require_once 'helpers/helpers.php';
-// load routes. Each route runs a controller method
+// load routes
 require_once 'config/routes.php';
