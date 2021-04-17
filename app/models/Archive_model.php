@@ -80,11 +80,15 @@ class Archive_model {
   
   public function get_pagination() {
     $paged = $this->get_archive_data()->pagination;
-    $data = set_pagination_data(
-      $paged, 
-      $this->page, 
-      $this->get_all_posts()->count
-    );
+    if($paged['is_paged'] == true) {
+      $data = set_pagination_data(
+        $paged, 
+        $this->page, 
+        $this->get_all_posts()->count
+      );
+    } else {
+      $data = '';
+    }
     return $data;
   }
   

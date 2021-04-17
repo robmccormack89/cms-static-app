@@ -12,10 +12,26 @@ class Settings_model {
     return $settings;
   }
   
+  public function get_blog_meta() {
+    
+    $q = new Jsonq('../public/json/data.json');
+    $blog = $q->from('site.blog.meta')->get();
+
+    return $blog;
+  }
+  
   public function get_blog_settings() {
     
     $q = new Jsonq('../public/json/data.json');
     $blog = $q->from('site.blog.routes')->get();
+
+    return $blog;
+  }
+  
+  public function get_portfolio_meta() {
+    
+    $q = new Jsonq('../public/json/data.json');
+    $blog = $q->from('site.portfolio.meta')->get();
 
     return $blog;
   }

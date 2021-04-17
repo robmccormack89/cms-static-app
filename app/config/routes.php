@@ -19,21 +19,26 @@ $router->get($GLOBALS['configs']['blog_url'], function(){
   $blog = new Archive_controller('');
   $blog->blog('');
 });
-// blog with pagination
-$router->get($GLOBALS['configs']['blog_url'].'/page/:page', function($page){
-  if ($page == 1) {
-    $url = $GLOBALS['configs']['blog_url'];
-    header('Location: ' . $url, true, 301);
-    exit();
-  }
-  $blog = new Archive_controller($page);
-  $blog->blog();
-});
-// posts
-$router->get($GLOBALS['configs']['post_url'].'/:slug', function($slug){
-  $post = new Single_controller;
-  $post->post($slug);
-});
+// if blog is set as paged, create the paged route
+if($GLOBALS['configs']['is_blog_paged'] == true) {
+  // blog with pagination
+  $router->get($GLOBALS['configs']['blog_url'].'/page/:page', function($page){
+    if ($page == 1) {
+      $url = $GLOBALS['configs']['blog_url'];
+      header('Location: ' . $url, true, 301);
+      exit();
+    }
+    $blog = new Archive_controller($page);
+    $blog->blog();
+  });
+}
+if($GLOBALS['configs']['is_portfolio_paged'] == true) {
+  // posts
+  $router->get($GLOBALS['configs']['post_url'].'/:slug', function($slug){
+    $post = new Single_controller;
+    $post->post($slug);
+  });
+}
 // portfolio
 $router->get($GLOBALS['configs']['portfolio_url'], function(){
   $portfolio = new Archive_controller('');

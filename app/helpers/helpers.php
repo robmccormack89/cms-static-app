@@ -22,9 +22,7 @@ function set_pagination_data($blog_data, $requested_page, $posts_count) {
     $data['prev'] = $requested_page-1;
   }
   
-  $howmany = ceil($posts_count / 4);
-  
-
+  $howmany = ceil($posts_count / $blog_data['posts_per_page']);
   
   for ($i=0; $i < $howmany; $i++) {
 

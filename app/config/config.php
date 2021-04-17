@@ -3,7 +3,9 @@ $site_settings = new Settings_model;
 $settings = $site_settings->get_settings();
 $root = (isset($_SERVER['HTTPS']) ? "https://" : "http://") . $_SERVER['HTTP_HOST'];
 $blog_settings = $site_settings->get_blog_settings();
+$blog_pagi = $site_settings->get_blog_meta()->pagination;
 $portfolio_settings = $site_settings->get_portfolio_settings();
+$portfolio_pagi = $site_settings->get_portfolio_meta()->pagination;
 
 return array(
   'admin_email' => $settings['site_email'], // owners email**
@@ -15,9 +17,11 @@ return array(
   'site_protocol' => $settings['site_protocol'], // http or https, you decide**
   'base_url' => $root, // done for ya
   'blog_url' => $blog_settings['archive_url'], // done for ya
+  'is_blog_paged' => $blog_pagi['is_paged'],
   'post_url' => $blog_settings['single_url'], // done for ya
   'portfolio_url' => $portfolio_settings['archive_url'], // done for ya
   'project_url' => $portfolio_settings['single_url'], // done for ya
+  'is_portfolio_paged' => $portfolio_pagi['is_paged'],
   'author_ip' => $settings['site_ip'], // your ip address! if local, keep the same. If on a server, use that IP**
   'visitor_ip' => $_SERVER['REMOTE_ADDR'], // the visitor's IP, done for ya
   'php_cache' => $settings['site_cache'], // set 'enable' to enable php caching
