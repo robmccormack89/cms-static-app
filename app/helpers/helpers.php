@@ -21,6 +21,27 @@ function set_pagination_data($blog_data, $requested_page, $posts_count) {
   if (has_prev($requested_page, $posts_count, $blog_data['posts_per_page'])) {
     $data['prev'] = $requested_page-1;
   }
+  
+  $howmany = ceil($posts_count / 4);
+  
+
+  
+  for ($i=0; $i < $howmany; $i++) {
+
+    if ($i+1 == $requested_page) {
+      $class = "uk-active";
+    } else {
+      $class = "not-active";
+    }
+    
+    $out[] = array(
+      'link' => $i+1, 
+      'title' => $i+1,
+      'class' => $class,
+    );
+  }
+  
+  $data['pages'] = $out;
 
   return $data;
 }
