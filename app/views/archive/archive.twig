@@ -19,6 +19,9 @@
       max-height: 400px;
       object-fit: cover;
     }
+    .pagination-nav .uk-navbar-item {
+      min-height: 50px;
+    }
   </style>
 {% endblock %}
 
@@ -46,36 +49,49 @@
         
         <section class="left-section uk-width-2-3@m">
           {% block page_content %}
+          
+            {% if (archive.pagination.next or archive.pagination.prev) %}
+              <nav class="uk-navbar-container theme-border pagination-nav uk-margin-bottom" uk-navbar>
+                
+                <div class="uk-navbar-left">
+                  <div class="uk-navbar-item">
+                    <span class="uk-text-bold uk-text-emphasis">Navigation</span>
+                  </div>
+                </div>
+            
+                <div class="uk-navbar-right">
+                  <div class="uk-navbar-item">
+                    <ul class="uk-pagination uk-margin-remove">
+                      {% if archive.pagination.prev %}
+                        <li>
+                          <a class="prev" href="{{archive.routes.archive_url}}/page/{{archive.pagination.prev}}">
+                            <span uk-pagination-previous></span><span class="uk-margin-small-left uk-visible@m">Previous</span></a>
+                        </li>
+                      {% endif %}
+                      {% for page in archive.pagination.pages %}
+                        {% if page.class == 'uk-active' %}
+                          <li class="{{page.class}}"><span>{{page.title}}</span></li>
+                        {% else %}
+                          <li class="{{page.class}}"><a href="{{archive.routes.archive_url}}/page/{{page.link}}">{{page.title}}</a></li>
+                        {% endif %}
+                      {% endfor %}
+                      {% if archive.pagination.next %}
+                        <li>
+                          <a class="next" href="{{archive.routes.archive_url}}/page/{{archive.pagination.next}}">
+                            <span class="uk-margin-small-right uk-visible@m">Next</span><span uk-pagination-next></span></a>
+                        </li>
+                      {% endif %}
+                    </ul>
+                  </div>
+                </div>
+                  
+              </nav>
+            {% endif %}
             <div class="archive-posts">
               {% for post in archive.posts %}
                 {% include 'tease.twig' %}
               {% endfor %}
             </div>
-            
-            {% if (archive.pagination.next or archive.pagination.prev) %}
-              <ul class="uk-pagination uk-flex-center">
-                {% if archive.pagination.prev %}
-                  <li>
-                    <a class="prev " href="{{archive.routes.archive_url}}/page/{{archive.pagination.prev}}">
-                      <span class="uk-margin-small-right" uk-pagination-previous></span> Previous</a>
-                  </li>
-                {% endif %}
-                {% for page in archive.pagination.pages %}
-                  {% if page.class == 'uk-active' %}
-                    <li class="{{page.class}}"><span>{{page.title}}</span></li>
-                  {% else %}
-                    <li class="{{page.class}}"><a href="{{archive.routes.archive_url}}/page/{{page.link}}">{{page.title}}</a></li>
-                  {% endif %}
-                {% endfor %}
-                {% if archive.pagination.next %}
-                  <li>
-                    <a class="next" href="{{archive.routes.archive_url}}/page/{{archive.pagination.next}}">
-                      Next <span class="uk-margin-small-left" uk-pagination-next></span></a>
-                  </li>
-                {% endif %}
-              </ul>
-            {% endif %}
-            
           {% endblock %}
         </section>
         
