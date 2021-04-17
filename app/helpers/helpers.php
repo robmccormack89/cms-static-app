@@ -2,7 +2,7 @@
 
 function generate_tease_post_links($someposts, $singular_url_setting) {
   foreach ($someposts as $post) {
-    $post->link = $GLOBALS['configs']['base_url'].$singular_url_setting.'/'.$post->slug;
+    $post['link'] = $GLOBALS['configs']['base_url'].$singular_url_setting.'/'.$post['slug'];
     $posts[] = $post;
   }
   return $posts;
