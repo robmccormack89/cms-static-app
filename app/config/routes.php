@@ -32,28 +32,28 @@ if($GLOBALS['configs']['is_blog_paged'] == true) {
     $blog->blog();
   });
 }
-if($GLOBALS['configs']['is_portfolio_paged'] == true) {
-  // posts
-  $router->get($GLOBALS['configs']['post_url'].'/:slug', function($slug){
-    $post = new Single_controller;
-    $post->post($slug);
-  });
-}
+// posts
+$router->get($GLOBALS['configs']['post_url'].'/:slug', function($slug){
+  $post = new Single_controller;
+  $post->post($slug);
+});
 // portfolio
 $router->get($GLOBALS['configs']['portfolio_url'], function(){
   $portfolio = new Archive_controller('');
   $portfolio->portfolio('');
 });
-// portfolio with pagination
-$router->get($GLOBALS['configs']['portfolio_url'].'/page/:page', function($page){
-  if ($page == 1) {
-    $url = $GLOBALS['configs']['portfolio_url'];
-    header('Location: ' . $url, true, 301);
-    exit();
-  }
-  $portfolio = new Archive_controller($page);
-  $portfolio->portfolio();
-});
+if($GLOBALS['configs']['is_portfolio_paged'] == true) {
+  // portfolio with pagination
+  $router->get($GLOBALS['configs']['portfolio_url'].'/page/:page', function($page){
+    if ($page == 1) {
+      $url = $GLOBALS['configs']['portfolio_url'];
+      header('Location: ' . $url, true, 301);
+      exit();
+    }
+    $portfolio = new Archive_controller($page);
+    $portfolio->portfolio();
+  });
+}
 // projects
 $router->get($GLOBALS['configs']['project_url'].'/:slug', function($slug){
   $project = new Single_controller;
