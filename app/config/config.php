@@ -14,10 +14,10 @@ return array(
   'site_tagline' => $settings['site_tagline'], // site tagline**
   'site_protocol' => $settings['site_protocol'], // http or https, you decide**
   'base_url' => $root, // done for ya
-  'blog_url' => $blog_settings['blog_url'], // done for ya
-  'post_url' => $blog_settings['post_url'], // done for ya
-  'portfolio_url' => $portfolio_settings['portfolio_url'], // done for ya
-  'project_url' => $portfolio_settings['project_url'], // done for ya
+  'blog_url' => $blog_settings['archive_url'], // done for ya
+  'post_url' => $blog_settings['single_url'], // done for ya
+  'portfolio_url' => $portfolio_settings['archive_url'], // done for ya
+  'project_url' => $portfolio_settings['single_url'], // done for ya
   'author_ip' => $settings['site_ip'], // your ip address! if local, keep the same. If on a server, use that IP**
   'visitor_ip' => $_SERVER['REMOTE_ADDR'], // the visitor's IP, done for ya
   'php_cache' => $settings['site_cache'], // set 'enable' to enable php caching

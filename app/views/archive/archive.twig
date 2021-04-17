@@ -31,6 +31,23 @@
       <h1 class="uk-article-title uk-text-bold">{{archive.title}}</h1>
       <hr class="uk-divider-small">
       <p class="uk-text-lead">{{archive.description}}</p>
+      
+      <ul class="uk-pagination uk-flex-center" uk-margin>
+        {% if archive.pagination.prev %}
+          <li>
+            <a href="{{archive.routes.archive_url}}/page/{{archive.pagination.prev}}">
+              <span class="uk-margin-small-right" uk-pagination-previous></span> Previous</a>
+          </li>
+        {% endif %}
+        <li hidden><a href="#">1</a></li>
+        <li hidden><a href="#">2</a></li>
+        {% if archive.pagination.next %}
+          <li>
+            <a href="{{archive.routes.archive_url}}/page/{{archive.pagination.next}}">
+              Next <span class="uk-margin-small-left" uk-pagination-next></span></a>
+          </li>
+        {% endif %}
+      </ul>
     </div>
   </header>
 

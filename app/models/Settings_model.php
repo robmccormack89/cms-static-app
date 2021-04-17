@@ -15,8 +15,7 @@ class Settings_model {
   public function get_blog_settings() {
     
     $q = new Jsonq('../public/json/data.json');
-    $blog = $q->from('site.blog.routes')
-    ->get();
+    $blog = $q->from('site.blog.routes')->get();
 
     return $blog;
   }
@@ -24,8 +23,7 @@ class Settings_model {
   public function get_portfolio_settings() {
     
     $q = new Jsonq('../public/json/data.json');
-    $portfolio = $q->from('site.portfolio.routes')
-    ->get();
+    $portfolio = $q->from('site.portfolio.routes')->get();
 
     return $portfolio;
   }

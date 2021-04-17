@@ -306,23 +306,27 @@
       }
     ],
     "blog": {
-      "name": "blog",
-      "title": "Blog",
-      "description": "This is my Blog",
-      "meta_title": "",
-      "meta_description": "",
-      "routes": {
-        "blog_url": "/blog",
-        "post_url": "/blog/post",
-        "is_paged": true,
-        "posts_per_page": 4
+      "meta": {
+        "name": "blog",
+        "title": "Blog",
+        "description": "This is my Blog",
+        "meta_title": "",
+        "meta_description": "",
+        "featured_img": {
+          "src": "/public/img/stock.jpg",
+          "title": "My Image",
+          "alt": "Alt Text",
+          "caption": "A lovely caption",
+          "description": "Something about the image"
+        },
+        "pagination": {
+          "is_paged": true,
+          "posts_per_page": 4
+        }
       },
-      "featured_img": {
-        "src": "/public/img/stock.jpg",
-        "title": "My Image",
-        "alt": "Alt Text",
-        "caption": "A lovely caption",
-        "description": "Something about the image"
+      "routes": {
+        "archive_url": "/blog",
+        "single_url": "/blog/post"
       },
       "posts": [
         {
@@ -742,21 +746,27 @@
       ]
     },
     "portfolio": {
-      "name": "portfolio",
-      "title": "Portfolio",
-      "description": "This is my Portfolio",
-      "meta_title": "",
-      "meta_description": "",
-      "routes": {
-        "portfolio_url": "/portfolio",
-        "project_url": "/portfolio/project"
+      "meta": {
+        "name": "portfolio",
+        "title": "Portfolio",
+        "description": "This is my Portfolio",
+        "meta_title": "",
+        "meta_description": "",
+        "featured_img": {
+          "src": "/public/img/stock.jpg",
+          "title": "My Image",
+          "alt": "Alt Text",
+          "caption": "A lovely caption",
+          "description": "Something about the image"
+        },
+        "pagination": {
+          "is_paged": true,
+          "posts_per_page": 4
+        }
       },
-      "featured_img": {
-        "src": "/public/img/stock.jpg",
-        "title": "My Image",
-        "alt": "Alt Text",
-        "caption": "A lovely caption",
-        "description": "Something about the image"
+      "routes": {
+        "archive_url": "/portfolio",
+        "single_url": "/portfolio/project"
       },
       "projects": [
         {
@@ -806,13 +816,243 @@
           ]
         },
         {
-          "id": 13,
-          "title": "Web Development",
-          "slug": "web-development",
+          "id": 11,
+          "title": "D Consectetur Adipisicing Elit",
+          "slug": "consectetur-adipisicing-elit",
           "status": "published",
           "author": "Robert McCormack",
           "date_time": "2019-04-04T19:20:30.45+01:00",
-          "type": "project",
+          "type": "post",
+          "excerpt": "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.",
+          "featured_img": {
+            "src": "/public/img/stock.jpg",
+            "title": "My Image",
+            "alt": "Alt Text",
+            "caption": "A lovely caption",
+            "description": "Something about the image"
+          },
+          "gallery": [{
+              "src": "/public/img/stock.jpg",
+              "title": "My Image 1",
+              "alt": "Alt Text 1",
+              "caption": "A lovely caption 1",
+              "description": "Something about the image 1"
+            },
+            {
+              "src": "/public/img/stock.jpg",
+              "title": "My Image 2",
+              "alt": "Alt Text 2",
+              "caption": "A lovely caption 2",
+              "description": "Something about the image 2"
+            },
+            {
+              "src": "/public/img/stock.jpg 3",
+              "title": "My Image 3",
+              "alt": "Alt Text 3",
+              "caption": "A lovely caption 3",
+              "description": "Something about the image 3"
+            },
+            {
+              "src": "/public/img/stock.jpg 4",
+              "title": "My Image 4",
+              "alt": "Alt Text 4",
+              "caption": "A lovely caption 4",
+              "description": "Something about the image 4"
+            }
+          ]
+        },
+        {
+          "id": 12,
+          "title": "E Lorem ipsum dolor sit amet",
+          "slug": "lorem-ipsum-dolor",
+          "status": "published",
+          "author": "Robert McCormack",
+          "date_time": "2019-04-04T19:20:30.45+01:00",
+          "type": "post",
+          "excerpt": "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.",
+          "featured_img": {
+            "src": "/public/img/stock.jpg",
+            "title": "My Image",
+            "alt": "Alt Text",
+            "caption": "A lovely caption",
+            "description": "Something about the image"
+          },
+          "gallery": [{
+              "src": "/public/img/stock.jpg",
+              "title": "My Image 1",
+              "alt": "Alt Text 1",
+              "caption": "A lovely caption 1",
+              "description": "Something about the image 1"
+            },
+            {
+              "src": "/public/img/stock.jpg",
+              "title": "My Image 2",
+              "alt": "Alt Text 2",
+              "caption": "A lovely caption 2",
+              "description": "Something about the image 2"
+            },
+            {
+              "src": "/public/img/stock.jpg 3",
+              "title": "My Image 3",
+              "alt": "Alt Text 3",
+              "caption": "A lovely caption 3",
+              "description": "Something about the image 3"
+            },
+            {
+              "src": "/public/img/stock.jpg 4",
+              "title": "My Image 4",
+              "alt": "Alt Text 4",
+              "caption": "A lovely caption 4",
+              "description": "Something about the image 4"
+            }
+          ]
+        },
+        {
+          "id": 13,
+          "title": "F Consectetur Adipisicing Elit",
+          "slug": "consectetur-adipisicing-elit",
+          "status": "published",
+          "author": "Robert McCormack",
+          "date_time": "2019-04-04T19:20:30.45+01:00",
+          "type": "post",
+          "excerpt": "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.",
+          "featured_img": {
+            "src": "/public/img/stock.jpg",
+            "title": "My Image",
+            "alt": "Alt Text",
+            "caption": "A lovely caption",
+            "description": "Something about the image"
+          },
+          "gallery": [{
+              "src": "/public/img/stock.jpg",
+              "title": "My Image 1",
+              "alt": "Alt Text 1",
+              "caption": "A lovely caption 1",
+              "description": "Something about the image 1"
+            },
+            {
+              "src": "/public/img/stock.jpg",
+              "title": "My Image 2",
+              "alt": "Alt Text 2",
+              "caption": "A lovely caption 2",
+              "description": "Something about the image 2"
+            },
+            {
+              "src": "/public/img/stock.jpg 3",
+              "title": "My Image 3",
+              "alt": "Alt Text 3",
+              "caption": "A lovely caption 3",
+              "description": "Something about the image 3"
+            },
+            {
+              "src": "/public/img/stock.jpg 4",
+              "title": "My Image 4",
+              "alt": "Alt Text 4",
+              "caption": "A lovely caption 4",
+              "description": "Something about the image 4"
+            }
+          ]
+        },
+        {
+          "id": 14,
+          "title": "G Lorem ipsum dolor sit amet",
+          "slug": "lorem-ipsum-dolor",
+          "status": "published",
+          "author": "Robert McCormack",
+          "date_time": "2019-04-04T19:20:30.45+01:00",
+          "type": "post",
+          "excerpt": "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.",
+          "featured_img": {
+            "src": "/public/img/stock.jpg",
+            "title": "My Image",
+            "alt": "Alt Text",
+            "caption": "A lovely caption",
+            "description": "Something about the image"
+          },
+          "gallery": [{
+              "src": "/public/img/stock.jpg",
+              "title": "My Image 1",
+              "alt": "Alt Text 1",
+              "caption": "A lovely caption 1",
+              "description": "Something about the image 1"
+            },
+            {
+              "src": "/public/img/stock.jpg",
+              "title": "My Image 2",
+              "alt": "Alt Text 2",
+              "caption": "A lovely caption 2",
+              "description": "Something about the image 2"
+            },
+            {
+              "src": "/public/img/stock.jpg 3",
+              "title": "My Image 3",
+              "alt": "Alt Text 3",
+              "caption": "A lovely caption 3",
+              "description": "Something about the image 3"
+            },
+            {
+              "src": "/public/img/stock.jpg 4",
+              "title": "My Image 4",
+              "alt": "Alt Text 4",
+              "caption": "A lovely caption 4",
+              "description": "Something about the image 4"
+            }
+          ]
+        },
+        {
+          "id": 15,
+          "title": "H Consectetur Adipisicing Elit",
+          "slug": "consectetur-adipisicing-elit",
+          "status": "published",
+          "author": "Robert McCormack",
+          "date_time": "2019-04-04T19:20:30.45+01:00",
+          "type": "post",
+          "excerpt": "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.",
+          "featured_img": {
+            "src": "/public/img/stock.jpg",
+            "title": "My Image",
+            "alt": "Alt Text",
+            "caption": "A lovely caption",
+            "description": "Something about the image"
+          },
+          "gallery": [{
+              "src": "/public/img/stock.jpg",
+              "title": "My Image 1",
+              "alt": "Alt Text 1",
+              "caption": "A lovely caption 1",
+              "description": "Something about the image 1"
+            },
+            {
+              "src": "/public/img/stock.jpg",
+              "title": "My Image 2",
+              "alt": "Alt Text 2",
+              "caption": "A lovely caption 2",
+              "description": "Something about the image 2"
+            },
+            {
+              "src": "/public/img/stock.jpg 3",
+              "title": "My Image 3",
+              "alt": "Alt Text 3",
+              "caption": "A lovely caption 3",
+              "description": "Something about the image 3"
+            },
+            {
+              "src": "/public/img/stock.jpg 4",
+              "title": "My Image 4",
+              "alt": "Alt Text 4",
+              "caption": "A lovely caption 4",
+              "description": "Something about the image 4"
+            }
+          ]
+        },
+        {
+          "id": 16,
+          "title": "I Incididunt ut labore et dolore magna aliqua",
+          "slug": "incididunt-ut-labore",
+          "status": "published",
+          "author": "Robert McCormack",
+          "date_time": "2019-04-04T19:20:30.45+01:00",
+          "type": "post",
           "excerpt": "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.",
           "featured_img": {
             "src": "/public/img/stock.jpg",

@@ -16,7 +16,7 @@ $router->get('/', function(){
 });
 // blog
 $router->get($GLOBALS['configs']['blog_url'], function(){
-  $blog = new Archive_controller;
+  $blog = new Archive_controller('');
   $blog->blog('');
 });
 // blog with pagination
@@ -26,8 +26,8 @@ $router->get($GLOBALS['configs']['blog_url'].'/page/:page', function($page){
     header('Location: ' . $url, true, 301);
     exit();
   }
-  $blog = new Archive_controller;
-  $blog->blog($page);
+  $blog = new Archive_controller($page);
+  $blog->blog();
 });
 // posts
 $router->get($GLOBALS['configs']['post_url'].'/:slug', function($slug){
@@ -36,7 +36,17 @@ $router->get($GLOBALS['configs']['post_url'].'/:slug', function($slug){
 });
 // portfolio
 $router->get($GLOBALS['configs']['portfolio_url'], function(){
-  $portfolio = new Archive_controller;
+  $portfolio = new Archive_controller('');
+  $portfolio->portfolio('');
+});
+// portfolio with pagination
+$router->get($GLOBALS['configs']['portfolio_url'].'/page/:page', function($page){
+  if ($page == 1) {
+    $url = $GLOBALS['configs']['portfolio_url'];
+    header('Location: ' . $url, true, 301);
+    exit();
+  }
+  $portfolio = new Archive_controller($page);
   $portfolio->portfolio();
 });
 // projects

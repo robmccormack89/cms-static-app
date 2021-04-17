@@ -1,6 +1,65 @@
 <?php
-function get_json_data($filename)
-{
+
+function generate_tease_post_links($someposts, $singular_url_setting) {
+  foreach ($someposts as $post) {
+    $post->link = $GLOBALS['configs']['base_url'].$singular_url_setting.'/'.$post->slug;
+    $posts[] = $post;
+  }
+  return $posts;
+}
+
+function set_pagination_data($blog_data, $requested_page, $posts_count) {
+  
+  $data[] = "";
+  
+  if (has_next($requested_page, $posts_count, $blog_data['posts_per_page'])) {
+    if(!$requested_page) {
+      $requested_page = 1;
+    };
+    $data['next'] = $requested_page+1;
+  }
+  if (has_prev($requested_page, $posts_count, $blog_data['posts_per_page'])) {
+    $data['prev'] = $requested_page-1;
+  }
+
+  return $data;
+}
+
+function has_next($requested_page, $posts_count, $posts_per_page) {
+  
+  if (!$requested_page) {
+    $requested_page = 0;
+  } else {
+    $requested_page = $requested_page - 1;
+  }
+  $real_req_page = $requested_page + 1;
+  
+  if($real_req_page > $posts_count / $posts_per_page) {
+    return false;
+  } else {
+    return true;
+  };
+
+}
+
+function has_prev($requested_page, $posts_count, $posts_per_page) {
+  
+  if (!$requested_page) {
+    $requested_page = 0;
+  } else {
+    $requested_page = $requested_page - 1;
+  }
+  $real_req_page = $requested_page + 1;
+  
+  if($real_req_page > 1) {
+    return true;
+  } else {
+    return false;
+  };
+
+}
+
+function get_json_data($filename) {
   $str = file_get_contents('../public/json/'.$filename.'.json');
   $data = json_decode($str, true); // decode the JSON into an associative array
   return $data;

@@ -2,18 +2,23 @@
 
 class Archive_controller extends Core_controller {
   
-  public function __construct()
+  public $paged;
+  
+  public function __construct($paged)
   {
     parent::__construct();
+    $this->page = $paged;
   }
   
-  public function blog($page) {
-    $this->blog = new Archive_model;
-    $context['archive'] = $this->blog->posts($page)->archive;
-    $context['archive']['posts'] = $this->blog->posts($page)->posts;
+  public function blog() {
+    $blog = new Archive_model($this->page, 'blog');
+    $context['archive'] = $blog->get_archive_data()->meta;
+    $context['archive']['posts'] = $blog->get_posts()->posts;
+    $context['archive']['pagination'] = $blog->get_pagination();
+    $context['archive']['routes'] = $blog->get_archive_data()->routes;
     
     if ($context['archive']['posts']) {
-      $this->render_archive($context['archive'], 'blog.twig', 'archive.twig', '404.twig', $context);
+      $this->render_archive($context['archive'], 'blog.twig', 'news.twig', 'archive.twig', $context);
     } 
     else {
       $this->error();
@@ -21,17 +26,18 @@ class Archive_controller extends Core_controller {
   }
   
   public function portfolio() {
-    $this->portfolio = new Archive_model;
-    $context['archive'] = $this->portfolio->projects();
-    // set the project link url
-    foreach ($context['archive']['projects'] as $post) {
-      $post['link'] = $GLOBALS['configs']['base_url'].$GLOBALS['configs']['project_url'].'/'.$post['slug'];
-      $posts[] = $post;
+    $portfolio = new Archive_model($this->page, 'portfolio');
+    $context['archive'] = $portfolio->get_archive_data()->meta;
+    $context['archive']['posts'] = $portfolio->get_posts()->posts;
+    $context['archive']['pagination'] = $portfolio->get_pagination();
+    $context['archive']['routes'] = $portfolio->get_archive_data()->routes;
+    
+    if ($context['archive']['posts']) {
+      $this->render_archive($context['archive'], 'portfolio.twig', 'projects.twig', 'archive.twig', $context);
+    } 
+    else {
+      $this->error();
     }
-    // set the archive.posts context from modified above posts
-    $context['archive']['posts'] = $posts;
-
-    $this->render_archive($context['archive'], 'blog.twig', 'archive.twig', '404.twig', $context);
+    
   }
-  
 }
