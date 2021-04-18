@@ -9,30 +9,44 @@ class Single_controller extends Core_controller {
   
   public function index() {
     $this->homepage = new Single_model;
-    $context['single'] = $this->homepage->get_single_by_slug('index', '');
+    $context['single'] = $this->homepage->get_page('index', '');
     
-    $this->render_single($context['single'], 'homepage.twig', 'front.twig', 'home.twig', $context);
+    $this->render('homepage.twig', 'index.twig', $context);
   }
   
   public function page($parent_slug, $child_slug) {
     $this->page = new Single_model;
-    $context['single'] = $this->page->get_single_by_slug($parent_slug, $child_slug);
+    $context['single'] = $this->page->get_page($parent_slug, $child_slug);
     
-    $this->render_single($context['single'], 'page-'.$context['single']['slug'].'.twig', 'page.twig', 'single.twig', $context);
+    $this->render('page-'.$context['single']['slug'].'.twig', 'page.twig', $context);
   }
   
   public function post($slug) {
     $this->post = new Single_model;
-    $context['single'] = $this->post->get_post_by_slug($slug);
+    $context['single'] = $this->post->get_post($slug);
 
-    $this->render_single($context['single'], 'post-'.$context['single']['slug'].'.twig', 'post.twig', 'single.twig', $context);
+    $this->render('post-'.$context['single']['slug'].'.twig', 'post.twig', $context);
   }
   
   public function project($slug) {
     $this->project = new Single_model;
-    $context['single'] = $this->project->get_project_by_slug($slug);
+    $context['single'] = $this->project->get_project($slug);
 
-    $this->render_single($context['single'], 'project-'.$context['single']['slug'].'.twig', 'project.twig', 'single.twig', $context);
+    $this->render('project-'.$context['single']['slug'].'.twig', 'project.twig', $context);
+  }
+  
+  public function render($custom_template, $default_template, $context) {
+    if (is_published_or_draft_allowed($context['single'])) {
+      if ($this->twig->getLoader()->exists($custom_template)) {
+        $this->template_render($custom_template, $context);
+      } elseif ($this->twig->getLoader()->exists($default_template)) {
+        $this->template_render($default_template, $context);
+      } else {
+        $this->template_render('single.twig', $context);
+      };
+    } else {
+      $this->error();
+    }
   }
   
 }

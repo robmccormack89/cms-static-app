@@ -28,11 +28,9 @@
     },
     "menus": [
       {
-        "id": 33,
         "title": "Main Menu",
         "slug": "main-menu",
         "status": "published",
-        "type": "menu",
         "menu_items": [
           {
             "link": "/",
@@ -45,7 +43,8 @@
           {
             "link": "/blog",
             "title": "Blog",
-            "children": [{
+            "children": [
+              {
                 "link": "/",
                 "title": "Sub One"
               },
@@ -68,7 +67,6 @@
     ],
     "pages": [
       {
-        "id": 1,
         "title": "Homepage",
         "slug": "index",
         "status": "published",
@@ -117,7 +115,6 @@
         ]
       },
       {
-        "id": 2,
         "title": "About",
         "slug": "about",
         "status": "published",
@@ -164,7 +161,6 @@
         ]
       },
       {
-        "id": 3,
         "title": "Contact",
         "slug": "contact",
         "status": "published",
@@ -211,7 +207,6 @@
         ]
       },
       {
-        "id": 6,
         "title": "Test",
         "slug": "test",
         "status": "draft",
@@ -258,7 +253,6 @@
         ]
       },
       {
-        "id": 7,
         "title": "About Test",
         "slug": "about/test",
         "status": "draft",
@@ -321,8 +315,104 @@
         },
         "pagination": {
           "is_paged": true,
-          "posts_per_page": 4
+          "posts_per_page": 3
         }
+      },
+      "taxonomies": {
+        "categories": [
+          {
+            "title": "News",
+            "name": "news",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.",
+            "meta_title": "",
+            "meta_description": "",
+            "featured_img": {
+              "src": "/public/img/stock.jpg",
+              "title": "My Image",
+              "alt": "Alt Text",
+              "caption": "A lovely caption",
+              "description": "Something about the image"
+            },
+            "pagination": {
+              "is_paged": true,
+              "posts_per_page": 4
+            }
+          },
+          {
+            "title": "Events",
+            "name": "events",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.",
+            "meta_title": "",
+            "meta_description": "",
+            "featured_img": {
+              "src": "/public/img/stock.jpg",
+              "title": "My Image",
+              "alt": "Alt Text",
+              "caption": "A lovely caption",
+              "description": "Something about the image"
+            },
+            "pagination": {
+              "is_paged": true,
+              "posts_per_page": 4
+            }
+          },
+          {
+            "title": "Media",
+            "name": "media",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.",
+            "meta_title": "",
+            "meta_description": "",
+            "featured_img": {
+              "src": "/public/img/stock.jpg",
+              "title": "My Image",
+              "alt": "Alt Text",
+              "caption": "A lovely caption",
+              "description": "Something about the image"
+            },
+            "pagination": {
+              "is_paged": true,
+              "posts_per_page": 4
+            }
+          }
+        ],
+        "tags": [
+          {
+            "title": "Twig",
+            "slug": "twig",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.",
+            "featured_img": {
+              "src": "/public/img/stock.jpg",
+              "title": "My Image",
+              "alt": "Alt Text",
+              "caption": "A lovely caption",
+              "description": "Something about the image"
+            }
+          },
+          {
+            "title": "Javascript",
+            "slug": "javascript",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.",
+            "featured_img": {
+              "src": "/public/img/stock.jpg",
+              "title": "My Image",
+              "alt": "Alt Text",
+              "caption": "A lovely caption",
+              "description": "Something about the image"
+            }
+          },
+          {
+            "title": "CSS",
+            "slug": "css",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.",
+            "featured_img": {
+              "src": "/public/img/stock.jpg",
+              "title": "My Image",
+              "alt": "Alt Text",
+              "caption": "A lovely caption",
+              "description": "Something about the image"
+            }
+          }
+        ]
       },
       "routes": {
         "archive_url": "/blog",
@@ -330,13 +420,14 @@
       },
       "posts": [
         {
-          "id": 8,
           "title": "A Lorem ipsum dolor sit amet",
           "slug": "lorem-ipsum-dolor",
           "status": "published",
           "author": "Robert McCormack",
           "date_time": "2019-04-04T19:20:30.45+01:00",
           "type": "post",
+          "categories": ["news","events"],
+          "tags": ["twig","css"],
           "excerpt": "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.",
           "featured_img": {
             "src": "/public/img/stock.jpg",
@@ -345,7 +436,8 @@
             "caption": "A lovely caption",
             "description": "Something about the image"
           },
-          "gallery": [{
+          "gallery": [
+            {
               "src": "/public/img/stock.jpg",
               "title": "My Image 1",
               "alt": "Alt Text 1",
@@ -376,13 +468,14 @@
           ]
         },
         {
-          "id": 9,
           "title": "B Consectetur Adipisicing Elit",
           "slug": "consectetur-adipisicing-elit",
           "status": "published",
           "author": "Robert McCormack",
           "date_time": "2019-04-04T19:20:30.45+01:00",
           "type": "post",
+          "categories": ["news","events"],
+          "tags": ["twig","css"],
           "excerpt": "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.",
           "featured_img": {
             "src": "/public/img/stock.jpg",
@@ -391,7 +484,8 @@
             "caption": "A lovely caption",
             "description": "Something about the image"
           },
-          "gallery": [{
+          "gallery": [
+            {
               "src": "/public/img/stock.jpg",
               "title": "My Image 1",
               "alt": "Alt Text 1",
@@ -422,13 +516,14 @@
           ]
         },
         {
-          "id": 10,
           "title": "C Lorem ipsum dolor sit amet",
           "slug": "lorem-ipsum-dolor",
           "status": "published",
           "author": "Robert McCormack",
           "date_time": "2019-04-04T19:20:30.45+01:00",
           "type": "post",
+          "categories": ["news","events"],
+          "tags": ["twig","css"],
           "excerpt": "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.",
           "featured_img": {
             "src": "/public/img/stock.jpg",
@@ -437,7 +532,8 @@
             "caption": "A lovely caption",
             "description": "Something about the image"
           },
-          "gallery": [{
+          "gallery": [
+            {
               "src": "/public/img/stock.jpg",
               "title": "My Image 1",
               "alt": "Alt Text 1",
@@ -468,13 +564,13 @@
           ]
         },
         {
-          "id": 11,
           "title": "D Consectetur Adipisicing Elit",
           "slug": "consectetur-adipisicing-elit",
           "status": "published",
           "author": "Robert McCormack",
           "date_time": "2019-04-04T19:20:30.45+01:00",
           "type": "post",
+          "categories": ["news","events", "media"],
           "excerpt": "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.",
           "featured_img": {
             "src": "/public/img/stock.jpg",
@@ -483,7 +579,8 @@
             "caption": "A lovely caption",
             "description": "Something about the image"
           },
-          "gallery": [{
+          "gallery": [
+            {
               "src": "/public/img/stock.jpg",
               "title": "My Image 1",
               "alt": "Alt Text 1",
@@ -514,7 +611,6 @@
           ]
         },
         {
-          "id": 12,
           "title": "E Lorem ipsum dolor sit amet",
           "slug": "lorem-ipsum-dolor",
           "status": "published",
@@ -529,7 +625,8 @@
             "caption": "A lovely caption",
             "description": "Something about the image"
           },
-          "gallery": [{
+          "gallery": [
+            {
               "src": "/public/img/stock.jpg",
               "title": "My Image 1",
               "alt": "Alt Text 1",
@@ -560,7 +657,6 @@
           ]
         },
         {
-          "id": 13,
           "title": "F Consectetur Adipisicing Elit",
           "slug": "consectetur-adipisicing-elit",
           "status": "published",
@@ -575,7 +671,8 @@
             "caption": "A lovely caption",
             "description": "Something about the image"
           },
-          "gallery": [{
+          "gallery": [
+            {
               "src": "/public/img/stock.jpg",
               "title": "My Image 1",
               "alt": "Alt Text 1",
@@ -606,7 +703,6 @@
           ]
         },
         {
-          "id": 14,
           "title": "G Lorem ipsum dolor sit amet",
           "slug": "lorem-ipsum-dolor",
           "status": "published",
@@ -652,7 +748,6 @@
           ]
         },
         {
-          "id": 15,
           "title": "H Consectetur Adipisicing Elit",
           "slug": "consectetur-adipisicing-elit",
           "status": "published",
@@ -698,7 +793,6 @@
           ]
         },
         {
-          "id": 16,
           "title": "I Incididunt ut labore et dolore magna aliqua",
           "slug": "incididunt-ut-labore",
           "status": "published",
@@ -770,7 +864,6 @@
       },
       "projects": [
         {
-          "id": 12,
           "title": "Web Design",
           "slug": "web-design",
           "status": "published",
@@ -785,7 +878,8 @@
             "caption": "A lovely caption",
             "description": "Something about the image"
           },
-          "gallery": [{
+          "gallery": [
+            {
               "src": "/public/img/stock.jpg",
               "title": "My Image 1",
               "alt": "Alt Text 1",
@@ -816,7 +910,6 @@
           ]
         },
         {
-          "id": 11,
           "title": "D Consectetur Adipisicing Elit",
           "slug": "consectetur-adipisicing-elit",
           "status": "published",
@@ -831,7 +924,8 @@
             "caption": "A lovely caption",
             "description": "Something about the image"
           },
-          "gallery": [{
+          "gallery": [
+            {
               "src": "/public/img/stock.jpg",
               "title": "My Image 1",
               "alt": "Alt Text 1",
@@ -862,7 +956,6 @@
           ]
         },
         {
-          "id": 12,
           "title": "E Lorem ipsum dolor sit amet",
           "slug": "lorem-ipsum-dolor",
           "status": "published",
@@ -908,7 +1001,6 @@
           ]
         },
         {
-          "id": 13,
           "title": "F Consectetur Adipisicing Elit",
           "slug": "consectetur-adipisicing-elit",
           "status": "published",
@@ -954,7 +1046,6 @@
           ]
         },
         {
-          "id": 14,
           "title": "G Lorem ipsum dolor sit amet",
           "slug": "lorem-ipsum-dolor",
           "status": "published",
@@ -1000,7 +1091,6 @@
           ]
         },
         {
-          "id": 15,
           "title": "H Consectetur Adipisicing Elit",
           "slug": "consectetur-adipisicing-elit",
           "status": "published",
@@ -1046,7 +1136,6 @@
           ]
         },
         {
-          "id": 16,
           "title": "I Incididunt ut labore et dolore magna aliqua",
           "slug": "incididunt-ut-labore",
           "status": "published",

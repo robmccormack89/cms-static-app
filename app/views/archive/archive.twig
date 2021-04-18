@@ -45,7 +45,7 @@
     </ul>
     
     <div class="uk-section uk-section-small">
-      <div class="uk-grid-large uk-grid" uk-grid>
+      <div class="uk-grid" uk-grid>
         
         <section class="left-section uk-width-2-3@m">
           {% block page_content %}
@@ -64,7 +64,7 @@
                     <ul class="uk-pagination uk-margin-remove">
                       {% if archive.pagination.prev %}
                         <li>
-                          <a class="prev" href="{{archive.routes.archive_url}}/page/{{archive.pagination.prev}}">
+                          <a class="prev" href="{{archive.pagination.prev}}">
                             <span uk-pagination-previous></span><span class="uk-margin-small-left uk-visible@m">Previous</span></a>
                         </li>
                       {% endif %}
@@ -72,12 +72,12 @@
                         {% if page.class == 'uk-active' %}
                           <li class="{{page.class}}"><span>{{page.title}}</span></li>
                         {% else %}
-                          <li class="{{page.class}}"><a href="{{archive.routes.archive_url}}/page/{{page.link}}">{{page.title}}</a></li>
+                          <li class="{{page.class}}"><a href="{{page.link}}">{{page.title}}</a></li>
                         {% endif %}
                       {% endfor %}
                       {% if archive.pagination.next %}
                         <li>
-                          <a class="next" href="{{archive.routes.archive_url}}/page/{{archive.pagination.next}}">
+                          <a class="next" href="{{archive.pagination.next}}">
                             <span class="uk-margin-small-right uk-visible@m">Next</span><span uk-pagination-next></span></a>
                         </li>
                       {% endif %}

@@ -2,38 +2,55 @@
 
 class Archive_controller extends Core_controller {
   
-  public $paged;
-  
-  public function __construct($paged)
+  public function __construct()
   {
     parent::__construct();
-    $this->page = $paged;
   }
-  public function blog() {
-    $blog = new Archive_model($this->page, 'blog');
-    $context['archive'] = $blog->get_archive_data()->meta;
-    $context['archive']['routes'] = $blog->get_archive_data()->routes;
-    $context['archive']['posts'] = $blog->get_posts();
-    $context['archive']['pagination'] = $blog->get_pagination();
+  
+  public function category($term, $page) {
+    $category = new Term_model('categories', $page, $term);
     
-    if ($context['archive']['posts']) {
-      $this->render_archive($context['archive'], 'blog.twig', 'news.twig', 'archive.twig', $context);
-    } 
-    else {
+    $context['archive'] = $category->get_category();
+    
+    if($context['archive']['posts']) {
+          $this->render('category.twig', $context);
+    } else {
       $this->error();
     }
   }
-  public function portfolio() {
-    $portfolio = new Archive_model($this->page, 'portfolio');
-    $context['archive'] = $portfolio->get_archive_data()->meta;
-    $context['archive']['routes'] = $portfolio->get_archive_data()->routes;
-    $context['archive']['posts'] = $portfolio->get_posts();
-    $context['archive']['pagination'] = $portfolio->get_pagination();
+  
+  public function blog($page) {
+    $blog = new Archive_model('blog', $page, '');
     
-    if ($context['archive']['posts']) {
-      $this->render_archive($context['archive'], 'portfolio.twig', 'projects.twig', 'archive.twig', $context);
-    } 
-    else {
+    $context['archive'] = $blog->get_blog();
+    
+    if($context['archive']['posts']) {
+      $this->render('blog.twig', $context);
+    } else {
+      $this->error();
+    }
+  }
+  
+  public function portfolio($page) {
+    $portfolio = new Archive_model('portfolio', $page, '');
+    
+    $context['archive'] = $portfolio->get_portfolio();
+    
+    if($context['archive']['posts']) {
+      $this->render('portfolio.twig', $context);
+    } else {
+      $this->error();
+    }
+  }
+  
+  public function render($custom_template, $context) {
+    if ($context['archive']) {
+      if ($this->twig->getLoader()->exists($custom_template)) {
+        $this->template_render($custom_template, $context);
+      } else {
+        $this->template_render('archive.twig', $context);
+      }
+    } else {
       $this->error();
     }
   }

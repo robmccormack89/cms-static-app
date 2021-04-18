@@ -4,7 +4,7 @@ use Nahid\JsonQ\Jsonq;
 
 class Single_model {
   
-  public function get_single_by_slug($parent_slug, $child_slug) {
+  public function get_page($parent_slug, $child_slug) {
     $q = new Jsonq('../public/json/data.json');
     if ($child_slug) {
       $slug = $parent_slug.'/'.$child_slug;
@@ -15,14 +15,14 @@ class Single_model {
     return $page;
   }
   
-  public function get_post_by_slug($slug) {
+  public function get_post($slug) {
     $q = new Jsonq('../public/json/data.json');
     $post = $q->from('site.blog.posts')->where('slug', '=', $slug)->first();
 
     return $post;
   }
   
-  public function get_project_by_slug($slug) {
+  public function get_project($slug) {
     $q = new Jsonq('../public/json/data.json');
     $project = $q->from('site.portfolio.projects')->where('slug', '=', $slug)->first();
 

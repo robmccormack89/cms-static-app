@@ -8,18 +8,23 @@ function generate_tease_post_links($someposts, $singular_url_setting) {
   return $posts;
 }
 
-function set_pagination_data($blog_data, $requested_page, $posts_count) {
+function set_pagination_data($blog_data, $requested_page, $posts_count, $archive_url) {
   
   $data[] = "";
   
-  if (has_next($requested_page, $posts_count, $blog_data['posts_per_page'])) {
-    if(!$requested_page) {
-      $requested_page = 1;
-    };
-    $data['next'] = $requested_page+1;
+  $pre = $archive_url.'/page/';
+  
+  if(!$requested_page) {
+    $requested_page = 1;
   }
+  
+  if (has_next($requested_page, $posts_count, $blog_data['posts_per_page'])) {
+    $next_requested_page = $requested_page+1;
+    $data['next'] = $pre.$next_requested_page;
+  }
+  $prev_requested_page = $requested_page-1;
   if (has_prev($requested_page, $posts_count, $blog_data['posts_per_page'])) {
-    $data['prev'] = $requested_page-1;
+    $data['prev'] = $pre.$prev_requested_page;
   }
   
   $howmany = ceil($posts_count / $blog_data['posts_per_page']);
@@ -31,10 +36,12 @@ function set_pagination_data($blog_data, $requested_page, $posts_count) {
     } else {
       $class = "not-active";
     }
+  
+    $offs = $i+1;
     
     $out[] = array(
-      'link' => $i+1, 
-      'title' => $i+1,
+      'link' => $pre.$offs, 
+      'title' => $offs,
       'class' => $class,
     );
   }
@@ -53,7 +60,7 @@ function has_next($requested_page, $posts_count, $posts_per_page) {
   }
   $real_req_page = $requested_page + 1;
   
-  if($real_req_page > $posts_count / $posts_per_page) {
+  if($real_req_page >= $posts_count / $posts_per_page) {
     return false;
   } else {
     return true;

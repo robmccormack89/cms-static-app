@@ -16,9 +16,15 @@ $router->get('/', function(){
 });
 // blog
 $router->get($GLOBALS['configs']['blog_url'], function(){
-  $blog = new Archive_controller('');
+  $blog = new Archive_controller();
   $blog->blog('');
 });
+// portfolio
+$router->get($GLOBALS['configs']['portfolio_url'], function(){
+  $portfolio = new Archive_controller();
+  $portfolio->portfolio('');
+});
+
 // if blog is set as paged, create the paged route
 if($GLOBALS['configs']['is_blog_paged'] == true) {
   // blog with pagination
@@ -28,20 +34,11 @@ if($GLOBALS['configs']['is_blog_paged'] == true) {
       header('Location: ' . $url, true, 301);
       exit();
     }
-    $blog = new Archive_controller($page);
-    $blog->blog();
+    $blog = new Archive_controller();
+    $blog->blog($page);
   });
 }
-// posts
-$router->get($GLOBALS['configs']['post_url'].'/:slug', function($slug){
-  $post = new Single_controller;
-  $post->post($slug);
-});
-// portfolio
-$router->get($GLOBALS['configs']['portfolio_url'], function(){
-  $portfolio = new Archive_controller('');
-  $portfolio->portfolio('');
-});
+// if portfolio is set as paged, create the paged route
 if($GLOBALS['configs']['is_portfolio_paged'] == true) {
   // portfolio with pagination
   $router->get($GLOBALS['configs']['portfolio_url'].'/page/:page', function($page){
@@ -50,15 +47,40 @@ if($GLOBALS['configs']['is_portfolio_paged'] == true) {
       header('Location: ' . $url, true, 301);
       exit();
     }
-    $portfolio = new Archive_controller($page);
-    $portfolio->portfolio();
+    $portfolio = new Archive_controller();
+    $portfolio->portfolio($page);
   });
 }
+
+$router->get($GLOBALS['configs']['blog_url'].'/:term', function($term){
+  $category = new Archive_controller();
+  $category->category($term, '');
+});
+
+if($GLOBALS['configs']['is_blog_paged'] == true) {
+  // blog with pagination
+  $router->get($GLOBALS['configs']['blog_url'].'/:term/page/:page', function($term, $page){
+    if ($page == 1) {
+      $url = $GLOBALS['configs']['blog_url'].'/'.$term;
+      header('Location: ' . $url, true, 301);
+      exit();
+    }
+    $category = new Archive_controller();
+    $category->category($term, $page);
+  });
+}
+
+// posts
+$router->get($GLOBALS['configs']['post_url'].'/:slug', function($slug){
+  $post = new Single_controller;
+  $post->post($slug);
+});
 // projects
 $router->get($GLOBALS['configs']['project_url'].'/:slug', function($slug){
   $project = new Single_controller;
   $project->project($slug, '');
 });
+
 // pages
 $router->get('/:parent_slug', function($parent_slug){
   $page = new Single_controller;
@@ -69,6 +91,7 @@ $router->get('/:parent_slug/:child_slug', function($parent_slug, $child_slug){
   $page = new Single_controller;
   $page->page($parent_slug, $child_slug);
 });
+
 // error page
 $router->any('/404', function(){
   $core = new Core_controller;
