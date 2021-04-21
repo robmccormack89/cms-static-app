@@ -23,9 +23,9 @@ class Core_controller {
       'debug' => true
     ]);
     $this->twig->addExtension(new \Twig\Extension\DebugExtension());
-    // config settings -> twig global
+    // configs -> twig global
     $this->twig->addGlobal('configs', $GLOBALS['configs'] );
-    // cpts
+    // cpts & taxes -> twig global
     $this->twig->addGlobal('is_blog', is_blog());
     $this->twig->addGlobal('is_post', is_post());
     $this->twig->addGlobal('is_category', is_category());
