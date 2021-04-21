@@ -11,7 +11,7 @@ class Single_model {
     $this->slug = $slug;
     $this->child_slug = $child_slug;
   }
-  
+  // (cpts)
   public function get_page() {
     $q = new Jsonq('../public/json/data.min.json');
     if ($this->child_slug) {
@@ -22,14 +22,14 @@ class Single_model {
     };
     return $page;
   }
-  
+  // (cpts)
   public function get_post() {
     $q = new Jsonq('../public/json/data.min.json');
     $post = $q->from('site.blog.posts')->where('slug', '=', $this->slug)->first();
 
     return $post;
   }
-  
+  // (cpts)
   public function get_project() {
     $q = new Jsonq('../public/json/data.min.json');
     $project = $q->from('site.portfolio.projects')->where('slug', '=', $this->slug)->first();

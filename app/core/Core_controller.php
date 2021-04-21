@@ -27,6 +27,7 @@ class Core_controller {
     $this->twig->addGlobal('configs', $GLOBALS['configs'] );
     // darklight_cookie -> twig global
     $this->twig->addGlobal('dark_light_def', darklight_cookie());
+    // cpts
     $this->twig->addGlobal('is_blog', is_blog());
     $this->twig->addGlobal('is_post', is_post());
     $this->twig->addGlobal('is_category', is_category());

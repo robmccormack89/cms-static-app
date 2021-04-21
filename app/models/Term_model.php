@@ -12,7 +12,7 @@ class Term_model extends Archive_model {
     $this->term = $term;
   }
   
-  // for the category taxonomy archives
+  // for the category taxonomy archives (cpts)
   public function get_category() {
     
     $data = $this->get_term_meta();
@@ -21,7 +21,7 @@ class Term_model extends Archive_model {
     
     return $data;
   } 
-  
+  // (cpts)
   public function get_tag() {
     
     $data = $this->get_term_meta();
@@ -30,7 +30,7 @@ class Term_model extends Archive_model {
     
     return $data;
   } 
-
+  // (cpts)
   // this sets the given taxonomy to a content-type's posts (categories & tags are part of blog)
   // add new taxonomies to other content types here
   public function term_archive_locations() {
@@ -41,6 +41,7 @@ class Term_model extends Archive_model {
   
     return $data;
   }
+  // (cpts)
   // this sets the given taxonomy to a content-type's taxonomies (categories & tags are part of blog taxonomies)
   // add new taxonomies to other content types here
   public function term_locations() {
@@ -51,6 +52,7 @@ class Term_model extends Archive_model {
   
     return $data;
   }
+  // (cpts)
   // this sets a given taxonomy to its content type's settings
   // add new taxonomies to other content types here
   public function term_archive_settings() {
@@ -62,6 +64,7 @@ class Term_model extends Archive_model {
   
     return $data;
   }
+  // (cpts)
   // this sets an acrhive name for a given taxonomy (to be used in pagination urls)
   // add new taxonomies here
   public function taxonomy_archive_url() {

@@ -17,7 +17,7 @@ class Archive_model {
   }
   
   /**
-   * getting all the data for the blog
+   * getting all the data for the blog (cpts)
    * builds the main blog archive data in three parts: meta, posts & pagination
    * data returned is accessible at data, data.posts & data.pagination
    * used fns can be used for get main archive/s data: content types like blog, portfolio. see get_portfolio
@@ -33,7 +33,7 @@ class Archive_model {
     return $blog;
   }  
   /**
-   * getting all the data for the portfolio
+   * getting all the data for the portfolio (cpts)
    * builds the main portfolio archive data in three parts: meta, posts & pagination
    * data returned is accessible at data, data.posts & data.pagination
    * used fns can be used for get main archive/s data: content types like blog, portfolio
@@ -50,7 +50,7 @@ class Archive_model {
   }
   
   /**
-   * sets the archive posts json data location depending on $this->type
+   * sets the archive posts json data location depending on $this->type (cpts)
    *
    * @return object|array
    */
@@ -65,7 +65,7 @@ class Archive_model {
     return $data;
   }
   /**
-   * getting routes & meta settings for main archive type from settings model depending on $this->type
+   * getting routes & meta settings for main archive type from settings model depending on $this->type (cpts)
    *
    * @return object|array
    */

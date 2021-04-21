@@ -6,7 +6,7 @@ class Archive_controller extends Core_controller {
   {
     parent::__construct();
   }
-  
+  // cpts tax
   public function category($term, $page) {
     $category = new Term_model('categories', $page, $term);
     
@@ -18,7 +18,7 @@ class Archive_controller extends Core_controller {
       $this->error();
     }
   }
-  
+  // cpts tax
   public function tag($term, $page) {
     $tag = new Term_model('tags', $page, $term);
     
@@ -30,7 +30,7 @@ class Archive_controller extends Core_controller {
       $this->error();
     }
   }
-  
+  // cpts
   public function blog($page) {
     $blog = new Archive_model('blog', $page, '');
     
@@ -42,7 +42,7 @@ class Archive_controller extends Core_controller {
       $this->error();
     }
   }
-  
+  // cpts
   public function portfolio($page) {
     $portfolio = new Archive_model('portfolio', $page, '');
     

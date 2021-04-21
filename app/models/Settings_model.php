@@ -11,7 +11,7 @@ class Settings_model {
 
     return $data;
   }
-  
+  // (cpts)
   public function get_blog_meta() {
     
     $q = new Jsonq('../public/json/data.min.json');
@@ -19,7 +19,7 @@ class Settings_model {
 
     return $data;
   }
-  
+  // (cpts)
   public function get_blog_settings() {
     
     $q = new Jsonq('../public/json/data.min.json');
@@ -27,7 +27,7 @@ class Settings_model {
 
     return $data;
   }
-  
+  // (cpts)
   public function get_portfolio_meta() {
     
     $q = new Jsonq('../public/json/data.min.json');
@@ -35,7 +35,7 @@ class Settings_model {
 
     return $data;
   }
-  
+  // (cpts)
   public function get_portfolio_settings() {
     
     $q = new Jsonq('../public/json/data.min.json');

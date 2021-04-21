@@ -20,7 +20,7 @@ $router->get('/', function(){
 });
 
 /**
- * route for main content type archives (blog, portfolio)
+ * route for main archives (blog, portfolio) (cpts) 
  *
  */
 $router->get($GLOBALS['configs']['blog_url'], function(){
@@ -33,7 +33,7 @@ $router->get($GLOBALS['configs']['portfolio_url'], function(){
 });
 
 /**
- * routes for taxonomy term archives (category|blog, tag|blog)
+ * routes for taxonomy term archives (category|blog, tag|blog) (cpts)
  *
  */
 $router->get($GLOBALS['configs']['category_url'].'/:term', function($term){
@@ -46,7 +46,7 @@ $router->get($GLOBALS['configs']['tag_url'].'/:term', function($term){
 });
 
 /**
- * if the blog is set as paged, do the paged routes
+ * if the blog is set as paged, do the paged routes (cpts)
  *
  */
 if($GLOBALS['configs']['is_blog_paged'] == true) {
@@ -74,7 +74,7 @@ if($GLOBALS['configs']['is_blog_paged'] == true) {
 
 
 /**
- * if the portfolio is set as paged, do the paged routes
+ * if the portfolio is set as paged, do the paged routes (cpts)
  *
  */
 if($GLOBALS['configs']['is_portfolio_paged'] == true) {
@@ -91,7 +91,7 @@ if($GLOBALS['configs']['is_portfolio_paged'] == true) {
 }
 
 /**
- * route for singular items (posts, projects, pages, pages/sub-pages)
+ * route for singular items (posts, projects, pages, pages/sub-pages) (cpts)
  *
  */
 $router->get($GLOBALS['configs']['post_url'].'/:slug', function($slug){

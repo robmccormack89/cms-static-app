@@ -1,4 +1,7 @@
 <?php
+// https://github.com/nahid/jsonq
+use Nahid\JsonQ\Jsonq;
+
 function menu_active_classes($menu_items) {
   foreach ($menu_items as $k => &$item) {
     
@@ -20,7 +23,7 @@ function menu_active_classes($menu_items) {
 }
 
 /**
- * generate the links data for post teases
+ * generate the links data for post teases (cpts)
  *
  * @param $someposts - a posts array to set the link data for
  * @param $singular_url_setting - the singular url setting for a content type
@@ -29,10 +32,41 @@ function menu_active_classes($menu_items) {
 function generate_tease_post_links($someposts, $singular_url_setting) {
   foreach ($someposts as $post) {
     $post['link'] = $GLOBALS['configs']['base_url'].$singular_url_setting.'/'.$post['slug'];
+    
+    if(isset($post['categories'])){
+      foreach ($post['categories'] as &$value) {
+        $value = array(
+          'link' => $GLOBALS['configs']['category_url'].'/'.$value,
+          'name' => $value,
+          'title' => get_term_title_from_name($value, 'categories')
+        );
+      }
+    }
+    
+    if(isset($post['tags'])){
+      foreach ($post['tags'] as &$value) {
+        $value = array(
+          'link' => $GLOBALS['configs']['tag_url'].'/'.$value,
+          'name' => $value,
+          'title' => get_term_title_from_name($value, 'tags')
+        );
+      }
+    }
+    
     $posts[] = $post;
   }
   return $posts;
 }
+
+function get_term_title_from_name($name, $type) {
+  $q = new Jsonq('../public/json/data.min.json');
+  $term = $q->from('site.blog.taxonomies.'.$type)
+  ->where('name', '=', $name)
+  ->first();
+  
+  return $term->title;
+}
+
 /**
  * sets the pagination data for an archive, to be used in pagination markup
  *
@@ -149,13 +183,13 @@ function get_in_array( string $needle, array $haystack, string $column){
   foreach( $haystack as $item )  if( $item[ $column ] === $needle )  $matches[] = $item;
   return $matches;
 }
-// check if given obj is pag,e post or a project. checks the type property of the given singular pobject
+// check if given obj is pag,e post or a project. checks the type property of the given singular pobject (cpts)
 function is_page_post_or_project($obj) {
 	if ($obj['type'] == 'page' || $obj['type'] == 'post' || $obj['type'] == 'project') {
 		return true;
 	}
 }
-// check if request is for blog archive using REQUEST_URI
+// check if request is for blog archive using REQUEST_URI (cpts)
 function is_blog() {
 	$string = $_SERVER['REQUEST_URI'];
   $fresh = str_replace("/","",$string);
@@ -167,7 +201,7 @@ function is_blog() {
     return true;
   }
 }
-// check if request is for portfolio archive using REQUEST_URI
+// check if request is for portfolio archive using REQUEST_URI (cpts)
 function is_portfolio() {
 	$string = $_SERVER['REQUEST_URI'];
   $fresh = str_replace("/","",$string);
@@ -179,7 +213,7 @@ function is_portfolio() {
     return true;
   }
 }
-// check if request is 
+// check if request is (cpts)
 function is_post() {
 	$string = $_SERVER['REQUEST_URI'];
   $fresh = str_replace("/","",$string);
@@ -189,6 +223,7 @@ function is_post() {
 	   return true;
   }
 }
+// (cpts)
 function is_project() {
 	$string = $_SERVER['REQUEST_URI'];
   $fresh = str_replace("/","",$string);
@@ -198,6 +233,7 @@ function is_project() {
 	   return true;
   }
 }
+// (cpts)
 function is_category() {
 	$string = $_SERVER['REQUEST_URI'];
   $fresh = str_replace("/","",$string);
@@ -207,6 +243,7 @@ function is_category() {
 	   return true;
   }
 }
+// (cpts)
 function is_tag() {
 	$string = $_SERVER['REQUEST_URI'];
   $fresh = str_replace("/","",$string);
