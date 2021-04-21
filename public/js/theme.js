@@ -8,6 +8,14 @@ window.onload = function(){
   
 }
 
+var darkLightCookie = getCookie("darklightswitch");
+if (darkLightCookie) {
+  setDarkStyle('uk-light', 'LightSwitch', 'DarkSwitch');
+} else {
+  unsetDarkStyle('uk-light', 'DarkSwitch', 'LightSwitch');
+}
+
+
 document.querySelectorAll('.darklight-switch').forEach(item => {
   item.addEventListener('mousedown', event => {
     event.preventDefault();

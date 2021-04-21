@@ -4,7 +4,7 @@ use Nahid\JsonQ\Jsonq;
 
 class Archive_model {
   
-  // main archive type; blog or portfolio
+  // main archive type; eg: blog or portfolio
   public $type;
   // paged value, for paginated archives
   public $page;
@@ -15,6 +15,8 @@ class Archive_model {
     
     $this->archive_settings = new Settings_model;
   }
+  
+  // main functions for archives - specific to content types
   
   /**
    * getting all the data for the blog (cpts)
@@ -32,14 +34,6 @@ class Archive_model {
     
     return $blog;
   }  
-  /**
-   * getting all the data for the portfolio (cpts)
-   * builds the main portfolio archive data in three parts: meta, posts & pagination
-   * data returned is accessible at data, data.posts & data.pagination
-   * used fns can be used for get main archive/s data: content types like blog, portfolio
-   *
-   * @return object|array
-   */
   public function get_portfolio() {
     
     $portfolio = $this->get_archive_meta();
@@ -48,6 +42,8 @@ class Archive_model {
     
     return $portfolio;
   }
+  
+  // content types conditionals - edit for new content types
   
   /**
    * sets the archive posts json data location depending on $this->type (cpts)
@@ -81,20 +77,9 @@ class Archive_model {
   
     return $data;
   }
-  /**
-   * getting all posts & their count from archive locations
-   *
-   * @return object|array,integer $data->posts(object|array), $data->count(integer)
-   */
-  public function get_all_posts_and_count() {
-    
-    if (!isset($data)) $data = new stdClass();
-    $q = new Jsonq('../public/json/data.min.json');
-    $data->posts = $q->find($this->archive_locations())->get();
-    $data->count = $data->posts->count();
-    
-    return $data;
-  }
+  
+  // getting meta - general functions
+  
   /**
    * getting archive meta data from archive_settings
    *
@@ -111,20 +96,6 @@ class Archive_model {
     
     return $data['meta'];
   }
-  
-  public function mod_archive_meta() {
-    $data = $this->get_archive_meta();
-    
-    if(!$this->page) {
-      $data['title'] = $data['title'];
-    } else {
-      $paged = $this->page;
-      $data['title'] = $data['title'].' - Page '.$this->page;
-    }
-    
-    return $data;
-  }
-  
   /**
    * getting archive routes data from archive_settings
    *
@@ -144,6 +115,41 @@ class Archive_model {
     $data = $this->get_archive_meta();
     
     return $data['pagination'];
+  }
+  /**
+   * setting the paginated archive pagination data
+   *
+   * @return object|array modifies archive meta pagination data with pagination links to be used under archive.pagination
+   */
+  public function get_archive_pagination() {
+    if($this->get_archive_meta_pagi()['is_paged'] == true) {
+      $data = set_pagination_data(
+        $this->get_archive_meta_pagi(), 
+        $this->page, 
+        $this->get_all_posts_and_count()->count,
+        $this->get_archive_routes()['archive_url']
+      );
+    } else {
+      $data = null;
+    }
+    return $data;
+  }
+  
+  // getting posts - general functions
+  
+  /**
+   * getting all posts & their count from archive locations
+   *
+   * @return object|array,integer $data->posts(object|array), $data->count(integer)
+   */
+  public function get_all_posts_and_count() {
+    
+    if (!isset($data)) $data = new stdClass();
+    $q = new Jsonq('../public/json/data.min.json');
+    $data->posts = $q->find($this->archive_locations())->get();
+    $data->count = $data->posts->count();
+    
+    return $data;
   }
   /**
    * getting main archive posts data
@@ -198,24 +204,6 @@ class Archive_model {
    */
   public function get_all_posts() {
     $data = generate_tease_post_links($this->get_all_posts_and_count()->posts, $this->get_archive_routes()['single_url']);
-    return $data;
-  }
-  /**
-   * setting the paginated archive pagination data
-   *
-   * @return object|array modifies archive meta pagination data with pagination links to be used under archive.pagination
-   */
-  public function get_archive_pagination() {
-    if($this->get_archive_meta_pagi()['is_paged'] == true) {
-      $data = set_pagination_data(
-        $this->get_archive_meta_pagi(), 
-        $this->page, 
-        $this->get_all_posts_and_count()->count,
-        $this->get_archive_routes()['archive_url']
-      );
-    } else {
-      $data = null;
-    }
     return $data;
   }
   

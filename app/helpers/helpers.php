@@ -106,6 +106,8 @@ function set_pagination_data($blog_data, $requested_page, $posts_count, $archive
   
   $howmany = ceil($posts_count / $blog_data['posts_per_page']);
   
+  $out = [];
+  
   for ($i=0; $i < $howmany; $i++) {
 
     if ($i+1 == $requested_page) {

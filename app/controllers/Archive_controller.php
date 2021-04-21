@@ -6,9 +6,18 @@ class Archive_controller extends Core_controller {
   {
     parent::__construct();
   }
+  // in progress
+  public function cat_collection($page) {
+    $collection = new Term_model('blog', null, null, null);
+  
+    $context['archive'] = $collection->get_cat_collection();
+    $context['archive']['title'] = 'Blog - Categories';
+  
+    $this->render('collection.twig', $context);
+  }
   // cpts tax
   public function category($term, $page) {
-    $category = new Term_model('categories', $page, $term);
+    $category = new Term_model('blog', $page, 'categories', $term);
     
     $context['archive'] = $category->get_category();
     
@@ -20,7 +29,7 @@ class Archive_controller extends Core_controller {
   }
   // cpts tax
   public function tag($term, $page) {
-    $tag = new Term_model('tags', $page, $term);
+    $tag = new Term_model('blog', $page, 'tags', $term);
     
     $context['archive'] = $tag->get_tag();
     
@@ -32,7 +41,7 @@ class Archive_controller extends Core_controller {
   }
   // cpts
   public function blog($page) {
-    $blog = new Archive_model('blog', $page, '');
+    $blog = new Archive_model('blog', $page, null);
     
     $context['archive'] = $blog->get_blog();
     
@@ -44,7 +53,7 @@ class Archive_controller extends Core_controller {
   }
   // cpts
   public function portfolio($page) {
-    $portfolio = new Archive_model('portfolio', $page, '');
+    $portfolio = new Archive_model('portfolio', $page, null);
     
     $context['archive'] = $portfolio->get_portfolio();
     

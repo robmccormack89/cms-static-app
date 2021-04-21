@@ -36,6 +36,10 @@ $router->get($GLOBALS['configs']['portfolio_url'], function(){
  * routes for taxonomy term archives (category|blog, tag|blog) (cpts)
  *
  */
+$router->get($GLOBALS['configs']['category_url'], function(){
+ $category = new Archive_controller();
+ $category->cat_collection(null);
+});
 $router->get($GLOBALS['configs']['category_url'].'/:term', function($term){
   $category = new Archive_controller();
   $category->category($term, null);
@@ -49,28 +53,28 @@ $router->get($GLOBALS['configs']['tag_url'].'/:term', function($term){
  * if the blog is set as paged, do the paged routes (cpts)
  *
  */
-if($GLOBALS['configs']['is_blog_paged'] == true) {
-  // route for main blog paged archive
-  $router->get($GLOBALS['configs']['blog_url'].'/page/:page', function($page){
-    // redirect requests for page one of paged archive to main archive
-    if ($page == 1) {
-      header('Location: ' . $GLOBALS['configs']['blog_url'], true, 301);
-      exit();
-    }
-    $blog = new Archive_controller();
-    $blog->blog($page);
-  });
-  // route for blog's paged taxonomy term archives
-  $router->get($GLOBALS['configs']['category_url'].'/:term/page/:page', function($term, $page){
-    // redirect requests for page one of paged archive to main archive
-    if ($page == 1) {
-      header('Location: '.$GLOBALS['configs']['category_url'].'/'.$term, true, 301);
-      exit();
-    }
-    $category = new Archive_controller();
-    $category->category($term, $page);
-  });
-}
+ if($GLOBALS['configs']['is_blog_paged'] == true) {
+   // route for main blog paged archive
+   $router->get($GLOBALS['configs']['blog_url'].'/page/:page', function($page){
+     // redirect requests for page one of paged archive to main archive
+     if ($page == 1) {
+       header('Location: ' . $GLOBALS['configs']['blog_url'], true, 301);
+       exit();
+     }
+     $blog = new Archive_controller();
+     $blog->blog($page);
+   });
+   // route for blog's paged taxonomy term archives
+   $router->get($GLOBALS['configs']['category_url'].'/:term/page/:page', function($term, $page){
+     // redirect requests for page one of paged archive to main archive
+     if ($page == 1) {
+       header('Location: '.$GLOBALS['configs']['category_url'].'/'.$term, true, 301);
+       exit();
+     }
+     $category = new Archive_controller();
+     $category->category($term, $page);
+   });
+ }
 
 
 /**
