@@ -27,6 +27,12 @@ class Core_controller {
     $this->twig->addGlobal('configs', $GLOBALS['configs'] );
     // darklight_cookie -> twig global
     $this->twig->addGlobal('dark_light_def', darklight_cookie());
+    $this->twig->addGlobal('is_blog', is_blog());
+    $this->twig->addGlobal('is_post', is_post());
+    $this->twig->addGlobal('is_category', is_category());
+    $this->twig->addGlobal('is_tag', is_tag());
+    $this->twig->addGlobal('is_portfolio', is_portfolio());
+    $this->twig->addGlobal('is_project', is_project());
     // menus -> twig global
     $this->menu = new Menu_model;
     $this->twig->addGlobal('main_menu', $this->menu->get_menu_by_slug('main-menu') );
