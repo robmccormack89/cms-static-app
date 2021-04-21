@@ -18,21 +18,25 @@
       </a>
     </h2>
     <p class="uk-article-meta">
-      Posted in {% for cat in post.categories %}
-        {% if not loop.last %}
-          <a title="{{cat.title}}" href="{{cat.link}}">{{cat.title}}</a>,
-        {% else %}
-          <a title="{{cat.title}}" href="{{cat.link}}">{{cat.title}}</a>.
-        {% endif %}
-      {% endfor %}
+      {% if post.categories %}
+        Posted in {% for cat in post.categories %}
+          {% if not loop.last %}
+            <a title="{{cat.title}}" href="{{cat.link}}">{{cat.title}}</a>,
+          {% else %}
+            <a title="{{cat.title}}" href="{{cat.link}}">{{cat.title}}</a>.
+          {% endif %}
+        {% endfor %}
+      {% endif %}
       Published: {{post.date|date("F j, Y")}}
-      Tags: {% for cat in post.tags %}
-        {% if not loop.last %}
-          <a title="{{cat.title}}" href="{{cat.link}}">{{cat.title}}</a>,
-        {% else %}
-          <a title="{{cat.title}}" href="{{cat.link}}">{{cat.title}}</a>.
-        {% endif %}
-      {% endfor %}
+      {% if post.tags %}
+        Tags: {% for cat in post.tags %}
+          {% if not loop.last %}
+            <a title="{{cat.title}}" href="{{cat.link}}">{{cat.title}}</a>,
+          {% else %}
+            <a title="{{cat.title}}" href="{{cat.link}}">{{cat.title}}</a>.
+          {% endif %}
+        {% endfor %}
+      {% endif %}
     </p>
   </header>
   <p>{{post.excerpt}}</p>
