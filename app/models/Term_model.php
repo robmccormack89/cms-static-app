@@ -21,13 +21,20 @@ class Term_model extends Archive_model {
   public function get_cat_collection() {
   
     $data = $this->get_term_meta();
-    // $data['posts'] = $this->get_term_archive_posts();
+    $data['posts'] = $this->get_collection_terms();
     // $data['pagination'] = $this->get_term_pagination();
-  
-    // $data = '';
-  
+
     return $data;
   } 
+  
+  public function get_collection_terms() {
+    if($this->tax == 'categories' || $this->tax == 'tags') {
+      $pre = 'site.blog.taxonomies.';
+      $q = new Jsonq('../public/json/data.min.json');
+      $data = $q->from($pre.$this->tax)->get();
+    } 
+    return $data;
+  }
   
   // main functions for term archives - specfic to new taxonomoes
   
@@ -87,7 +94,7 @@ class Term_model extends Archive_model {
       $pre = 'site.blog.taxonomies.';
       $q = new Jsonq('../public/json/data.min.json');
       $data = $q->from($pre.$this->tax)
-      ->where('name', '=', $this->term)->first();
+      ->where('slug', '=', $this->term)->first();
     } 
     return $data;
   }

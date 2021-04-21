@@ -46,8 +46,8 @@ function generate_tease_post_links($someposts, $singular_url_setting) {
       foreach ($post['categories'] as &$value) {
         $value = array(
           'link' => $GLOBALS['configs']['category_url'].'/'.$value,
-          'name' => $value,
-          'title' => get_term_title_from_name($value, 'categories')
+          'slug' => $value,
+          'title' => get_term_title_from_slug($value, 'categories')
         );
       }
     }
@@ -56,8 +56,8 @@ function generate_tease_post_links($someposts, $singular_url_setting) {
       foreach ($post['tags'] as &$value) {
         $value = array(
           'link' => $GLOBALS['configs']['tag_url'].'/'.$value,
-          'name' => $value,
-          'title' => get_term_title_from_name($value, 'tags')
+          'slug' => $value,
+          'title' => get_term_title_from_slug($value, 'tags')
         );
       }
     }
@@ -67,10 +67,10 @@ function generate_tease_post_links($someposts, $singular_url_setting) {
   return $posts;
 }
 
-function get_term_title_from_name($name, $type) {
+function get_term_title_from_slug($slug, $type) {
   $q = new Jsonq('../public/json/data.min.json');
   $term = $q->from('site.blog.taxonomies.'.$type)
-  ->where('name', '=', $name)
+  ->where('slug', '=', $slug)
   ->first();
   
   return $term->title;

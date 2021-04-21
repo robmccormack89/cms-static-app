@@ -575,7 +575,6 @@
       }
     },
     "config": {
-      "dark_light_mode": "light",
       "placeholder_img": "https://picsum.photos/1920/1280",
       "site_cache": "disable",
       "site_charset": "UTF-8",
@@ -596,17 +595,23 @@
           },
           {
             "link": "/about",
-            "title": "About"
+            "title": "About",
+            "children": [
+              {
+                "link": "/about/more",
+                "title": "More"
+              }
+            ]
           },
           {
             "children": [
               {
-                "link": "/",
-                "title": "Sub One"
+                "link": "/blog/categories/news",
+                "title": "News"
               },
               {
-                "link": "/about",
-                "title": "Sub Two"
+                "link": "/blog/categories/media",
+                "title": "Media"
               }
             ],
             "link": "/blog",
@@ -854,9 +859,9 @@
             "title": "My Image 4"
           }
         ],
-        "slug": "about/test",
-        "status": "draft",
-        "title": "About Test",
+        "slug": "about/more",
+        "status": "published",
+        "title": "More",
         "type": "page"
       }
     ],
@@ -1205,7 +1210,7 @@
       ],
       "routes": {
         "archive_url": "/portfolio",
-        "single_url": "/portfolio/project"
+        "single_url": "/portfolio/projects"
       },
       "taxonomies": {
         "types": [
