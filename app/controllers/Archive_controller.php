@@ -13,7 +13,19 @@ class Archive_controller extends Core_controller {
     $context['archive'] = $category->get_category();
     
     if($context['archive']['posts']) {
-          $this->render('category.twig', $context);
+      $this->render('category.twig', $context);
+    } else {
+      $this->error();
+    }
+  }
+  
+  public function tag($term, $page) {
+    $tag = new Term_model('tags', $page, $term);
+    
+    $context['archive'] = $tag->get_tag();
+    
+    if($context['archive']['posts']) {
+      $this->render('tag.twig', $context);
     } else {
       $this->error();
     }

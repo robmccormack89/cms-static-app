@@ -26,11 +26,11 @@ class Archive_model {
    */
   public function get_blog() {
     
-    $data = $this->get_archive_meta();
-    $data['posts'] = $this->get_archive_posts();
-    $data['pagination'] = $this->get_archive_pagination();
+    $blog = $this->get_archive_meta();
+    $blog['posts'] = $this->get_archive_posts();
+    $blog['pagination'] = $this->get_archive_pagination();
     
-    return $data;
+    return $blog;
   }  
   /**
    * getting all the data for the portfolio
@@ -42,11 +42,11 @@ class Archive_model {
    */
   public function get_portfolio() {
     
-    $data = $this->get_archive_meta();
-    $data['posts'] = $this->get_archive_posts();
-    $data['pagination'] = $this->get_archive_pagination();
+    $portfolio = $this->get_archive_meta();
+    $portfolio['posts'] = $this->get_archive_posts();
+    $portfolio['pagination'] = $this->get_archive_pagination();
     
-    return $data;
+    return $portfolio;
   }
   
   /**
@@ -89,7 +89,7 @@ class Archive_model {
   public function get_all_posts_and_count() {
     
     if (!isset($data)) $data = new stdClass();
-    $q = new Jsonq('../public/json/data.json');
+    $q = new Jsonq('../public/json/data.min.json');
     $data->posts = $q->find($this->archive_locations())->get();
     $data->count = $data->posts->count();
     
@@ -103,8 +103,28 @@ class Archive_model {
   public function get_archive_meta() {
     $data = $this->archive_settings();
     
+    if(!$this->page) {
+      $data['meta']['title'] = $data['meta']['title'];
+    } else {
+      $data['meta']['title'] = $data['meta']['title'].' - Page '.$this->page;
+    }
+    
     return $data['meta'];
   }
+  
+  public function mod_archive_meta() {
+    $data = $this->get_archive_meta();
+    
+    if(!$this->page) {
+      $data['title'] = $data['title'];
+    } else {
+      $paged = $this->page;
+      $data['title'] = $data['title'].' - Page '.$this->page;
+    }
+    
+    return $data;
+  }
+  
   /**
    * getting archive routes data from archive_settings
    *
@@ -132,7 +152,7 @@ class Archive_model {
    */
   public function get_archive_posts() {
     
-    $q = new Jsonq('../public/json/data.json');
+    $q = new Jsonq('../public/json/data.min.json');
     $posts = $q->from($this->archive_locations())->chunk($this->get_archive_meta_pagi()['posts_per_page']);
 
     if ($this->get_archive_meta_pagi()['is_paged']) {

@@ -4,27 +4,35 @@ use Nahid\JsonQ\Jsonq;
 
 class Single_model {
   
-  public function get_page($parent_slug, $child_slug) {
-    $q = new Jsonq('../public/json/data.json');
-    if ($child_slug) {
-      $slug = $parent_slug.'/'.$child_slug;
-      $page = $q->from('site.pages')->where('slug', '=', $slug)->first();
+  public $slug;
+  public $child_slug;
+  
+  public function __construct($slug, $child_slug) {
+    $this->slug = $slug;
+    $this->child_slug = $child_slug;
+  }
+  
+  public function get_page() {
+    $q = new Jsonq('../public/json/data.min.json');
+    if ($this->child_slug) {
+      $newslug = $this->slug.'/'.$this->child_slug;
+      $page = $q->from('site.pages')->where('slug', '=', $newslug)->first();
     } else {
-      $page = $q->from('site.pages')->where('slug', '=', $parent_slug)->first();
+      $page = $q->from('site.pages')->where('slug', '=', $this->slug)->first();
     };
     return $page;
   }
   
-  public function get_post($slug) {
-    $q = new Jsonq('../public/json/data.json');
-    $post = $q->from('site.blog.posts')->where('slug', '=', $slug)->first();
+  public function get_post() {
+    $q = new Jsonq('../public/json/data.min.json');
+    $post = $q->from('site.blog.posts')->where('slug', '=', $this->slug)->first();
 
     return $post;
   }
   
-  public function get_project($slug) {
-    $q = new Jsonq('../public/json/data.json');
-    $project = $q->from('site.portfolio.projects')->where('slug', '=', $slug)->first();
+  public function get_project() {
+    $q = new Jsonq('../public/json/data.min.json');
+    $project = $q->from('site.portfolio.projects')->where('slug', '=', $this->slug)->first();
 
     return $project;
   }

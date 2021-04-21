@@ -12,6 +12,7 @@ class Term_model extends Archive_model {
     $this->term = $term;
   }
   
+  // for the category taxonomy archives
   public function get_category() {
     
     $data = $this->get_term_meta();
@@ -20,7 +21,18 @@ class Term_model extends Archive_model {
     
     return $data;
   } 
+  
+  public function get_tag() {
+    
+    $data = $this->get_term_meta();
+    $data['posts'] = $this->get_term_archive_posts();
+    $data['pagination'] = $this->get_term_pagination();
+    
+    return $data;
+  } 
 
+  // this sets the given taxonomy to a content-type's posts (categories & tags are part of blog)
+  // add new taxonomies to other content types here
   public function term_archive_locations() {
   
     if($this->type == 'categories' || $this->type == 'tags') {
@@ -29,6 +41,18 @@ class Term_model extends Archive_model {
   
     return $data;
   }
+  // this sets the given taxonomy to a content-type's taxonomies (categories & tags are part of blog taxonomies)
+  // add new taxonomies to other content types here
+  public function term_locations() {
+  
+    if($this->type == 'categories' || $this->type == 'tags') {
+      $data = 'site.blog.taxonomies.';
+    };
+  
+    return $data;
+  }
+  // this sets a given taxonomy to its content type's settings
+  // add new taxonomies to other content types here
   public function term_archive_settings() {
   
     if($this->type == 'categories' || $this->type == 'tags') {
@@ -38,18 +62,38 @@ class Term_model extends Archive_model {
   
     return $data;
   }
+  // this sets an acrhive name for a given taxonomy (to be used in pagination urls)
+  // add new taxonomies here
+  public function taxonomy_archive_url() {
+  
+    if($this->type == 'categories') {
+      $data = $GLOBALS['configs']['category_url'];
+    } elseif($this->type == 'tags') {
+      $data = $GLOBALS['configs']['tag_url'];
+    }
+  
+    return $data;
+  }
+  
+  // general term archive functions
   public function get_term_archive_routes() {
     $data = $this->term_archive_settings();
     
     return $data['routes'];
   }
-  
   public function get_term_meta() {
     
-    $q = new Jsonq('../public/json/data.json');
-    $data = $q->from('site.blog.taxonomies.categories')
+    $q = new Jsonq('../public/json/data.min.json');
+    $location = $this->term_locations().$this->type;
+    $data = $q->from($location)
     ->where('name', '=', $this->term)
     ->first();
+    
+    if(!$this->page) {
+      $data['title'] = $data['title'];
+    } else {
+      $data['title'] = $data['title'].' - Page '.$this->page;
+    }
     
     return $data;
   }
@@ -59,12 +103,11 @@ class Term_model extends Archive_model {
     
     return $data['pagination'];
   }
-  
   public function get_term_archive_posts() {
     
-    $q = new Jsonq('../public/json/data.json');
+    $q = new Jsonq('../public/json/data.min.json');
     $posts = $q->from($this->term_archive_locations())
-    ->where('categories', 'any', $this->term)
+    ->where($this->type, 'any', $this->term)
     ->chunk($this->get_term_archive_meta_pagi()['posts_per_page']);
 
     if ($this->get_term_archive_meta_pagi()['is_paged']) {
@@ -81,7 +124,6 @@ class Term_model extends Archive_model {
     
     return $data;
   }
-  
   public function get_term_paged_posts($posts) {
 
     if (!$this->page) {
@@ -102,19 +144,16 @@ class Term_model extends Archive_model {
     
     if (!isset($data)) $data = new stdClass();
     
-    $q = new Jsonq('../public/json/data.json');
+    $q = new Jsonq('../public/json/data.min.json');
     $data->posts = $q->from($this->term_archive_locations())
-    ->where('categories', 'any', $this->term)
+    ->where($this->type, 'any', $this->term)
     ->get();
     $data->count = $data->posts->count();
     
     return $data;
   }
-  
   public function get_term_pagination() {
-    
-    $archive_url = $this->get_term_archive_routes()['archive_url'];
-    $pag_url = $archive_url.'/'.$this->term;
+    $pag_url = $this->taxonomy_archive_url().'/'.$this->term;
     
     if($this->get_term_archive_meta_pagi()['is_paged'] == true) {
       $data = set_pagination_data(

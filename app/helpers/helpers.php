@@ -1,5 +1,31 @@
 <?php
+function menu_active_classes($menu_items) {
+  foreach ($menu_items as $k => &$item) {
+    
+    if ($_SERVER['REQUEST_URI'] == $menu_items[$k]['link']) {
+      $menu_items[$k]['class'] = 'uk-active';
+    }
 
+    if(isset($menu_items[$k]['children'])){
+      foreach ($menu_items[$k]['children'] as $key => &$value) {
+
+        if ($_SERVER['REQUEST_URI'] == $value['link']) {
+          $value['class'] = 'uk-active';
+        }
+      }
+    }
+
+  }
+  return($menu_items);
+}
+
+/**
+ * generate the links data for post teases
+ *
+ * @param $someposts - a posts array to set the link data for
+ * @param $singular_url_setting - the singular url setting for a content type
+ * @return object|array the modified posts data with .link data set for each item
+ */
 function generate_tease_post_links($someposts, $singular_url_setting) {
   foreach ($someposts as $post) {
     $post['link'] = $GLOBALS['configs']['base_url'].$singular_url_setting.'/'.$post['slug'];
@@ -7,7 +33,15 @@ function generate_tease_post_links($someposts, $singular_url_setting) {
   }
   return $posts;
 }
-
+/**
+ * sets the pagination data for an archive, to be used in pagination markup
+ *
+ * @param $blog_data - pagination settings for a content type (is_paged, posts_per_page)
+ * @param $requested_page - requested page value (an integer like 2, 3 or 4)
+ * @param $posts_count - the count value of all the posts being used (an integer like 12, 13 or 14)
+ * @param $archive_url - the content type's archive url (/blog, /portfolio)
+ * @return object|array the modified pagination data with .next, .prev & .pages data added to .pagination
+ */
 function set_pagination_data($blog_data, $requested_page, $posts_count, $archive_url) {
   
   $data[] = "";
@@ -50,7 +84,14 @@ function set_pagination_data($blog_data, $requested_page, $posts_count, $archive
 
   return $data;
 }
-
+/**
+ * check to see if a given archive paged page has a next link
+ *
+ * @param $requested_page - the paged page being requested (an integer like 2, 3 or 4)
+ * @param $posts_count - the posts count of the archive in question (an integer like 2, 3 or 4)
+ * @param $posts_per_page - the posts_per_page setting of the archive in question (an integer like 2, 3 or 4)
+ * @return boolean yes if archive page has next page
+ */
 function has_next($requested_page, $posts_count, $posts_per_page) {
   
   if (!$requested_page) {
@@ -67,7 +108,14 @@ function has_next($requested_page, $posts_count, $posts_per_page) {
   };
 
 }
-
+/**
+ * check to see if a given archive paged page has a previous link
+ *
+ * @param $requested_page - the paged page being requested (an integer like 2, 3 or 4)
+ * @param $posts_count - the posts count of the archive in question (an integer like 2, 3 or 4)
+ * @param $posts_per_page - the posts_per_page setting of the archive in question (an integer like 2, 3 or 4)
+ * @return boolean yes if archive page has previous page
+ */
 function has_prev($requested_page, $posts_count, $posts_per_page) {
   
   if (!$requested_page) {
@@ -84,7 +132,12 @@ function has_prev($requested_page, $posts_count, $posts_per_page) {
   };
 
 }
-
+/**
+ * get the data (decoded) from a given json file in public/json
+ *
+ * @param $filename - the name of the file in question (a string like 'data')
+ * @return object|array - returns the decoded data from the given file
+ */
 function get_json_data($filename) {
   $str = file_get_contents('../public/json/'.$filename.'.json');
   $data = json_decode($str, true); // decode the JSON into an associative array
@@ -96,13 +149,13 @@ function get_in_array( string $needle, array $haystack, string $column){
   foreach( $haystack as $item )  if( $item[ $column ] === $needle )  $matches[] = $item;
   return $matches;
 }
-// check if obj is page post or project
+// check if given obj is pag,e post or a project. checks the type property of the given singular pobject
 function is_page_post_or_project($obj) {
 	if ($obj['type'] == 'page' || $obj['type'] == 'post' || $obj['type'] == 'project') {
 		return true;
 	}
 }
-// check if request is for blog archive
+// check if request is for blog archive using REQUEST_URI
 function is_blog() {
 	$string = $_SERVER['REQUEST_URI'];
   $fresh = str_replace("/","",$string);
@@ -112,7 +165,7 @@ function is_blog() {
 		return true;
 	}
 }
-// check if request is for portfolio archive
+// check if request is for portfolio archive using REQUEST_URI
 function is_portfolio() {
 	$string = $_SERVER['REQUEST_URI'];
   $fresh = str_replace("/","",$string);
@@ -121,28 +174,6 @@ function is_portfolio() {
 	if ($fresh == $portfolio_fresh) {
 		return true;
 	}
-}
-// check the darklight cookie seting & set some values
-function darklight_cookie() {
-	
-	$dark_light_def = '';
-	
-	if(isset($_COOKIE['darklightswitch'])) {
-		$dark_light_def = array(
-			'body_class' => 'uk-light',
-			'sun_link_show_hide' => '',
-			'moon_link_show_hide' => 'hidden',
-		);
-	} elseif (!isset($_COOKIE['darklightswitch'])) {
-		$dark_light_def = array(
-			'body_class' => '',
-			'sun_link_show_hide' => 'hidden',
-			'moon_link_show_hide' => '',
-		);    
-	}
-	
-	return $dark_light_def;
-	
 }
 // check is given page/post published
 function is_published($reqPage) {

@@ -24,13 +24,13 @@
       <ul class="main-menu-nav uk-navbar-nav uk-visible@m">
         {% if main_menu %}
           {% for item in main_menu.menu_items %}
-            <li class="menu-item">
+            <li class="menu-item {{item.class}}">
               <a href="{{item.link}}">{{item.title}}</a>
               {% if item.children %}
               <div class="uk-navbar-dropdown">
                 <ul class="uk-nav uk-navbar-dropdown-nav">
                   {% for child_item in item.children %}
-                    <li><a href="{{child_item.link}}">{{child_item.title}}</a></li>
+                    <li class="menu-item {{child_item.class}}"><a href="{{child_item.link}}">{{child_item.title}}</a></li>
                   {% endfor %}  
                 </ul>
               </div>
