@@ -3,12 +3,12 @@
 use Nahid\JsonQ\Jsonq;
 
 function minify_output($buffer){
-    $search = array('/\>[^\S ]+/s','/[^\S ]+\</s','/(\s)+/s');
-    $replace = array('>','<','\\1');
-    if (preg_match("/\<html/i",$buffer) == 1 && preg_match("/\<\/html\>/i",$buffer) == 1) {
-        $buffer = preg_replace($search, $replace, $buffer);
-    }
-    return $buffer;
+  $search = array('/\>[^\S ]+/s','/[^\S ]+\</s','/(\s)+/s');
+  $replace = array('>','<','\\1');
+  if (preg_match("/\<html/i",$buffer) == 1 && preg_match("/\<\/html\>/i",$buffer) == 1) {
+    $buffer = preg_replace($search, $replace, $buffer);
+  }
+  return $buffer;
 }
 
 function menu_active_classes($menu_items) {
@@ -196,31 +196,31 @@ function get_in_array( string $needle, array $haystack, string $column){
 }
 // check if given obj is pag,e post or a project. checks the type property of the given singular pobject (cpts)
 function is_page_post_or_project($obj) {
-	if ($obj['type'] == 'page' || $obj['type'] == 'post' || $obj['type'] == 'project') {
-		return true;
-	}
+  if ($obj['type'] == 'page' || $obj['type'] == 'post' || $obj['type'] == 'project') {
+    return true;
+  }
 }
 // check if request is for blog archive using REQUEST_URI (cpts)
 function is_blog() {
-	$string = $_SERVER['REQUEST_URI'];
+  $string = $_SERVER['REQUEST_URI'];
   $fresh = str_replace("/","",$string);
-	$blog = $GLOBALS['configs']['blog_url'];
-	$blog_fresh = str_replace("/","",$blog);
-	if ($fresh == $blog_fresh) {
-		return true;
-	} elseif (strpos($fresh, $blog_fresh.'page') !== false) {
+  $blog = $GLOBALS['configs']['blog_url'];
+  $blog_fresh = str_replace("/","",$blog);
+  if ($fresh == $blog_fresh) {
+    return true;
+  } elseif (strpos($fresh, $blog_fresh.'page') !== false) {
     return true;
   }
 }
 // check if request is for portfolio archive using REQUEST_URI (cpts)
 function is_portfolio() {
-	$string = $_SERVER['REQUEST_URI'];
+  $string = $_SERVER['REQUEST_URI'];
   $fresh = str_replace("/","",$string);
-	$portfolio = $GLOBALS['configs']['portfolio_url'];
-	$portfolio_fresh = str_replace("/","",$portfolio);
+  $portfolio = $GLOBALS['configs']['portfolio_url'];
+  $portfolio_fresh = str_replace("/","",$portfolio);
   if ($fresh == $portfolio_fresh) {
-		return true;
-	} elseif (strpos($fresh, $portfolio_fresh.'page') !== false) {
+    return true;
+  } elseif (strpos($fresh, $portfolio_fresh.'page') !== false) {
     return true;
   }
 }
@@ -236,115 +236,115 @@ function is_post() {
 }
 // (cpts)
 function is_project() {
-	$string = $_SERVER['REQUEST_URI'];
+  $string = $_SERVER['REQUEST_URI'];
   $fresh = str_replace("/","",$string);
-	$proj = $GLOBALS['configs']['project_url'];
-	$proj_fresh = str_replace("/","",$proj);
+  $proj = $GLOBALS['configs']['project_url'];
+  $proj_fresh = str_replace("/","",$proj);
   if (strpos($fresh, $proj_fresh) !== false) {
-	   return true;
+    return true;
   }
 }
 // (cpts)
 function is_category() {
-	$string = $_SERVER['REQUEST_URI'];
+  $string = $_SERVER['REQUEST_URI'];
   $fresh = str_replace("/","",$string);
-	$proj = $GLOBALS['configs']['category_url'];
-	$proj_fresh = str_replace("/","",$proj);
+  $proj = $GLOBALS['configs']['category_url'];
+  $proj_fresh = str_replace("/","",$proj);
   if (strpos($fresh, $proj_fresh) !== false) {
-	   return true;
+    return true;
   }
 }
 // (cpts)
 function is_tag() {
-	$string = $_SERVER['REQUEST_URI'];
+  $string = $_SERVER['REQUEST_URI'];
   $fresh = str_replace("/","",$string);
-	$proj = $GLOBALS['configs']['tag_url'];
-	$proj_fresh = str_replace("/","",$proj);
+  $proj = $GLOBALS['configs']['tag_url'];
+  $proj_fresh = str_replace("/","",$proj);
   if (strpos($fresh, $proj_fresh) !== false) {
-	   return true;
+    return true;
   }
 }
 // check is given page/post published
 function is_published($reqPage) {
-	if ($reqPage && $reqPage['status'] == 'published') {
-		return true;
-	}
+  if ($reqPage && $reqPage['status'] == 'published') {
+    return true;
+  }
 }
 // check is given page/post an allowed draft
 function is_draft_allowed($reqPage) {
-	if ($reqPage && $reqPage['status'] == 'draft' && $GLOBALS['configs']['visitor_ip'] == $GLOBALS['configs']['author_ip']) {
-		return true;
-	}
+  if ($reqPage && $reqPage['status'] == 'draft' && $GLOBALS['configs']['visitor_ip'] == $GLOBALS['configs']['author_ip']) {
+    return true;
+  }
 }
 // check is given page/post published or an allowed draft
 function is_published_or_draft_allowed($reqPage) {
-	if (is_published($reqPage) || is_draft_allowed($reqPage)) {
-		return true;
-	}
+  if (is_published($reqPage) || is_draft_allowed($reqPage)) {
+    return true;
+  }
 }
 // check is cache setting enabled
 function is_cache_enabled() {
-	if ($GLOBALS['configs']['php_cache'] == 'enable') {
-		return true;
-	}
+  if ($GLOBALS['configs']['php_cache'] == 'enable') {
+    return true;
+  }
 }
 // image resize (in progress)
 function imResize($img, $w, $h) {
 
-	$image_name =  '../public/img/' .$img. '.jpg';
-	$image = imagecreatefromjpeg($image_name);
-	$imgResized = imagescale($image , 600, 600);
-	imagejpeg($imgResized, '../public/img/' .$img. '-' .$width. '-' .$height. '.jpg');
+  $image_name =  '../public/img/' .$img. '.jpg';
+  $image = imagecreatefromjpeg($image_name);
+  $imgResized = imagescale($image , 600, 600);
+  imagejpeg($imgResized, '../public/img/' .$img. '-' .$width. '-' .$height. '.jpg');
 
 }
 // image crop (in progress)
 function imCropAspect($img, $width, $height) {
 	
-	if (!defined('WIDTHINPUT')) define('WIDTHINPUT', 400);
-	
-	$helo = $width;
-	// define("FOO", $helo);
-	if (!defined('FOO')) define('FOO', $helo);
-	
-	// The file
-	$filepath = BASE_URL.$img;
-	
-	$info = new SplFileInfo($img);
-	$filename = str_replace(".jpg", "", $info->getFilename());
-	// var_dump($filename);
-	// 
-	// // Set a maximum height and width
-	// $width = $w;
-	// $height = $h;
-	
-	// Get new dimensions
-	list($width_orig, $height_orig) = getimagesize($filepath);
-	
-	$ratio_orig = $width_orig/$height_orig;
-	
-	// 
-	// $init_width = $width;
-	
-	if ($width/$height > $ratio_orig) {
-		$newwqidth = $width;
-	   $width = $height*$ratio_orig;
-	} else {
-	   $height = $width/$ratio_orig;
-	}
-	
-	// Resample
-	$image_p = imagecreatetruecolor($width, $height);
-	$image = imagecreatefromjpeg($filepath);
-	imagecopyresampled($image_p, $image, 0, 0, 0, 0, $width, $height, $width_orig, $height_orig);
-	
-	$output_name = '../public/img/' .$filename. '-' . $height*$ratio_orig . '.jpg';
-	// Output
-	imagejpeg($image_p, $output_name, 100);
-	
-	// var_dump($height*$ratio_orig);
-	
-	if (file_exists($output_name)) {
-		return  $output_name;
-	}
+  if (!defined('WIDTHINPUT')) define('WIDTHINPUT', 400);
+
+  $helo = $width;
+  // define("FOO", $helo);
+  if (!defined('FOO')) define('FOO', $helo);
+
+  // The file
+  $filepath = BASE_URL.$img;
+
+  $info = new SplFileInfo($img);
+  $filename = str_replace(".jpg", "", $info->getFilename());
+  // var_dump($filename);
+  // 
+  // // Set a maximum height and width
+  // $width = $w;
+  // $height = $h;
+
+  // Get new dimensions
+  list($width_orig, $height_orig) = getimagesize($filepath);
+
+  $ratio_orig = $width_orig/$height_orig;
+
+  // 
+  // $init_width = $width;
+
+  if ($width/$height > $ratio_orig) {
+    $newwqidth = $width;
+    $width = $height*$ratio_orig;
+  } else {
+    $height = $width/$ratio_orig;
+  }
+
+  // Resample
+  $image_p = imagecreatetruecolor($width, $height);
+  $image = imagecreatefromjpeg($filepath);
+  imagecopyresampled($image_p, $image, 0, 0, 0, 0, $width, $height, $width_orig, $height_orig);
+
+  $output_name = '../public/img/' .$filename. '-' . $height*$ratio_orig . '.jpg';
+  // Output
+  imagejpeg($image_p, $output_name, 100);
+
+  // var_dump($height*$ratio_orig);
+
+  if (file_exists($output_name)) {
+    return $output_name;
+  }
 
 }
