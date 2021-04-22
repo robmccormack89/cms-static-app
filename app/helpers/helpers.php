@@ -39,6 +39,7 @@ function menu_active_classes($menu_items) {
  * @return object|array the modified posts data with .link data set for each item
  */
 function generate_tease_post_links($someposts, $singular_url_setting) {
+  
   foreach ($someposts as $post) {
     $post['link'] = $GLOBALS['configs']['base_url'].$singular_url_setting.'/'.$post['slug'];
     

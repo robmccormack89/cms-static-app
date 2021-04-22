@@ -90,12 +90,14 @@ class Term_model extends Archive_model {
       $q = new Jsonq('../public/json/data.min.json');
       $data = $q->from('site.blog.meta')->get();
     }
-    if($this->tax == 'categories' || $this->tax == 'tags') {
-      $pre = 'site.blog.taxonomies.';
-      $q = new Jsonq('../public/json/data.min.json');
-      $data = $q->from($pre.$this->tax)
-      ->where('slug', '=', $this->term)->first();
-    } 
+    if($this->term) {
+      if($this->tax == 'categories' || $this->tax == 'tags') {
+        $pre = 'site.blog.taxonomies.';
+        $q = new Jsonq('../public/json/data.min.json');
+        $data = $q->from($pre.$this->tax)
+        ->where('slug', '=', $this->term)->first();
+      } 
+    }
     return $data;
   }
   public function set_term_settings_locations() {
@@ -150,7 +152,7 @@ class Term_model extends Archive_model {
       $data = set_pagination_data(
         $this->get_term_archive_meta_pagi(), 
         $this->page, 
-        $this->get_term_all_posts()->count,
+        $this->get_term_all_posts_and_count()->count,
         $pag_url
       );
     } else {
@@ -190,7 +192,7 @@ class Term_model extends Archive_model {
       $page = $this->page - 1;
     }
 
-    if (!($this->get_term_archive_meta_pagi()['posts_per_page'] * $page >= $this->get_term_all_posts()->count)) {
+    if (!($this->get_term_archive_meta_pagi()['posts_per_page'] * $page >= $this->get_term_all_posts_and_count()->count)) {
       $data = generate_tease_post_links($posts[$page], $this->get_term_archive_routes()['single_url']);
     } else {
       $data = false;
@@ -198,7 +200,7 @@ class Term_model extends Archive_model {
     
     return $data;
   }
-  public function get_term_all_posts() {
+  public function get_term_all_posts_and_count() {
     
     if (!isset($data)) $data = new stdClass();
     
@@ -208,6 +210,12 @@ class Term_model extends Archive_model {
     ->get();
     $data->count = $data->posts->count();
     
+    return $data;
+  }
+  public function get_term_all_posts() {
+    // turn json object to php array
+    $posts = json_decode( $this->get_term_all_posts_and_count()->posts, TRUE );
+    $data = generate_tease_post_links($posts, $this->get_archive_routes()['single_url']);
     return $data;
   }
   

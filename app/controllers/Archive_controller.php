@@ -13,7 +13,7 @@ class Archive_controller extends Core_controller {
     $context['archive'] = $collection->get_cat_collection();
     $context['archive']['title'] = 'Blog - Categories';
     
-    echo($context['archive']['posts']);
+    // echo($context['archive']['posts']);
   
     $this->render('collection.twig', $context);
   }
@@ -43,7 +43,7 @@ class Archive_controller extends Core_controller {
   }
   // cpts
   public function blog($page) {
-    $blog = new Archive_model('blog', $page, null);
+    $blog = new Archive_model('blog', $page);
     
     $context['archive'] = $blog->get_blog();
     
@@ -55,7 +55,7 @@ class Archive_controller extends Core_controller {
   }
   // cpts
   public function portfolio($page) {
-    $portfolio = new Archive_model('portfolio', $page, null);
+    $portfolio = new Archive_model('portfolio', $page);
     
     $context['archive'] = $portfolio->get_portfolio();
     

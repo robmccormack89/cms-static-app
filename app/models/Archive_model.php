@@ -203,7 +203,9 @@ class Archive_model {
    * @return object|array returns all posts data
    */
   public function get_all_posts() {
-    $data = generate_tease_post_links($this->get_all_posts_and_count()->posts, $this->get_archive_routes()['single_url']);
+    // turn json object to php array
+    $posts = json_decode( $this->get_all_posts_and_count()->posts, TRUE );
+    $data = generate_tease_post_links($posts, $this->get_archive_routes()['single_url']);
     return $data;
   }
   
