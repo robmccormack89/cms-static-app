@@ -8,16 +8,18 @@ class Collection_model extends Term_model {
     parent::__construct($type, $page, $tax, null);
   }
   
-  public function get_cat_collection() {
+  public function get_category_collection() {
   
     $data = $this->get_archive_meta();
-    $data['posts'] = $this->get_collection_terms();
+    $data['posts'] = $this->get_collection();
     $data['pagination'] = $this->get_archive_pagination();
 
     return $data;
   } 
   
-  public function get_collection_terms() {
+  // getting the collection, change per taxonomy - general functions
+  
+  public function get_collection() {
     
     if($this->tax == 'categories' || $this->tax == 'tags') {
       $pre = 'site.blog.taxonomies.';
@@ -27,27 +29,44 @@ class Collection_model extends Term_model {
       
     if ($this->get_archive_meta_pagination()['is_paged']) {
         
-      if($this->get_paged_collection_terms($terms)) {
-        $data = $this->get_paged_collection_terms($terms);
+      if($this->get_paged_posts($terms)) {
+        $data = $this->get_paged_posts($terms);
       } else {
         $data = false;
       }
       
     } else {
-      $data = $this->get_all_terms();
+      $data = $this->get_all_posts();
     }
     
     return $data;
   }
   
-  public function get_paged_collection_terms($terms) {
+  // getting posts - general functions, extended from Archive_model->Term_model
+  
+  public function get_archive_pagination() {
+    $pag_url = $this->tax_archive_url();
+    
+    if($this->get_archive_meta_pagination()['is_paged'] == true) {
+      $data = set_pagination_data(
+        $this->get_archive_meta_pagination(), 
+        $this->page, 
+        $this->get_all_posts_and_count()->count,
+        $pag_url
+      );
+    } else {
+      $data = null;
+    }
+    return $data;
+  }
+  public function get_paged_posts($terms) {
     if (!$this->page) {
       $page = 0;
     } else {
       $page = $this->page - 1;
     }
       
-    if (!($this->get_archive_meta_pagination()['posts_per_page'] * $page >= $this->get_all_collection_terms()->count)) {
+    if (!($this->get_archive_meta_pagination()['posts_per_page'] * $page >= $this->get_all_posts_and_count()->count)) {
       $data = generate_tease_term_links($terms[$page], $this->get_archive_routes()['category_url']);
     } else {
       $data = false;
@@ -55,15 +74,13 @@ class Collection_model extends Term_model {
     
     return $data;
   }
-  
-  public function get_all_terms() {
+  public function get_all_posts() {
     // turn json object to php array
-    $posts = json_decode( $this->get_all_collection_terms()->posts, TRUE );
+    $posts = json_decode( $this->get_all_posts_and_count()->posts, TRUE );
     $data = generate_tease_post_links($posts, $this->get_archive_routes()['category_url']);
     return $data;
   }
-  
-  public function get_all_collection_terms() {
+  public function get_all_posts_and_count() {
     if (!isset($data)) $data = new stdClass();
     
     if($this->tax == 'categories' || $this->tax == 'tags') {
