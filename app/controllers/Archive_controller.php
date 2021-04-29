@@ -8,12 +8,10 @@ class Archive_controller extends Core_controller {
   }
   // in progress
   public function cat_collection($page) {
-    $collection = new Term_model('blog', $page, 'categories', null);
+    $collection = new Collection_model('blog', $page, 'categories');
   
     $context['archive'] = $collection->get_cat_collection();
     $context['archive']['title'] = 'Blog - Categories';
-    
-    // print_r($context['archive']['posts']);
   
     $this->render('collection.twig', $context);
   }
