@@ -40,6 +40,10 @@ $router->get($GLOBALS['configs']['category_url'], function(){
  $category = new Archive_controller();
  $category->cat_collection(null);
 });
+$router->get($GLOBALS['configs']['tag_url'], function(){
+ $tag = new Archive_controller();
+ $tag->tag_collection(null);
+});
 $router->get($GLOBALS['configs']['category_url'].'/:term', function($term){
   $category = new Archive_controller();
   $category->category($term, null);
@@ -81,6 +85,14 @@ $router->get($GLOBALS['configs']['tag_url'].'/:term', function($term){
      }
     $category = new Archive_controller();
     $category->cat_collection($page);
+   });
+   $router->get($GLOBALS['configs']['tag_url'].'/page/:page', function($page){
+     if ($page == 1) {
+       header('Location: '.$GLOBALS['configs']['tag_url'], true, 301);
+       exit();
+     }
+    $tag = new Archive_controller();
+    $tag->tag_collection($page);
    });
  }
 

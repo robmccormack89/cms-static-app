@@ -11,21 +11,53 @@ class Collection_model extends Term_model {
   public function get_category_collection() {
   
     $data = $this->get_archive_meta();
+    $data['title'] = $this->collection_archive_title();
     $data['posts'] = $this->get_collection();
     $data['pagination'] = $this->get_archive_pagination();
 
     return $data;
   } 
   
+  public function get_tag_collection() {
+  
+    $data = $this->get_archive_meta();
+    $data['title'] = $this->collection_archive_title();
+    $data['posts'] = $this->get_collection();
+    $data['pagination'] = $this->get_archive_pagination();
+
+    return $data;
+  } 
+  
+  public function collection_archive_url() {
+    if($this->tax == 'categories') {
+      $data = $this->get_archive_routes()['category_url'];
+    } elseif($this->tax == 'tags') {
+      $data = $this->get_archive_routes()['tag_url'];
+    }
+    return $data;
+  }
+  
+  public function collection_archive_title() {
+    if($this->tax == 'categories') {
+      $title = 'Blog Categories';
+    } elseif($this->tax == 'tags') {
+      $title = 'Blog Tags';
+    }
+    if(!$this->page) {
+      $data = $title;
+    } else {
+      $data = $title.' - Page '.$this->page;
+    }
+    return $data;
+  }
+  
   // getting the collection, change per taxonomy - general functions
   
   public function get_collection() {
     
-    if($this->tax == 'categories' || $this->tax == 'tags') {
-      $pre = 'site.blog.taxonomies.';
-      $q = new Jsonq('../public/json/data.min.json');
-      $terms = $q->from($pre.$this->tax)->chunk($this->get_archive_meta_pagination()['posts_per_page']);
-    } 
+    $pre = 'site.'.$this->type.'.taxonomies.';
+    $q = new Jsonq('../public/json/data.min.json');
+    $terms = $q->from($pre.$this->tax)->chunk($this->get_archive_meta_pagination()['posts_per_page']);
       
     if ($this->get_archive_meta_pagination()['is_paged']) {
         
@@ -67,7 +99,7 @@ class Collection_model extends Term_model {
     }
       
     if (!($this->get_archive_meta_pagination()['posts_per_page'] * $page >= $this->get_all_posts_and_count()->count)) {
-      $data = generate_tease_term_links($terms[$page], $this->get_archive_routes()['category_url']);
+      $data = generate_tease_term_links($terms[$page], $this->collection_archive_url());
     } else {
       $data = false;
     }
@@ -77,18 +109,16 @@ class Collection_model extends Term_model {
   public function get_all_posts() {
     // turn json object to php array
     $posts = json_decode( $this->get_all_posts_and_count()->posts, TRUE );
-    $data = generate_tease_post_links($posts, $this->get_archive_routes()['category_url']);
+    $data = generate_tease_post_links($posts, $this->collection_archive_url());
     return $data;
   }
   public function get_all_posts_and_count() {
     if (!isset($data)) $data = new stdClass();
     
-    if($this->tax == 'categories' || $this->tax == 'tags') {
-      $pre = 'site.blog.taxonomies.';
-      $q = new Jsonq('../public/json/data.min.json');
-      $data->posts = $q->from($pre.$this->tax)->get();
-      $data->count = $data->posts->count();
-    } 
+    $pre = 'site.'.$this->type.'.taxonomies.';
+    $q = new Jsonq('../public/json/data.min.json');
+    $data->posts = $q->from($pre.$this->tax)->get();
+    $data->count = $data->posts->count();
     
     return $data;
   }
