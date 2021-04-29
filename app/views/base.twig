@@ -8,6 +8,39 @@
     {% block seo_meta %}
       <!-- seo meta should be extended on a per page basis -->
     {% endblock %}
+    <!-- WebSite -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org/",
+        "@type": "WebSite",
+        "name": "{{configs.site_title}}",
+        "url": "{{configs.base_url}}",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "{{configs.base_url}}/?s={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      }
+    </script>
+    <!-- Person -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org/",
+        "@type": "Person",
+        "name": "{{configs.name}}",
+        "url": "{{configs.base_url}}",
+        "image": "{{configs.avatar_src}}",
+        "sameAs": [
+          "{{configs.github_url}}",
+          "{{configs.base_url}}"
+        ],
+        "jobTitle": "{{configs.job}}",
+        "worksFor": {
+          "@type": "Organization",
+          "name": "{{configs.name}}"
+        }  
+      }
+    </script>
     <!-- theme styles -->
     <link rel="stylesheet" type="text/css" href="/public/css/base.css">
     <link rel="stylesheet" type="text/css" href="/public/css/global.css">

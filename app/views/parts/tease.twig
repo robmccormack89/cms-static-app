@@ -27,7 +27,7 @@
           {% endif %}
         {% endfor %}
       {% endif %}
-      Published: {{post.date|date("F j, Y")}}
+      Published: {{post.date_time|date("F j, Y")}}
       {% if post.tags %}
         Tags: {% for cat in post.tags %}
           {% if not loop.last %}

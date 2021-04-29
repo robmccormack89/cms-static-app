@@ -24,6 +24,11 @@ return array(
   'dark_light_mode' => $settings['dark_light_mode'], // default setting for dark light mode, set to 'dark' for dark mode
   'placeholder_img_src' => $settings['placeholder_img'],
   
+  'name' => $settings['name'],
+  'avatar_src' => $root.$settings['avatar_src'],
+  'job' => $settings['job'],
+  'github_url' => $settings['github_url'],
+  
   // (cpts) (blog)
   'blog_url' => $blog_settings['archive_url'], // done for ya
   'post_url' => $blog_settings['single_url'], // done for ya

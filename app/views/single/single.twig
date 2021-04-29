@@ -10,6 +10,30 @@
   <meta property="og:image" content="{{configs.base_url}}{{single.featured_img.src}}" />
   <meta property="og:url" content="{{configs.current_url}}" />
   <meta property="og:site_name" content="{{configs.site_title}}" />
+  <!-- BlogPosting -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "{{configs.base_url}}"
+      },
+      "headline": "Some Heading",
+      "description": "Lorem Ipsum",
+      "image": "{{configs.base_url}}/public/img/image.jpg",  
+      "author": {
+        "@type": "Person",
+        "name": "Robert McCormack"
+      },  
+      "publisher": {
+        "@type": "Person",
+        "name": "{{configs.site_title}}"
+      },
+      "datePublished": "{{single.date_time|date("F j, Y")}}",
+      "dateModified": "{{single.date_time|date("Y-m-d")}}"
+    }
+  </script>
 {% endblock %}
 
 {% block content %}
