@@ -9,6 +9,12 @@
     {% if is_project %}
       <li><a href="{{configs.portfolio_url}}">Portfolio</a></li>
     {% endif %}
+    {% if is_category %}
+      <li><a href="{{configs.category_url}}">Categories</a></li>
+    {% endif %}
+    {% if is_tag %}
+      <li><a href="{{configs.tag_url}}">Tags</a></li>
+    {% endif %}
     {% if single %}
       <li><span>{{single.title}}</span></li>
     {% endif %}
