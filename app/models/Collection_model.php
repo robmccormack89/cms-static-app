@@ -8,6 +8,8 @@ class Collection_model extends Term_model {
     parent::__construct($type, $page, $tax, null);
   }
   
+  // main functions for term archives - specfic to new taxonomies
+  
   public function get_category_collection() {
   
     $data = $this->get_archive_meta();
@@ -17,7 +19,6 @@ class Collection_model extends Term_model {
 
     return $data;
   } 
-  
   public function get_tag_collection() {
   
     $data = $this->get_archive_meta();
@@ -27,7 +28,6 @@ class Collection_model extends Term_model {
 
     return $data;
   } 
-  
   public function collection_archive_url() {
     if($this->tax == 'categories') {
       $data = $this->get_archive_routes()['category_url'];
@@ -35,8 +35,7 @@ class Collection_model extends Term_model {
       $data = $this->get_archive_routes()['tag_url'];
     }
     return $data;
-  }
-  
+  }  
   public function collection_archive_title() {
     if($this->tax == 'categories') {
       $title = 'Blog Categories';
@@ -51,7 +50,7 @@ class Collection_model extends Term_model {
     return $data;
   }
   
-  // getting the collection, change per taxonomy - general functions
+  // getting the collection, general functions
   
   public function get_collection() {
     

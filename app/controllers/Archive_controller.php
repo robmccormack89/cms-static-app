@@ -11,15 +11,23 @@ class Archive_controller extends Core_controller {
     $collection = new Collection_model('blog', $page, 'categories');
   
     $context['archive'] = $collection->get_category_collection();
-  
-    $this->render('collection.twig', $context);
+    
+    if($context['archive']['posts']) {
+      $this->render('collection.twig', $context);
+    } else {
+      $this->error();
+    }
   }
   public function tag_collection($page) {
     $collection = new Collection_model('blog', $page, 'tags');
   
     $context['archive'] = $collection->get_tag_collection();
-  
-    $this->render('collection.twig', $context);
+    
+    if($context['archive']['posts']) {
+      $this->render('collection.twig', $context);
+    } else {
+      $this->error();
+    }
   }
   // cpts tax
   public function category($term, $page) {
