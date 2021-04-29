@@ -17,6 +17,7 @@
         {{post.title}}
       </a>
     </h2>
+    {% if post.categories or post.date_time or post.tags %}
     <p class="uk-article-meta">
       {% if post.categories %}
         Posted in {% for cat in post.categories %}
@@ -27,7 +28,9 @@
           {% endif %}
         {% endfor %}
       {% endif %}
-      Published: {{post.date_time|date("F j, Y")}}
+      {% if post.date_time %}
+        Published: {{post.date_time|date("F j, Y")}}
+      {% endif %}
       {% if post.tags %}
         Tags: {% for cat in post.tags %}
           {% if not loop.last %}
@@ -38,6 +41,7 @@
         {% endfor %}
       {% endif %}
     </p>
+    {% endif %}
   </header>
   <p>{{post.excerpt}}</p>
   <a href="{{post.link}}" class="">Read more</a>

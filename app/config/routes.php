@@ -74,6 +74,14 @@ $router->get($GLOBALS['configs']['tag_url'].'/:term', function($term){
      $category = new Archive_controller();
      $category->category($term, $page);
    });
+   $router->get($GLOBALS['configs']['category_url'].'/page/:page', function($page){
+     if ($page == 1) {
+       header('Location: '.$GLOBALS['configs']['category_url'], true, 301);
+       exit();
+     }
+    $category = new Archive_controller();
+    $category->cat_collection($page);
+   });
  }
 
 

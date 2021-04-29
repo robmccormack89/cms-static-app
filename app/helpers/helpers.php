@@ -35,13 +35,13 @@ function menu_active_classes($menu_items) {
  * generate the links data for post teases (cpts)
  *
  * @param $someposts - a posts array to set the link data for
- * @param $singular_url_setting - the singular url setting for a content type
+ * @param $url_setting - the singular url setting for a content type
  * @return object|array the modified posts data with .link data set for each item
  */
-function generate_tease_post_links($someposts, $singular_url_setting) {
+function generate_tease_post_links($someposts, $url_setting) {
   
   foreach ($someposts as $post) {
-    $post['link'] = $GLOBALS['configs']['base_url'].$singular_url_setting.'/'.$post['slug'];
+    $post['link'] = $GLOBALS['configs']['base_url'].$url_setting.'/'.$post['slug'];
     
     if(isset($post['categories'])){
       foreach ($post['categories'] as &$value) {
@@ -63,6 +63,16 @@ function generate_tease_post_links($someposts, $singular_url_setting) {
       }
     }
     
+    $posts[] = $post;
+  }
+  return $posts;
+}
+
+function generate_tease_term_links($someposts, $url_setting) {
+  
+  foreach ($someposts as $post) {
+    $post['link'] = $GLOBALS['configs']['base_url'].$url_setting.'/'.$post['slug'];
+  
     $posts[] = $post;
   }
   return $posts;

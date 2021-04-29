@@ -27,13 +27,86 @@ class Term_model extends Archive_model {
     return $data;
   } 
   public function get_collection_terms() {
+    
+    // $posts = json_decode( $this->get_all_posts_and_count()->posts, TRUE );
+    // $data = generate_tease_post_links($posts, $this->get_archive_routes()['single_url']);
+    // return $data;
+    
     if($this->tax == 'categories' || $this->tax == 'tags') {
       $pre = 'site.blog.taxonomies.';
       $q = new Jsonq('../public/json/data.min.json');
-      $data = $q->from($pre.$this->tax)->get();
+      $terms = $q->from($pre.$this->tax)->chunk($this->get_archive_meta_pagination()['posts_per_page']);
     } 
+      
+      if ($this->get_archive_meta_pagination()['is_paged']) {
+
+          // $data = $this->get_paged_collection_terms($terms);
+          // print_r($terms);
+          
+          if($this->get_paged_collection_terms($terms)) {
+            $data = $this->get_paged_collection_terms($terms);
+          } else {
+            $data = false;
+          }
+        
+      } else {
+        $data = $this->get_all_collection_terms()->posts;
+      }
+ 
+    
+    
     return $data;
   }
+  
+  public function get_paged_collection_terms($terms) {
+    if (!$this->page) {
+      $page = 0;
+    } else {
+      $page = $this->page - 1;
+    }
+      
+    if (!($this->get_archive_meta_pagination()['posts_per_page'] * $page >= $this->get_all_collection_terms()->count)) {
+      
+      // $data = generate_tease_post_links($posts[$page], $this->get_archive_routes()['single_url']);
+      $data = generate_tease_term_links($terms[$page], $this->get_archive_routes()['category_url']);
+      
+    } else {
+      $data = false;
+    }
+    
+    return $data;
+  }
+  
+  public function get_all_terms() {
+    
+  }
+  
+  public function get_all_collection_terms() {
+    
+    // $posts = json_decode( $this->get_all_posts_and_count()->posts, TRUE );
+    // $data = generate_tease_post_links($posts, $this->get_archive_routes()['single_url']);
+    // return $data;
+    
+    if (!isset($data)) $data = new stdClass();
+    
+    if($this->tax == 'categories' || $this->tax == 'tags') {
+      $pre = 'site.blog.taxonomies.';
+      $q = new Jsonq('../public/json/data.min.json');
+      $data->posts = $q->from($pre.$this->tax)->get();
+      $data->count = $data->posts->count();
+    } 
+    
+    return $data;
+
+  }
+  // public function get_all_collection_terms_and_count() {
+  //   if (!isset($data)) $data = new stdClass();
+  //   $q = new Jsonq('../public/json/data.min.json');
+  //   $data->posts = $q->find($this->archive_locations())->get();
+  //   $data->count = $data->posts->count();
+  // 
+  //   return $data;
+  // }
   
   // main functions for term archives - specfic to new taxonomoes
   
