@@ -111,7 +111,7 @@ class Archive_model {
    *
    * @return object|array returns archive meta pagination data: is_paged & posts_per_page settings
    */
-  public function get_archive_meta_pagi() {
+  public function get_archive_meta_pagination() {
     $data = $this->get_archive_meta();
     
     return $data['pagination'];
@@ -122,9 +122,9 @@ class Archive_model {
    * @return object|array modifies archive meta pagination data with pagination links to be used under archive.pagination
    */
   public function get_archive_pagination() {
-    if($this->get_archive_meta_pagi()['is_paged'] == true) {
+    if($this->get_archive_meta_pagination()['is_paged'] == true) {
       $data = set_pagination_data(
-        $this->get_archive_meta_pagi(), 
+        $this->get_archive_meta_pagination(), 
         $this->page, 
         $this->get_all_posts_and_count()->count,
         $this->get_archive_routes()['archive_url']
@@ -159,9 +159,9 @@ class Archive_model {
   public function get_archive_posts() {
     
     $q = new Jsonq('../public/json/data.min.json');
-    $posts = $q->from($this->archive_locations())->chunk($this->get_archive_meta_pagi()['posts_per_page']);
+    $posts = $q->from($this->archive_locations())->chunk($this->get_archive_meta_pagination()['posts_per_page']);
 
-    if ($this->get_archive_meta_pagi()['is_paged']) {
+    if ($this->get_archive_meta_pagination()['is_paged']) {
       
       if($this->get_paged_posts($posts)) {
         $data = $this->get_paged_posts($posts);
@@ -188,7 +188,7 @@ class Archive_model {
       $page = $this->page - 1;
     }
 
-    if (!($this->get_archive_meta_pagi()['posts_per_page'] * $page >= $this->get_all_posts_and_count()->count)) {
+    if (!($this->get_archive_meta_pagination()['posts_per_page'] * $page >= $this->get_all_posts_and_count()->count)) {
       $data = generate_tease_post_links($posts[$page], $this->get_archive_routes()['single_url']);
     } else {
       $data = false;

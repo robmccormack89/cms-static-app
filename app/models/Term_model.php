@@ -20,13 +20,12 @@ class Term_model extends Archive_model {
   
   public function get_cat_collection() {
   
-    $data = $this->get_term_meta();
+    $data = $this->get_archive_meta();
     $data['posts'] = $this->get_collection_terms();
-    // $data['pagination'] = $this->get_term_pagination();
+    // $data['pagination'] = $this->get_archive_pagination();
 
     return $data;
   } 
-  
   public function get_collection_terms() {
     if($this->tax == 'categories' || $this->tax == 'tags') {
       $pre = 'site.blog.taxonomies.';
@@ -48,36 +47,25 @@ class Term_model extends Archive_model {
    */
   public function get_category() {
     
-    $data = $this->get_term_meta();
-    $data['posts'] = $this->get_term_archive_posts();
-    $data['pagination'] = $this->get_term_pagination();
+    $data = $this->get_archive_meta();
+    $data['posts'] = $this->get_archive_posts();
+    $data['pagination'] = $this->get_archive_pagination();
     
     return $data;
   } 
   public function get_tag() {
     
-    $data = $this->get_term_meta();
-    $data['posts'] = $this->get_term_archive_posts();
-    $data['pagination'] = $this->get_term_pagination();
+    $data = $this->get_archive_meta();
+    $data['posts'] = $this->get_archive_posts();
+    $data['pagination'] = $this->get_archive_pagination();
     
     return $data;
   } 
   
   // content type & taxonomy conditionals - edit for new content types->taxonomies
   
-  public function set_term_locations() {
-    
-    if($this->type == 'blog' && $this->term == null) {
-      $data = 'site.';
-    }
-  
-    if($this->tax == 'categories' || $this->tax == 'tags') {
-      $data = 'site.blog.taxonomies.';
-    } 
-  
-    return $data;
-  }
-  public function set_term_posts_locations() {
+  // extended from Archive_model
+  public function archive_locations() {
   
     if($this->type == 'blog') {
       $data = 'site.blog.posts';
@@ -85,7 +73,7 @@ class Term_model extends Archive_model {
   
     return $data;
   }
-  public function set_term_meta_locations() {
+  public function archive_meta_locations() {
     if($this->type == 'blog' && $this->term == null) {
       $q = new Jsonq('../public/json/data.min.json');
       $data = $q->from('site.blog.meta')->get();
@@ -100,16 +88,7 @@ class Term_model extends Archive_model {
     }
     return $data;
   }
-  public function set_term_settings_locations() {
-  
-    if($this->type == 'blog') {
-      $data['meta'] = $this->archive_settings->get_blog_meta();
-      $data['routes'] = $this->archive_settings->get_blog_settings();
-    } 
-  
-    return $data;
-  }
-  public function set_tax_archive_url() {
+  public function tax_archive_url() {
   
     if($this->tax == 'categories') {
       $data = $GLOBALS['configs']['category_url'];
@@ -120,11 +99,11 @@ class Term_model extends Archive_model {
     return $data;
   }
   
-  // getting meta - general functions
+  // getting meta - general functions, extended from Archive_model
   
-  public function get_term_meta() {
+  public function get_archive_meta() {
     
-    $data = $this->set_term_meta_locations();
+    $data = $this->archive_meta_locations();
     
     if(!$this->page) {
       $data['title'] = $data['title'];
@@ -134,25 +113,25 @@ class Term_model extends Archive_model {
     
     return $data;
   }
-  public function get_term_archive_routes() {
-    $data = $this->set_term_settings_locations();
+  public function get_archive_routes() {
+    $data = $this->archive_settings();
     
     return $data['routes'];
   }
-  public function get_term_archive_meta_pagi() {
-    $data_archive_settings = $this->set_term_settings_locations();
+  public function get_archive_meta_pagination() {
+    $data_archive_settings = $this->archive_settings();
     $data = $data_archive_settings['meta'];
     
     return $data['pagination'];
   }
-  public function get_term_pagination() {
-    $pag_url = $this->set_tax_archive_url().'/'.$this->term;
+  public function get_archive_pagination() {
+    $pag_url = $this->tax_archive_url().'/'.$this->term;
     
-    if($this->get_term_archive_meta_pagi()['is_paged'] == true) {
+    if($this->get_archive_meta_pagination()['is_paged'] == true) {
       $data = set_pagination_data(
-        $this->get_term_archive_meta_pagi(), 
+        $this->get_archive_meta_pagination(), 
         $this->page, 
-        $this->get_term_all_posts_and_count()->count,
+        $this->get_all_posts_and_count()->count,
         $pag_url
       );
     } else {
@@ -161,61 +140,39 @@ class Term_model extends Archive_model {
     return $data;
   }
   
-  // getting posts - general functions
+  // getting posts - general functions, extended from Archive_model
   
-  public function get_term_archive_posts() {
+  public function get_archive_posts() {
     
     $q = new Jsonq('../public/json/data.min.json');
-    $posts = $q->from($this->set_term_posts_locations())
+    $posts = $q->from($this->archive_locations())
     ->where($this->tax, 'any', $this->term)
-    ->chunk($this->get_term_archive_meta_pagi()['posts_per_page']);
+    ->chunk($this->get_archive_meta_pagination()['posts_per_page']);
 
-    if ($this->get_term_archive_meta_pagi()['is_paged']) {
+    if ($this->get_archive_meta_pagination()['is_paged']) {
       
-      if($this->get_term_paged_posts($posts)) {
-        $data = $this->get_term_paged_posts($posts);
+      if($this->get_paged_posts($posts)) {
+        $data = $this->get_paged_posts($posts);
       } else {
         $data = false;
       }
       
     } else {
-      $data = $this->get_term_all_posts();
+      $data = $this->get_all_posts();
     }
     
     return $data;
   }
-  public function get_term_paged_posts($posts) {
-
-    if (!$this->page) {
-      $page = 0;
-    } else {
-      $page = $this->page - 1;
-    }
-
-    if (!($this->get_term_archive_meta_pagi()['posts_per_page'] * $page >= $this->get_term_all_posts_and_count()->count)) {
-      $data = generate_tease_post_links($posts[$page], $this->get_term_archive_routes()['single_url']);
-    } else {
-      $data = false;
-    }
-    
-    return $data;
-  }
-  public function get_term_all_posts_and_count() {
+  public function get_all_posts_and_count() {
     
     if (!isset($data)) $data = new stdClass();
     
     $q = new Jsonq('../public/json/data.min.json');
-    $data->posts = $q->from($this->set_term_posts_locations())
+    $data->posts = $q->from($this->archive_locations())
     ->where($this->tax, 'any', $this->term)
     ->get();
     $data->count = $data->posts->count();
     
-    return $data;
-  }
-  public function get_term_all_posts() {
-    // turn json object to php array
-    $posts = json_decode( $this->get_term_all_posts_and_count()->posts, TRUE );
-    $data = generate_tease_post_links($posts, $this->get_archive_routes()['single_url']);
     return $data;
   }
   
