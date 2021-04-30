@@ -7,10 +7,6 @@ class Archive_controller extends Core_controller {
     parent::__construct();
   }
   
-  public function query($query_params) {
-    echo $query_params;
-  }
-  
   // taxonomy collections (archive of terms)
   public function cat_collection($page) {
     $collection = new Collection_model('blog', $page, 'categories');

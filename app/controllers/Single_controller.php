@@ -14,22 +14,22 @@ class Single_controller extends Core_controller {
     $this->render('homepage.twig', 'index.twig', $context);
   }
   // cpts
-  public function page($slug, $child_slug) {
-    $this->page = new Single_model($slug, $child_slug);
+  public function page($slug) {
+    $this->page = new Single_model($slug);
     $context['single'] = $this->page->get_page();
     
     $this->render('page-'.$context['single']['slug'].'.twig', 'page.twig', $context);
   }
   // cpts
   public function post($slug) {
-    $this->post = new Single_model($slug, null);
+    $this->post = new Single_model($slug);
     $context['single'] = $this->post->get_post();
 
     $this->render('post-'.$context['single']['slug'].'.twig', 'post.twig', $context);
   }
   // cpts
   public function project($slug) {
-    $this->project = new Single_model($slug, null);
+    $this->project = new Single_model($slug);
     $context['single'] = $this->project->get_project();
 
     $this->render('project-'.$context['single']['slug'].'.twig', 'project.twig', $context);

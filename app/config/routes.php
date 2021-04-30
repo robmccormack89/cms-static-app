@@ -15,9 +15,15 @@ $router = new \Bramus\Router\Router;
 $router->setBasePath('/');
 
 // homepage route
-$router->get('/', function() { 
-  $homepage = new Single_controller;
-  $homepage->index();
+$router->get('/', function() {
+  $query_params = $_SERVER['QUERY_STRING'];
+  if ($query_params) {
+    $query = new Archive_controller;
+    $query->query($query_params);
+  } else {
+    $homepage = new Single_controller;
+    $homepage->index();
+  }
 });
 
 // blog routes
@@ -172,12 +178,6 @@ $router->mount('/portfolio', function() use ($router) {
     $project->project($slug);
   });
 
-});
-
-// page/subpage
-$router->get('/{slug}/{child_slug}', function($slug, $child_slug) {
-  $page = new Single_controller;
-  $page->page($slug, $child_slug);
 });
 
 // page
