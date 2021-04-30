@@ -1,6 +1,6 @@
 <?php
 // composer autoload
-require_once '../vendor/autoload.php';
+require_once 'vendor/autoload.php';
 // spl_autoload_register the core, controllers & models
 spl_autoload_register(function ($className) {
   $dirs = array(

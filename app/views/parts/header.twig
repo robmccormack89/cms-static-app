@@ -6,6 +6,10 @@
   .site-header .uk-navbar-item, .site-header .uk-navbar-nav>li>a, .site-header .uk-navbar-toggle {
     font-size: 1rem;
   }
+  .third-drop {
+    left: 140px!important;
+    top: 30px!important;
+  }
 </style>
 <header id="SiteHeader" class="site-header uk-background-default uk-padding-small uk-padding-remove-horizontal">
   <nav class="uk-navbar-transparent uk-container uk-navbar" uk-navbar>
@@ -33,7 +37,7 @@
                     <li class="menu-item {{child_item.class}}">
                       <a href="{{child_item.link}}">{{child_item.title}}</a>
                       {% if child_item.children %}
-                        <div class="uk-navbar-dropdown">
+                        <div class="third-drop uk-navbar-dropdown">
                           <ul class="uk-nav uk-navbar-dropdown-nav">
                             {% for third_item in child_item.children %}
                               <li class="menu-item {{third_item.class}}"><a href="{{third_item.link}}">{{third_item.title}}</a></li>

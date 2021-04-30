@@ -7,14 +7,13 @@ if ($configs['site_protocol'] == "https") {
     exit();
   }
 }
-// include the router class. see https://phprouter.com/ for further route setups & information
-require_once('router.php');
+// new bramus router
+$router = new \Bramus\Router\Router;
+// make it work. see https://github.com/bramus/router/issues/82
+$router->setBasePath('/');
 
-/**
- * route for the homepage
- *
- */
-$router->get('/', function(){
+// homepage
+$router->get('/', function() { 
   $homepage = new Single_controller;
   $homepage->index();
 });
@@ -44,11 +43,11 @@ $router->get($GLOBALS['configs']['tag_url'], function(){
  $tag = new Archive_controller();
  $tag->tag_collection(null);
 });
-$router->get($GLOBALS['configs']['category_url'].'/:term', function($term){
+$router->get($GLOBALS['configs']['category_url'].'/{term}', function($term){
   $category = new Archive_controller();
   $category->category($term, null);
 });
-$router->get($GLOBALS['configs']['tag_url'].'/:term', function($term){
+$router->get($GLOBALS['configs']['tag_url'].'/{term}', function($term){
   $tag = new Archive_controller();
   $tag->tag($term, null);
 });
@@ -59,7 +58,7 @@ $router->get($GLOBALS['configs']['tag_url'].'/:term', function($term){
  */
  if($GLOBALS['configs']['is_blog_paged'] == true) {
    // route for main blog paged archive
-   $router->get($GLOBALS['configs']['blog_url'].'/page/:page', function($page){
+   $router->get($GLOBALS['configs']['blog_url'].'/page/{page}', function($page){
      // redirect requests for page one of paged archive to main archive
      if ($page == 1) {
        header('Location: ' . $GLOBALS['configs']['blog_url'], true, 301);
@@ -69,7 +68,7 @@ $router->get($GLOBALS['configs']['tag_url'].'/:term', function($term){
      $blog->blog($page);
    });
    // route for blog's paged taxonomy term archives
-   $router->get($GLOBALS['configs']['category_url'].'/:term/page/:page', function($term, $page){
+   $router->get($GLOBALS['configs']['category_url'].'/{term/page/{page}', function($term, $page){
      // redirect requests for page one of paged archive to main archive
      if ($page == 1) {
        header('Location: '.$GLOBALS['configs']['category_url'].'/'.$term, true, 301);
@@ -78,7 +77,7 @@ $router->get($GLOBALS['configs']['tag_url'].'/:term', function($term){
      $category = new Archive_controller();
      $category->category($term, $page);
    });
-   $router->get($GLOBALS['configs']['category_url'].'/page/:page', function($page){
+   $router->get($GLOBALS['configs']['category_url'].'/page/{page}', function($page){
      if ($page == 1) {
        header('Location: '.$GLOBALS['configs']['category_url'], true, 301);
        exit();
@@ -86,7 +85,7 @@ $router->get($GLOBALS['configs']['tag_url'].'/:term', function($term){
     $category = new Archive_controller();
     $category->cat_collection($page);
    });
-   $router->get($GLOBALS['configs']['tag_url'].'/page/:page', function($page){
+   $router->get($GLOBALS['configs']['tag_url'].'/page/{page}', function($page){
      if ($page == 1) {
        header('Location: '.$GLOBALS['configs']['tag_url'], true, 301);
        exit();
@@ -96,14 +95,13 @@ $router->get($GLOBALS['configs']['tag_url'].'/:term', function($term){
    });
  }
 
-
 /**
  * if the portfolio is set as paged, do the paged routes (cpts)
  *
  */
 if($GLOBALS['configs']['is_portfolio_paged'] == true) {
   // route for main portfolio paged archive
-  $router->get($GLOBALS['configs']['portfolio_url'].'/page/:page', function($page){
+  $router->get($GLOBALS['configs']['portfolio_url'].'/page/{page}', function($page){
     // redirect requests for page one of paged archive to main archive
     if ($page == 1) {
       header('Location: ' . $GLOBALS['configs']['portfolio_url'], true, 301);
@@ -118,25 +116,31 @@ if($GLOBALS['configs']['is_portfolio_paged'] == true) {
  * route for singular items (posts, projects, pages, pages/sub-pages) (cpts)
  *
  */
-$router->get($GLOBALS['configs']['post_url'].'/:slug', function($slug){
+$router->get($GLOBALS['configs']['post_url'].'/{slug}', function($slug){
   $post = new Single_controller;
   $post->post($slug);
 });
-$router->get($GLOBALS['configs']['project_url'].'/:slug', function($slug){
+$router->get($GLOBALS['configs']['project_url'].'/{slug}', function($slug){
   $project = new Single_controller;
   $project->project($slug, null);
 });
-$router->get('/:parent_slug', function($parent_slug){
+// page/subpage
+$router->get('/{slug}/{child_slug}', function($slug, $child_slug) {
   $page = new Single_controller;
-  $page->page($parent_slug, null);
+  $page->page($slug, $child_slug);
 });
-$router->get('/:parent_slug/:child_slug', function($parent_slug, $child_slug){
+// page
+$router->get('/{slug}', function($slug) {
   $page = new Single_controller;
-  $page->page($parent_slug, $child_slug);
+  $page->page($slug, null);
 });
 
-// route for error pages (routes that aren't accounted for above)
-$router->any('/404', function(){
+// errors
+$router->set404(function() {
+  header('HTTP/1.1 404 Not Found');
   $core = new Core_controller;
   $core->error();
 });
+
+// go
+$router->run();
