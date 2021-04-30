@@ -7,58 +7,31 @@ if ($configs['site_protocol'] == "https") {
     exit();
   }
 }
+
 // new bramus router
 $router = new \Bramus\Router\Router;
+
 // make it work. see https://github.com/bramus/router/issues/82
 $router->setBasePath('/');
 
-// homepage
+// homepage route
 $router->get('/', function() { 
   $homepage = new Single_controller;
   $homepage->index();
 });
 
-/**
- * route for main archives (blog, portfolio) (cpts) 
- *
- */
-$router->get($GLOBALS['configs']['blog_url'], function(){
-  $blog = new Archive_controller();
-  $blog->blog(null);
-});
-$router->get($GLOBALS['configs']['portfolio_url'], function(){
-  $portfolio = new Archive_controller();
-  $portfolio->portfolio(null);
-});
-
-/**
- * routes for taxonomy term archives (category|blog, tag|blog) (cpts)
- *
- */
-$router->get($GLOBALS['configs']['category_url'], function(){
- $category = new Archive_controller();
- $category->cat_collection(null);
-});
-$router->get($GLOBALS['configs']['tag_url'], function(){
- $tag = new Archive_controller();
- $tag->tag_collection(null);
-});
-$router->get($GLOBALS['configs']['category_url'].'/{term}', function($term){
-  $category = new Archive_controller();
-  $category->category($term, null);
-});
-$router->get($GLOBALS['configs']['tag_url'].'/{term}', function($term){
-  $tag = new Archive_controller();
-  $tag->tag($term, null);
-});
-
-/**
- * if the blog is set as paged, do the paged routes (cpts)
- *
- */
- if($GLOBALS['configs']['is_blog_paged'] == true) {
-   // route for main blog paged archive
-   $router->get($GLOBALS['configs']['blog_url'].'/page/{page}', function($page){
+// blog routes
+$router->mount('/blog', function() use ($router) {
+  
+  // blog index
+  $router->get('/', function() {
+    $blog = new Archive_controller();
+    $blog->blog(null);
+  });
+  
+  // blog index paged
+  if($GLOBALS['configs']['is_blog_paged'] == true) {
+    $router->get('/page/{page}', function($page){
      // redirect requests for page one of paged archive to main archive
      if ($page == 1) {
        header('Location: ' . $GLOBALS['configs']['blog_url'], true, 301);
@@ -66,69 +39,147 @@ $router->get($GLOBALS['configs']['tag_url'].'/{term}', function($term){
      }
      $blog = new Archive_controller();
      $blog->blog($page);
-   });
-   // route for blog's paged taxonomy term archives
-   $router->get($GLOBALS['configs']['category_url'].'/{term/page/{page}', function($term, $page){
+    });
+  }
+  
+  // blog post
+  $router->get('/posts/{slug}', function($slug) {
+    $post = new Single_controller;
+    $post->post($slug);
+  });
+  
+  // blog categories
+  $router->mount('/categories', function() use ($router) {
+    
+    // blog categories index paged
+    if($GLOBALS['configs']['is_blog_paged'] == true) {
+      $router->get('/page/{page}', function($page){
+        if ($page == 1) {
+          header('Location: '.$GLOBALS['configs']['category_url'], true, 301);
+          exit();
+        }
+        $category = new Archive_controller();
+        $category->cat_collection($page);
+      });
+    }
+  
+    // blog categories index (collection)
+    $router->get('/', function(){
+      $category = new Archive_controller();
+      $category->cat_collection(null);
+    });
+
+    // // blog categories term
+    $router->mount('/{term}', function() use ($router) {
+      
+      // blog categories term index paged
+      if($GLOBALS['configs']['is_blog_paged'] == true) {
+        $router->get('/page/{page}', function($term, $page){
+          // redirect requests for page one of paged archive to main archive
+          if ($page == 1) {
+            header('Location: '.$GLOBALS['configs']['category_url'].'/'.$term, true, 301);
+            exit();
+          }
+          $category = new Archive_controller();
+          $category->category($term, $page);
+        });
+      }
+    
+      // blog categories term index
+      $router->get('/', function($term){
+        $category = new Archive_controller();
+        $category->category($term, null);
+      });
+    
+    });
+  
+  });
+  
+  // blog tags
+  $router->mount('/tags', function() use ($router) {
+    
+    // blog tags index paged
+    if($GLOBALS['configs']['is_blog_paged'] == true) {
+      $router->get('/page/{page}', function($page){
+        if ($page == 1) {
+          header('Location: '.$GLOBALS['configs']['tag_url'], true, 301);
+          exit();
+        }
+        $tag = new Archive_controller();
+        $tag->tag_collection($page);
+      });
+    }
+  
+    // blog tags index (collection)
+    $router->get('/', function(){
+      $tag = new Archive_controller();
+      $tag->tag_collection(null);
+    });
+
+    // // blog tags term
+    $router->mount('/{term}', function() use ($router) {
+      
+      // blog tags term index paged
+      if($GLOBALS['configs']['is_blog_paged'] == true) {
+        $router->get('/page/{page}', function($term, $page){
+          // redirect requests for page one of paged archive to main archive
+          if ($page == 1) {
+            header('Location: '.$GLOBALS['configs']['tag_url'].'/'.$term, true, 301);
+            exit();
+          }
+          $tag = new Archive_controller();
+          $tag->tag($term, $page);
+        });
+      }
+    
+      // blog tags term index
+      $router->get('/', function($term){
+        $tag = new Archive_controller();
+        $tag->tag($term, null);
+      });
+    
+    });
+  
+  });
+
+});
+
+// portfolio routes
+$router->mount('/portfolio', function() use ($router) {
+  
+  // portfolio index
+  $router->get('/', function() {
+    $portfolio = new Archive_controller();
+    $portfolio->portfolio(null);
+  });
+  
+  // portfolio index paged
+  if($GLOBALS['configs']['is_portfolio_paged'] == true) {
+    $router->get('/page/{page}', function($page){
      // redirect requests for page one of paged archive to main archive
      if ($page == 1) {
-       header('Location: '.$GLOBALS['configs']['category_url'].'/'.$term, true, 301);
+       header('Location: ' . $GLOBALS['configs']['portfolio_url'], true, 301);
        exit();
      }
-     $category = new Archive_controller();
-     $category->category($term, $page);
-   });
-   $router->get($GLOBALS['configs']['category_url'].'/page/{page}', function($page){
-     if ($page == 1) {
-       header('Location: '.$GLOBALS['configs']['category_url'], true, 301);
-       exit();
-     }
-    $category = new Archive_controller();
-    $category->cat_collection($page);
-   });
-   $router->get($GLOBALS['configs']['tag_url'].'/page/{page}', function($page){
-     if ($page == 1) {
-       header('Location: '.$GLOBALS['configs']['tag_url'], true, 301);
-       exit();
-     }
-    $tag = new Archive_controller();
-    $tag->tag_collection($page);
-   });
- }
-
-/**
- * if the portfolio is set as paged, do the paged routes (cpts)
- *
- */
-if($GLOBALS['configs']['is_portfolio_paged'] == true) {
-  // route for main portfolio paged archive
-  $router->get($GLOBALS['configs']['portfolio_url'].'/page/{page}', function($page){
-    // redirect requests for page one of paged archive to main archive
-    if ($page == 1) {
-      header('Location: ' . $GLOBALS['configs']['portfolio_url'], true, 301);
-      exit();
-    }
-    $portfolio = new Archive_controller();
-    $portfolio->portfolio($page);
+     $portfolio = new Archive_controller();
+     $portfolio->portfolio($page);
+    });
+  }
+  
+  // portfolio project
+  $router->get('/projects/{slug}', function($slug) {
+    $project = new Single_controller;
+    $project->project($slug);
   });
-}
 
-/**
- * route for singular items (posts, projects, pages, pages/sub-pages) (cpts)
- *
- */
-$router->get($GLOBALS['configs']['post_url'].'/{slug}', function($slug){
-  $post = new Single_controller;
-  $post->post($slug);
 });
-$router->get($GLOBALS['configs']['project_url'].'/{slug}', function($slug){
-  $project = new Single_controller;
-  $project->project($slug, null);
-});
+
 // page/subpage
 $router->get('/{slug}/{child_slug}', function($slug, $child_slug) {
   $page = new Single_controller;
   $page->page($slug, $child_slug);
 });
+
 // page
 $router->get('/{slug}', function($slug) {
   $page = new Single_controller;
