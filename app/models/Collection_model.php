@@ -81,7 +81,6 @@ class Collection_model extends Term_model {
     }
       
     if (!($this->get_type_settings($this->type)['posts_per_page'] * $page >= $this->get_all_posts_count())) {
-      // $data = generate_tease_term_links($terms[$page], $this->collection_archive_url());
       $data = get_tease_term_data($terms[$page], $this->tax);
     } else {
       $data = false;

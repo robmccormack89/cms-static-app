@@ -1,12 +1,15 @@
 <?php
+// get the root
 $root = (isset($_SERVER['HTTPS']) ? "https://" : "http://") . $_SERVER['HTTP_HOST'];
 
+// getting settings data from the Site_model
 $settings = new Site_model;
 
 $app_settings = $settings->get_app_settings();
 $site_settings = $settings->get_site_settings();
 $author = $settings->get_author();
 
+// new types/taxonomies go here
 $blog_settings = $settings->get_type_settings('blog');
 $portfolio_settings = $settings->get_type_settings('portfolio');
 
@@ -34,6 +37,7 @@ return array(
   'job' => $author['job'],
   'github_url' => $author['github_url'],
   
+  // new types/taxonomies go here
   // blog
   'is_blog_paged' => $blog_settings['is_paged'],
   'blog_posts_per_page' => $blog_settings['blog_posts_per_page'],
@@ -41,12 +45,10 @@ return array(
   'post_route' => 'posts',
   'category_route' => 'categories',
   'tag_route' => 'tags',
-  
   // portfolio
   'is_portfolio_paged' => $portfolio_settings['is_paged'],
   'portfolio_posts_per_page' => $portfolio_settings['posts_per_page'],
   'portfolio_route' => 'portfolio',
   'project_route' => 'projects',
-  
   
 );

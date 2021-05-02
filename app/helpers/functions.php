@@ -1,7 +1,7 @@
 <?php
 
 /*
-Type helper/s - content_type & taxonomy specific helpers. New types & taxes go here
+Type helper/s - content_type & taxonomy specific helpers. Add new types/taxonomies here
 */
 
 // add new single types & their json locations here (page, post, project)
@@ -120,7 +120,7 @@ function get_collection_title($tax, $page) {
 }
 
 /*
-URL & route helper/s
+URL & route helper/s. Add new types/taxonomies here
 */
 
 // returns /blog
@@ -197,6 +197,69 @@ function get_project_route() {
 }
 
 /*
+Conditional helper/s. Add new types/taxonomies here
+*/
+
+function is_blog() {
+  $string = $_SERVER['REQUEST_URI'];
+  $fresh = str_replace("/","",$string);
+  $blog = $GLOBALS['configs']['blog_route'];
+  $blog_fresh = str_replace("/","",$blog);
+  if ($fresh == $blog_fresh) {
+    return true;
+  } elseif (strpos($fresh, $blog_fresh.'page') !== false) {
+    return true;
+  }
+}
+function is_portfolio() {
+  $string = $_SERVER['REQUEST_URI'];
+  $fresh = str_replace("/","",$string);
+  $portfolio = $GLOBALS['configs']['portfolio_route'];
+  $portfolio_fresh = str_replace("/","",$portfolio);
+  if ($fresh == $portfolio_fresh) {
+    return true;
+  } elseif (strpos($fresh, $portfolio_fresh.'page') !== false) {
+    return true;
+  }
+}
+function is_post() {
+	$string = $_SERVER['REQUEST_URI'];
+  $fresh = str_replace("/","",$string);
+	$post = $GLOBALS['configs']['post_route'];
+	$post_fresh = str_replace("/","",$post);
+  if (strpos($fresh, $post_fresh) !== false) {
+	   return true;
+  }
+}
+function is_project() {
+  $string = $_SERVER['REQUEST_URI'];
+  $fresh = str_replace("/","",$string);
+  $proj = $GLOBALS['configs']['project_route'];
+  $proj_fresh = str_replace("/","",$proj);
+  if (strpos($fresh, $proj_fresh) !== false) {
+    return true;
+  }
+}
+function is_category() {
+  $string = $_SERVER['REQUEST_URI'];
+  $fresh = str_replace("/","",$string);
+  $proj = $GLOBALS['configs']['category_route'];
+  $proj_fresh = str_replace("/","",$proj);
+  if (strpos($fresh, $proj_fresh) !== false) {
+    return true;
+  }
+}
+function is_tag() {
+  $string = $_SERVER['REQUEST_URI'];
+  $fresh = str_replace("/","",$string);
+  $proj = $GLOBALS['configs']['tag_route'];
+  $proj_fresh = str_replace("/","",$proj);
+  if (strpos($fresh, $proj_fresh) !== false) {
+    return true;
+  }
+}
+
+/*
 Menu helper/s
 */
 
@@ -249,13 +312,11 @@ function get_tease_url($type, $item) {
   
   return $data;
 }
-
 function get_tease_term_url($tax, $item) {
   $data = get_tax_post_route($tax).'/'.$item['slug'];
   
   return $data;
 }
-
 function get_tease_term_data($terms, $tax) {
   foreach ($terms as $term) {
     $term['link'] = get_tease_term_url($tax, $term);
@@ -326,7 +387,6 @@ function set_pagination_data($posts_per_page, $req_page, $count, $url) {
 
   return $data;
 }
-
 // conditionals for pagination
 function has_next($req_page, $count, $posts_per_page) {
   
@@ -362,7 +422,22 @@ function has_prev($req_page, $count, $posts_per_page) {
 }
 
 /*
-General helper/s
+Data requisite helper/s - helpers that fetch actual data from json
+*/
+
+use Nahid\JsonQ\Jsonq;
+// gets the term title using a given term slug. requires $type, $tax & $slug
+function get_term_title_from_slug($type, $tax, $slug) {
+  $q = new Jsonq('../public/json/data.min.json');
+  $term = $q->from('site.'.$type.'.taxonomies.'.$tax)
+  ->where('slug', '=', $slug)
+  ->first();
+  
+  return $term->title;
+}
+
+/*
+General helper/s - generalized helper functions
 */
 
 // remove & replace the slashes in the requested string with hyphens for use as a file name
@@ -383,84 +458,4 @@ function get_in_array( string $needle, array $haystack, string $column){
   $matches = [];
   foreach( $haystack as $item )  if( $item[ $column ] === $needle )  $matches[] = $item;
   return $matches;
-}
-
-// these are all dependent on settings for the respective post types url routes
-// as far as i can see these are only used in breadcrumbs
-// breadcrumbs data could be wrote into the site object so that it can be called from that in twig
-// these functions use global config route settings to check against the requested url
-// each type/taxonomy would requiore a new function here
-function is_blog() {
-  $string = $_SERVER['REQUEST_URI'];
-  $fresh = str_replace("/","",$string);
-  $blog = $GLOBALS['configs']['blog_route'];
-  $blog_fresh = str_replace("/","",$blog);
-  if ($fresh == $blog_fresh) {
-    return true;
-  } elseif (strpos($fresh, $blog_fresh.'page') !== false) {
-    return true;
-  }
-}
-function is_portfolio() {
-  $string = $_SERVER['REQUEST_URI'];
-  $fresh = str_replace("/","",$string);
-  $portfolio = $GLOBALS['configs']['portfolio_route'];
-  $portfolio_fresh = str_replace("/","",$portfolio);
-  if ($fresh == $portfolio_fresh) {
-    return true;
-  } elseif (strpos($fresh, $portfolio_fresh.'page') !== false) {
-    return true;
-  }
-}
-function is_post() {
-	$string = $_SERVER['REQUEST_URI'];
-  $fresh = str_replace("/","",$string);
-	$post = $GLOBALS['configs']['post_route'];
-	$post_fresh = str_replace("/","",$post);
-  if (strpos($fresh, $post_fresh) !== false) {
-	   return true;
-  }
-}
-function is_project() {
-  $string = $_SERVER['REQUEST_URI'];
-  $fresh = str_replace("/","",$string);
-  $proj = $GLOBALS['configs']['project_route'];
-  $proj_fresh = str_replace("/","",$proj);
-  if (strpos($fresh, $proj_fresh) !== false) {
-    return true;
-  }
-}
-function is_category() {
-  $string = $_SERVER['REQUEST_URI'];
-  $fresh = str_replace("/","",$string);
-  $proj = $GLOBALS['configs']['category_route'];
-  $proj_fresh = str_replace("/","",$proj);
-  if (strpos($fresh, $proj_fresh) !== false) {
-    return true;
-  }
-}
-function is_tag() {
-  $string = $_SERVER['REQUEST_URI'];
-  $fresh = str_replace("/","",$string);
-  $proj = $GLOBALS['configs']['tag_route'];
-  $proj_fresh = str_replace("/","",$proj);
-  if (strpos($fresh, $proj_fresh) !== false) {
-    return true;
-  }
-}
-
-/*
-Data requisite helper/s
-*/
-
-use Nahid\JsonQ\Jsonq;
-
-// gets the term title using a given term slug. requires $type, $tax & $slug
-function get_term_title_from_slug($type, $tax, $slug) {
-  $q = new Jsonq('../public/json/data.min.json');
-  $term = $q->from('site.'.$type.'.taxonomies.'.$tax)
-  ->where('slug', '=', $slug)
-  ->first();
-  
-  return $term->title;
 }

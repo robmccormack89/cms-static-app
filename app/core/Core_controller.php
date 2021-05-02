@@ -42,10 +42,7 @@ class Core_controller {
     echo $this->twig->render('404.twig');
   }
   
-  // render twig template & context with custom caching
-  // extended controllers archive & single will use this function to create their own renderers for their own respective contexts
-  // these new renders will setup a template hierarchy/check using $this->twig->getLoader()->exists()
-  // Single_controller renderer may use is_published_or_draft_allowed() to allow for draft pages, and show 404 where not allowed
+  // core renderer with caching. use this function for specific renders per frontend context (Archive_controller or Single_controller)
   public function template_render($template, $context) {
     cache_render($this->twig->render($template, $context));
   }

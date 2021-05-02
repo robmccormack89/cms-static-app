@@ -1,5 +1,4 @@
 <?php
-
 // redirect to https if site protocol is set to https
 if ($configs['site_protocol'] == "https") {
   if ($_SERVER['HTTPS'] != 'on') {
@@ -13,7 +12,7 @@ if ($configs['site_protocol'] == "https") {
 $router = new \Bramus\Router\Router;
 $router->setBasePath('/');
 
-// homepage route
+// homepage
 $router->get('/', function() {
   cache_serve(function() { 
     $homepage = new Single_controller;
@@ -43,7 +42,7 @@ $router->mount(get_blog_route_base(), function() use ($router) {
     });
   }
   
-  // blog post
+  // blog single post
   $router->get(get_post_route_base().'/{slug}', function($slug) {
     $post = new Single_controller;
     $post->post($slug);
@@ -52,7 +51,7 @@ $router->mount(get_blog_route_base(), function() use ($router) {
   // blog categories
   $router->mount(get_category_route_base(), function() use ($router) {
     
-    // blog categories index paged
+    // blog categories index paged (collection)
     if($GLOBALS['configs']['is_blog_paged'] == true) {
       $router->get('/page/{page}', function($page){
         if ($page == 1) {
@@ -70,7 +69,7 @@ $router->mount(get_blog_route_base(), function() use ($router) {
       $category->cat_collection(null);
     });
 
-    // // blog categories term
+    // blog categories term index
     $router->mount('/{term}', function() use ($router) {
       
       // blog categories term index paged
@@ -99,7 +98,7 @@ $router->mount(get_blog_route_base(), function() use ($router) {
   // blog tags
   $router->mount(get_tag_route_base(), function() use ($router) {
     
-    // blog tags index paged
+    // blog tags index paged (collection)
     if($GLOBALS['configs']['is_blog_paged'] == true) {
       $router->get('/page/{page}', function($page){
         if ($page == 1) {
@@ -117,7 +116,7 @@ $router->mount(get_blog_route_base(), function() use ($router) {
       $tag->tag_collection(null);
     });
 
-    // // blog tags term
+    // // blog tags term index
     $router->mount('/{term}', function() use ($router) {
       
       // blog tags term index paged
@@ -167,7 +166,7 @@ $router->mount(get_portfolio_route_base(), function() use ($router) {
     });
   }
   
-  // portfolio project
+  // portfolio single project
   $router->get(get_project_route_base().'/{slug}', function($slug) {
     $project = new Single_controller;
     $project->project($slug);
@@ -175,7 +174,7 @@ $router->mount(get_portfolio_route_base(), function() use ($router) {
 
 });
 
-// page
+// /page
 $router->get('/{slug}', function($slug) {
   cache_serve(function() use ($slug) { 
     $page = new Single_controller;
@@ -183,7 +182,7 @@ $router->get('/{slug}', function($slug) {
   });
 });
 
-// errors
+// error pages 404
 $router->set404(function() {
   header('HTTP/1.1 404 Not Found');
   $core = new Core_controller;

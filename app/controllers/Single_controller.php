@@ -4,12 +4,6 @@ class Single_controller extends Core_controller {
   
   public function __construct() {
     parent::__construct();
-    // methods here are meant for singular objects
-    // $context['single'] should be defined as part of each singular method
-    // the $context variable itself is what is passed on to the template via render()
-    // render() is a specific renderer for singular items
-    // generally all methods here will be passed on to the Single_model
-    // generally all methods here require a $slug, except the homepage/index
   }
   
   // homepage
@@ -41,11 +35,6 @@ class Single_controller extends Core_controller {
     $this->render('project', $context);
   }
   
-  // check for slug-defined individual template
-  // else check for type-defined template
-  // else default to template for all singles: single.twig
-  // uses this->twig->getLoader()->exists() from Core_controller
-  // works off of $this->template_render() from Core_controller
   public function render($template_name, $context) {
     if ($this->twig->getLoader()->exists($template_name.'-'.$context['single']['slug'].'.twig')) {
       $this->template_render($template_name.'-'.$context['single']['slug'].'.twig', $context);
