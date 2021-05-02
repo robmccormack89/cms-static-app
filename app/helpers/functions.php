@@ -107,9 +107,9 @@ function get_tax_route($tax) {
 // set the collection page archive title; add new taxonomies here  (categories, tags)
 function get_collection_title($tax, $page) {
   if($tax == 'categories') {
-    $title = 'Blog Categories';
+    $title = 'Categories';
   } elseif($tax == 'tags') {
-    $title = 'Blog Tags';
+    $title = 'Tags';
   }
   if(!$page) {
     $data = $title;
@@ -248,6 +248,21 @@ function is_category() {
   if (strpos($fresh, $proj_fresh) !== false) {
     return true;
   }
+  
+}
+function is_category_collection() {
+  $req = $_SERVER['REQUEST_URI'];
+
+  $url = get_blog_route_base().get_category_route_base();
+  $paged_url = $url.'/page';
+
+  if ($req == $url) {
+    return true;
+  } elseif (strpos($req, $paged_url) !== false) {
+    return true;
+  } else {
+    return false;
+  }
 }
 function is_tag() {
   $string = $_SERVER['REQUEST_URI'];
@@ -255,6 +270,18 @@ function is_tag() {
   $proj = $GLOBALS['configs']['tag_route'];
   $proj_fresh = str_replace("/","",$proj);
   if (strpos($fresh, $proj_fresh) !== false) {
+    return true;
+  }
+}
+function is_tag_collection() {
+  $req = $_SERVER['REQUEST_URI'];
+
+  $url = get_blog_route_base().get_tag_route_base();
+  $paged_url = $url.'/page';
+
+  if ($req == $url) {
+    return true;
+  } elseif (strpos($req, $paged_url) !== false) {
     return true;
   }
 }

@@ -26,11 +26,19 @@ class Core_controller {
     $this->twig->addGlobal('configs', $GLOBALS['configs'] );
     // cpts & taxes -> twig global
     $this->twig->addGlobal('is_blog', is_blog());
+    $this->twig->addGlobal('blog_url', get_blog_route());
     $this->twig->addGlobal('is_post', is_post());
+    $this->twig->addGlobal('post_url', get_post_route());
     $this->twig->addGlobal('is_category', is_category());
+    $this->twig->addGlobal('is_category_collection', is_category_collection());
+    $this->twig->addGlobal('category_url', get_category_route());
     $this->twig->addGlobal('is_tag', is_tag());
+    $this->twig->addGlobal('is_tag_collection', is_tag_collection());
+    $this->twig->addGlobal('tag_url', get_tag_route());
     $this->twig->addGlobal('is_portfolio', is_portfolio());
+    $this->twig->addGlobal('portfolio_url', get_portfolio_route());
     $this->twig->addGlobal('is_project', is_project());
+    $this->twig->addGlobal('project_url', get_project_route());
     // menus -> twig global
     $this->menu = new Site_model;
     $this->twig->addGlobal('main_menu', $this->menu->get_menu('main-menu') );

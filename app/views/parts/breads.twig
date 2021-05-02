@@ -4,16 +4,16 @@
   </li>
   {% if single.slug != 'index' %}
     {% if is_post or is_category or is_tag %}
-      <li><a href="{{configs.blog_url}}">Blog</a></li>
+      <li><a href="{{blog_url}}">Blog</a></li>
     {% endif %}
     {% if is_project %}
-      <li><a href="{{configs.portfolio_url}}">Portfolio</a></li>
+      <li><a href="{{portfolio_url}}">Portfolio</a></li>
     {% endif %}
-    {% if is_category %}
-      <li><a href="{{configs.category_url}}">Categories</a></li>
+    {% if is_category and not is_category_collection %}
+      <li><a href="{{category_url}}">Categories</a></li>
     {% endif %}
-    {% if is_tag %}
-      <li><a href="{{configs.tag_url}}">Tags</a></li>
+    {% if is_tag and not is_tag_collection %}
+      <li><a href="{{tag_url}}">Tags</a></li>
     {% endif %}
     {% if single %}
       <li><span>{{single.title}}</span></li>
