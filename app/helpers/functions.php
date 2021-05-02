@@ -1,20 +1,10 @@
 <?php
 
-// legacy
-
-function generate_tease_term_links($terms, $url_setting) {
-  foreach ($terms as $term) {
-    $term['link'] = $GLOBALS['configs']['base_url'].$url_setting.'/'.$term['slug'];
-  
-    $data[] = $term;
-  }
-  return $data;
-}
-
 /*
 Type helper/s - content_type & taxonomy specific helpers. New types & taxes go here
 */
 
+// add new single types & their json locations here (page, post, project)
 function get_singles_location($type) {
   
   if($type == 'page'):
@@ -30,7 +20,7 @@ function get_singles_location($type) {
   return $data;
   
 }
-
+// add new archive types & their json locations here (blog, portfolio)
 function get_archive_locations($type) {
 
   if($type == 'blog') {
@@ -41,7 +31,29 @@ function get_archive_locations($type) {
 
   return $data;
 }
+// add new archive types & their route functions here; requires new route functions per type (blog, portfolio)
+function get_type_route($type) {
+  if($type == 'blog'):
+  $data = get_blog_route();
 
+  elseif($type == 'portfolio'):
+  $data = get_portfolio_route();
+  endif;
+  
+  return $data;
+}
+// add new archive types & their post_route functions here; requires new post_route functions per type (blog, portfolio)
+function get_type_post_route($type) {
+  if($type == 'blog'):
+  $data = get_post_route();
+
+  elseif($type == 'portfolio'):
+  $data = get_project_route();
+  endif;
+  
+  return $data;
+}
+// add new taxonomies here; to be used within tease's on listings (categories, tags)
 function get_tease_data($posts, $type) {
   foreach ($posts as $post) {
     $post['link'] = get_tease_url($type, $post);
@@ -70,39 +82,46 @@ function get_tease_data($posts, $type) {
   }
   return $data;
 }
+// add new taxonomies & their route functions here; requires new route functions per type (categories, tags)
+function get_tax_post_route($tax) {
+  if($tax == 'categories'):
+  $data = get_category_route();
 
-function get_type_route($type) {
-  if($type == 'blog'):
-  $data = get_blog_route();
-
-  elseif($type == 'portfolio'):
-  $data = get_portfolio_route();
+  elseif($tax == 'tags'):
+  $data = get_tag_route();
   endif;
   
   return $data;
 }
-
-function get_tax_route($type) {
-  if($type == 'categories'):
+// add new taxonomies & their post_route functions here; requires new post_route functions per type (categories, tags)
+function get_tax_route($tax) {
+  if($tax == 'categories'):
   $data = get_category_route_base();
 
-  elseif($type == 'tags'):
+  elseif($tax == 'tags'):
   $data = get_tag_route_base();
   endif;
   
   return $data;
 }
-
-function get_type_post_route($type) {
-  if($type == 'blog'):
-  $data = get_post_route();
-
-  elseif($type == 'portfolio'):
-  $data = get_project_route();
-  endif;
-  
+// set the collection page archive title; add new taxonomies here  (categories, tags)
+function get_collection_title($tax, $page) {
+  if($tax == 'categories') {
+    $title = 'Blog Categories';
+  } elseif($tax == 'tags') {
+    $title = 'Blog Tags';
+  }
+  if(!$page) {
+    $data = $title;
+  } else {
+    $data = $title.' (Page '.$page.')';
+  }
   return $data;
 }
+
+/*
+URL & route helper/s
+*/
 
 // returns /blog
 function get_blog_route_base() {
@@ -228,6 +247,21 @@ Post tease helper/s
 function get_tease_url($type, $item) {
   $data = get_type_post_route($type).'/'.$item['slug'];
   
+  return $data;
+}
+
+function get_tease_term_url($tax, $item) {
+  $data = get_tax_post_route($tax).'/'.$item['slug'];
+  
+  return $data;
+}
+
+function get_tease_term_data($terms, $tax) {
+  foreach ($terms as $term) {
+    $term['link'] = get_tease_term_url($tax, $term);
+  
+    $data[] = $term;
+  }
   return $data;
 }
 

@@ -7,10 +7,33 @@ class Archive_controller extends Core_controller {
     parent::__construct();
   }
   
+  // taxonomy collections (archive of terms)
+  public function cat_collection($page) {
+    $collection = new Collection_model('blog', $page, 'categories');
+    $context['archive'] = $collection->get_collection();
+
+    if($context['archive']['posts']) {
+      $this->render('collection.twig', $context);
+    } else {
+      $this->error();
+    }
+  }
+  
+  // taxonomy collections (archive of terms)
+  public function tag_collection($page) {
+    $collection = new Collection_model('blog', $page, 'tags');
+    $context['archive'] = $collection->get_collection();
+
+    if($context['archive']['posts']) {
+      $this->render('collection.twig', $context);
+    } else {
+      $this->error();
+    }
+  }
+  
   // type archive
   public function blog($page) {
     $blog = new Archive_model('blog', $page);
-    
     $context['archive'] = $blog->get_archive();
     
     if($context['archive']['posts']) {
@@ -23,7 +46,6 @@ class Archive_controller extends Core_controller {
   // type archive
   public function portfolio($page) {
     $portfolio = new Archive_model('portfolio', $page);
-    
     $context['archive'] = $portfolio->get_archive();
     
     if($context['archive']['posts']) {

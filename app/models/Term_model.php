@@ -55,9 +55,11 @@ class Term_model extends Archive_model {
   public function get_all_posts() {
     
     $q = new Jsonq('../public/json/data.min.json');
-    $data = $q->from(get_archive_locations($this->type))
+    $posts = $q->from(get_archive_locations($this->type))
     ->where($this->tax, 'any', $this->term)
     ->get();
+    
+    $data = get_tease_data($posts, $this->type);
     
     return $data;
   }

@@ -51,6 +51,24 @@ $router->mount(get_blog_route_base(), function() use ($router) {
   
   // blog categories
   $router->mount(get_category_route_base(), function() use ($router) {
+    
+    // blog categories index paged
+    if($GLOBALS['configs']['is_blog_paged'] == true) {
+      $router->get('/page/{page}', function($page){
+        if ($page == 1) {
+          header('Location: '.get_blog_route_base().get_category_route_base(), true, 301);
+          exit();
+        }
+        $category = new Archive_controller();
+        $category->cat_collection($page);
+      });
+    }
+  
+    // blog categories index (collection)
+    $router->get('/', function(){
+      $category = new Archive_controller();
+      $category->cat_collection(null);
+    });
 
     // // blog categories term
     $router->mount('/{term}', function() use ($router) {
@@ -80,6 +98,24 @@ $router->mount(get_blog_route_base(), function() use ($router) {
   
   // blog tags
   $router->mount(get_tag_route_base(), function() use ($router) {
+    
+    // blog tags index paged
+    if($GLOBALS['configs']['is_blog_paged'] == true) {
+      $router->get('/page/{page}', function($page){
+        if ($page == 1) {
+          header('Location: '.get_blog_route_base().get_tag_route_base(), true, 301);
+          exit();
+        }
+        $tag = new Archive_controller();
+        $tag->tag_collection($page);
+      });
+    }
+  
+    // blog tags index (collection)
+    $router->get('/', function(){
+      $tag = new Archive_controller();
+      $tag->tag_collection(null);
+    });
 
     // // blog tags term
     $router->mount('/{term}', function() use ($router) {
