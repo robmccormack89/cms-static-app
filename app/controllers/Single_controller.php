@@ -39,8 +39,11 @@ class Single_controller extends Core_controller {
   // status = 'published' | status = 'draft' & visitor_ip = author_ip
   public function render($template_name, $context) {
     if (is_single_allowed($context['single'])) {
-      if ($this->twig->getLoader()->exists($template_name.'-'.$context['single']['slug'].'.twig')) {
-        $this->template_render($template_name.'-'.$context['single']['slug'].'.twig', $context);
+      
+      $slug = slug_to_filename($context['single']['slug']);
+      
+      if ($this->twig->getLoader()->exists($template_name.'-'.$slug.'.twig')) {
+        $this->template_render($template_name.'-'.$slug.'.twig', $context);
       } elseif ($this->twig->getLoader()->exists($template_name.'.twig')) {
         $this->template_render($template_name.'.twig', $context);
       } else {

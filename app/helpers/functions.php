@@ -477,6 +477,16 @@ function request_to_filename() {
   
   return $data;
 }
+function slug_to_filename($slug) {
+  // strip character/s from end of string
+  $string = rtrim($slug, '/');
+  // strip character/s from beginning of string
+  $trimmed = ltrim($string, '/');
+  
+  $data = str_replace('/', '-', $trimmed);
+  
+  return $data;
+}
 
 // get objects in array using key->value
 function get_in_array( string $needle, array $haystack, string $column){

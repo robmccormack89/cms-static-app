@@ -11,6 +11,9 @@ class Core_controller {
         '../app/views/archive',
         '../app/views/parts',
         '../app/views/single',
+        '../app/views/single/page',
+        '../app/views/single/post',
+        '../app/views/single/project',
         '../app/views/parts'
       )
     );
