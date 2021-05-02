@@ -3,9 +3,12 @@
 class Core_controller {
   
   public function __construct() {
-    
-    // directories to find twig files in
+    // include caching class & create new cache object
+    require_once('../app/config/cache.php');
+    $this->cache = new Cache;
+    // twig environment setup with compilation cache & debug extension
     $loader = new \Twig\Loader\FilesystemLoader(
+      // directories to find twig files in
       array(
         '../app/views/',
         '../app/views/archive',
@@ -14,14 +17,12 @@ class Core_controller {
         '../app/views/parts'
       )
     );
-    // twig environment settings
     $this->twig = new \Twig\Environment($loader, [
+      // twig environment settings
       'cache' => '../app/cache/compilation',
       'debug' => true
     ]);
-    // debug extension
     $this->twig->addExtension(new \Twig\Extension\DebugExtension());
-    
     // configs -> twig global
     $this->twig->addGlobal('configs', $GLOBALS['configs'] );
     // cpts & taxes -> twig global
@@ -32,22 +33,18 @@ class Core_controller {
     $this->twig->addGlobal('is_portfolio', is_portfolio());
     $this->twig->addGlobal('is_project', is_project());
     // menus -> twig global
-    $this->menu = new Site_model;
-    $this->twig->addGlobal('main_menu', $this->menu->get_menu('main-menu') );
-    
+    $this->menu = new Menu_model;
+    $this->twig->addGlobal('main_menu', $this->menu->get_menu_by_slug('main-menu') );
   }
 
-  // 404 error pages
   public function error() {
     echo $this->twig->render('404.twig');
   }
-  
-  // render twig template & context with custom caching
-  // extended controllers archive & single will use this function to create their own renderers for their own respective contexts
-  // these new renders will setup a template hierarchy/check using $this->twig->getLoader()->exists()
-  // Single_controller renderer may use is_published_or_draft_allowed() to allow for draft pages, and show 404 where not allowed
+
   public function template_render($template, $context) {
-    cache_render($this->twig->render($template, $context));
+    if(is_cache_enabled()): $this->cache->cacheServe(); endif;
+    echo $this->twig->render($template, $context);
+    if(is_cache_enabled()): $this->cache->cacheFile(); endif;
   }
   
 }

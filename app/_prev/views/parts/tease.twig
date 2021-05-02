@@ -5,7 +5,7 @@
       <a class="uk-link-reset" href="{{post.link}}">
         <img 
         class="" 
-        data-src="{{post.featured_img.src|default('https://picsum.photos/1200/800')}}" 
+        data-src="{{post.featured_img.src|default(configs.placeholder_img_src)}}" 
         width="800" 
         height="400" 
         alt="{{post.featured_img.alt}}" 

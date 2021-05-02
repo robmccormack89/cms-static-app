@@ -1,5 +1,4 @@
 <?php
-
 // redirect to https if site protocol is set to https
 if ($configs['site_protocol'] == "https") {
   if ($_SERVER['HTTPS'] != 'on') {
@@ -11,18 +10,24 @@ if ($configs['site_protocol'] == "https") {
 
 // new bramus router
 $router = new \Bramus\Router\Router;
+
+// make it work. see https://github.com/bramus/router/issues/82
 $router->setBasePath('/');
 
 // homepage route
 $router->get('/', function() {
-  cache_serve(function() { 
+  $query_params = $_SERVER['QUERY_STRING'];
+  if ($query_params) {
+    $query = new Archive_controller;
+    $query->query($query_params);
+  } else {
     $homepage = new Single_controller;
     $homepage->index();
-  });
+  }
 });
 
-// /blog
-$router->mount(get_blog_route_base(), function() use ($router) {
+// blog routes
+$router->mount('/blog', function() use ($router) {
   
   // blog index
   $router->get('/', function() {
@@ -44,13 +49,31 @@ $router->mount(get_blog_route_base(), function() use ($router) {
   }
   
   // blog post
-  $router->get(get_post_route_base().'/{slug}', function($slug) {
+  $router->get('/posts/{slug}', function($slug) {
     $post = new Single_controller;
     $post->post($slug);
   });
   
   // blog categories
-  $router->mount(get_category_route_base(), function() use ($router) {
+  $router->mount('/categories', function() use ($router) {
+    
+    // blog categories index paged
+    if($GLOBALS['configs']['is_blog_paged'] == true) {
+      $router->get('/page/{page}', function($page){
+        if ($page == 1) {
+          header('Location: /blog/categories', true, 301);
+          exit();
+        }
+        $category = new Archive_controller();
+        $category->cat_collection($page);
+      });
+    }
+  
+    // blog categories index (collection)
+    $router->get('/', function(){
+      $category = new Archive_controller();
+      $category->cat_collection(null);
+    });
 
     // // blog categories term
     $router->mount('/{term}', function() use ($router) {
@@ -60,7 +83,7 @@ $router->mount(get_blog_route_base(), function() use ($router) {
         $router->get('/page/{page}', function($term, $page){
           // redirect requests for page one of paged archive to main archive
           if ($page == 1) {
-            header('Location: '.get_blog_route_base().get_category_route_base().'/'.$term, true, 301);
+            header('Location: /blog/categories/'.$term, true, 301);
             exit();
           }
           $category = new Archive_controller();
@@ -79,7 +102,25 @@ $router->mount(get_blog_route_base(), function() use ($router) {
   });
   
   // blog tags
-  $router->mount(get_tag_route_base(), function() use ($router) {
+  $router->mount('/tags', function() use ($router) {
+    
+    // blog tags index paged
+    if($GLOBALS['configs']['is_blog_paged'] == true) {
+      $router->get('/page/{page}', function($page){
+        if ($page == 1) {
+          header('Location: /blog/tags', true, 301);
+          exit();
+        }
+        $tag = new Archive_controller();
+        $tag->tag_collection($page);
+      });
+    }
+  
+    // blog tags index (collection)
+    $router->get('/', function(){
+      $tag = new Archive_controller();
+      $tag->tag_collection(null);
+    });
 
     // // blog tags term
     $router->mount('/{term}', function() use ($router) {
@@ -89,7 +130,7 @@ $router->mount(get_blog_route_base(), function() use ($router) {
         $router->get('/page/{page}', function($term, $page){
           // redirect requests for page one of paged archive to main archive
           if ($page == 1) {
-            header('Location: '.get_blog_route_base().get_tag_route_base().'/'.$term, true, 301);
+            header('Location: /blog/tags/'.$term, true, 301);
             exit();
           }
           $tag = new Archive_controller();
@@ -109,8 +150,8 @@ $router->mount(get_blog_route_base(), function() use ($router) {
 
 });
 
-// /portfolio
-$router->mount(get_portfolio_route_base(), function() use ($router) {
+// portfolio routes
+$router->mount('/portfolio', function() use ($router) {
   
   // portfolio index
   $router->get('/', function() {
@@ -132,7 +173,7 @@ $router->mount(get_portfolio_route_base(), function() use ($router) {
   }
   
   // portfolio project
-  $router->get(get_project_route_base().'/{slug}', function($slug) {
+  $router->get('/projects/{slug}', function($slug) {
     $project = new Single_controller;
     $project->project($slug);
   });
@@ -141,10 +182,8 @@ $router->mount(get_portfolio_route_base(), function() use ($router) {
 
 // page
 $router->get('/{slug}', function($slug) {
-  cache_serve(function() use ($slug) { 
-    $page = new Single_controller;
-    $page->page($slug, null);
-  });
+  $page = new Single_controller;
+  $page->page($slug, null);
 });
 
 // errors

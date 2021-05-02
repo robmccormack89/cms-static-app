@@ -1,43 +1,52 @@
 <?php
-$site_settings = new Settings_model;
-$settings = $site_settings->get_settings();
 $root = (isset($_SERVER['HTTPS']) ? "https://" : "http://") . $_SERVER['HTTP_HOST'];
-// (cpts)
-$blog_settings = $site_settings->get_blog_settings();
-$blog_pagi = $site_settings->get_blog_meta()->pagination;
-$portfolio_settings = $site_settings->get_portfolio_settings();
-$portfolio_pagi = $site_settings->get_portfolio_meta()->pagination;
+
+$settings = new Site_model;
+
+$app_settings = $settings->get_app_settings();
+$site_settings = $settings->get_site_settings();
+$author = $settings->get_author();
+
+$blog_settings = $settings->get_type_settings('blog');
+$portfolio_settings = $settings->get_type_settings('portfolio');
 
 return array(
-  'admin_email' => $settings['site_email'], // owners email**
-  'charset' => $settings['site_charset'], // site charset**
-  'language' => $settings['site_lang'], // site language**
-  'site_title' => $settings['site_title'], // site title**
-  'site_description' => $settings['site_description'], // site tagline**
-  'site_tagline' => $settings['site_tagline'], // site tagline**
-  'site_protocol' => $settings['site_protocol'], // http or https, you decide**
-  'base_url' => $root, // done for ya
+  
+  // global settings
+  'site_protocol' => $app_settings['site_protocol'],
+  'author_ip' => $app_settings['site_ip'],
+  'visitor_ip' => $_SERVER['REMOTE_ADDR'],
+  'base_url' => $root,
   'current_url' => $root.$_SERVER['REQUEST_URI'],
-  'author_ip' => $settings['site_ip'], // your ip address! if local, keep the same. If on a server, use that IP**
-  'visitor_ip' => $_SERVER['REMOTE_ADDR'], // the visitor's IP, done for ya
-  'php_cache' => $settings['site_cache'], // set 'enable' to enable php caching
-  'dark_light_mode' => $settings['dark_light_mode'], // default setting for dark light mode, set to 'dark' for dark mode
-  'placeholder_img_src' => $settings['placeholder_img'],
+  'admin_email' => $app_settings['site_email'],
+  'php_cache' => $app_settings['site_cache'], 
   
-  'name' => $settings['name'],
-  'avatar_src' => $root.$settings['avatar_src'],
-  'job' => $settings['job'],
-  'github_url' => $settings['github_url'],
+  // site settings
+  'site_title' => $site_settings['site_title'],
+  'site_tagline' => $site_settings['site_tagline'],
+  'site_description' => $site_settings['site_description'],
+  'charset' => $site_settings['site_charset'],
+  'language' => $site_settings['site_lang'],
+    
+  // author
+  'name' => $author['name'],
+  'avatar_src' => $root.$author['avatar_src'],
+  'job' => $author['job'],
+  'github_url' => $author['github_url'],
   
-  // (cpts) (blog)
-  'blog_url' => $blog_settings['archive_url'], // done for ya
-  'post_url' => $blog_settings['single_url'], // done for ya
-  'is_blog_paged' => $blog_pagi['is_paged'],
-  // (cpts) (portfolio)
-  'portfolio_url' => $portfolio_settings['archive_url'], // done for ya
-  'project_url' => $portfolio_settings['single_url'], // done for ya
-  'is_portfolio_paged' => $portfolio_pagi['is_paged'],
-  // (cpts) (blog cats)
-  'category_url' => $blog_settings['category_url'], // done for ya
-  'tag_url' => $blog_settings['tag_url'], // done for ya
+  // blog
+  'is_blog_paged' => $blog_settings['is_paged'],
+  'blog_posts_per_page' => $blog_settings['blog_posts_per_page'],
+  'blog_route' => 'blog',
+  'post_route' => 'posts',
+  'category_route' => 'categories',
+  'tag_route' => 'tags',
+  
+  // portfolio
+  'is_portfolio_paged' => $portfolio_settings['is_paged'],
+  'portfolio_posts_per_page' => $portfolio_settings['posts_per_page'],
+  'portfolio_route' => 'portfolio',
+  'project_route' => 'projects',
+  
+  
 );

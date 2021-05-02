@@ -1,0 +1,25 @@
+<ul class="uk-breadcrumb uk-margin-small-top uk-margin-remove-bottom">
+  <li>
+    <a href="/">Home</a>
+  </li>
+  {% if single.slug != 'index' %}
+    {% if is_post or is_category or is_tag %}
+      <li><a href="{{configs.blog_url}}">Blog</a></li>
+    {% endif %}
+    {% if is_project %}
+      <li><a href="{{configs.portfolio_url}}">Portfolio</a></li>
+    {% endif %}
+    {% if is_category %}
+      <li><a href="{{configs.category_url}}">Categories</a></li>
+    {% endif %}
+    {% if is_tag %}
+      <li><a href="{{configs.tag_url}}">Tags</a></li>
+    {% endif %}
+    {% if single %}
+      <li><span>{{single.title}}</span></li>
+    {% endif %}
+    {% if is_blog or is_portfolio or is_category or is_tag %}
+      <li><span>{{archive.title}}</span></li>
+    {% endif %}
+  {% endif %}
+</ul>

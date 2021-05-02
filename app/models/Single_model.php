@@ -1,34 +1,20 @@
 <?php
-// https://github.com/nahid/jsonq
 use Nahid\JsonQ\Jsonq;
 
 class Single_model {
   
+  public $type;
   public $slug;
   
-  public function __construct($slug) {
+  public function __construct($type, $slug) {
+    $this->type = $type;
     $this->slug = $slug;
   }
-  // (cpts)
-  public function get_page() {
+  
+  public function get_single() {
     $q = new Jsonq('../public/json/data.min.json');
-    $page = $q->from('site.pages')->where('slug', '=', $this->slug)->first();
-    
-    return $page;
-  }
-  // (cpts)
-  public function get_post() {
-    $q = new Jsonq('../public/json/data.min.json');
-    $post = $q->from('site.blog.posts')->where('slug', '=', $this->slug)->first();
-
-    return $post;
-  }
-  // (cpts)
-  public function get_project() {
-    $q = new Jsonq('../public/json/data.min.json');
-    $project = $q->from('site.portfolio.projects')->where('slug', '=', $this->slug)->first();
-
-    return $project;
+    $data = $q->from(get_singles_location($this->type))->where('slug', '=', $this->slug)->first();
+    return $data;
   }
   
 }

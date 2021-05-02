@@ -3,8 +3,7 @@
 class Cache {
   
   public function __construct()
-  {    
-    // some data
+  {
   }
   
   // serving the cached files when they exist

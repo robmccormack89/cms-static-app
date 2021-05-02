@@ -7,91 +7,64 @@ class Archive_controller extends Core_controller {
     parent::__construct();
   }
   
-  public function query($query_params) {
-    echo $query_params;
-  }
-  
-  // taxonomy collections (archive of terms)
-  public function cat_collection($page) {
-    $collection = new Collection_model('blog', $page, 'categories');
-  
-    $context['archive'] = $collection->get_category_collection();
-    
-    if($context['archive']['posts']) {
-      $this->render('collection.twig', $context);
-    } else {
-      $this->error();
-    }
-  }
-  public function tag_collection($page) {
-    $collection = new Collection_model('blog', $page, 'tags');
-  
-    $context['archive'] = $collection->get_tag_collection();
-    
-    if($context['archive']['posts']) {
-      $this->render('collection.twig', $context);
-    } else {
-      $this->error();
-    }
-  }
-  // cpts tax
-  public function category($term, $page) {
-    $category = new Term_model('blog', $page, 'categories', $term);
-    
-    $context['archive'] = $category->get_category();
-    
-    if($context['archive']['posts']) {
-      $this->render('category.twig', $context);
-    } else {
-      $this->error();
-    }
-  }
-  // cpts tax
-  public function tag($term, $page) {
-    $tag = new Term_model('blog', $page, 'tags', $term);
-    
-    $context['archive'] = $tag->get_tag();
-    
-    if($context['archive']['posts']) {
-      $this->render('tag.twig', $context);
-    } else {
-      $this->error();
-    }
-  }
-  // cpts
+  // type archive
   public function blog($page) {
     $blog = new Archive_model('blog', $page);
     
-    $context['archive'] = $blog->get_blog();
+    $context['archive'] = $blog->get_archive();
     
     if($context['archive']['posts']) {
-      $this->render('blog.twig', $context);
-    } else {
-      $this->error();
-    }
-  }
-  // cpts
-  public function portfolio($page) {
-    $portfolio = new Archive_model('portfolio', $page);
-    
-    $context['archive'] = $portfolio->get_portfolio();
-    
-    if($context['archive']['posts']) {
-      $this->render('portfolio.twig', $context);
+      $this->render('blog', $context);
     } else {
       $this->error();
     }
   }
   
-  public function render($custom_template, $context) {
-    if ($context['archive']) {
-      if ($this->twig->getLoader()->exists($custom_template)) {
-        $this->template_render($custom_template, $context);
-      } else {
-        $this->template_render('archive.twig', $context);
-      }
+  // type archive
+  public function portfolio($page) {
+    $portfolio = new Archive_model('portfolio', $page);
+    
+    $context['archive'] = $portfolio->get_archive();
+    
+    if($context['archive']['posts']) {
+      $this->render('portfolio', $context);
     } else {
       $this->error();
+    }
+  }
+  
+  // term archive
+  public function category($term, $page) {
+    $category = new Term_model('blog', $page, 'categories', $term);
+    
+    $context['archive'] = $category->get_term();    
+    
+    if($context['archive']['posts']) {
+      $this->render('category', $context);
+    } else {
+      $this->error();
+    }
+  }
+  
+  // term archive
+  public function tag($term, $page) {
+    $tag = new Term_model('blog', $page, 'tags', $term);
+    
+    $context['archive'] = $tag->get_term();    
+    
+    if($context['archive']['posts']) {
+      $this->render('tag', $context);
+    } else {
+      $this->error();
+    }
+  }
+  
+  // renderer
+  public function render($template_name, $context) {
+    if ($this->twig->getLoader()->exists($template_name.'.twig')) {
+      $this->template_render($template_name.'.twig', $context);
+    } else {
+      $this->template_render('archive.twig', $context);
     }
   }
 }
