@@ -25,8 +25,10 @@ $router->mount(get_blog_route_base(), function() use ($router) {
   
   // blog index
   $router->get('/', function() {
-    $blog = new Archive_controller();
-    $blog->blog(null);
+    cache_serve(function() { 
+      $blog = new Archive_controller();
+      $blog->blog(null);
+    });
   });
   
   // blog index paged
@@ -37,15 +39,19 @@ $router->mount(get_blog_route_base(), function() use ($router) {
        header('Location: /blog', true, 301);
        exit();
      }
-     $blog = new Archive_controller();
-     $blog->blog($page);
+     cache_serve(function() use ($page) { 
+       $blog = new Archive_controller();
+       $blog->blog($page);
+     });
     });
   }
   
   // blog single post
   $router->get(get_post_route_base().'/{slug}', function($slug) {
-    $post = new Single_controller;
-    $post->post($slug);
+    cache_serve(function() use ($slug) { 
+      $post = new Single_controller;
+      $post->post($slug);
+    });
   });
   
   // blog categories
@@ -58,15 +64,19 @@ $router->mount(get_blog_route_base(), function() use ($router) {
           header('Location: '.get_blog_route_base().get_category_route_base(), true, 301);
           exit();
         }
-        $category = new Archive_controller();
-        $category->cat_collection($page);
+        cache_serve(function() use ($page) { 
+          $category = new Archive_controller();
+          $category->cat_collection($page);
+        });
       });
     }
   
     // blog categories index (collection)
     $router->get('/', function(){
-      $category = new Archive_controller();
-      $category->cat_collection(null);
+      cache_serve(function() { 
+        $category = new Archive_controller();
+        $category->cat_collection(null);
+      });
     });
 
     // blog categories term index
@@ -80,15 +90,19 @@ $router->mount(get_blog_route_base(), function() use ($router) {
             header('Location: '.get_blog_route_base().get_category_route_base().'/'.$term, true, 301);
             exit();
           }
-          $category = new Archive_controller();
-          $category->category($term, $page);
+          cache_serve(function() use ($term, $page) { 
+            $category = new Archive_controller();
+            $category->category($term, $page);
+          });
         });
       }
     
       // blog categories term index
       $router->get('/', function($term){
-        $category = new Archive_controller();
-        $category->category($term, null);
+        cache_serve(function() use ($term) { 
+          $category = new Archive_controller();
+          $category->category($term, null);
+        });
       });
     
     });
@@ -105,15 +119,19 @@ $router->mount(get_blog_route_base(), function() use ($router) {
           header('Location: '.get_blog_route_base().get_tag_route_base(), true, 301);
           exit();
         }
-        $tag = new Archive_controller();
-        $tag->tag_collection($page);
+        cache_serve(function() use ($page) { 
+          $tag = new Archive_controller();
+          $tag->tag_collection($page);
+        });
       });
     }
   
     // blog tags index (collection)
     $router->get('/', function(){
-      $tag = new Archive_controller();
-      $tag->tag_collection(null);
+      cache_serve(function() { 
+        $tag = new Archive_controller();
+        $tag->tag_collection(null);
+      });
     });
 
     // // blog tags term index
@@ -127,15 +145,19 @@ $router->mount(get_blog_route_base(), function() use ($router) {
             header('Location: '.get_blog_route_base().get_tag_route_base().'/'.$term, true, 301);
             exit();
           }
-          $tag = new Archive_controller();
-          $tag->tag($term, $page);
+          cache_serve(function() use ($term, $page) { 
+            $tag = new Archive_controller();
+            $tag->tag($term, $page);
+          });
         });
       }
     
       // blog tags term index
       $router->get('/', function($term){
-        $tag = new Archive_controller();
-        $tag->tag($term, null);
+        cache_serve(function() use ($term) { 
+          $tag = new Archive_controller();
+          $tag->tag($term, null);
+        });
       });
     
     });
@@ -149,8 +171,10 @@ $router->mount(get_portfolio_route_base(), function() use ($router) {
   
   // portfolio index
   $router->get('/', function() {
-    $portfolio = new Archive_controller();
-    $portfolio->portfolio(null);
+    cache_serve(function() { 
+      $portfolio = new Archive_controller();
+      $portfolio->portfolio(null);
+    });
   });
   
   // portfolio index paged
@@ -161,15 +185,19 @@ $router->mount(get_portfolio_route_base(), function() use ($router) {
        header('Location: /portfolio', true, 301);
        exit();
      }
-     $portfolio = new Archive_controller();
-     $portfolio->portfolio($page);
+     cache_serve(function() use ($page) { 
+       $portfolio = new Archive_controller();
+       $portfolio->portfolio($page);
+     });
     });
   }
   
   // portfolio single project
   $router->get(get_project_route_base().'/{slug}', function($slug) {
-    $project = new Single_controller;
-    $project->project($slug);
+    cache_serve(function() use ($slug) { 
+      $project = new Single_controller;
+      $project->project($slug);
+    });
   });
 
 });
