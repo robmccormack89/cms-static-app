@@ -314,19 +314,17 @@ function menu_active_classes($menu_items) {
 Page helper/s
 */
 
-function is_draft_allowed($reqPage) {
-  if ($reqPage && $reqPage['status'] == 'draft' && $GLOBALS['configs']['visitor_ip'] == $GLOBALS['configs']['author_ip']) {
-    return true;
-  }
-}
-function is_published($reqPage) {
-  if ($reqPage && $reqPage['status'] == 'published') {
-    return true;
-  }
-}
-function is_published_or_draft_allowed($reqPage) {
-  if (is_draft_allowed($reqPage) || is_published($reqPage)) {
-    return true;
+function is_single_allowed($page) {
+  if($page) {
+    if ($page['status'] == 'draft' && $GLOBALS['configs']['visitor_ip'] == $GLOBALS['configs']['author_ip']) {
+      return true;
+    } elseif($page['status'] == 'published') {
+      return true;
+    } else {
+      return false;
+    }
+  } else {
+    return false;
   }
 }
 

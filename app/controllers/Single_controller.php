@@ -35,20 +35,17 @@ class Single_controller extends Core_controller {
     $this->render('project', $context);
   }
   
+  // custom renderer with is_single_allowed check
+  // status = 'published' | status = 'draft' & visitor_ip = author_ip
   public function render($template_name, $context) {
-    if ($this->twig->getLoader()->exists($template_name.'-'.$context['single']['slug'].'.twig')) {
-      $this->template_render($template_name.'-'.$context['single']['slug'].'.twig', $context);
-    } elseif ($this->twig->getLoader()->exists($template_name.'.twig')) {
-      $this->template_render($template_name.'.twig', $context);
-    } else {
-      $this->template_render('single.twig', $context);
-    };
-  }
-  
-  // if is_published_or_draft_allowed, else throw 404 error
-  public function render_check($context) {
-    if (is_published_or_draft_allowed($context['single'])) {
-      // render
+    if (is_single_allowed($context['single'])) {
+      if ($this->twig->getLoader()->exists($template_name.'-'.$context['single']['slug'].'.twig')) {
+        $this->template_render($template_name.'-'.$context['single']['slug'].'.twig', $context);
+      } elseif ($this->twig->getLoader()->exists($template_name.'.twig')) {
+        $this->template_render($template_name.'.twig', $context);
+      } else {
+        $this->template_render('single.twig', $context);
+      };
     } else {
       $this->error();
     }
