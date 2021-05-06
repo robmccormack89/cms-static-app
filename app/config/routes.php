@@ -12,13 +12,20 @@ if ($configs['site_protocol'] == "https") {
 $router = new \Bramus\Router\Router;
 $router->setBasePath('/');
 
-// homepage
+// homepage route
 $router->get('/', function() {
-  cache_serve(function() { 
-    $homepage = new Single_controller;
-    $homepage->index();
-  });
+  $query_params = $_SERVER['QUERY_STRING'];
+  if ($query_params) {
+    $query = new Archive_controller;
+    $query->query($query_params);
+  } else {
+    cache_serve(function() { 
+      $homepage = new Single_controller;
+      $homepage->index();
+    });
+  }
 });
+
 
 // /blog
 $router->mount(get_blog_route_base(), function() use ($router) {

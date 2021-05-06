@@ -23,9 +23,9 @@ function get_singles_location($type) {
 // add new archive types & their json locations here (blog, portfolio)
 function get_archive_locations($type) {
 
-  if($type == 'blog') {
+  if($type == 'blog' || $type == 'post') {
     $data = 'site.blog.posts';
-  } elseif($type == 'portfolio') {
+  } elseif($type == 'portfolio' || $type == 'project') {
     $data = 'site.portfolio.projects';
   }
 
