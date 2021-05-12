@@ -2,7 +2,9 @@
 // https://github.com/nahid/jsonq
 use Nahid\JsonQ\Jsonq;
 
-class Query_model {
+class Query {
+  
+  // ?search=lorem&type=post&category=news&tag=twig&date=2021&posts_per_page=4&paged=2&layout=list
   
   public $string;
   public $search;
@@ -20,6 +22,7 @@ class Query_model {
     // query paramaters
     $this->search = $this->get_search_params();
     $this->type = $this->get_type_params();
+    // category & tag are related only to type: post. will show empty when type is project
     $this->category = $this->get_category_params();
     $this->tag = $this->get_tag_params();
     $this->date = $this->get_date_params();
@@ -27,6 +30,14 @@ class Query_model {
     $this->posts_per_page = $this->get_posts_per_page_params();
     $this->paged = $this->get_paged_params();
     $this->layout = $this->get_layout_params();
+  }
+  
+  public function switch_type() {
+    if ($this->type == 'post') {
+      return 'blog';
+    } elseif ($this->type == 'project') {
+      return 'portfolio';
+    }
   }
   
   public function fetch() {
@@ -37,7 +48,6 @@ class Query_model {
     return $query;
   }
   
-  
   public function get_meta() {
     $meta['title'] = 'Search Results';
     $meta['description'] = 'This is the Search results page. Query = '.$this->string;
@@ -47,47 +57,70 @@ class Query_model {
   public function get_posts() {
 
     if($this->type){
-      $q = new Jsonq('../public/json/data.min.json');
-      $res = $q
+      // Jsonq = regular jsonq class which extends qarray, see vendor
+      $q1 = new Jsonq('../public/json/data.min.json');
+      $posts = $q1
       ->from(get_archive_locations($this->type))
+      ->get();
+    } else {
+      $data = $this->get_all_posts();
+    }
+    
+    if($this->search) {
+      // Json_model extends Jsonq, used for custom ConditionalFactory from qarray
+      // reason for this is to use custom match conditional
+      // so can use proper case insensitive regex
+      $q2 = new Json_model($data);
+      $posts = $q2
+      ->where('excerpt', 'match', '(?i)ipsum')
+      ->orWhere('title', 'match', '(?i)ipsum')
       ->get();
     }
     
     if($this->category) {
-      $json = new Nahid\JsonQ\Jsonq($res);
-      $res = $json->where('categories', 'any', $this->category)->get();
+      $q3 = new Nahid\JsonQ\Jsonq($data);
+      $posts = $q3->where('categories', 'any', $this->category)->get();
     }
     
     if($this->tag) {
-      $json2 = new Nahid\JsonQ\Jsonq($res);
-      $res = $json2->where('tags', 'any', $this->tag)->get();
+      $q4 = new Nahid\JsonQ\Jsonq($data);
+      $posts = $q4->where('tags', 'any', $this->tag)->get();
     }
     
     if($this->date) {
-      $json3 = new Nahid\JsonQ\Jsonq($res);
-      $res = $json3->whereContains('date_time', $this->date)->get();
+      $q5 = new Nahid\JsonQ\Jsonq($data);
+      $posts = $q5->whereContains('date_time', $this->date)->get();
     }
     
-    return $res;
+    $data = get_tease_data($posts, $this->type);
+    
+    return $data;
 
   }
+  
+  // get all posts (post & project type, with no other filters)
   public function get_all_posts() {
-    $q = new Jsonq('../public/json/data.min.json');
-    $res = $q->find('site.blog.posts');
-    $q2 = $q->copy();
+    $q1 = new Jsonq('../public/json/data.min.json');
+    $res1 = $q1->find('site.blog.posts');
+    $q2 = $q1->copy();
     $res2 = $q2->reset()->find('site.portfolio.projects');
     
-    $array1 = json_decode($res, true);
+    $array1 = json_decode($res1, true);
     $array2 = json_decode($res2, true);
-    $result = array_merge($array1, $array2);
+    $merge = array_merge($array1, $array2);
     
     $json = new Nahid\JsonQ\Jsonq();
-    $yee = $json->collect($result);
+    $data = $json->collect($merge);
 
-    return $yee;
+    return $data;
   }
+  // get_all_posts count
   public function get_all_posts_count() {
-
+    $data = $this->get_all_posts();
+    
+    $count = $data->count();
+    
+    return $count;
   }
   public function get_pagination() {
 
@@ -97,7 +130,6 @@ class Query_model {
 
     
   }
-  
   
   public function get_search_params() {
     parse_str($this->string, $data);

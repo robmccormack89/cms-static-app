@@ -1,15 +1,15 @@
 {% extends "base.twig" %}
 
 {% block seo_meta %}
-  <title>{{single.meta_title|default(single.title ~ ' | ' ~ configs.site_title)}}</title>
+  <title>{{single.meta_title|default(single.title ~ ' | ' ~ site.title)}}</title>
   <meta name="description" content="{{single.meta_description|default(single.excerpt)}}">
-  <link rel="canonical" href="{{configs.current_url}}" />
+  <link rel="canonical" href="{{current_url}}" />
   <meta property="og:type" content="article" />
-  <meta property="og:title" content="{{single.meta_title|default(single.title ~ ' | ' ~ configs.site_title)}}" />
+  <meta property="og:title" content="{{single.meta_title|default(single.title ~ ' | ' ~ site.title)}}" />
   <meta property="og:description" content="{{single.meta_description|default(single.excerpt)}}" />
-  <meta property="og:image" content="{{configs.base_url}}{{single.featured_img.src}}" />
-  <meta property="og:url" content="{{configs.current_url}}" />
-  <meta property="og:site_name" content="{{configs.site_title}}" />
+  <meta property="og:image" content="{{base_url}}{{single.featured_img.src}}" />
+  <meta property="og:url" content="{{current_url}}" />
+  <meta property="og:site_name" content="{{site.title}}" />
   <!-- BlogPosting -->
   <script type="application/ld+json">
     {
@@ -17,18 +17,18 @@
       "@type": "BlogPosting",
       "mainEntityOfPage": {
         "@type": "WebPage",
-        "@id": "{{configs.base_url}}"
+        "@id": "{{base_url}}"
       },
       "headline": "Some Heading",
       "description": "Lorem Ipsum",
-      "image": "{{configs.base_url}}/public/img/image.jpg",  
+      "image": "{{base_url}}/public/img/image.jpg",  
       "author": {
         "@type": "Person",
         "name": "Robert McCormack"
       },  
       "publisher": {
         "@type": "Person",
-        "name": "{{configs.site_title}}"
+        "name": "{{site.title}}"
       },
       "datePublished": "{{single.date_time|date("F j, Y")}}",
       "dateModified": "{{single.date_time|date("Y-m-d")}}"

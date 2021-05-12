@@ -16,16 +16,17 @@
     <div class="header-logo uk-navbar-left nav-logo-area">
       <div class="">
         <a class="site-logo uk-logo uk-padding-remove uk-text-bold uk-text-emphasis line-height-1" href="/">
-          {{configs.site_title}}
+          {{site.title}}
         </a>
         <div>
-          <p class="site-tagline uk-text-small uk-margin-remove line-height-1">{{configs.site_tagline}}</p>
+          <p class="site-tagline uk-text-small uk-margin-remove line-height-1">{{site.tagline}}</p>
         </div>
       </div>
     </div>
     <div class="header-main-nav uk-navbar-center nav-overlay">
       
       <ul class="main-menu-nav uk-navbar-nav uk-visible@m">
+        
         {% if main_menu %}
           {% for item in main_menu.menu_items %}
             <li class="menu-item {{item.class}}">

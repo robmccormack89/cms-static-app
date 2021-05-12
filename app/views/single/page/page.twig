@@ -1,15 +1,15 @@
 {% extends "single.twig" %}
 
 {% block seo_meta %}
-  <title>{{single.meta_title|default(single.title ~ ' | ' ~ configs.site_title)}}</title>
+  <title>{{single.meta_title|default(single.title ~ ' | ' ~ site.title)}}</title>
   <meta name="description" content="{{single.meta_description|default(single.excerpt)}}">
-  <link rel="canonical" href="{{configs.current_url}}" />
+  <link rel="canonical" href="{{current_url}}" />
   <meta property="og:type" content="article" />
-  <meta property="og:title" content="{{single.meta_title|default(single.title ~ ' | ' ~ configs.site_title)}}" />
+  <meta property="og:title" content="{{single.meta_title|default(single.title ~ ' | ' ~ site.title)}}" />
   <meta property="og:description" content="{{single.meta_description|default(single.excerpt)}}" />
-  <meta property="og:image" content="{{configs.base_url}}{{single.featured_img.src}}" />
-  <meta property="og:url" content="{{configs.current_url}}" />
-  <meta property="og:site_name" content="{{configs.site_title}}" />
+  <meta property="og:image" content="{{base_url}}{{single.featured_img.src}}" />
+  <meta property="og:url" content="{{current_url}}" />
+  <meta property="og:site_name" content="{{site.title}}" />
   <!-- WebPage -->
   <script type="application/ld+json">
     {

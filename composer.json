@@ -5,6 +5,9 @@
         "mezon/router": "^1.3",
         "bramus/router": "~1.5"
     },
+    "autoload": {
+        "psr-4": { "Rmcc\\": ["app/classes/", "app/core/", "app/controllers/", "app/models/", "app/extensions/"] }
+    },
     "config": {
         "vendor-dir": "app/vendor"
     }
