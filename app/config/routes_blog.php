@@ -6,31 +6,31 @@ $router->mount('/blog', function() use ($router) {
   // blog index
   $router->get('/', function() {
     Rmcc\Cache::cacheServe(function() { 
-      $blog = new Rmcc\ArchiveController();
-      $blog->blog();
+      $blog = new Rmcc\ArchiveController('blog', 'posts', true);
+      $blog->mainIndexArchive();
     });
   });
   
   // blog index paged
-  // if($GLOBALS['config']['is_blog_paged'] == true) {
-  //   $router->get('/page/{page}', function($page){
-  //    // redirect requests for page one of paged archive to main archive
-  //    if ($page == 1) {
-  //      header('Location: /blog', true, 301);
-  //      exit();
-  //    }
-  //    cacheServe(function() use ($page) { 
-  //      $blog = new ArchiveController();
-  //      $blog->blog($page);
-  //    });
-  //   });
-  // }
+
+  $router->get('/page/{page}', function($page){
+   // redirect requests for page one of paged archive to main archive
+   if ($page == 1) {
+     header('Location: /blog', true, 301);
+     exit();
+   }
+   Rmcc\Cache::cacheServe(function() use ($page) { 
+     $blog = new Rmcc\ArchiveController('blog', 'posts', true, $page, 4);
+     $blog->mainIndexArchive();
+   });
+  });
+
   
   // blog single post
   $router->get('/posts/{slug}', function($slug) {
     Rmcc\Cache::cacheServe(function() use ($slug) { 
-      $post = new Rmcc\SingleController;
-      $post->post($slug);
+      $post = new Rmcc\SingleController('post', 'blog', $slug, 'posts');
+      $post->getSingle();
     });
   });
   

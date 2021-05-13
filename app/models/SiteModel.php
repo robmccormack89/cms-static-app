@@ -8,24 +8,19 @@ class SiteModel {
   private static $instance = null;
   private $q;
 
-  private function __construct()
-  {
+  private function __construct() {
     $q = new Jsonq('../public/json/data.min.json');
     $this->q = $q->from('site.meta')->get();
   }
   
-  public static function init()
-  {
-    if(!self::$instance)
-    {
+  public static function init() {
+    if(!self::$instance) {
       self::$instance = new SiteModel();
     }
-   
     return self::$instance;
   }
   
-  public function getSite()
-  {
+  public function getSite() {
     return $this->q;
   }
 }

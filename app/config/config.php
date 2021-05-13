@@ -12,12 +12,4 @@ $config['admin_email'] = 'info@example.com';
 $config['php_cache'] = false;
 $config['php_minify'] = false;
 
-// blog configs
-$config['is_blog_paged'] = true;
-$config['blog_posts_per_page'] = 4;
-$config['blog_route'] = 'blog';
-$config['post_route'] = 'posts';
-$config['category_route'] = 'categories';
-$config['tag_route'] = 'tags';
-
 return $config;

@@ -8,24 +8,19 @@ class AuthorModel {
   private static $instance = null;
   private $q;
 
-  private function __construct()
-  {
+  private function __construct() {
     $q = new Jsonq('../public/json/data.min.json');
     $this->q = $q->from('site.author')->get();
   }
   
-  public static function init()
-  {
-    if(!self::$instance)
-    {
+  public static function init() {
+    if(!self::$instance) {
       self::$instance = new AuthorModel();
     }
-   
     return self::$instance;
   }
   
-  public function getAuthor()
-  {
+  public function getAuthor() {
     return $this->q;
   }
 }

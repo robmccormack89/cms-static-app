@@ -2,8 +2,9 @@
 namespace Rmcc;
 use Nahid\JsonQ\Jsonq;
 
-// creation of Menu object requires $slug. E.g new MenuModel('main-menu')
-// Menu object is returned with 3 properties: $slug, $title, $menu_items
+// creation of Menu obj requires $slug. E.g new MenuModel('main-menu')
+// Menu obj is returned with 3 properties: $slug, $title, $menu_items
+// menus created therefore dont need to call getMenu(), this function is protected anyway. Menu obj should be enough
 class MenuModel {
   
   public $slug;

@@ -1,35 +1,30 @@
 <?php
 namespace Rmcc;
-use Nahid\JsonQ\Jsonq as Q;
+use Nahid\JsonQ\Jsonq;
 
+// the model for getting data for a main index archive such as 'blog' or 'portfolio'
 class ArchiveModel {
   
-  public $type; // string. e.g 'blog' or 'portfolio'
-  public $key; // string. e.g 'posts' or 'projects'
-  public $paged; // boolean. setting. whether or not the archive is paged.
-  public $page; // int. requested paginated page number. passed on via routes
-  public $posts_per_page; // int. setting. how many posts to show per page on this archive
-  
-  public function __construct($type, $key, $page, $paged, $posts_per_page) {
+  public function __construct($type, $key, $paged, $page, $posts_per_page) {
     $this->type = $type;
     $this->key = $key;
-    $this->index = '/'.$type;
     $this->paged = $paged;
     $this->page = $page;
     $this->posts_per_page = $posts_per_page;
   }
 
+  // get the actual archive data in 3 parts: meta, posts & pagination
   public function getArchive() {
     $blog = $this->getArchiveMeta();
-    $blog['posts'] = $this->getAllPosts();
+    $blog['posts'] = $this->getPosts();
     // $blog['pagination'] = $this->getPagination();
     
     return $blog;
   }
   
-  // done
-  public function getArchiveMeta() {
-    $q = new Q('../public/json/data.min.json');
+  // get the archive meta data
+  protected function getArchiveMeta() {
+    $q = new Jsonq('../public/json/data.min.json');
     $data = $q->from('site.content_types.'.$this->type.'.meta')->get();
     
     // pagination related - could be grouped into a pagination class
@@ -40,47 +35,89 @@ class ArchiveModel {
     return $data;
   }
   
-  // not pagination related
-  public function getAllPosts() {
-    $q = new Q('../public/json/data.min.json');
-    $posts = $q->from('site.content_types.'.$this->type.'.'.$this->key)
-    ->chunk($this->posts_per_page);
-    
-    if (!$this->page) {
-      $page = 0;
+  protected function getPosts() {
+  
+    // if paged is true
+    if ($this->paged) {
+      
+      $posts = $this->getChunkedPosts();
+      
+      if ($this->getPagedPosts($posts)) {
+        $data = $this->getPagedPosts($posts);
+      } else {
+        $data = false;
+      }
+      
+    } else {
+      $data = $this->getAllPosts();
     }
-    
-    $data = PostsModel::setPostsTease($posts[$page], $this->key, $this->index);
-    
+  
     return $data;
   }
   
-  // public function get_all_posts() {
-  //   $q1 = new Jsonq('../public/json/data.min.json');
-  //   $res1 = $q1->find('site.blog.posts');
-  //   $q2 = $q1->copy();
-  //   $res2 = $q2->reset()->find('site.portfolio.projects');
-  // 
-  //   $array1 = json_decode($res1, true);
-  //   $array2 = json_decode($res2, true);
-  //   $merge = array_merge($array1, $array2);
-  // 
-  //   $json = new Nahid\JsonQ\Jsonq();
-  //   $data = $json->collect($merge);
-  // 
-  //   return $data;
-  // }
+  // get some chunked posts
+  protected function getChunkedPosts() {
+    $q = new Jsonq('../public/json/data.min.json');
+    $posts = $q->from('site.content_types.'.$this->type.'.'.$this->key)
+    ->chunk($this->posts_per_page);
+    
+    return $posts;
+  }
+  protected function getPagedPosts($posts) {
+
+    if (!$this->page) {
+      $page = 0;
+    } else {
+      $page = $this->page - 1;
+    }
+
+    if (!($this->posts_per_page * $page >= $this->getAllPostsCount())) {
+      $data = PostsModel::setPostsTease($posts[$page], $this->key, '/'.$this->type);
+    } else {
+      $data = false;
+    }
+    
+    return $data;
+    
+  }
+  
+  // get all posts (with posts_per_page setting still applied, will just return the number of posts set in Archive Model construction)
+  protected function getAllPosts() {
+    $q = new Jsonq('../public/json/data.min.json');
+    $posts = $q->find('site.content_types.'.$this->type.'.'.$this->key)
+    ->get();
+    
+    $index = '/'.$this->type;
+    
+    // $data = PostsModel::setPostsTeaseLink($posts, $this->key, $this->index);
+    $data = PostsModel::setPostsTease($posts, $this->key, $index);
+    
+    return $data;
+  }
+  // get all posts count; this is used for checking against to determine pagination
+  protected function getAllPostsCount() {
+    $q = new Jsonq('../public/json/data.min.json');
+    $posts = $q->from('site.content_types.'.$this->type.'.'.$this->key)
+    ->get();
+    $data = $posts->count();
+  
+    return $data;
+  }
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   // doesnt require anything from pagination variables but is used in pagination
-  // public function getAllPostsCount() {
-  //   $posts = $this->getAllPosts();
-  //   $data = $posts->count();
-  // 
-  //   return $data;
-  // }
-  
    // has pagination
-  public function getPosts() {
+  protected function getPosts2() {
   
     $q = new Jsonq('../public/json/data.min.json');
     $posts = $q->from('site.content_types.'.$this->type.'.'.$this->key)
@@ -103,7 +140,7 @@ class ArchiveModel {
     return $data;
   }
   // pagination related - could be grouped into a pagination class
-  public function getPagination() {
+  protected function getPagination() {
     if($this->paged == true) {
   
       $data = set_pagination_data(
@@ -119,7 +156,7 @@ class ArchiveModel {
     return $data;
   }
   // pagination related
-  public function getPagedPosts($posts) {
+  protected function getPagedPosts2($posts) {
 
     if (!$this->page) {
       $page = 0;
