@@ -1,6 +1,5 @@
 <?php
 namespace Rmcc;
-use Nahid\JsonQ\Jsonq;
 
 // for getting posts listings archives for given terms, like News (NOT collections!)
 class TermArchiveModel extends ArchiveModel {
