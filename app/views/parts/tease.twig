@@ -17,30 +17,30 @@
         {{post.title}}
       </a>
     </h2>
-    {% if post.categories or post.date_time or post.tags %}
-    <p class="uk-article-meta">
-      {% if post.categories %}
-        Posted in {% for cat in post.categories %}
-          {% if not loop.last %}
-            <a title="{{cat.title}}" href="{{cat.link}}">{{cat.title}}</a>,
-          {% else %}
-            <a title="{{cat.title}}" href="{{cat.link}}">{{cat.title}}</a>.
-          {% endif %}
-        {% endfor %}
-      {% endif %}
-      {% if post.date_time %}
-        Published: {{post.date_time|date("F j, Y")}}
-      {% endif %}
-      {% if post.tags %}
-        Tags: {% for cat in post.tags %}
-          {% if not loop.last %}
-            <a title="{{cat.title}}" href="{{cat.link}}">{{cat.title}}</a>,
-          {% else %}
-            <a title="{{cat.title}}" href="{{cat.link}}">{{cat.title}}</a>.
-          {% endif %}
-        {% endfor %}
-      {% endif %}
-    </p>
+    {% if post.taxonomies.categories or post.date_time or post.taxonomies.tags %}
+      <p class="uk-article-meta">
+        {% if post.taxonomies.categories %}
+          Posted in {% for cat in post.taxonomies.categories %}
+            {% if not loop.last %}
+              <a title="{{cat.title}}" href="{{cat.link}}">{{cat.title}}</a>,
+            {% else %}
+              <a title="{{cat.title}}" href="{{cat.link}}">{{cat.title}}</a>.
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+        {% if post.date_time %}
+          Published: {{post.date_time|date("F j, Y")}}
+        {% endif %}
+        {% if post.taxonomies.tags %}
+          Tags: {% for cat in post.taxonomies.tags %}
+            {% if not loop.last %}
+              <a title="{{cat.title}}" href="{{cat.link}}">{{cat.title}}</a>,
+            {% else %}
+              <a title="{{cat.title}}" href="{{cat.link}}">{{cat.title}}</a>.
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      </p>
     {% endif %}
   </header>
   <p>{{post.excerpt}}</p>

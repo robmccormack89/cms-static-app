@@ -3,29 +3,26 @@ namespace Rmcc;
 
 class SingleController extends CoreController {
   
-  public function __construct($name, $type, $slug, $key = null) {
+  public function __construct() {
     parent::__construct();
-    $this->name = $name; // string. twig template name. e.g 'page', 'post' or 'project'
-    $this->type = $type; // string. e.g 'page' or 'blog'. if set to 'page', $key is unnecessary
-    $this->slug = $slug; // string. requested page slug. passed on via routes
-    $this->key = $key; // string. e.g 'posts' or 'projects'. the plural items key for the archived content type.
-    
-    $this->single = new SingleModel($this->name, $this->type, $this->slug, $this->key);
   }
   
-  public function getSingle() {
-    $context['single'] = $this->single->getSinglular();
+  public function getSingle($name, $type, $slug, $key = null) {
+    $single = new SingleModel($name, $type, $slug, $key);
+    $context['single'] = $single->getSinglular();
     
-    $this->render($context);
+    $this->render($context, $name, $slug);
   }
   
-  protected function render($context) {
+  protected function render($context, $name, $slug) {
     if (isSingleAllowed($context['single'])) {
       $slug = slugToFilename($context['single']['slug']);
-      if ($this->twig->getLoader()->exists($this->name.'-'.$slug.'.twig')) {
-        $this->templateRender($this->name.'-'.$slug.'.twig', $context);
-      } elseif ($this->twig->getLoader()->exists($this->name.'.twig')) {
-        $this->templateRender($this->name.'.twig', $context);
+      if ($this->twig->getLoader()->exists($name.'-'.$slug.'.twig')) {
+        $this->templateRender($name.'-'.$slug.'.twig', $context);
+      } elseif($this->twig->getLoader()->exists($slug.'.twig')) {
+        $this->templateRender($slug.'.twig', $context);
+      } elseif ($this->twig->getLoader()->exists($name.'.twig')) {
+        $this->templateRender($name.'.twig', $context);
       } else {
         $this->templateRender('single.twig', $context);
       };

@@ -5,10 +5,10 @@ use Nahid\JsonQ\Jsonq;
 class SingleModel {
   
   public function __construct($name, $type, $slug, $key = null) {
-    $this->name = $name;
-    $this->type = $type;
-    $this->slug = $slug;
-    $this->key = $key;
+    $this->name = $name; // string. twig template name. e.g 'page', 'post' or 'project'
+    $this->type = $type; // string. e.g 'page' or 'blog'. if set to 'page', $key is unnecessary
+    $this->slug = $slug; // string. requested page slug. passed on via routes
+    $this->key = $key; // string. e.g 'posts' or 'projects'. the plural items key for the archived content type.
   }
   
   // get the singular data based on $type, $slug, $key

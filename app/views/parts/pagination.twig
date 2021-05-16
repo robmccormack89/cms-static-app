@@ -1,0 +1,37 @@
+{% if (archive.pagination.next or archive.pagination.prev) %}
+  <nav class="uk-navbar-container uk-navbar-transparent uk-background-muted theme-border pagination-nav uk-margin-bottom" uk-navbar>
+    
+    <div class="uk-navbar-left">
+      <div class="uk-navbar-item">
+        <span class="uk-text-bold uk-text-emphasis">Navigation</span>
+      </div>
+    </div>
+
+    <div class="uk-navbar-right">
+      <div class="uk-navbar-item">
+        <ul class="uk-pagination uk-margin-remove">
+          {% if archive.pagination.prev %}
+            <li>
+              <a class="prev" href="{{archive.pagination.prev}}">
+                <span uk-pagination-previous></span><span class="uk-margin-small-left uk-visible@m">Previous</span></a>
+            </li>
+          {% endif %}
+          {% for page in archive.pagination.pages %}
+            {% if page.class == 'uk-active' %}
+              <li class="{{page.class}}"><span>{{page.title}}</span></li>
+            {% else %}
+              <li class="{{page.class}}"><a href="{{page.link}}">{{page.title}}</a></li>
+            {% endif %}
+          {% endfor %}
+          {% if archive.pagination.next %}
+            <li>
+              <a class="next" href="{{archive.pagination.next}}">
+                <span class="uk-margin-small-right uk-visible@m">Next</span><span uk-pagination-next></span></a>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+      
+  </nav>
+{% endif %}

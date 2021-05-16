@@ -19,8 +19,8 @@ $router->get('/', function() {
     echo $query_params;
   } else {
     Rmcc\Cache::cacheServe(function() { 
-      $homepage = new Rmcc\SingleController('page', 'page', 'index');
-      $homepage->getSingle();
+      $homepage = new Rmcc\SingleController();
+      $homepage->getSingle('page', 'page', 'index');
     });
   }
 });
@@ -30,8 +30,8 @@ include('routes_blog.php');
 // /page
 $router->get('/{slug}', function($slug) {
   Rmcc\Cache::cacheServe(function() use ($slug) { 
-    $page = new Rmcc\SingleController('page', 'page', $slug);
-    $page->getSingle();
+    $page = new Rmcc\SingleController();
+    $page->getSingle('page', 'page', $slug);
   });
 });
 

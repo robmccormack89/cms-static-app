@@ -2,7 +2,7 @@
 namespace Rmcc;
 use Nahid\JsonQ\Jsonq;
 
-// class for setting the tease data in terms lists (collections)
+// class for setting the tease data in terms lists (collections!)
 public function __construct() {
 }
 

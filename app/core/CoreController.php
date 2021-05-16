@@ -4,7 +4,7 @@ namespace Rmcc;
 // mainly sets up the twig environment for rendering templates. includes custom caching with rendering
 class CoreController {
   
-  // construct twig environment, twig globals & anything else. All other controllers wil extend from CoreController
+  // construct twig environment, twig globals & anything else. All other controllers will extend from CoreController
   public function __construct() {
     // twig stuff
     $loader = new \Twig\Loader\FilesystemLoader(
@@ -22,14 +22,9 @@ class CoreController {
     $this->twig = new \Twig\Environment($loader, ['cache' => '../app/cache/compilation', 'debug' => true ]);
     $this->twig->addExtension(new \Twig\Extension\DebugExtension());
     // twig globals
-    $site = SiteModel::init();
-    $this->site = $site->getSite();
-    $this->twig->addGlobal('site', $this->site);
-    $author = AuthorModel::init();
-    $this->author = $author->getAuthor();
-    $this->twig->addGlobal('author', $this->author);
-    $this->main_menu = new MenuModel('main-menu');
-    $this->twig->addGlobal('main_menu', $this->main_menu);
+    $this->twig->addGlobal('site', SiteModel::init()->getSite());
+    $this->twig->addGlobal('author', AuthorModel::init()->getAuthor());
+    $this->twig->addGlobal('main_menu', new MenuModel('main-menu'));
     $this->twig->addGlobal('base_url', $GLOBALS['config']['base_url']);
     $this->twig->addGlobal('current_url', $GLOBALS['config']['base_url'].$_SERVER['REQUEST_URI']);
   }
