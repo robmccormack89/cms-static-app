@@ -46,12 +46,17 @@ $router->mount('/blog', function() use ($router) {
   $router->mount('/categories', function() use ($router) {
     
     // blog categories index (collection)
-    // $router->get('/', function(){
-    //   Rmcc\Cache::cacheServe(function() { 
-    //     $category = new ArchiveController();
-    //     $category->cat_collection();
-    //   });
-    // });
+    $router->get('/', function() {
+      Rmcc\Cache::cacheServe(function() { 
+        $cat_collection = new Rmcc\CollectionArchiveController;
+        $cat_collection->getTaxCollectionArchive(
+          'blog', // content type key e.g blog or portfolio
+          'categories', // taxonomy key
+          array('categories', 'tags'), // taxonomies to include meta for in the listings
+          true // is archive paged. true or false
+        );
+      });
+    });
   
     // blog categories index paged (collection)
     // $router->get('/page/{page}', function($page){

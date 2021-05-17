@@ -4,11 +4,11 @@ namespace Rmcc;
 class PaginationModel {
   
   public function __construct($posts_per_page, $page, $count, $paged, $url) {
-    $this->posts_per_page = $posts_per_page;
-    $this->page = $page;
-    $this->count = $count;
-    $this->paged = $paged;
-    $this->url = '/'.$url;
+    $this->posts_per_page = $posts_per_page; // posts per page setting
+    $this->page = $page; // requested page/slug value
+    $this->count = $count; // all posts count
+    $this->paged = $paged; // paged setting
+    $this->url = '/'.$url; // base url for thre archive, needed for pagination links to work
     
     if($this->paged == true) {
       $this->pagination = $this->setPaginationData();

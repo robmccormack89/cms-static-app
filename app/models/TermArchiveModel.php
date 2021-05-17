@@ -21,8 +21,6 @@ class TermArchiveModel extends ArchiveModel {
     $url = $this->type.'/'.$this->tax.'/'.$this->term ;
     $pag_obj = new PaginationModel($this->posts_per_page, $this->page, $posts_obj->all_count, $this->paged, $url);
     $term['pagination'] = $pag_obj->pagination;
-
-    // $term['pagination'] = [];
     
     return $term;
   }

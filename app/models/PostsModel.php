@@ -134,7 +134,7 @@ class PostsModel {
     }
 
     if (!($this->posts_per_page * $offset >= $this->getCount())) {
-      $data = $this->setPostsTease($posts[$offset], $this->key, '/'.$this->type);
+      $data = $this->setPostsTease($posts[$offset]);
     }
     
     return $data;
