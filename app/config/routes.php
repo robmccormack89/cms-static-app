@@ -27,6 +27,8 @@ $router->get('/', function() {
 
 include('routes_blog.php');
 
+include('routes_portfolio.php');
+
 // /page
 $router->get('/{slug}', function($slug) {
   Rmcc\Cache::cacheServe(function() use ($slug) { 

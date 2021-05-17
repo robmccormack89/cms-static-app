@@ -5,15 +5,14 @@ use Nahid\JsonQ\Jsonq;
 class TermsModel {
   
   // class for setting the tease data in terms lists (collections!)
-  public function __construct($type, $tax, $taxonomies, $paged, $page, $posts_per_page) {
+  public function __construct($type, $tax, $paged, $page, $posts_per_page) {
     $this->type = $type;
     $this->tax = $tax;
-    $this->taxonomies = $taxonomies;
     $this->paged = $paged;
     $this->page = $page;
     $this->posts_per_page = $posts_per_page;
     $this->terms = $this->getCollectionTerms();
-    $this->count = $this->getAllTermsCount();
+    $this->all_count = $this->getAllTermsCount();
   }
   
   private function getCollectionTerms() {
