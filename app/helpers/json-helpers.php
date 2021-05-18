@@ -1,7 +1,7 @@
 <?php
 // these helpers are specifically related to getting json data
 // any generalized functions that get json data
-use Nahid\JsonQ\Jsonq;
+use Rmcc\Json;
 
 // getting the TermTitleFromSlug for setPostsTeaseTerms() in PostsModel
 // in the case of post teases or posts singulars, we will only ever know the slugs of taxonomy terms that a post has
@@ -10,7 +10,7 @@ use Nahid\JsonQ\Jsonq;
 // the second argument is the taxonomy name. e.g 'categories'
 // the third argument is the taxonomy term slug
 function getTermTitleFromSlug($type, $tax, $slug) {
-  $q = new Jsonq('../public/json/data.min.json');
+  $q = new Json('../public/json/data.min.json');
   $term = $q->from('site.content_types.'.$type.'.taxonomies.'.$tax)
   ->where('slug', '=', $slug)
   ->first();

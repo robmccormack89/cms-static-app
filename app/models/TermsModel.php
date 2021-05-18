@@ -1,11 +1,10 @@
 <?php
 namespace Rmcc;
-use Nahid\JsonQ\Jsonq;
 
 class TermsModel {
   
   // class for setting the tease data in terms lists (collections!)
-  public function __construct($type, $tax, $paged, $page, $posts_per_page) {
+  public function __construct($type, $tax, $paged = false, $page = null, $posts_per_page = 4) {
     $this->type = $type;
     $this->tax = $tax;
     $this->paged = $paged;
@@ -21,7 +20,7 @@ class TermsModel {
   
     // if paged is true
     if ($this->paged){
-      $q = new Jsonq('../public/json/data.min.json');
+      $q = new Json('../public/json/data.min.json');
       $terms = $q->from('site.content_types.'.$this->type.'.taxonomies.'.$this->tax)
       ->chunk($this->posts_per_page);
       if($terms){
@@ -34,7 +33,7 @@ class TermsModel {
     return $data;
   }
   private function getAllTermsCount() {
-    $q = new Jsonq('../public/json/data.min.json');
+    $q = new Json('../public/json/data.min.json');
     $posts = $q->from('site.content_types.'.$this->type.'.taxonomies.'.$this->tax)
     ->get();
     $data = $posts->count();
@@ -42,7 +41,7 @@ class TermsModel {
     return $data;
   }
   private function getAllTerms() {
-    $q = new Jsonq('../public/json/data.min.json');
+    $q = new Json('../public/json/data.min.json');
     $posts = $q->from('site.content_types.'.$this->type.'.taxonomies.'.$this->tax)
     ->get();
     

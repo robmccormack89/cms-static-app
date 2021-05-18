@@ -8,17 +8,22 @@ class PaginationModel {
     $this->page = $page; // requested page/slug value
     $this->count = $count; // all posts count
     $this->paged = $paged; // paged setting
-    $this->url = '/'.$url; // base url for thre archive, needed for pagination links to work
+    $this->url = $url; // base url for the archive, needed for pagination links to work
     
+    $this->pagination = $this->getPagination();
+  }
+  
+  private function getPagination() {
     if($this->paged == true) {
-      $this->pagination = $this->setPaginationData();
+      $data = $this->setPaginationData();
     } else {
-      $this->pagination = null;
+      $data = null;
     }
+    return $data;
   }
   
   // set the pagination data
-  protected function setPaginationData() {
+  private function setPaginationData() {
     
     if(!$this->page) {
       $page = 1;
@@ -72,7 +77,7 @@ class PaginationModel {
   }
   
   // conditionals for pagination
-  protected function hasNextPage() {
+  private function hasNextPage() {
     
     if(!$this->page) {
       $page = 1;
@@ -87,7 +92,7 @@ class PaginationModel {
     };
 
   }  
-  protected function hasPrevPage() {
+  private function hasPrevPage() {
     
     if(!$this->page) {
       $page = 1;

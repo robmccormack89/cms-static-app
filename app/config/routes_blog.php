@@ -1,46 +1,67 @@
 <?php
 
-// /blog
+// for routing for new types, copy this file into config folder & rename according to new type-key. e.g routes_portfolio.php
+// then search/replace the old type-key(blog) in this file with your new type-key e.g portfolio
+// data for the content type must exist in json file firstly
+// config.php -> type_settings must contain item for your new content type secondly
+// dont forget to load the new routes up in routes.php at the end.
+
+// Strings to replace: 'blog', 'post/posts'
+// If taxonomies: 'categories', 'tags'
+
+/*
+*
+* The blog routes. with index_uri = /blog
+*
+*/
+
 $router->mount('/blog', function() use ($router) {
   
-  // blog index paged (archive)
+  /*
+  *
+  * main index archive routes
+  *
+  */
+  
+  // blog index (paged urls. go before main index url)
   $router->get('/page/{page}', function($page){
    if ($page == 1) {
      header('Location: /blog', true, 301); // redirect requests for page one of paged archive to main archive
      exit();
    }
    Rmcc\Cache::cacheServe(function() use ($page) { 
-     $blog = new Rmcc\ArchiveController();
-     $blog->getMainIndexArchive(
-       'blog',
-       'posts',
-       array('categories', 'tags'),
-       true,
-       $page // paged value. 2, 3, or 4 etc
-     );
+     $blog = new Rmcc\ArchiveController('blog', true, $page);
+     $blog->getMainIndexArchive();
    });
   });
   
-  // blog index (archive)
+  // blog index (main index url)
   $router->get('/', function() {
     Rmcc\Cache::cacheServe(function() { 
-      $blog = new Rmcc\ArchiveController;
-      $blog->getMainIndexArchive(
-        'blog', // content type key e.g blog or portfolio
-        'posts', // content type items key e.g posts or projects
-        array('categories', 'tags'), // taxonomies to include meta for in the listings
-        true // is archive paged. true or false
-      );
+      $blog = new Rmcc\ArchiveController('blog', true);
+      $blog->getMainIndexArchive();
     });
   });
   
-  // blog single post (single)
+  /*
+  *
+  * singular routes
+  *
+  */
+  
+  // blog post
   $router->get('/posts/{slug}', function($slug) {
     Rmcc\Cache::cacheServe(function() use ($slug) { 
-      $post = new Rmcc\SingleController();
-      $post->getSingle('post', 'blog', $slug, 'posts');
+      $post = new Rmcc\SingleController('blog', $slug);
+      $post->getSingle();
     });
   });
+  
+  /*
+  *
+  * taxonomy routes
+  *
+  */
   
   // blog categories (archive)
   $router->mount('/categories', function() use ($router) {
@@ -52,25 +73,16 @@ $router->mount('/blog', function() use ($router) {
         exit();
       }
       Rmcc\Cache::cacheServe(function() use ($page) { 
-        $cat_collection = new Rmcc\CollectionArchiveController;
-        $cat_collection->getTaxCollectionArchive(
-          'blog', // content type key e.g blog or portfolio
-          'categories', // taxonomy key
-          true, // is archive paged. true or false
-          $page
-        );
+        $cat_collection = new Rmcc\CollectionArchiveController('blog', 'categories', true, $page);
+        $cat_collection->getTaxCollectionArchive();
       });
     });
     
     // blog categories index (collection)
     $router->get('/', function() {
       Rmcc\Cache::cacheServe(function() { 
-        $cat_collection = new Rmcc\CollectionArchiveController;
-        $cat_collection->getTaxCollectionArchive(
-          'blog', // content type key e.g blog or portfolio
-          'categories', // taxonomy key
-          true // is archive paged. true or false
-        );
+        $cat_collection = new Rmcc\CollectionArchiveController('blog', 'categories',   true);
+        $cat_collection->getTaxCollectionArchive();
       });
     });
   
@@ -84,31 +96,16 @@ $router->mount('/blog', function() use ($router) {
          exit();
        }
        Rmcc\Cache::cacheServe(function() use ($term, $page) { 
-         $category = new Rmcc\TermArchiveController();
-         $category->getTaxTermArchive(
-           'blog',
-           'posts',
-           'categories', // taxonomy key
-           $term, // taxonomy term slug
-           array('categories', 'tags'),
-           true,
-           $page
-         );
+         $category = new Rmcc\TermArchiveController('blog', 'categories', $term, true, $page);
+         $category->getTaxTermArchive();
        });
       });
       
       // blog categories term index (archive)
       $router->get('/', function($term){
         Rmcc\Cache::cacheServe(function() use ($term) { 
-          $category = new Rmcc\TermArchiveController;
-          $category->getTaxTermArchive(
-            'blog', // content type key
-            'posts', // items key
-            'categories', // taxonomy key
-            $term, // taxonomy term slug
-            array('categories', 'tags'), // taxonomies to include meta for in the listings
-            true
-          );
+          $category = new Rmcc\TermArchiveController('blog', 'categories', $term, true);
+          $category->getTaxTermArchive();
         });
       });
     
@@ -126,25 +123,16 @@ $router->mount('/blog', function() use ($router) {
         exit();
       }
       Rmcc\Cache::cacheServe(function() use ($page) { 
-        $tag_collection = new Rmcc\CollectionArchiveController;
-        $tag_collection->getTaxCollectionArchive(
-          'blog', // content type key e.g blog or portfolio
-          'tags', // taxonomy key
-          true, // is archive paged. true or false
-          $page
-        );
+        $tag_collection = new Rmcc\CollectionArchiveController('blog', 'tags', true, $page);
+        $tag_collection->getTaxCollectionArchive();
       });
     });
     
     // blog tags index (collection)
     $router->get('/', function() {
       Rmcc\Cache::cacheServe(function() { 
-        $tag_collection = new Rmcc\CollectionArchiveController;
-        $tag_collection->getTaxCollectionArchive(
-          'blog', // content type key e.g blog or portfolio
-          'tags', // taxonomy key
-          true // is archive paged. true or false
-        );
+        $tag_collection = new Rmcc\CollectionArchiveController('blog', 'tags', true);
+        $tag_collection->getTaxCollectionArchive();
       });
     });
   
@@ -158,31 +146,16 @@ $router->mount('/blog', function() use ($router) {
          exit();
        }
        Rmcc\Cache::cacheServe(function() use ($term, $page) { 
-         $tag = new Rmcc\TermArchiveController();
-         $tag->getTaxTermArchive(
-           'blog',
-           'posts',
-           'tags', // taxonomy key
-           $term, // taxonomy term slug
-           array('categories', 'tags'),
-           true,
-           $page
-         );
+         $tag = new Rmcc\TermArchiveController('blog', 'tags', $term, true, $page);
+         $tag->getTaxTermArchive();
        });
       });
       
       // blog tags term index (archive)
       $router->get('/', function($term){
         Rmcc\Cache::cacheServe(function() use ($term) { 
-          $tag = new Rmcc\TermArchiveController;
-          $tag->getTaxTermArchive(
-            'blog', // content type key
-            'posts', // items key
-            'tags', // taxonomy key
-            $term, // taxonomy term slug
-            array('categories', 'tags'), // taxonomies to include meta for in the listings
-            true
-          );
+          $tag = new Rmcc\TermArchiveController('blog', 'tags', $term, true);
+          $tag->getTaxTermArchive();
         });
       });
     

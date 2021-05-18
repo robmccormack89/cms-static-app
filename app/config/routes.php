@@ -16,11 +16,13 @@ $router->setBasePath('/');
 $router->get('/', function() {
   $query_params = $_SERVER['QUERY_STRING'];
   if ($query_params) {
-    echo $query_params;
+    // echo $query_params;
+    $query = new Rmcc\QueryController;
+    $query->query($query_params);
   } else {
     Rmcc\Cache::cacheServe(function() { 
-      $homepage = new Rmcc\SingleController();
-      $homepage->getSingle('page', 'page', 'index');
+      $homepage = new Rmcc\SingleController('page', 'index');
+      $homepage->getSingle();
     });
   }
 });
@@ -32,8 +34,8 @@ include('routes_portfolio.php');
 // /page
 $router->get('/{slug}', function($slug) {
   Rmcc\Cache::cacheServe(function() use ($slug) { 
-    $page = new Rmcc\SingleController();
-    $page->getSingle('page', 'page', $slug);
+    $page = new Rmcc\SingleController('page', $slug);
+    $page->getSingle();
   });
 });
 

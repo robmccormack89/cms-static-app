@@ -1,19 +1,24 @@
 <?php
 namespace Rmcc;
-use Nahid\JsonQ\Jsonq;
 
 // class for getting posts lists for archives
 class PostsModel {
   
-  public function __construct($type, $key, $taxonomies, $paged, $page, $posts_per_page, $tax = null, $term = null) {
-    $this->type = $type;
-    $this->key = $key;
-    $this->taxonomies = $taxonomies;
-    $this->paged = $paged;
-    $this->page = $page;
-    $this->posts_per_page = $posts_per_page;
-    $this->tax = $tax;
-    $this->term = $term;
+  public function __construct($type, $paged, $page, $posts_per_page, $tax = null, $term = null) {
+    $this->type = $type; // string. e.g 'blog'
+    $this->paged = $paged; // boolean. true / false
+    $this->page = $page; // int
+    $this->posts_per_page = $posts_per_page; // int
+    $this->tax = $tax; // string. 'categories' or 'tags'
+    $this->term = $term; // string. 'news' or 'media'
+    
+    $this->key = $GLOBALS['config']['types'][$this->type]['items'];
+    
+    if(isset($GLOBALS['config']['types'][$this->type]['taxes_in_meta'])){
+      $this->taxonomies = $GLOBALS['config']['types'][$this->type]['taxes_in_meta'];
+    } else {
+      $this->taxonomies = null;
+    }
     $this->posts = $this->getPosts();
     $this->all_count = $this->getCount();
   }
@@ -45,7 +50,7 @@ class PostsModel {
   
     // if paged is true
     if ($this->paged){
-      $q = new Jsonq('../public/json/data.min.json');
+      $q = new Json('../public/json/data.min.json');
       $posts = $q->from('site.content_types.'.$this->type.'.'.$this->key)
       ->where($this->tax, 'any', $this->term)
       ->chunk($this->posts_per_page);
@@ -56,7 +61,7 @@ class PostsModel {
     return $data;
   }
   private function getAllTermPostsCount() {
-    $q = new Jsonq('../public/json/data.min.json');
+    $q = new Json('../public/json/data.min.json');
     $posts = $q->from('site.content_types.'.$this->type.'.'.$this->key)
     ->where($this->tax, 'any', $this->term)
     ->get();
@@ -65,7 +70,7 @@ class PostsModel {
     return $data;
   }
   private function getAllTermPosts() {
-    $q = new Jsonq('../public/json/data.min.json');
+    $q = new Json('../public/json/data.min.json');
     $posts = $q->from('site.content_types.'.$this->type.'.'.$this->key)
     ->where($this->tax, 'any', $this->term)
     ->get();
@@ -85,7 +90,7 @@ class PostsModel {
   
     // if paged is true
     if ($this->paged){
-      $q = new Jsonq('../public/json/data.min.json');
+      $q = new Json('../public/json/data.min.json');
       $posts = $q->from('site.content_types.'.$this->type.'.'.$this->key)
       ->chunk($this->posts_per_page);
       if($posts){
@@ -99,7 +104,7 @@ class PostsModel {
     return $data;
   }
   private function getAllPostsCount() {
-    $q = new Jsonq('../public/json/data.min.json');
+    $q = new Json('../public/json/data.min.json');
     $posts = $q->from('site.content_types.'.$this->type.'.'.$this->key)
     ->get();
     $data = $posts->count();
@@ -107,7 +112,7 @@ class PostsModel {
     return $data;
   }
   private function getAllPosts() {
-    $q = new Jsonq('../public/json/data.min.json');
+    $q = new Json('../public/json/data.min.json');
     $posts = $q->find('site.content_types.'.$this->type.'.'.$this->key)
     ->get();
     

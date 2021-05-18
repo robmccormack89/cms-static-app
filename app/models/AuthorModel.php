@@ -1,6 +1,5 @@
 <?php
 namespace Rmcc;
-use Nahid\JsonQ\Jsonq;
 
 //  a singleton class, used for representation of single objects. see https://phpenthusiast.com/blog/the-singleton-design-pattern-in-php
 class AuthorModel {
@@ -9,7 +8,7 @@ class AuthorModel {
   private $q;
 
   private function __construct() {
-    $q = new Jsonq('../public/json/data.min.json');
+    $q = new Json('../public/json/data.min.json');
     $this->q = $q->from('site.author')->get();
   }
   

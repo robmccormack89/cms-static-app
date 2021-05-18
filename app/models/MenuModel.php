@@ -1,6 +1,5 @@
 <?php
 namespace Rmcc;
-use Nahid\JsonQ\Jsonq;
 
 // creation of Menu obj requires $slug. E.g new MenuModel('main-menu')
 // Menu obj is returned with 3 properties: $slug, $title, $menu_items
@@ -18,8 +17,8 @@ class MenuModel {
   }
   
   // get a menu via its slug
-  protected function getMenu() {
-    $q = new Jsonq('../public/json/data.min.json');
+  private function getMenu() {
+    $q = new Json('../public/json/data.min.json');
     $data = $q->from('site.menus')->where('slug', '=', $this->slug)->first();
     $data['menu_items'] = self::setMenuItemsClasses($data['menu_items']);
 
@@ -27,7 +26,7 @@ class MenuModel {
   }
   
   // traverse a given set of menu items, and add active classes if link is found in REQUEST_URI
-  protected static function setMenuItemsClasses($menu_items) {
+  private static function setMenuItemsClasses($menu_items) {
     foreach ($menu_items as $k => &$item) {
       if ($_SERVER['REQUEST_URI'] == $menu_items[$k]['link']) {
         $menu_items[$k]['class'] = 'uk-active';
