@@ -152,35 +152,50 @@ class PostsModel {
     return $termed_posts;
   }
   // setting the Post's Tease Link data
-  private function setPostsTeaseLink($posts) {
-    foreach ($posts as $post) {
-      $post['link'] = '/'.$this->type.'/'.$this->key.'/'.$post['slug'];
-      $data[] = $post;
+  public function setPostsTeaseLink($posts) {
+    $data = null;
+    if($posts){
+      foreach ($posts as $post) {
+        
+        $items = getTypeSettingBySettingKey('single', $post['type'], 'items'); // returns 'posts' or 'projects'
+        $type_key = getTypeSettingBySettingKey('single', $post['type'], 'key'); // returns 'blog' or 'portfolio'
+        
+        $post['link'] = '/'.$type_key.'/'.$items.'/'.$post['slug'];
+        $data[] = $post;
+      }
     }
     return $data;
   }
   // setting the Post's Tease Taxonomy Meta data
-  private function setPostsTeaseTerms($posts) {
-    foreach ($posts as $post) {
-      if($this->taxonomies) {
-        $taxonomies = $this->taxonomies;
-        foreach($taxonomies as $tax) {
-          if(isset($post[$tax])){
-            $terms = $post[$tax];
-            foreach ($terms as &$term) {
-              $term = array(
-                'link' => '/'.$this->type.'/'.$tax.'/'.$term,
-                'slug' => $term,
-                'title' => \getTermTitleFromSlug($this->type, $tax, $term)
-              );
+  public function setPostsTeaseTerms($posts) {
+    $data = null;
+    if($posts){
+      foreach ($posts as $post) {
+        $type_key = getTypeSettingBySettingKey('single', $post['type'], 'key'); // returns 'blog' or 'portfolio'
+        if(isset($GLOBALS['config']['types'][$type_key]['taxes_in_meta'])){
+          $taxonomies = $GLOBALS['config']['types'][$type_key]['taxes_in_meta'];
+        } else {
+          $taxonomies = null;
+        }
+        if($taxonomies) {
+          foreach($taxonomies as $tax) {
+            if(isset($post[$tax])){
+              $terms = $post[$tax];
+              foreach ($terms as &$term) {
+                $term = array(
+                  'link' => '/'.$type_key.'/'.$tax.'/'.$term,
+                  'slug' => $term,
+                  'title' => \getTermTitleFromSlug($type_key, $tax, $term)
+                );
+              }
+              $post[$tax] = null;
+              $new_posts[$tax] = $terms;
+              $post['taxonomies'] = $new_posts;
             }
-            $post[$tax] = null;
-            $new_posts[$tax] = $terms;
-            $post['taxonomies'] = $new_posts;
           }
         }
+        $data[] = $post;
       }
-      $data[] = $post;
     }
     return $data;
   }

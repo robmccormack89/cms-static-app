@@ -14,11 +14,11 @@ $router->setBasePath('/');
 
 // homepage route
 $router->get('/', function() {
-  $query_params = $_SERVER['QUERY_STRING'];
-  if ($query_params) {
+  $params = $_SERVER['QUERY_STRING'];
+  if ($params) {
     // echo $query_params;
-    $query = new Rmcc\QueryController;
-    $query->query($query_params);
+    $query = new Rmcc\QueryController($params);
+    $query->getQueryArchive();
   } else {
     Rmcc\Cache::cacheServe(function() { 
       $homepage = new Rmcc\SingleController('page', 'index');

@@ -19,14 +19,19 @@ class ArchiveController extends CoreController {
   }
   
   protected function render($context) {
-    if($context['archive']['posts']) {
+    if(isset($_GET['p'])) {
+      $p = $_GET['p'];
+    } else {
+      $p = null;
+    }
+    if(($this->page || $p > 0 ) && (empty($context['archive']['posts']))) {
+      $this->error();
+    } else {
       if ($this->twig->getLoader()->exists($this->type.'.twig')) {
         $this->templateRender($this->type.'.twig', $context);
       } else {
         $this->templateRender('archive.twig', $context);
       }
-    } else {
-      $this->error();
     }
   }
 }

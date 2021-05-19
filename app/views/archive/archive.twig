@@ -49,9 +49,13 @@
           {% include 'pagination.twig' %}
           
             <div class="archive-posts">
-              {% for post in archive.posts %}
-                {% include 'tease.twig' %}
-              {% endfor %}
+              {% if archive.posts %}
+                {% for post in archive.posts %}
+                  {% include 'tease.twig' %}
+                {% endfor %}
+              {% else %}
+                <span class="uk-text-lead uk-text-emphasis">No posts found here...</span>
+              {% endif %}
             </div>
           {% endblock %}
         </section>

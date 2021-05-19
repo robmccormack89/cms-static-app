@@ -1,4 +1,17 @@
 <?php
+function getTypeSettingBySettingKey(
+  string $key, // key of item to check against. e.g 'key' or 'items_key' or 'items_singular'
+  string $value, // value of item to check against. e.g 'blog' or 'portfolio'
+  string $return_key // key of the value to return. e.g 'items_route' 
+)
+{
+  foreach ($GLOBALS["config"]['types'] as $type_setting) if ($type_setting[$key] == $value) {
+    $data = $type_setting[$return_key];
+  }
+  return $data;
+}
+
+
 // check to see if singular page is status, visitor ip & author_ip
 function isSingleAllowed($page) {
   if($page) {

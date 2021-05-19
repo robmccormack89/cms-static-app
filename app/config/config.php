@@ -39,7 +39,7 @@ $config['types'] = array(
     'items' => 'projects',
     'single' => 'project',
     'index_uri' => '/portfolio',
-    'items_uri' => '/portfolio/projects'
+    'items_uri' => '/projects'
   ),
   
 );

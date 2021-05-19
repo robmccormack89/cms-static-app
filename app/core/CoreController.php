@@ -6,6 +6,7 @@ class CoreController {
   
   // construct twig environment, twig globals & anything else. All other controllers will extend from CoreController
   public function __construct() {
+    
     // twig stuff
     $loader = new \Twig\Loader\FilesystemLoader(
       array(
@@ -21,6 +22,7 @@ class CoreController {
     );
     $this->twig = new \Twig\Environment($loader, ['cache' => '../app/cache/compilation', 'debug' => true ]);
     $this->twig->addExtension(new \Twig\Extension\DebugExtension());
+    
     // twig globals
     $this->twig->addGlobal('site', SiteModel::init()->getSite());
     $this->twig->addGlobal('author', AuthorModel::init()->getAuthor());
