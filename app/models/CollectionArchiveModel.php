@@ -20,8 +20,7 @@ class CollectionArchiveModel {
     $terms_obj = new TermsModel($this->type, $this->tax, $this->paged, $this->page, $this->posts_per_page);
     $collection['posts'] = $terms_obj->terms;
     
-    $url = '/'.$this->type.'/'.$this->tax;
-    
+    $url = '/'.$this->type.'/'.$this->tax.'/page/';
     $pag_obj = new PaginationModel($this->posts_per_page, $this->page, $terms_obj->all_count, $this->paged, $url);
     $collection['pagination'] = $pag_obj->pagination;
     

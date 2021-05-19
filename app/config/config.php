@@ -39,7 +39,14 @@ $config['types'] = array(
     'items' => 'projects',
     'single' => 'project',
     'index_uri' => '/portfolio',
-    'items_uri' => '/projects'
+    'items_uri' => '/projects',
+    'taxes_in_meta' => array('technologies'),
+    'taxonomies' => array(
+      'technologies' => array(
+        'key'  => 'technologies',
+        'index_uri' => '/technologies',
+      )
+    ),
   ),
   
 );

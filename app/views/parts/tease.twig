@@ -1,16 +1,17 @@
 <article id="post-{{post.id}}" class="uk-section uk-section-small uk-padding-remove-top item post-{{post.id}} type-{{post.type}}">
   <header>
     
-    <figure class="uk-position-relatve uk-inline uk-margin-remove">
+    <figure class="uk-position-relatve uk-inline uk-margin-remove uk-position-relative">
       <a class="uk-link-reset" href="{{post.link}}">
         <img 
         class="" 
-        data-src="{{post.featured_img.src|default('https://picsum.photos/1200/800')}}" 
+        data-src="{{post.featured_img.src|default('https://picsum.photos/1200/600')}}" 
         width="800" 
         height="400" 
         alt="{{post.featured_img.alt}}" 
         uk-img>
       </a>
+    <span class='uk-label uk-badge uk-text-capitalize uk-position-top-left uk-margin-small-left uk-margin-small-top'>Type: {{ post.type|capitalize }}</span> 
     </figure>
     <h2 class="uk-text-bold uk-margin-top">
       <a class="uk-link-reset" href="{{post.link}}">
@@ -18,13 +19,21 @@
       </a>
     </h2>
     <p class="uk-article-meta">
-      Type: {{ post.type|capitalize }}. 
       {% if post.taxonomies.categories %}
-        Posted in {% for cat in post.taxonomies.categories %}
+        Posted in: {% for cat in post.taxonomies.categories %}
           {% if not loop.last %}
             <a title="{{cat.title}}" href="{{cat.link}}">{{cat.title}}</a>,
           {% else %}
             <a title="{{cat.title}}" href="{{cat.link}}">{{cat.title}}</a>.
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+      {% if post.taxonomies.technologies %}
+        Technology used: {% for tech in post.taxonomies.technologies %}
+          {% if not loop.last %}
+            <a title="{{tech.title}}" href="{{tech.link}}">{{tech.title}}</a>,
+          {% else %}
+            <a title="{{tech.title}}" href="{{tech.link}}">{{tech.title}}</a>.
           {% endif %}
         {% endfor %}
       {% endif %}

@@ -21,8 +21,9 @@ class ArchiveModel {
     $posts_obj = new PostsModel($this->type, $this->paged, $this->page, $this->posts_per_page);
     $archive['posts'] = $posts_obj->posts;
     
+    $url = $GLOBALS['config']['types'][$this->type]['index_uri'].'/page/';
     $pag_obj = new PaginationModel(
-      $this->posts_per_page, $this->page, $posts_obj->all_count, $this->paged, $GLOBALS['config']['types'][$this->type]['index_uri']
+      $this->posts_per_page, $this->page, $posts_obj->all_count, $this->paged, $url
     );
     $archive['pagination'] = $pag_obj->pagination;
     

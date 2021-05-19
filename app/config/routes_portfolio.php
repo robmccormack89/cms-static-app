@@ -55,5 +55,61 @@ $router->mount('/portfolio', function() use ($router) {
       $project->getSingle();
     });
   });
+  
+  /*
+  *
+  * taxonomy routes
+  *
+  */
+  
+  // portfolio technologies (archive)
+  $router->mount('/technologies', function() use ($router) {
+    
+    // portfolio technologies index paged (collection)
+    $router->get('/page/{page}', function($page){
+      if ($page == 1) {
+        header('Location: /portfolio/technologies', true, 301);
+        exit();
+      }
+      Rmcc\Cache::cacheServe(function() use ($page) { 
+        $tech_collection = new Rmcc\CollectionArchiveController('portfolio', 'technologies', true, $page);
+        $tech_collection->getTaxCollectionArchive();
+      });
+    });
+    
+    // portfolio technologies index (collection)
+    $router->get('/', function() {
+      Rmcc\Cache::cacheServe(function() { 
+        $tech_collection = new Rmcc\CollectionArchiveController('portfolio', 'technologies',   true);
+        $tech_collection->getTaxCollectionArchive();
+      });
+    });
+  
+    // portfolio technologies term index (archive)
+    $router->mount('/{term}', function() use ($router) {
+    
+      // portfolio technologies term index paged
+      $router->get('/page/{page}', function($term, $page){
+       if ($page == 1) {
+         header('Location: /portfolio/technologies/'.$term, true, 301); // redirect requests for page one of paged archive to main archive
+         exit();
+       }
+       Rmcc\Cache::cacheServe(function() use ($term, $page) { 
+         $technology = new Rmcc\TermArchiveController('portfolio', 'technologies', $term, true, $page);
+         $technology->getTaxTermArchive();
+       });
+      });
+      
+      // portfolio technologies term index (archive)
+      $router->get('/', function($term){
+        Rmcc\Cache::cacheServe(function() use ($term) { 
+          $technology = new Rmcc\TermArchiveController('portfolio', 'technologies', $term, true);
+          $technology->getTaxTermArchive();
+        });
+      });
+    
+    });
+  
+  });
 
 });

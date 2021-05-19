@@ -11,7 +11,7 @@ class SingleController extends CoreController {
     if($this->type == 'page') {
       $this->name = $this->type;
     } else {
-      $this->name = $GLOBALS['config']['types'][$this->type]['items'];
+      $this->name = $GLOBALS['config']['types'][$this->type]['single'];
     }
   }
   
@@ -24,7 +24,9 @@ class SingleController extends CoreController {
   
   protected function render($context) {
     if (isSingleAllowed($context['single'])) {
+      
       $slug = slugToFilename($context['single']['slug']);
+      
       if ($this->twig->getLoader()->exists($this->name.'-'.$this->slug.'.twig')) {
         $this->templateRender($this->name.'-'.$this->slug.'.twig', $context);
       } elseif($this->twig->getLoader()->exists($this->slug.'.twig')) {
@@ -34,8 +36,10 @@ class SingleController extends CoreController {
       } else {
         $this->templateRender('single.twig', $context);
       };
+      
     } else {
       $this->error();
     }
+    
   }
 }

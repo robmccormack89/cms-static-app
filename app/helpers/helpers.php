@@ -26,12 +26,6 @@ function isSingleAllowed($page) {
     return false;
   }
 }
-// remove & replace the slashes in the requested string with hyphens for use as a file name. from request
-function requestToFilename() {
-  $data = slugToFilename($_SERVER["REQUEST_URI"]);
-  
-  return $data;
-}
 // remove & replace the slashes in the requested string with hyphens for use as a file name. from given slug
 function slugToFilename($slug) {
   // strip character/s from end of string

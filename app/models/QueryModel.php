@@ -2,29 +2,33 @@
 namespace Rmcc;
 
 class QueryModel {
+  
+  // how to do searches & querys using paramters
+  
+  // With type & related taxonomy: http://static.com/?s=lorem&date=2021&type=post&cat=news&tag=twig
+  // or
+  // Without type or taxonomy (uses archived post types): http://static.com/?s=lorem&date=2021
 
-  // e.g http://static.com/?s=lorem&type=post&cat=events&tag=javascript&date=202
-  
-  // &show_all
-  
-  // &per_page = 4
-  
-  // &p = 2
+  // With pagination: http://static.com/?s=lorem&date=2021&per_page=3&p=2
+  // or
+  // With default pagination settings(posts_per_page = 4): http://static.com/?s=lorem&date=2021
+  // or
+  // Without pagination: http://static.com/?s=lorem&type=post&cat=news&tag=twig&date=2021&show_all
   
   public function __construct($string) {
     $this->string = $string;
 
     // params taken from string
-    $this->paged = $this->get_paged_params();
-    $this->page = $this->get_page_params();
-    $this->posts_per_page = $this->get_per_page_params();
-    $this->search = $this->get_search_params();
-    $this->tag = $this->get_tag_params();
-    $this->date = $this->get_date_params();
+    $this->paged = $this->get_paged_params(); // &show_all (use this instead of p & per_page to show all without pagination)
+    $this->page = $this->get_page_params(); // &p=2 (paged value)
+    $this->posts_per_page = $this->get_per_page_params(); // &per_page=4
+    $this->search = $this->get_search_params(); // &s=lorem (looks in title & excerpt)
+    $this->date = $this->get_date_params(); // &date=2021
     
     // taxonomy specific
-    $this->type = $this->get_type_params();
-    $this->category = $this->get_category_params();
+    $this->type = $this->get_type_params(); // &type=post
+    $this->category = $this->get_category_params(); // &cat=news
+    $this->tag = $this->get_tag_params(); // &tag=twig
     
     // result
     $this->query = $this->getQuery();
@@ -33,7 +37,7 @@ class QueryModel {
   // new, replaces fetch()
   public function getQuery() {
     $archive['title'] = 'Search Results';
-    $archive['description'] = 'This is the Search results page. Query = '.$this->string;
+    $archive['description'] = 'This is the Search results page. Query = '.$this->search;
     
     $posts_obj = new QueryPostsModel(
       $this->paged, 
@@ -47,17 +51,17 @@ class QueryModel {
     );
     $archive['posts'] = $posts_obj->posts;
     
-    // $pag_obj = new PaginationModel(
-    //   $this->posts_per_page, $this->page, $posts_obj->all_count, $this->paged, $GLOBALS['config']['current_url']
-    // );
-    // $archive['pagination'] = $pag_obj->pagination;
+    $pag_obj = new QueryPaginationModel(
+      $this->posts_per_page, $this->page, $posts_obj->all_count, $this->paged, $_SERVER['REQUEST_URI']
+    );
+    $archive['pagination'] = $pag_obj->pagination;
     
     return $archive;
   }
   
   public function get_paged_params() {
     parse_str($this->string, $data);
-    if (isset($data['show_all'])) :
+    if (isset($data['show_all']) && !isset($data['p'])) :
       return false;
     else:
       return true;
@@ -111,24 +115,5 @@ class QueryModel {
       return $data['tag'];
     endif;
   }
-  
-  // public function get_posts_per_page_params() {
-  //   parse_str($this->string, $data);
-  //   if (isset($data['posts_per_page'])) :
-  //   return $data['posts_per_page'];
-  //   endif;
-  // }
-  // public function get_paged_params() {
-  //   parse_str($this->string, $data);
-  //   if (isset($data['paged'])) :
-  //   return $data['paged'];
-  //   endif;
-  // }
-  // public function get_layout_params() {
-  //   parse_str($this->string, $data);
-  //   if (isset($data['layout'])) :
-  //   return $data['layout'];
-  //   endif;
-  // }
   
 }

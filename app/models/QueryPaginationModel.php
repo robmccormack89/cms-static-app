@@ -1,25 +1,12 @@
 <?php
 namespace Rmcc;
 
-class PaginationModel {
+class QueryPaginationModel extends PaginationModel {
   
   public function __construct($posts_per_page, $page, $count, $paged, $url) {
-    $this->posts_per_page = $posts_per_page; // posts per page setting
-    $this->page = $page; // requested page/slug value
-    $this->count = $count; // all posts count
-    $this->paged = $paged; // paged setting
-    $this->url = $url; // base url for the archive, needed for pagination links to work
+    parent::__construct($posts_per_page, $page, $count, $paged, $url);
     
     $this->pagination = $this->getPagination();
-  }
-  
-  protected function getPagination() {
-    if($this->paged == true) {
-      $data = $this->setPaginationData();
-    } else {
-      $data = null;
-    }
-    return $data;
   }
   
   // set the pagination data
@@ -37,11 +24,17 @@ class PaginationModel {
     // step 2 - if has next|prev, set the links data, available at .next & .prev. see functions.php 
     if ($this->hasNextPage($page, $this->count, $this->posts_per_page)) {
       $next_requested_page = $page + 1;
-      $data['next'] = $this->url.$next_requested_page;
+      
+      $link = $this->setPaginationLink($next_requested_page);
+      
+      $data['next'] = $link;
     }
     if ($this->hasPrevPage($page, $this->count, $this->posts_per_page)) {
       $prev_requested_page = $page - 1;
-      $data['prev'] = $this->url.$prev_requested_page;
+      
+      $link = $this->setPaginationLink($prev_requested_page);
+      
+      $data['prev'] = $link;
     }
     
     // step 3 - all posts count divided by posts per page, rounded up to the highest integer
@@ -60,9 +53,11 @@ class PaginationModel {
         $class = "not-active";
       }
       
+      $new_link = $this->setPaginationLink($offset);
+      
       // setting the data
       $output[] = array(
-        'link' => $this->url.$offset, 
+        'link' => $new_link, 
         'title' => $offset,
         'class' => $class,
       );
@@ -75,36 +70,14 @@ class PaginationModel {
     return $data;
   }
   
-  // conditionals for pagination
-  protected function hasNextPage() {
+  protected function setPaginationLink($requested_page) {
+    $query2 = ltrim($this->url, '/');
+    $query3 = ltrim($query2, '?');
+    parse_str($query3, $output);
+    $output['p'] = $requested_page;
+    $query_result = '/?'.http_build_query($output);
     
-    if(!$this->page) {
-      $page = 1;
-    } else {
-      $page = $this->page;
-    }
-    
-    if($page >= $this->count / $this->posts_per_page) {
-      return false;
-    } else {
-      return true;
-    };
-
-  }  
-  protected function hasPrevPage() {
-    
-    if(!$this->page) {
-      $page = 1;
-    } else {
-      $page = $this->page;
-    }
-    
-    if($page > 1) {
-      return true;
-    } else {
-      return false;
-    };
-
+    return $query_result;
   }
   
 }
