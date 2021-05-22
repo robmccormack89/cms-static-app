@@ -11,7 +11,9 @@
         alt="{{post.featured_img.alt}}" 
         uk-img>
       </a>
-    <span class='uk-label uk-badge uk-text-capitalize uk-position-top-left uk-margin-small-left uk-margin-small-top'>Type: {{ post.type|capitalize }}</span> 
+      {% if post.type %}
+        <span class='uk-label uk-badge uk-text-capitalize uk-position-top-left uk-margin-small-left uk-margin-small-top'>Type: {{ post.type|capitalize }}</span> 
+      {% endif %}
     </figure>
     <h2 class="uk-text-bold uk-margin-top">
       <a class="uk-link-reset" href="{{post.link}}">

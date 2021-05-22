@@ -25,13 +25,6 @@ class QueryPostsModel {
     $this->category = $category; 
     $this->tag = $tag;
     
-    // $this->key = $GLOBALS['config']['types'][$this->type]['items'];
-    // if(isset($GLOBALS['config']['types'][$this->type]['taxes_in_meta'])){
-    //   $this->taxonomies = $GLOBALS['config']['types'][$this->type]['taxes_in_meta'];
-    // } else {
-    //   $this->taxonomies = null;
-    // }
-    
     $query_posts = $this->getQueryPosts();
     $this->posts = $query_posts['data'];
     $this->all_count = $query_posts['count'];
@@ -93,10 +86,7 @@ class QueryPostsModel {
 
     $data = $this->setPostsTease($posts);
     
-    // return [$data, $count];
     return array('data' => $data, 'count' => $count);
-    
-    // return $data;
   }
   private function getAllQueryPosts() {
     $q1 = new Json('../public/json/data.min.json');
