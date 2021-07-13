@@ -6,6 +6,11 @@ class CoreController {
   
   // construct twig environment, twig globals & anything else. All other controllers will extend from CoreController
   public function __construct() {
+      
+    // enable for error reporting in cases of fatal errors
+    // ini_set('display_errors', '1');
+    // ini_set('display_startup_errors', '1');
+    // error_reporting(E_ALL);
     
     // twig stuff
     $loader = new \Twig\Loader\FilesystemLoader(
