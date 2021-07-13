@@ -30,7 +30,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => 'a25962ca5a7f015a67c98bca0fc24f63f4f6a41e',
+    'reference' => '6e03e44c793b871c88894a2fa52d7499ebf7c87a',
     'name' => '__root__',
   ),
   'versions' => 
@@ -42,7 +42,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => 'a25962ca5a7f015a67c98bca0fc24f63f4f6a41e',
+      'reference' => '6e03e44c793b871c88894a2fa52d7499ebf7c87a',
     ),
     'bramus/router' => 
     array (
@@ -52,15 +52,6 @@ private static $installed = array (
       array (
       ),
       'reference' => '6adc0182dc6b0ebc22fd10543f65a36de10d8c05',
-    ),
-    'mezon/router' => 
-    array (
-      'pretty_version' => '1.3.1',
-      'version' => '1.3.1.0',
-      'aliases' => 
-      array (
-      ),
-      'reference' => '42ece12cde858438e672f9a95e3228ab47eb224c',
     ),
     'myclabs/deep-copy' => 
     array (
@@ -95,21 +86,21 @@ private static $installed = array (
     ),
     'symfony/polyfill-ctype' => 
     array (
-      'pretty_version' => 'v1.22.1',
-      'version' => '1.22.1.0',
+      'pretty_version' => 'v1.23.0',
+      'version' => '1.23.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'c6c942b1ac76c82448322025e084cadc56048b4e',
+      'reference' => '46cd95797e9df938fdd2b03693b5fca5e64b01ce',
     ),
     'symfony/polyfill-mbstring' => 
     array (
-      'pretty_version' => 'v1.22.1',
-      'version' => '1.22.1.0',
+      'pretty_version' => 'v1.23.0',
+      'version' => '1.23.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => '5232de97ee3b75b0360528dae24e73db49566ab1',
+      'reference' => '2df51500adbaebdc4c38dea4c89a2e131c45c8a1',
     ),
     'twig/twig' => 
     array (

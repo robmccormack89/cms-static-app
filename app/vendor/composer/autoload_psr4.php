@@ -12,6 +12,5 @@ return array(
     'Rmcc\\' => array($baseDir . '/app/classes', $baseDir . '/app/core', $baseDir . '/app/controllers', $baseDir . '/app/models', $baseDir . '/app/extensions'),
     'Nahid\\QArray\\' => array($vendorDir . '/nahid/qarray/src'),
     'Nahid\\JsonQ\\' => array($vendorDir . '/nahid/jsonq/src'),
-    'Mezon\\Router\\' => array($vendorDir . '/mezon/router/Mezon/Router'),
     'DeepCopy\\' => array($vendorDir . '/myclabs/deep-copy/src/DeepCopy'),
 );

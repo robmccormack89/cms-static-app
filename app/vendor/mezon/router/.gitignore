@@ -1,8 +1,0 @@
-# IDEs
-.idea
-
-# composer
-/vendor/*
-
-# phpunit
-.phpunit*
