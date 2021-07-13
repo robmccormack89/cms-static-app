@@ -2,80 +2,97 @@
 <html lang="{{ configs.language }}">
 
   <head>
-    <meta charset="{{ configs.charset }}">
+    
+    <!-- standard meta stuff for the document -->
+    <meta charset="{{configs.charset}}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="Content-Type" content="text/html; charset={{ configs.charset }}" />
-    {% block seo_meta %}
-      <!-- seo meta should be extended on a per page basis -->
-    {% endblock %}
-    <!-- WebSite -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org/",
-        "@type": "WebSite",
-        "name": "{{configs.site_title}}",
-        "url": "{{configs.base_url}}",
-        "potentialAction": {
-          "@type": "SearchAction",
-          "target": "{{configs.base_url}}/?s={search_term_string}",
-          "query-input": "required name=search_term_string"
+    <meta http-equiv="Content-Type" content="text/html; charset={{configs.charset}}" />
+    
+    <!-- global website/person seo meta. this will be present on all pages unless this block is extended in templates dowmstream -->
+    {% block base_seo_meta %}
+      <!-- WebSite -->
+      <script type="application/ld+json">
+        {
+          "@context": "https://schema.org/",
+          "@type": "WebSite",
+          "name": "{{configs.site_title}}",
+          "url": "{{configs.base_url}}",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "{{configs.base_url}}/?s={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
         }
-      }
-    </script>
-    <!-- Person -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org/",
-        "@type": "Person",
-        "name": "{{configs.name}}",
-        "url": "{{configs.base_url}}",
-        "image": "{{configs.avatar_src}}",
-        "sameAs": [
-          "{{configs.github_url}}",
-          "{{configs.base_url}}"
-        ],
-        "jobTitle": "{{configs.job}}",
-        "worksFor": {
-          "@type": "Organization",
-          "name": "{{configs.name}}"
-        }  
-      }
-    </script>
-    <!-- theme styles -->
-    <link rel="stylesheet" type="text/css" href="/public/css/base.css">
-    <link rel="stylesheet" type="text/css" href="/public/css/global.css">
-    <script src="/public/js/global/base.min.js"></script>
-    <!-- /theme styles -->
-    {% block styles %}
-      <!-- this block is for extending on a per page/template basis for specific page/template styles -->
+      </script>
+      <!-- Person -->
+      <script type="application/ld+json">
+        {
+          "@context": "https://schema.org/",
+          "@type": "Person",
+          "name": "{{configs.name}}",
+          "url": "{{configs.base_url}}",
+          "image": "{{configs.avatar_src}}",
+          "sameAs": [
+            "{{configs.github_url}}",
+            "{{configs.base_url}}"
+          ],
+          "jobTitle": "{{configs.job}}",
+          "worksFor": {
+            "@type": "Organization",
+            "name": "{{configs.name}}"
+          }  
+        }
+      </script>
     {% endblock %}
+    
+    <!-- seo meta block to be extended per template -->
+    {% block seo_meta %}
+    {% endblock %}
+    
+    <!-- the base styles, applied thru site globally unless extended in a template to overwrite the base styles -->
+    {% block base_styles %}
+      <!-- base uikit scss build -->
+      <link rel="stylesheet" type="text/css" href="/public/css/base.css">
+      <!-- font awesome scss build -->
+      <link rel="stylesheet" type="text/css" href="/public/css/global.css">
+      <!-- base uikit scripts: no icons -->
+      <script src="/public/js/global/base.min.js"></script>
+    {% endblock %}
+    
+    <!-- custom styles block to be extended per template -->
+    {% block styles %}
+    {% endblock %}
+    
   </head>
   
-  <body class="">
-
+  <body>
+    <!-- the header block; extend per template/context -->
     {% block header %}
-      {% include 'header.twig' %}
+      Sorry, Nothing to Display! Header goes here...
     {% endblock %}
     
     <main id="MainContent" role="main">
+      <!-- the content block; extend per template/context -->
       {% block content %}
-        Sorry, Nothing to Display!!
+        Sorry, Nothing to Display! Content goes here...
       {% endblock %}
     </main>
 
+    <!-- the footer block; extend per template/context -->
     {% block footer %}
-      {% include 'footer.twig' %}
+      Sorry, Nothing to Display! Footer goes here...
     {% endblock %}
     
-    <!-- theme scripts -->
-    <script type='text/javascript' src='/public/js/global/global.min.js'></script>
-    <script type='text/javascript' src='/public/js/theme.js'></script>
-    <script>
-    </script>
-    <!-- /theme scripts -->
-    
+    <!-- the base scripts, applied thru site globally unless extended in a template to overwrite the base scripts -->
+    {% block base_scripts %}
+      <!-- base functions for things like setting/unsetting cookies & the dark/light styles -->
+      <script type='text/javascript' src='/public/js/global/global.min.js'></script>
+      <!-- theme specific scripts; using functions from global.min.js to do actual work to our site -->
+      <script type='text/javascript' src='/public/js/theme.js'></script>
+    {% endblock %}
+
+    <!-- custom scripts block to be extended per template -->
     {% block scripts %}
-      <!-- this block is for extending on a per page/template basis for specific page/template scipts -->
     {% endblock %}
   </body>
 </html>

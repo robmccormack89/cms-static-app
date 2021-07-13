@@ -36,6 +36,10 @@
   </script>
 {% endblock %}
 
+{% block header %}
+  {% include 'header.twig' %}
+{% endblock %}
+
 {% block content %}
   <div id="single_{{single.slug}}" class="single-{{single.slug}} uk-container" data-template="single.twig">
     {% include 'breads.twig' %}
@@ -69,3 +73,6 @@
   </div>
 {% endblock %}
 
+{% block footer %}
+  {% include 'footer.twig' %}
+{% endblock %}

@@ -15,16 +15,12 @@
   <nav class="uk-navbar-transparent uk-container uk-navbar" uk-navbar>
     <div class="header-logo uk-navbar-left nav-logo-area">
       <div class="">
-        <a class="site-logo uk-logo uk-padding-remove uk-text-bold uk-text-emphasis line-height-1" href="/">
+        <a class="site-logo uk-logo uk-padding-remove uk-text-bold uk-text-emphasis" href="/">
           {{site.title}}
         </a>
-        <div>
-          <p class="site-tagline uk-text-small uk-margin-remove line-height-1">{{site.tagline}}</p>
-        </div>
       </div>
     </div>
-    <div class="header-main-nav uk-navbar-center nav-overlay">
-      
+    <div class="header-icons-nav uk-navbar-right">
       <ul class="main-menu-nav uk-navbar-nav uk-visible@m">
         
         {% if main_menu %}
@@ -57,9 +53,6 @@
           <li class="menu-item">Add a menu with the slug main-menu to data.json</li>
         {% endif %}
       </ul>
-      
-    </div>
-    <div class="header-icons-nav uk-navbar-right">
       <ul class="mobile-menu-toggle uk-navbar-nav">
         <li>
           <a class="uk-navbar-toggle" href="#">

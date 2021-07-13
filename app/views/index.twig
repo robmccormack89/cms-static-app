@@ -1,11 +1,19 @@
 {% extends "single.twig" %}
 
+{% block seo_meta %}
+  <title>This is the Homepage</title>
+{% endblock %}
+
+{% block header %}
+  {% include 'header.twig' %}
+{% endblock %}
+
 {% block content %}
-  <div data-template="homepage.twig">
-    <section class="home-more uk-section uk-section-small home-posts-section">
-      <div class="uk-container">
-        {% include 'breads.twig' %}
-      </div>
-    </section>
+  <div class="uk-container uk-section">
+    This is the Homepage
   </div>
+{% endblock %}
+
+{% block footer %}
+  {% include 'footer.twig' %}
 {% endblock %}

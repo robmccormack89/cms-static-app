@@ -4,14 +4,14 @@ body.uk-light,
 .uk-light .uk-navbar-dropdown, 
 .uk-light .uk-section-default, 
 .uk-light .uk-background-default {
-  background: $global-secondary-background;
+  background: #1a191d;
 }
 // dark muted backgrounds
 .uk-light .uk-background-muted, 
 .uk-light .uk-modal-close-full, 
 .uk-light .uk-section-muted, 
 .uk-light .uk-tile-muted {
-  background: $global-emphasis-color;
+  background: $global-secondary-background;
 }
 // links
 .uk-light .uk-navbar-dropdown-nav > li > a {

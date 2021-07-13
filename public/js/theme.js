@@ -1,12 +1,10 @@
 // things that i want to do everywhere, or that i want to be available everywhere
 
 // website onload; things to do
-window.onload = function(){
-  
-  // document.getElementById("ThemePreload").classList.add("hidden");
-  // document.getElementsByTagName("BODY")[0].classList.remove("no-overflow");
-  
-}
+// window.onload = function(){
+//   document.getElementById("ThemePreload").classList.add("hidden");
+//   document.getElementsByTagName("BODY")[0].classList.remove("no-overflow");
+// }
 
 var darkLightCookie = getCookie("darklightswitch");
 if (darkLightCookie) {

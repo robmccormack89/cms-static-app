@@ -1,0 +1,231 @@
+<style>
+  .uk-table th {
+    font-size: .875rem;
+    font-weight: 700;
+    text-transform: capitalize;
+  }
+  
+  .uk-light table:not(.uk-table-divider, .uk-table-striped), 
+  .uk-light table:not(.uk-table-divider, .uk-table-striped) td, 
+  .uk-light table:not(.uk-table-divider, .uk-table-striped) th {
+    border: 1px solid hsla(0,0%,100%,.2);
+  }
+  
+  .uk-light .uk-table th {
+    color: #fff;
+  }
+  
+  .uk-light .uk-table-striped>tr:nth-of-type(odd), .uk-light .uk-table-striped tbody tr:nth-of-type(odd) {
+    background: #ffffff26;
+    border-bottom: 1px solid #e5e5e5;
+    border-top: 1px solid #e5e5e5;
+  }
+  .uk-light .uk-table-hover>tr:hover, .uk-light .uk-table-hover tbody tr:hover, .uk-light .uk-table>tr.uk-active, .uk-light .uk-table tbody tr.uk-active {
+    background: #343f51;
+  }
+</style>
+
+<h3 class="uk-heading-bullet uk-h4">Default Table</h3>
+<table class="uk-table uk-table-responsive">
+  <thead>
+    <tr>
+      <th>Firsname</th>
+      <th>Lastname</th>
+      <th>Age</th>
+      <th>Lives in</th>
+      <th>Profession</th>
+      <th>Hobby</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Jill</td>
+      <td>Smith</td>
+      <td>29</td>
+      <td>New york</td>
+      <td>Web developer</td>
+      <td>Soccer</td>
+    </tr>
+    <tr>
+      <td>Eve</td>
+      <td>Jackson</td>
+      <td>36</td>
+      <td>New york</td>
+      <td>Musicial</td>
+      <td>Karaoke</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 class="uk-heading-bullet uk-h4">Small Table</h3>
+<table class="uk-table uk-table-responsive uk-table-small uk-margin-top">
+  <thead>
+    <tr>
+      <th>Firsname</th>
+      <th>Lastname</th>
+      <th>Age</th>
+      <th>Lives in</th>
+      <th>Profession</th>
+      <th>Hobby</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Jill</td>
+      <td>Smith</td>
+      <td>29</td>
+      <td>New york</td>
+      <td>Web developer</td>
+      <td>Soccer</td>
+    </tr>
+    <tr>
+      <td>Eve</td>
+      <td>Jackson</td>
+      <td>36</td>
+      <td>New york</td>
+      <td>Musicial</td>
+      <td>Karaoke</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 class="uk-heading-bullet uk-h4">Striped Table</h3>
+<table class="uk-table uk-table-striped uk-table-responsive uk-margin-top">
+  <thead>
+    <tr>
+      <th>Firsname</th>
+      <th>Lastname</th>
+      <th>Age</th>
+      <th>Lives in</th>
+      <th>Profession</th>
+      <th>Hobby</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Jill</td>
+      <td>Smith</td>
+      <td>29</td>
+      <td>New york</td>
+      <td>Web developer</td>
+      <td>Soccer</td>
+    </tr>
+    <tr>
+      <td>Eve</td>
+      <td>Jackson</td>
+      <td>36</td>
+      <td>New york</td>
+      <td>Musicial</td>
+      <td>Karaoke</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 class="uk-heading-bullet uk-h4">Table Utilities with Hover</h3>
+<div class="uk-overflow-auto">
+  <table class="uk-table uk-table-hover uk-table-middle uk-table-divider">
+    <thead>
+      <tr>
+        <th class="uk-table-shrink"></th>
+        <th class="uk-table-shrink">Preserve</th>
+        <th class="uk-table-expand">Expand + Link</th>
+        <th class="uk-width-small">Truncate</th>
+        <th class="uk-table-shrink uk-text-nowrap">Shrink + Nowrap</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><input class="uk-checkbox" type="checkbox"></td>
+          <td><img class="uk-preserve-width uk-border-circle" src="https://getuikit.com/docs/images/avatar.jpg" width="40" alt=""></td>
+          <td class="uk-table-link">
+            <a class="uk-link-reset" href="">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</a>
+          </td>
+          <td class="uk-text-truncate">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</td>
+          <td class="uk-text-nowrap">Lorem ipsum dolor</td>
+        </tr>
+        <tr>
+          <td><input class="uk-checkbox" type="checkbox"></td>
+          <td><img class="uk-preserve-width uk-border-circle" src="https://getuikit.com/docs/images/avatar.jpg" width="40" alt=""></td>
+          <td class="uk-table-link">
+            <a class="uk-link-reset" href="">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</a>
+          </td>
+          <td class="uk-text-truncate">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</td>
+          <td class="uk-text-nowrap">Lorem ipsum dolor</td>
+        </tr>
+        <tr>
+          <td><input class="uk-checkbox" type="checkbox"></td>
+          <td><img class="uk-preserve-width uk-border-circle" src="https://getuikit.com/docs/images/avatar.jpg" width="40" alt=""></td>
+          <td class="uk-table-link">
+            <a class="uk-link-reset" href="">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</a>
+          </td>
+          <td class="uk-text-truncate">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</td>
+          <td class="uk-text-nowrap">Lorem ipsum dolor</td>
+        </tr>
+        <tr>
+          <td><input class="uk-checkbox" type="checkbox"></td>
+          <td><img class="uk-preserve-width uk-border-circle" src="https://getuikit.com/docs/images/avatar.jpg" width="40" alt=""></td>
+          <td class="uk-table-link">
+            <a class="uk-link-reset" href="">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</a>
+          </td>
+          <td class="uk-text-truncate">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</td>
+          <td class="uk-text-nowrap">Lorem ipsum dolor</td>
+        </tr>
+    </tbody>
+  </table>
+</div>
+
+<h3 class="uk-heading-bullet uk-h4">Overflow Table</h3>
+<div class="uk-overflow-auto uk-margin-top">
+  <table class="uk-table uk-table-divider">
+      <tbody>
+        <tr>
+          <th>Heading</th>
+          <th>Heading</th>
+          <th>Heading</th>
+          <th>Heading</th>
+          <th>Heading</th>
+          <th>Heading</th>
+          <th>Heading</th>
+          <th>Heading</th>
+          <th>Heading</th>
+          <th>Heading</th>
+          <th>Heading</th>
+          <th>Heading</th>
+          <th>Heading</th>
+          <th>Heading</th>
+        </tr>
+        <tr>
+          <td>Data</td>
+          <td>Data</td>
+          <td>Data</td>
+          <td>Data</td>
+          <td>Data</td>
+          <td>Data</td>
+          <td>Data</td>
+          <td>Data</td>
+          <td>Data</td>
+          <td>Data</td>
+          <td>Data</td>
+          <td>Data</td>
+          <td>Data</td>
+          <td>Data</td>
+        </tr>
+        <tr>
+          <td>Data</td>
+          <td>Data</td>
+          <td>Data</td>
+          <td>Data</td>
+          <td>Data</td>
+          <td>Data</td>
+          <td>Data</td>
+          <td>Data</td>
+          <td>Data</td>
+          <td>Data</td>
+          <td>Data</td>
+          <td>Data</td>
+          <td>Data</td>
+          <td>Data</td>
+        </tr>
+      </tbody>
+    </table>
+</div>

@@ -1,2 +1,2 @@
-# Super Simple JSON CMS
+# Portfolio Static
 ---
