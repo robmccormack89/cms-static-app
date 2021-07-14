@@ -7,6 +7,9 @@
     <meta charset="{{configs.charset}}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset={{configs.charset}}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@900&family=Raleway:wght@400;500;700&display=swap" rel="stylesheet">
     
     <!-- global website/person seo meta. this will be present on all pages unless this block is extended in templates dowmstream -->
     {% block base_seo_meta %}
@@ -63,12 +66,502 @@
     {% block styles %}
     {% endblock %}
     
+    <!-- style pack two -->
+    <style>
+    
+      /* 
+      
+      HEADER
+      
+      */
+  
+      .site-header {
+        z-index: 2;
+      }
+      .site-header .uk-navbar-nav>li>a {
+        text-transform: capitalize;
+      }
+      .site-header .uk-navbar-item, .site-header .uk-navbar-nav>li>a, .site-header .uk-navbar-toggle {
+        font-size: 1rem;
+      }
+      .site-header .third-drop {
+        left: 140px!important;
+        top: 30px!important;
+      }
+      .site-header a p.uk-text-small {
+        color: #ffffffc7!important;
+      }
+      .site-header .uk-navbar-container:not(.uk-navbar-transparent) {
+        background: #ffffff;
+      }
+    
+      /* 
+      
+      UIKIT
+      
+      */
+    
+      .uk-container {
+        max-width: 1300px;
+      }
+      .uk-container-large {
+        max-width: 1400px;
+      }
+      .uk-container-expand {
+        max-width: none;
+      }
+      .uk-background-primary {
+        background-color: #d90a2c;
+      }
+      .uk-button-text {
+        font-weight: 600;
+      }
+      .uk-button-text:before {
+        border-width: 2px;
+      }
+      .uk-text-bold {
+        font-weight: 600;
+      }
+      .uk-grid-collapse>*, .uk-grid-column-collapse>* {
+        padding-left: 0;
+      }
+      
+      /* 
+      
+      FONT/TEXT SETTINGS
+      
+      */
+      
+      .site-logo {
+        font-family: 'Raleway', sans-serif;
+        font-weight: 700;
+      }
+      .uk-navbar-item, .uk-navbar-nav>li>a, .uk-navbar-toggle {
+        font-family: 'Raleway', sans-serif;
+        font-weight: 500;
+      }
+      .by-rmcc-text {
+        font-family: 'Raleway', sans-serif;
+      }
+      .uk-h1, .uk-h2, .uk-h3, .uk-h4, .uk-h5, .uk-h6, .uk-heading-2xlarge, .uk-heading-large, .uk-heading-medium, .uk-heading-small, .uk-heading-xlarge, 
+      h1, h2, h3, h4, h5, h6 {
+        font-weight: 700;
+        font-family: 'Raleway', sans-serif;
+      }
+      .uk-h1, .uk-h2, .uk-h3, .uk-h4, .uk-h5, .uk-h6, .uk-heading-small, 
+      h1, h2, h3, h4, h5, h6 {
+        letter-spacing: -1px;
+      }
+      .uk-heading-2xlarge, .uk-heading-large, .uk-heading-medium, .uk-heading-xlarge {
+        letter-spacing: -3px;
+      }
+      @media (min-width: 1200px) {
+        .uk-heading-large {
+          font-size: 5rem;
+        }
+      }
+      
+      /* 
+      
+      PERSONAL LEADER
+      
+      */
+      
+      #PersonalLeader .leader-height {
+        min-height: calc(100vh);
+      }
+      
+      #PersonalLeader {
+        overflow: hidden;
+      }
+      #PersonalLeader .bg-text, #PersonalLeader .bg-text > * {
+        font-size: 600px;
+        font-weight: 900;
+        color: rgba(23,22,26,0.08);
+        font-family: 'Playfair Display';
+        line-height: .8!important;
+      }
+      #PersonalLeader .bg-text {
+        transform: rotate(-30deg) translateY(-50%);
+        position: absolute;
+        top: -70%;
+        left: -100%;
+        z-index: -1;
+      }
+      #PersonalLeader .bg-text p {
+        line-height: 75%;
+        white-space: nowrap;
+        position: absolute;
+        z-index: -1;
+      }
+      #PersonalLeader .uk-text-meta {
+        font-size: 0.9rem;
+        color: #ffffffc7!important;
+      }
+      
+      /* 
+      
+      SERVICES
+      
+      */
+      
+      #Services .uk-grid {
+        margin-top:-225px;
+      }
+      #Services .uk-overlay-primary {
+        background: rgb(34 34 34 / 46%);
+      }
+      
+      /* 
+      
+      HOVER IMAGE EFFECTS
+      
+      */
+        
+      /* hover image colour effects */
+      .hover-colour-wrap {
+        height:100%;
+        width:100%
+      }
+      .hover-colour-wrap .uk-heading-bullet:before {
+        border-width: 4px;
+        transition: .5s border-color linear;
+      }   
+      .hover-colour-wrap:hover .uk-heading-bullet:before {
+        border-color: #d90a2c!important;
+      }      
+      .hover-colour-wrap img {
+        height:100%;
+        width:100%;
+        object-fit:cover;
+        filter:grayscale(1);
+        transition: .5s filter linear;
+      }
+      .hover-colour-wrap:hover img {
+        filter:grayscale(0);
+      }
+      /* hover image grow effects */
+      .hover-grow-wrap {
+        overflow: hidden;
+      }
+      .hover-grow-wrap img {
+        transition: .3s transform linear;
+      }
+      .hover-grow-wrap:hover img {
+        transform: scale(1.3);
+      }
+      
+      /* 
+      
+      CTA
+      
+      */
+      
+      #CTA .uk-accordion-title:focus, .uk-accordion-title:hover {
+        color: #fff;
+      }
+      #CTA .uk-accordion-title:before {
+        float: left;
+        margin-left: 0;
+        margin-right: 10px;
+      }
+      
+      /* 
+      
+      FOOTER TOP
+      
+      */
+      
+      @media (min-width: 1200px) {
+        #FooterTop .uk-grid-column-large, #FooterTop .uk-grid-large {
+          margin-left: -220px;
+        }
+        #FooterTop .uk-grid-column-large>*, #FooterTop .uk-grid-large>* {
+          padding-left: 220px;
+        }
+      }
+      #FooterTop *+.uk-grid-margin-medium, #FooterTop .uk-grid+.uk-grid-medium, #FooterTop .uk-grid+.uk-grid-row-medium, #FooterTop .uk-grid-medium>.uk-grid-margin, #FooterTop .uk-grid-row-medium>.uk-grid-margin {
+        margin-top: 20px;
+      }
+      #FooterTop .uk-grid-column-small>*, #FooterTop .uk-grid-small>* {
+        padding-left: 20px;
+      }
+      
+      #FooterTop input, #FooterTop select {
+        background-color: rgba(255,255,255,.05);
+        border: none;
+      }
+      
+      #FooterTop .uk-form-large:not(textarea):not([multiple]):not([size]) {
+        height: 45px;
+        padding-left: 12px;
+        padding-right: 12px;
+      }
+      #FooterTop .uk-form-large {
+        font-size: 1rem;
+      }
+      
+      /* 
+      
+      MORE HEADER
+      
+      */
+      
+      /* header logo subtext positioning */
+      .site-header .by-rmcc-text {
+        position: absolute;
+        bottom: -8px;
+        width: max-content;
+        font-size: .75rem;
+        left: 15px;
+      }
+      .site-header .uk-sticky-below .by-rmcc-text {
+        bottom: 0;
+        font-size: .7rem;
+      }
+      /* header logo padding & margins */
+      .site-header nav {
+        padding-bottom: 20px;
+        padding-top: 20px;
+        margin-top: -9px;
+      }
+      .site-header .uk-sticky-below nav {
+        padding-bottom: 0;
+        padding-top: 10px;
+      }
+      .site-header .main-menu-logo .logo-item {
+        margin-top: -10px;
+      }
+      .site-header .uk-sticky-below .main-menu-logo .logo-item {
+        margin-top: -5px;
+      }
+      /* header logo sizing */
+      .site-logo, .site-header .site-logo {
+        font-size: 1.5rem;
+        line-height: 20px;
+      }
+      .site-header .uk-sticky-below .site-logo {
+        font-size: 1.2rem;
+        line-height: 16px;
+      }
+      
+      .site-header .site-logo {
+        text-decoration: none!important;
+      }
+      .site-header .uk-navbar-nav>li>a, .site-header .uk-navbar-nav>li:hover>a, .site-header .uk-navbar-nav>li>a.uk-open, .site-header .uk-navbar-nav>li>a:focus, 
+      .site-logo, .site-logo:hover, .site-logo:focus {
+        color: #1a191d;
+      }
+      .uk-light .uk-navbar-item, .uk-light .uk-navbar-nav>li>a, .uk-light .uk-navbar-toggle {
+        color: #fff;
+      }
+      
+      /* 
+      
+      RESPONSIVE
+      
+      */
+      
+      /* Phones portrait*/
+      @media only screen and (max-width: 479px) {
+        
+      }
+      @media only screen and (min-device-width : 480px) and (max-device-width : 767px) {
+        
+      }
+      /* Phones landscape */
+      @media only screen and (max-width: 767px) {
+        .uk-h1, h1 {
+          font-size: 1.9rem;
+        }
+        .uk-h2, h2 {
+          font-size: 1.5rem;
+        }
+        #Work .work-item img {
+          max-height: 250px;
+          width: 100%;
+          object-fit: cover;
+        }
+        #CTA .uk-background-cover.uk-height-large {
+          height: 150px;
+        }
+        #CTA .uk-accordion-title {
+          font-size: 1rem;
+        }
+        #CTA .uk-padding-large {
+          padding: 20px;
+        }
+        #Services .services-item img{
+          max-height: 160px;
+          width: 100%;
+          object-fit: cover;
+        }
+        #Services .uk-grid {
+          margin-top: -115px;
+        }
+        #Services *+.uk-grid-margin, #Services .uk-grid+.uk-grid, #Services .uk-grid>.uk-grid-margin {
+            margin-top: 10px;
+        }
+        #PersonalLeader .leader-height {
+          min-height: calc(70vh);
+        }
+        #PersonalLeader .leader-heading {
+          font-size: 2.7rem;
+        }
+        #FooterTop .uk-grid-column-small>*, #FooterTop .uk-grid-small>* {
+          padding-left: 15px;
+        }
+        #FooterTop *+.uk-grid-margin-medium, #FooterTop .uk-grid+.uk-grid-medium, #FooterTop .uk-grid+.uk-grid-row-medium, #FooterTop .uk-grid-medium>.uk-grid-margin, #FooterTop .uk-grid-row-medium>.uk-grid-margin {
+          margin-top: 10px;
+        }
+        #FooterTop .uk-form-large:not(textarea):not([multiple]):not([size]) {
+          height: 35px;
+          padding-left: 10px;
+          padding-right: 10px;
+        }
+      }
+      @media only screen and (min-device-width : 768px) and (max-device-width : 959px) {
+        
+      }
+      @media only screen and (min-width: 768px) {
+        #CTA {
+          margin-top: -90px;
+        }
+        #CTA .uk-background-cover {
+          margin: 100px 0;
+        }
+      }
+      /* Tablets portrait*/
+      @media only screen and (max-width: 959px) {
+        
+      }
+      @media only screen and (min-device-width : 960px) and (max-device-width : 1199px) {
+        
+      }
+      /* Desktops & tablets landscape*/
+      @media only screen and (max-width: 1199px) {
+        
+      }
+      /* Large Desktops */
+      @media only screen and (min-width: 1200px) {
+        
+      }
+    </style>
+    
   </head>
   
   <body>
     <!-- the header block; extend per template/context -->
     {% block header %}
-      Sorry, Nothing to Display! Header goes here...
+      <header id="SiteHeader" class="site-header uk-position-z-index">
+        <nav class="uk-background-default uk-container uk-container-expand theme-border-bottom" uk-navbar>
+            <div class="mobile-menu uk-navbar-left">
+              <ul class="mobile-menu-toggle uk-navbar-nav">
+                <li>
+                  <a class="uk-navbar-toggle" href="#">
+                    <i class="fas fa-bars"></i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div class="main-menu-logo uk-navbar-center">
+              <div class="uk-navbar-center-left">
+                <div>
+                  <ul class="main-menu-nav uk-navbar-nav uk-visible@m">
+                    {% if main_menu %}
+                      {% for item in main_menu_first %}
+                        <li class="menu-item {{item.class}}">
+                          <a href="{{item.link}}"><p class="uk-text-small">0{{loop.index}}</p>{{item.title}}</a>
+                          {% if item.children %}
+                            <div class="uk-navbar-dropdown">
+                              <ul class="uk-nav uk-navbar-dropdown-nav">
+                                {% for child_item in item.children %}
+                                  <li class="menu-item {{child_item.class}}">
+                                    <a href="{{child_item.link}}">{{child_item.title}}</a>
+                                    {% if child_item.children %}
+                                      <div class="third-drop uk-navbar-dropdown">
+                                        <ul class="uk-nav uk-navbar-dropdown-nav">
+                                          {% for third_item in child_item.children %}
+                                            <li class="menu-item {{third_item.class}}"><a href="{{third_item.link}}">{{third_item.title}}</a></li>
+                                          {% endfor %}
+                                        </ul>
+                                      </div>
+                                    {% endif %}
+                                  </li>
+                                {% endfor %}  
+                              </ul>
+                            </div>
+                          {% endif %}
+                        </li>
+                      {% endfor %}  
+                    {% else %}
+                      <li class="menu-item">Add a menu with the slug main-menu to data.json</li>
+                    {% endif %}
+                  </ul>
+                </div>
+              </div>
+              <div class="logo-item uk-navbar-item uk-position-relative">
+                <a class="site-logo uk-text-bold uk-h4 uk-margin-remove" href="#">
+                  your<br>
+                  digital<br>
+                  studio.<br>
+                </a>
+                <span class="uk-text-small uk-margin-remove uk-text-italic by-rmcc-text">
+                  by robmccormack89
+                </span>
+              </div>
+              <div class="uk-navbar-center-right">
+                <div>
+                  <ul class="main-menu-nav uk-navbar-nav uk-visible@m">
+                    {% if main_menu %}
+                      {% for item in main_menu_second %}
+                        <li class="menu-item {{item.class}}">
+                          <a href="{{item.link}}"><p class="uk-text-small">0{{loop.index + main_menu_first|length}}</p>{{item.title}}</a>
+                          {% if item.children %}
+                            <div class="uk-navbar-dropdown">
+                              <ul class="uk-nav uk-navbar-dropdown-nav">
+                                {% for child_item in item.children %}
+                                  <li class="menu-item {{child_item.class}}">
+                                    <a href="{{child_item.link}}">{{child_item.title}}</a>
+                                    {% if child_item.children %}
+                                      <div class="third-drop uk-navbar-dropdown">
+                                        <ul class="uk-nav uk-navbar-dropdown-nav">
+                                          {% for third_item in child_item.children %}
+                                            <li class="menu-item {{third_item.class}}"><a href="{{third_item.link}}">{{third_item.title}}</a></li>
+                                          {% endfor %}
+                                        </ul>
+                                      </div>
+                                    {% endif %}
+                                  </li>
+                                {% endfor %}  
+                              </ul>
+                            </div>
+                          {% endif %}
+                        </li>
+                      {% endfor %}  
+                    {% else %}
+                      <li class="menu-item">Add a menu with the slug main-menu to data.json</li>
+                    {% endif %}
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="darklight uk-navbar-right">
+              <ul class="dark-light-switcher pull-right-15 uk-navbar-nav">
+                <li>
+                  <a id="DarkSwitch" class="uk-navbar-toggle darklight-switch" {{dark_light_def.moon_link_show_hide}}>
+                    <i class="far fa-moon"></i>
+                  </a>
+                </li>
+                <li>
+                  <a id="LightSwitch" class="uk-navbar-toggle darklight-switch" {{dark_light_def.sun_link_show_hide}}>
+                    <i class="fas fa-sun"></i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </nav>
+      </header>
     {% endblock %}
     
     <main id="MainContent" role="main">
@@ -80,7 +573,58 @@
 
     <!-- the footer block; extend per template/context -->
     {% block footer %}
-      Sorry, Nothing to Display! Footer goes here...
+      <footer id="Footer" class="uk-section uk-section-small uk-background-default">
+        <div class="uk-container">
+          <div class="footer-main">
+            <div class="uk-child-width-1-2@s uk-child-width-1-4@m" uk-grid>
+              <div>
+                <h4 class="site-logo uk-text-emphasis uk-link-reset uk-text-bold uk-margin-remove">
+                  your<br>
+                  digital<br>
+                  studio.
+                </h4>
+                <p class="uk-text-small uk-margin-remove uk-text-italic by-rmcc-text">by robmccormack89</p>
+              </div>
+              <div>
+                <h3 class="uk-h5">Rotterdam</h3>
+                <ul class="uk-list uk-list-collapse">
+                  <li>Ohio Digital Media LTD.</li>
+                  <li>Graaf Florisstraat 22A,</li>
+                  <li>3021 CH Rotterdam</li>
+                </ul>
+                <h3 class="uk-h5">Barcelona</h3>
+                <ul class="uk-list uk-list-collapse">
+                  <li>Ohio Digital LTD.</li>
+                  <li>365 Gran Via de Corts</li>
+                  <li>Catalanes, BA 08015</li>
+                </ul>
+              </div>
+              <div>
+                <h3 class="uk-h5">Work inquiries</h3>
+                <ul class="uk-list uk-list-collapse">
+                  <li>Interested in working with us?</li>
+                  <li><a href="#" class="uk-button uk-button-text uk-text-lowercase">jobs@robertmccormack.com</a></li>
+                </ul>
+                <h3 class="uk-h5">Career</h3>
+                <li>Looking for a job opportunity?</li>
+                <li><a href="#" class="uk-button uk-button-text uk-text-capitalize">See open positions <i class="fas fa-arrow-right fa-sm"></i></a></li>
+              </div>
+              <div>
+                <h3 class="uk-h5">Sign up for our newsletter</h3>
+              </div>
+            </div>
+          </div>
+          <hr class="uk-margin-medium-bottom uk-margin-large-top">
+          <div class="footer-bottom">
+            <div class="uk-child-width-1-2@m" uk-grid>
+              <div class="uk-text-small">© 2021 <span class="uk-text-bold uk-text-emphasis">{{site.title}}</span>. Made with passion by  <span class="uk-text-bold uk-text-emphasis">{{author.name}}</span></div>
+              <div class="uk-text-right@m">
+                <a href="#" class="uk-button uk-button-text uk-text-capitalize">Privacy & Cookie Policy</a> | <a href="#" class="uk-button uk-button-text uk-text-capitalize">Terms of Service</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
     {% endblock %}
     
     <!-- the base scripts, applied thru site globally unless extended in a template to overwrite the base scripts -->

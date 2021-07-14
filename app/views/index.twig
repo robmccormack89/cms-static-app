@@ -1,19 +1,214 @@
-{% extends "single.twig" %}
+{% extends "base.twig" %}
 
 {% block seo_meta %}
-  <title>This is the Homepage</title>
+  <title>Homepage</title>
+{% endblock %}
+
+{% block styles %}
+  <style>
+    /* colour the navbar items & also reset the uk-light navbar items to match */
+    .site-header .uk-navbar-item, .site-header .uk-navbar-nav>li>a,
+    .uk-light .site-header .uk-navbar-item, .uk-light .site-header .uk-navbar-nav>li>a,
+    .site-header .uk-navbar-nav>li:hover>a, .site-header .uk-navbar-nav>li>a.uk-open, .site-header .uk-navbar-nav>li>a:focus,
+    .uk-light .site-header .uk-navbar-nav>li:hover>a, .site-header .uk-light .uk-navbar-nav>li>a.uk-open, .site-header .uk-light .uk-navbar-nav>li>a:focus {
+      color: #1a191d;
+    }
+    /* dont forget the hovers & focuses */
+    .site-header .uk-navbar-nav>li:hover>a, .site-header .uk-navbar-nav>li>a.uk-open, .site-header .uk-navbar-nav>li>a:focus,
+    .uk-light .site-header .uk-navbar-nav>li:hover>a, .uk-light .site-header .uk-navbar-nav>li>a.uk-open, .uk-light .site-header .uk-navbar-nav>li>a:focus {
+      color: #1a191d;
+    }
+    /* new uk-light styles for navbar things. make all items white */
+    .site-header .uk-light .uk-navbar-item, .site-header .uk-light .uk-navbar-nav>li>a, .site-header .uk-light .uk-navbar-toggle {
+      color: #fff!important;
+    }
+  </style>
 {% endblock %}
 
 {% block header %}
-  {% include 'header.twig' %}
+  <header id="SiteHeader" class="site-header uk-position-top uk-position-z-index">
+    <div uk-sticky="animation: uk-animation-slide-top; sel-target: .uk-navbar-container; cls-active: uk-navbar-sticky; cls-inactive: uk-navbar-transparent uk-light; top: 200">
+      <nav class="uk-navbar-container uk-container uk-container-expand uk-light" uk-navbar>
+        <div class="mobile-menu uk-navbar-left">
+          <ul class="mobile-menu-toggle uk-navbar-nav">
+            <li>
+              <a class="uk-navbar-toggle" href="#">
+                <i class="fas fa-bars"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="main-menu-logo uk-navbar-center">
+          <div class="uk-navbar-center-left">
+            <div>
+              <ul class="main-menu-nav uk-navbar-nav uk-visible@m">
+                {% if main_menu %}
+                  {% for item in main_menu_first %}
+                    <li class="menu-item {{item.class}}">
+                      <a href="{{item.link}}"><p class="uk-text-small">0{{loop.index}}</p>{{item.title}}</a>
+                      {% if item.children %}
+                        <div class="uk-navbar-dropdown">
+                          <ul class="uk-nav uk-navbar-dropdown-nav">
+                            {% for child_item in item.children %}
+                              <li class="menu-item {{child_item.class}}">
+                                <a href="{{child_item.link}}">{{child_item.title}}</a>
+                                {% if child_item.children %}
+                                  <div class="third-drop uk-navbar-dropdown">
+                                    <ul class="uk-nav uk-navbar-dropdown-nav">
+                                      {% for third_item in child_item.children %}
+                                        <li class="menu-item {{third_item.class}}"><a href="{{third_item.link}}">{{third_item.title}}</a></li>
+                                      {% endfor %}
+                                    </ul>
+                                  </div>
+                                {% endif %}
+                              </li>
+                            {% endfor %}  
+                          </ul>
+                        </div>
+                      {% endif %}
+                    </li>
+                  {% endfor %}  
+                {% else %}
+                  <li class="menu-item">Add a menu with the slug main-menu to data.json</li>
+                {% endif %}
+              </ul>
+            </div>
+          </div>
+          <div class="logo-item uk-navbar-item uk-position-relative">
+            <a class="site-logo uk-link-reset uk-text-bold uk-h4 uk-margin-remove" href="#">
+              your<br>
+              digital<br>
+              studio.<br>
+            </a>
+            <span class="uk-text-small uk-margin-remove uk-text-italic by-rmcc-text">
+              by robmccormack89
+            </span>
+          </div>
+          <div class="uk-navbar-center-right">
+            <div>
+              <ul class="main-menu-nav uk-navbar-nav uk-visible@m">
+                {% if main_menu %}
+                  {% for item in main_menu_second %}
+                    <li class="menu-item {{item.class}}">
+                      <a href="{{item.link}}"><p class="uk-text-small">0{{loop.index + main_menu_first|length}}</p>{{item.title}}</a>
+                      {% if item.children %}
+                        <div class="uk-navbar-dropdown">
+                          <ul class="uk-nav uk-navbar-dropdown-nav">
+                            {% for child_item in item.children %}
+                              <li class="menu-item {{child_item.class}}">
+                                <a href="{{child_item.link}}">{{child_item.title}}</a>
+                                {% if child_item.children %}
+                                  <div class="third-drop uk-navbar-dropdown">
+                                    <ul class="uk-nav uk-navbar-dropdown-nav">
+                                      {% for third_item in child_item.children %}
+                                        <li class="menu-item {{third_item.class}}"><a href="{{third_item.link}}">{{third_item.title}}</a></li>
+                                      {% endfor %}
+                                    </ul>
+                                  </div>
+                                {% endif %}
+                              </li>
+                            {% endfor %}  
+                          </ul>
+                        </div>
+                      {% endif %}
+                    </li>
+                  {% endfor %}  
+                {% else %}
+                  <li class="menu-item">Add a menu with the slug main-menu to data.json</li>
+                {% endif %}
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="darklight uk-navbar-right">
+          <ul class="dark-light-switcher pull-right-15 uk-navbar-nav">
+            <li>
+              <a id="DarkSwitch" class="uk-navbar-toggle darklight-switch" {{dark_light_def.moon_link_show_hide}}>
+                <i class="far fa-moon"></i>
+              </a>
+            </li>
+            <li>
+              <a id="LightSwitch" class="uk-navbar-toggle darklight-switch" {{dark_light_def.sun_link_show_hide}}>
+                <i class="fas fa-sun"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+  </header>
 {% endblock %}
 
 {% block content %}
-  <div class="uk-container uk-section">
-    This is the Homepage
-  </div>
+  {% include '_leader.twig' %}
+  
+  {% include '_services.twig' %}
+  
+  {% include '_about.twig' %}
+  
+  {% include '_work.twig' %}
+  
+  {% include '_message.twig' %}
+  
+  {% include '_cta.twig' %}
+  
+  {% include '_footer-top.twig' %}
 {% endblock %}
 
-{% block footer %}
-  {% include 'footer.twig' %}
+{% block scripts %}
+  <!-- typewriting animation -->
+  <script>
+    var TxtType = function(el, toRotate, period) {
+      this.toRotate = toRotate;
+      this.el = el;
+      this.loopNum = 0;
+      this.period = parseInt(period, 10) || 2000;
+      this.txt = '';
+      this.tick();
+      this.isDeleting = false;
+    };
+    TxtType.prototype.tick = function() {
+      var i = this.loopNum % this.toRotate.length;
+      var fullTxt = this.toRotate[i];
+
+      if (this.isDeleting) {
+      this.txt = fullTxt.substring(0, this.txt.length - 1);
+      } else {
+      this.txt = fullTxt.substring(0, this.txt.length + 1);
+      }
+
+      this.el.innerHTML = '<span class="wrap">'+this.txt+'</span>';
+
+      var that = this;
+      var delta = 200 - Math.random() * 100;
+
+      if (this.isDeleting) { delta /= 2; }
+
+      if (!this.isDeleting && this.txt === fullTxt) {
+      delta = this.period;
+      this.isDeleting = true;
+      } else if (this.isDeleting && this.txt === '') {
+      this.isDeleting = false;
+      this.loopNum++;
+      delta = 500;
+      }
+
+      setTimeout(function() {
+      that.tick();
+      }, delta);
+    };
+    var elements = document.getElementsByClassName('typewrite');
+    for (var i=0; i<elements.length; i++) {
+      var toRotate = elements[i].getAttribute('data-type');
+      var period = elements[i].getAttribute('data-period');
+      if (toRotate) {
+        new TxtType(elements[i], JSON.parse(toRotate), period);
+      }
+    }
+    // INJECT CSS
+    var css = document.createElement("style");
+    css.type = "text/css";
+    css.innerHTML = ".typewrite > .wrap { border-right: 12px solid #fff}";
+    document.body.appendChild(css);
+  </script>
 {% endblock %}
