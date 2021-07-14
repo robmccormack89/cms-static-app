@@ -86,16 +86,13 @@ class Cache {
       $qr = null;
     }
 
-    if(!($qr))
-    {
-      // part 5 - Serve from the cache if it is younger than $cachetime
-      if (file_exists($cachefile) && time() - $cachetime < filemtime($cachefile) && $GLOBALS['config']['php_cache']) {
-        echo "<!-- Cached copy, generated ".date('H:i', filemtime($cachefile))." -->\n";
-        readfile($cachefile);
-        exit;
-      } else {
-        call_user_func($callback);
-      }
+    // part 5 - Serve from the cache if it is younger than $cachetime
+    if (file_exists($cachefile) && time() - $cachetime < filemtime($cachefile) && $GLOBALS['config']['php_cache'] && !($qr)) {
+      echo "<!-- Cached copy, generated ".date('H:i', filemtime($cachefile))." -->\n";
+      readfile($cachefile);
+      exit;
+    } else {
+      call_user_func($callback);
     }
     
   }
