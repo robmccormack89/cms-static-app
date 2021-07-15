@@ -23,6 +23,15 @@ class ArchiveQueryPostsModel {
   * best way for this may be to check against the existing posts, whether taxonomies exist in their data
   * if a param is present for a taxonomy that exists within the existing posts data, we should use it to modify the posts
   *
+  * UPDATE. i probs need to avoid modifying existing posts as they are already paginated. I need to get whole new sets of posts.
+  * I will need to take the existing query and convert any page paramters like /blog/ into a type paramter & add that to the query
+  * it is now necessary to use the Json class
+  * other archives where this functionality is to work: term archives
+  * /blog/categories/news?tag=twig&date=2021
+  * in this case, the 'blog' & 'categories' page params would act like query params. they will be fed into the query
+  * i would need to deconstruct the url part of the uri string & add that to the args. and remove posts
+  * no need for this functionality to work with taxonomy archives
+  *
   */
   public function __construct(array $posts, array $args) {
     $this->posts = $posts; // the existing posts to be modified
@@ -34,7 +43,12 @@ class ArchiveQueryPostsModel {
     // testing
     print_r($this->args);
     echo('<hr>');
+    // if(isset($this->args['hello'])) echo('hello<hr>');
+    // if(isset($this->args['query'])) echo('query<hr>');
+    // if(isset($this->args['taxonomies'])) echo('taxes<hr>');
+    // if(isset($this->args['pagination'])) echo('pagination<hr>');
     
+    // echo(count($this->posts));
     
     return $this->posts;
   }

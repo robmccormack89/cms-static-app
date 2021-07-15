@@ -126,7 +126,7 @@ class QueryPostsModel {
     }
     
     if (!isset($posts[$offset])) {
-       $posts[$offset] = null;
+     $posts[$offset] = null;
     }
 
     $data = $posts[$offset];

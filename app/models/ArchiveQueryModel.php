@@ -16,7 +16,7 @@ class ArchiveQueryModel {
   *
   */
   public function __construct(object $archive) {
-    $this->params = $_SERVER['QUERY_STRING'];;
+    $this->params = $_SERVER['QUERY_STRING'];
     $this->archive = $archive;
   }
 
@@ -28,9 +28,9 @@ class ArchiveQueryModel {
     // check if we are good to go, see method below. then we do our stuff to the archive obj
     if($this->areWeGoodToGo()) :
       
-    // do some test stuff to confirm
-    $this->archive['title'] = 'Yooo!';
-    print_r($this->params.' <hr>');
+    // do some test stuff to confirm. change the archive's title & description
+    $this->archive['title'] = 'We are good to go';
+    $this->archive['description'] = $this->params;
     
     // need to modify the archive obj in 3 parts; meta, posts & pagination
     // do the meta last; least important
@@ -50,35 +50,110 @@ class ArchiveQueryModel {
     // print_r($posts);
     // echo('<hr>');
     
+    // we will create an array of data to send to ArchiveQueryPostsModel with everything it needs to get the posts according to the query params
+    
+    parse_str($this->params, $data); // $data = $_SERVER['QUERY_STRING'] broken up into parts
+    
+    // create the empty $args array
+    $args = array();
+    
+    // adds 'hello' to the $args array
+    // next, we fill the $args array with some data.
+    // if the hello query param exists in the query string... (hello=there)
+    if(isset($data['hello'])) {
+      // add the value for the hello query param to the $args array
+      $args['hello'] = $data['hello'];
+    }
+    
+    // adds 'type' to the $args array
+    // if the url query param exists in the query string...
+    // by default this should be the case as we are applying this to main index archives where the url part would be 'blog' or '/blog/page/2'
+    // but if we use this class to do queries on the base url, this will need to be different.
+    // in that case we can refer back to the original Query model
+    if(isset($data['url'])) {
+
+      // we need to get the $type (blog, portfolio etc) from the url part
+      $stripped = trim($data['url'],'/'); // remove trailing & leading slashes first if exist
+      $exploded = explode('/', $stripped); // explode the remains in parts
+      $type = $exploded[0]; // the first part should be the type.
+      
+      // if the type part of the url does indeed exist
+      if($type) {
+        // add the type $args array
+        $args['type'] = $type;
+      }
+
+    }
+    
+    // adds 'taxonomies' to the $args array. but only if type exists in the url
+    if($type) {
+      // get the list of registed taxonomies first based on the $type
+      $active_taxes = $GLOBALS["config"]['types'][$type]['taxonomies']; 
+      
+      // if there are indeed active taxonomies registered according to that type
+      if($active_taxes){
+        // create the array placeholder for the 'taxonomies' of the $args array
+        $args['taxonomies'] = array();
+        // loop thru the active taxes & set them to $args array with the values taken from the query string
+        foreach($active_taxes as $tax) {
+          // print_r($tax['key']);
+          if(isset($data[$tax['key']])) {
+            $args['taxonomies'][$tax['key']] = $data[$tax['key']];
+          }
+        }
+      }
+    }
+    
+    // adds 'query' to the $args array
+    // adding query stuff to the args array. if search or date params exist in the uri...
+    if(isset($data['search']) || isset($data['date'])) {
+      
+      // put a property into the args called query which will be an array
+      $args['query'] = array();
+      
+      // if search param exists in uri, add this to the query array
+      if(isset($data['search'])) {
+       $args['query']['search'] = $data['s'];
+      }
+      
+      // if date param exists in uri, add this to the query array
+      if(isset($data['date'])) {
+       $args['query']['date'] = $data['date'];
+      }
+      
+    }
+    
+    // adds 'pagination' to the $args array
+    // adding pagination stuff to the args array.
+    if(isset($data['paged']) || isset($data['page']) || isset($data['per_page'])) {
+      
+      $args['pagination'] = array();
+      
+      if(isset($data['paged'])) {
+       $args['pagination']['paged'] = $this->get_paged_params();
+      }
+      
+      if(isset($data['page'])) {
+       $args['pagination']['page'] = $this->get_page_params();
+      }
+      
+      if(isset($data['per_page'])) {
+       $args['pagination']['per_page'] = $this->get_per_page_params();
+      }
+      
+    }
+    
     // taxonomies to use as query params. we may get this from the config types
     // in any case taxex need to be dealt with dynamically
-    $taxonomies = array(
-      'categories' => $this->get_date_params(),
-      'tags' => $this->get_tag_params(),
-      'technologies' => $this->get_tech_params(),
-    );
+    // $taxonomies = array(
+    //   'categories' => $this->get_date_params(),
+    //   'tags' => $this->get_tag_params(),
+    //   'technologies' => $this->get_tech_params(),
+    // );
+    // if(!empty($taxonomies)) {
+    //  $args['taxonomies'] = $taxonomies;
+    // }
     
-    $args = array(
-      
-      // test
-      'hello' => $this->get_hello_params(),
-      
-      // filtering params like search & date
-      'query' => array(
-        'search' => $this->get_search_params(),
-        'date' => $this->get_date_params(),
-      ),
-      
-      // taxonomy params must be dynamic, see above
-      'taxonomies' => $taxonomies,
-      
-      // pagination params keep them separate. must allow for show_all
-      'pagination' => array(
-        'paged' => $this->get_paged_params(),
-        'page' => $this->get_page_params(),
-        'per_page' => $this->get_per_page_params(),
-      ),
-    );
     // a simpler class can be created from this new class that just gets posts depending on the params conditions, not modify existing posts
     // that would be like the Query class as created before. Such a class can be used for the search archive but also for general posts queries
     // would be the QueryPostsModel
@@ -97,7 +172,7 @@ class ArchiveQueryModel {
   public function areWeGoodToGo() {
     
     // check to make sure its not a standard paginated archive
-    if (strpos($this->params, '/page/') !== false) return false;
+    // if (strpos($this->params, '/page/') !== false) return false;
     
     // check to make sure that at least on query param actually exists
     if(!$this->if_any_query_params()) return false;
@@ -124,14 +199,6 @@ class ArchiveQueryModel {
    *
    * @return string
    */
-   
-  // test
-  public function get_hello_params() {
-    parse_str($this->params, $data);
-    if (isset($data['hello'])) :
-      return $data['hello'];
-    endif;
-  }
   
   // pagination
   public function get_paged_params() {
@@ -156,40 +223,6 @@ class ArchiveQueryModel {
       return $data['per_page'];
     else:
       return 4;
-    endif;
-  }
-  
-  // filter query
-  public function get_search_params() {
-    parse_str($this->params, $data);
-    if (isset($data['s'])) :
-    return $data['s'];
-    endif;
-  }
-  public function get_date_params() {
-    parse_str($this->params, $data);
-    if (isset($data['date'])) :
-    return $data['date'];
-    endif;
-  }
-  
-  // taxonomy
-  public function get_category_params() {
-    parse_str($this->params, $data);
-    if (isset($data['categories'])) :
-      return $data['categories'];
-    endif;
-  }
-  public function get_tag_params() {
-    parse_str($this->params, $data);
-    if (isset($data['tags'])) :
-      return $data['tags'];
-    endif;
-  }
-  public function get_tech_params() {
-    parse_str($this->params, $data);
-    if (isset($data['technologies'])) :
-      return $data['technologies'];
     endif;
   }
   
