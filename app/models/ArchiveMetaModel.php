@@ -1,15 +1,23 @@
 <?php
 namespace Rmcc;
 
-// the model for getting meta data (like title & description) for an archive (like blog & categories term)
+/*
+*
+* This class is used for getting meta data (like title & description) for an archive (like blog & categories term)
+* Create a new ArchiveMetaModel object with $type, $page, $tax & $term properties.
+* $type is a required property
+* The $meta property of the created object contains all the data for the archive meta item
+*
+*/
 class ArchiveMetaModel {
   
-  public function __construct($type, $page = null, $tax = null, $term = null) {
+  public function __construct(string $type, int $page = null, string $tax = null, string $term = null) {
     $this->type = $type; // type key. e.g 'blog'. required for all archive meta
-    $this->page = $page; // page value for paged pages
+    $this->page = $page; // page value for paged pages. will usually come from teh request
     $this->tax = $tax; // taxonomy key. e.g 'categories'. required for getTermMeta & getCollectionMeta
     $this->term = $term; // term key. e.g 'news'. required for getTermMeta only
-    $this->meta = $this->getMeta();
+    
+    $this->meta = $this->getMeta(); // this property then contains all our data
   }
   
   //

@@ -1,7 +1,7 @@
 <?php
 namespace Rmcc;
 
-class ArchiveTermsModel {
+class TaxonomyArchiveTermsModel {
   
   // class for setting the tease data in terms lists (collections!)
   public function __construct($type, $tax, $paged = false, $page = null, $posts_per_page = 4) {

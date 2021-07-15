@@ -7,7 +7,7 @@ class SingleModel {
   *
   * This class is used to create singular objects like pages, posts, projects etc.
   * Create a new SingleModel object with $type & $slug properties.
-  * The $single property of the created object contains all the data for the singular item, e.g SingleModel()->single
+  * The $single property of the created object contains all the data for the singular item
   *
   */
   public function __construct(string $type, string $slug) {
