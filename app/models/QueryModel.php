@@ -15,7 +15,8 @@ class QueryModel {
     
     // working. takes array with relation key & sub-arrays
     'tax_query' => array(
-      'relation' => 'OR', // working: 'AND', 'OR'. Deaults to 'AND'
+      // relation is required for now as there are checks based the iteration of the first array in this sequence, which should be 2nd when relation exists
+      'relation' => 'OR', // working: 'AND', 'OR'. Deaults to 'AND'.
       array(
         'taxonomy' => 'category', // working. takes taxonomy string
         'terms' => array('news', 'media'), // working. takes array
@@ -67,14 +68,15 @@ class QueryModel {
   
   private function get_queried_object() {
     $_type = $this->type_key();
+    $type = type_setting_by_key('single', $_type, 'key');
+    
     $_p = $this->paged_key();
     
-    $type = type_setting_by_key('single', $_type, 'key'); // returns 'blog' or 'portfolio' etc...
-    
     if($_type && $this->paged_key()) {
-      $meta = (new ArchiveMetaModel($type, $_p))->meta;
+      $data = (new QueriedObjectModel($type, $_p))->data;
     }
-    return $meta;
+    
+    return $data;
   }
   
   // on initialize, do this stuff...

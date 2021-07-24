@@ -27,27 +27,24 @@ class ArchiveModel {
   // we need to get the archive object data in 3 parts: meta, posts & pagination
   public function getArchive() {
     
-    $archive = (new ArchiveMetaModel($this->type, $this->page))->meta;
-    
-    // $posts_obj = new ArchivePostsModel($this->type, $this->paged, $this->page, $this->posts_per_page);
-    // $archive['posts'] = $posts_obj->posts;
-    
-    $_type = type_setting_by_key('key', $this->type, 'single'); // returns 'blog' or 'portfolio' etc...
-    $_p = (!$this->page) ? 1 : $this->page;
-    $show_all = ($this->paged) ? false : true;
     $args = array(
-      'type' => $_type,
+      'type' => type_setting_by_key('key', $this->type, 'single'),
       'per_page' => $this->posts_per_page,
-      'p' => $_p,
-      'show_all' => $show_all
+      'p' => (!$this->page) ? 1 : $this->page,
+      'show_all' => ($this->paged) ? false : true
     );
     $posts_obj = new QueryModel($args);
-    $posts = $posts_obj->posts;
-    $count = $posts_obj->found_posts;
-    $archive['posts'] = $posts;
     
-    $paged_url = $GLOBALS['config']['types'][$this->type]['index_uri'].'/page/';
-    $archive['pagination'] = (new ArchivePaginationModel($this->posts_per_page, $this->page, $count, $this->paged, $paged_url))->pagination;
+    $archive = $posts_obj->queried_object;
+    $archive['posts'] = $posts_obj->posts;
+    
+    $archive['pagination'] = (new PaginationModel(
+      $this->posts_per_page, 
+      $this->page,
+      $posts_obj->found_posts, 
+      $this->paged, 
+      $GLOBALS['config']['types'][$this->type]['index_uri'].'/page/'
+    ))->pagination;
     
     return $archive;
   }
