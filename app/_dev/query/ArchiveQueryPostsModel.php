@@ -33,24 +33,64 @@ class ArchiveQueryPostsModel {
   * no need for this functionality to work with taxonomy archives
   *
   */
+  
+  // Array ( 
+  //   [hello] => boo // testing
+  //   [type] => blog // if type empty, query all types
+  //   [tax_query] => Array ( 
+  //     [categories] => Array ( 
+  //       [0] => news 
+  //       [1] => media 
+  //     ) 
+  //     [tags] => Array ( 
+  //       [0] => twig 
+  //       [1] => css 
+  //     ) 
+  //   ) 
+  //   [query] => Array ( 
+  //     [s] => shhhh 
+  //     [date] => there 
+  //   ) 
+  //   [pagination] => Array ( 
+  //     [p] => 2 
+  //     [per_page] => 3 
+  //   ) 
+  // )
+      
   public function __construct(array $posts, array $args) {
-    $this->posts = $posts; // the existing posts to be modified
+    $this->posts = $posts; // just leave these in for now. it is not necessary anymore to moify existing posts
     $this->args = $args; // the arguments by which to modify the existing posts
+    
+    $this->hello = $this->get_hello_arg();
+  }
+  
+  public function get_hello_arg() {
+    $data = null;
+    if(isset($this->args['hello'])) {
+      $data = $this->args['hello'];
+    };
+    return $data;
   }
   
   public function theArchivedQueryPosts() {
 
-    // testing
+    // testing. if hello is present, do something.
+    if($this->hello) print_r($this->hello.'<hr>');
+    
     print_r($this->args);
     echo('<hr>');
-    // if(isset($this->args['hello'])) echo('hello<hr>');
-    // if(isset($this->args['query'])) echo('query<hr>');
-    // if(isset($this->args['taxonomies'])) echo('taxes<hr>');
-    // if(isset($this->args['pagination'])) echo('pagination<hr>');
-    
-    // echo(count($this->posts));
     
     return $this->posts;
   }
+  
+  // private function getAllQueryPosts() {
+  //   $q = new Json('../public/json/data.min.json');
+  //   $posts = $q->find('site.content_types.'.$this->type.'.'.$this->key)
+  //   ->get();
+  // 
+  //   $data = $this->setPostsTease($posts);
+  // 
+  //   return $data;
+  // }
   
 }

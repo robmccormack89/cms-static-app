@@ -1,16 +1,34 @@
 <?php
-function getTypeSettingBySettingKey(
-  string $key, // key of item to check against. e.g 'key' or 'items_key' or 'items_singular'
-  string $value, // value of item to check against. e.g 'blog' or 'portfolio'
-  string $return_key // key of the value to return. e.g 'items_route' 
-)
-{
+// string $key, // key of item to check against. e.g 'key' or 'items_key' or 'items_singular'
+// string $value, // value of item to check against. e.g 'blog' or 'portfolio'
+// string $return_key // key of the value to return. e.g 'items_route' 
+function getTypeSettingBySettingKey(string $key, string $value, string $return_key) {
   foreach ($GLOBALS["config"]['types'] as $type_setting) if ($type_setting[$key] == $value) {
     $data = $type_setting[$return_key];
   }
   return $data;
 }
+// get taxonomy setting. same as above just added type paramter to get a types taxonomy
+function getTypeTaxSettingBySettingKey(string $type, string $key, string $value, string $return) {
+  foreach ($GLOBALS["config"]['types'][$type]['taxonomies'] as $tax_setting) if ($tax_setting[$key] == $value) {
+    $data = $tax_setting[$return];
+  }
+  return $data;
+}
 
+function type_setting_by_key(string $key, string $value, string $return_key) {
+  foreach ($GLOBALS["config"]['types'] as $type_setting) if ($type_setting[$key] == $value) {
+    $data = $type_setting[$return_key];
+  }
+  return $data;
+}
+// get taxonomy setting. same as above just added type paramter to get a types taxonomy
+function tax_setting_by_key(string $type, string $key, string $value, string $return) {
+  foreach ($GLOBALS["config"]['types'][$type]['taxonomies'] as $tax_setting) if ($tax_setting[$key] == $value) {
+    $data = $tax_setting[$return];
+  }
+  return $data;
+}
 
 // check to see if singular page is status, visitor ip & author_ip
 function isSingleAllowed($page) {

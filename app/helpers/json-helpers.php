@@ -16,3 +16,11 @@ function getTermTitleFromSlug($type, $tax, $slug) {
   ->first();
   return $term['title'];
 }
+
+function term_title_from_slug($type, $tax, $slug) {
+  $q = new Json('../public/json/data.min.json');
+  $term = $q->from('site.content_types.'.$type.'.taxonomies.'.$tax)
+  ->where('slug', '=', $slug)
+  ->first();
+  return $term['title'];
+}

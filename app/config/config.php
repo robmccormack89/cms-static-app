@@ -25,10 +25,12 @@ $config['types'] = array(
     'taxonomies' => array(
       'categories' => array(
         'key'  => 'categories',
+        'single'  => 'category',
         'index_uri' => '/categories',
       ), 
       'tags' => array(
         'key'  => 'tags',
+        'single'  => 'tag',
         'index_uri' => '/tags',
       )
     ),
@@ -44,6 +46,7 @@ $config['types'] = array(
     'taxonomies' => array(
       'technologies' => array(
         'key'  => 'technologies',
+        'single'  => 'techonology',
         'index_uri' => '/technologies',
       )
     ),

@@ -5,23 +5,28 @@ class ArchiveController extends CoreController {
   
   /*
   *
-  * This class is used to render archival objects like blog & portfolio etc.
-  * Create a new ArchiveController object with $type, $paged, $page & $posts_per_page properties. $type is required
-  * Call the getMainIndexArchive() method on the archival object to render it.
-  * This is mainly for use within a routing context, see config/routes.
+  * This class is used to render MainIndexArchives like 'blog' or 'portfolio'
+  * Create a new ArchiveController() object & call the getMainIndexArchive() method to render the MainIndexArchive
+  * $type is required a required property; rest have defaults
   *
   */
-  public function __construct(string $type, bool $paged = false, int $page = null, int $posts_per_page = 4){
+  public function __construct(
+    string $type, // e.g 'blog' or 'portfolio'. required
+    bool $paged = false, // true or false. set whether this archive should be paged
+    int $page = null, // if archive is paged, this would be the requested page (e.g 2, 3 or 4)
+    int $posts_per_page = 4 // how many items to display per page
+  )
+  {
     parent::__construct();
-    $this->type = $type; // e.g 'blog' or 'portfolio'. required
-    $this->paged = $paged; // true or false. set whether this archive should be paged
-    $this->page = $page; // if archive is paged, this would be the requested page e.g 2, 3 or 4 etc
-    $this->posts_per_page = $posts_per_page; // how many items to display per page, defaults to 4
+    $this->type = $type;
+    $this->paged = $paged;
+    $this->page = $page; 
+    $this->posts_per_page = $posts_per_page; 
   }
   
   public function getMainIndexArchive() {
-    $context['archive'] = (new ArchiveModel($this->type, $this->paged, $this->page, $this->posts_per_page))->archive; // get the archival object context using the ArchiveModel class
-    $this->render($context); // render the context
+    $context['archive'] = (new ArchiveModel($this->type, $this->paged, $this->page, $this->posts_per_page))->getArchive();
+    $this->render($context);
   }
   
   /*
@@ -33,15 +38,12 @@ class ArchiveController extends CoreController {
   *
   */
   protected function render($context) {
-    if(!empty($context['archive']['posts'])) {
-      if ($this->twig->getLoader()->exists($this->type.'.twig')) {
-        $this->templateRender($this->type.'.twig', $context);
-      } else {
-        $this->templateRender('archive.twig', $context);
-      }
-    } else {
-      $this->error();
-    }
+    // do something about the empty check here
+    // in some cases if no posts are retuned, there should be an error, like non-existent paged pages...
+    // but in other cases there should be a 'no posts found' message, like an existing but empty content type...
+    // just disable this check for now
+    // (!empty($context['archive']['posts'])) ? $do_something : $this->error();
+    ($this->twig->getLoader()->exists($this->type.'.twig')) ? $this->templateRender($this->type.'.twig', $context) : $this->templateRender('archive.twig', $context);
   }
   
 }

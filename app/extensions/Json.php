@@ -5,6 +5,44 @@ use Nahid\JsonQ\Jsonq as Jsonq;
 // This is an extension of Jsonq in order to use a custom conditional (overwrites the match conditional to use regex across the fill key)
 class Json extends Jsonq {
   
+  protected static $_conditionsMap = [
+    '=' => 'equal',
+    'eq' => 'equal',
+    '==' => 'strictEqual',
+    'seq' => 'strictEqual',
+    '!=' => 'notEqual',
+    'neq' => 'notEqual',
+    '!==' => 'strictNotEqual',
+    'sneq' => 'strictNotEqual',
+    '>' => 'greaterThan',
+    'gt' => 'greaterThan',
+    '<' => 'lessThan',
+    'lt' => 'lessThan',
+    '>=' => 'greaterThanOrEqual',
+    'gte' => 'greaterThanOrEqual',
+    '<=' => 'lessThanOrEqual',
+    'lte' => 'lessThanOrEqual',
+    'in'    => 'in',
+    'notin' => 'notIn',
+    'inarray' => 'inArray',
+    'notinarray' => 'notInArray',
+    'null' => 'isNull',
+    'notnull' => 'isNotNull',
+    'exists' => 'exists',
+    'notexists' => 'notExists',
+    'startswith' => 'startWith',
+    'endswith' => 'endWith',
+    'match' => 'match',
+    'contains' => 'contains',
+    'dates' => 'dateEqual',
+    'year' => 'yearEqual',
+    'month' => 'monthEqual',
+    'day' => 'dayEqual',
+    'instance'  => 'instance',
+    'any'  => 'any',
+    'notany'  => 'notany',
+  ];
+  
   /**
    * For custom ConditionalFactory.php
    * Build or generate a function for applies condition from operator
@@ -14,14 +52,15 @@ class Json extends Jsonq {
    */
   protected function makeConditionalFunctionFromOperator($condition)
   {
+    
     if (!isset(self::$_conditionsMap[$condition])) {
-      throw new Nahid\QArray\Exceptions\ConditionNotAllowedException("Exception: {$condition} condition not allowed");
+      throw new \Nahid\QArray\Exceptions\ConditionNotAllowedException("Exception: {$condition} condition not allowed");
     }
 
     $function = self::$_conditionsMap[$condition];
     if (!is_callable($function)) {
       if (!method_exists(Condition_model::class, $function)) {
-        throw new Nahid\QArray\Exceptions\ConditionNotAllowedException("Exception: {$condition} condition not allowed");
+        throw new \Nahid\QArray\Exceptions\ConditionNotAllowedException("Exception: {$condition} condition not allowed");
       }
 
       $function = [Condition_model::class, $function];
@@ -177,6 +216,15 @@ final class Condition_model
   {
       return !static::inArray($value, $comparable);
   }
+  
+  public static function notany($value, $comparable)
+  {
+      if (is_array($value)) {
+          return !in_array($comparable, $value);
+      }
+
+      return false;
+  }
 
   /**
    * Is null equal
@@ -326,7 +374,52 @@ final class Condition_model
       $date = date($format, strtotime($value));
       return $date == $comparable;
   }
-
+  
+  /**
+   * CUSTOM
+   * Year equal
+   *
+   * @param string $value
+   * @param string $comparable
+   *
+   * @return bool
+   */
+  public static function yearEqual($value, $comparable, $format = 'Y')
+  {
+      $date = date($format, strtotime($value));
+      // print_r($date == $comparable);
+      return $date == $comparable;
+  }
+  
+  /**
+   * CUSTOM
+   * Month equal
+   *
+   * @param string $value
+   * @param string $comparable
+   *
+   * @return bool
+   */
+  public static function monthEqual($value, $comparable, $format = 'm')
+  {
+      $date = date($format, strtotime($value));
+      return $date == $comparable;
+  }
+  
+  /**
+   * CUSTOM
+   * Day equal
+   *
+   * @param string $value
+   * @param string $comparable
+   *
+   * @return bool
+   */
+  public static function dayEqual($value, $comparable, $format = 'd')
+  {
+      $date = date($format, strtotime($value));
+      return $date == $comparable;
+  }
 
   /**
    * is given value instance of value
