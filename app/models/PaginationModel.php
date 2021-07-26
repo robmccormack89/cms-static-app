@@ -3,46 +3,36 @@ namespace Rmcc;
 
 class PaginationModel {
   
-  public function __construct($posts_per_page, $page, $count, $paged, $url) {
-    $this->posts_per_page = $posts_per_page; // posts per page setting
-    $this->page = $page; // requested page/slug value
-    $this->count = $count; // all posts count
-    $this->paged = $paged; // paged setting
-    $this->url = $url; // base url for the archive, needed for pagination links to work
-    
-    $this->pagination = $this->getPagination();
+  public function __construct(
+    int $posts_per_page, // posts per page setting. required. e.g. 4
+    int $page, // requested page value. required. e.g. 2
+    int $count, // all posts count. required. e.g 12
+    string $url // url string for the paged archive to work off of. this will be in the links in the data returned. e.g. '/blog/categories/{$term}/page/'
+  ) 
+  {
+    $this->posts_per_page = $posts_per_page; 
+    $this->page = $page; 
+    $this->count = $count; 
+    $this->url = $url; 
   }
   
-  protected function getPagination() {
-    if($this->paged == true) {
-      $data = $this->setPaginationData();
-    } else {
-      $data = null;
-    }
+  // if $count is greater than $posts_per_page, return the pagination data, else return null
+  public function getPagination() {
+    $data = null;
+    if($this->count > $this->posts_per_page) $data = $this->setPaginationData();
     return $data;
   }
   
   // set the pagination data
   protected function setPaginationData() {
     
-    if(!$this->page) {
-      $page = 1;
-    } else {
-      $page = $this->page;
-    }
-    
     // step 1 - setup. data is blank. paged is the archive paging route. if req page is blank, set it to 1
     $data[] = '';
     
-    // step 2 - if has next|prev, set the links data, available at .next & .prev. see functions.php 
-    if ($this->hasNextPage($page, $this->count, $this->posts_per_page)) {
-      $next_requested_page = $page + 1;
-      $data['next'] = $this->url.$next_requested_page;
-    }
-    if ($this->hasPrevPage($page, $this->count, $this->posts_per_page)) {
-      $prev_requested_page = $page - 1;
-      $data['prev'] = $this->url.$prev_requested_page;
-    }
+    // step 2 - if has next|prev, set the links data, available at .next & .prev
+    if ($this->hasNextPage()) $data['next'] = $this->url.($this->page + 1);
+
+    if ($this->hasPrevPage()) $data['prev'] = $this->url.($this->page - 1);
     
     // step 3 - all posts count divided by posts per page, rounded up to the highest integer
     $rounded = ceil($this->count / $this->posts_per_page);
@@ -54,11 +44,8 @@ class PaginationModel {
       $offset = $i+1;
       
       // set the active class if req page matches
-      if ($offset == $page) {
-        $class = "uk-active";
-      } else {
-        $class = "not-active";
-      }
+      $class = "not-active";
+      if ($offset == $this->page) $class = "uk-active";
       
       // setting the data
       $output[] = array(
@@ -77,34 +64,12 @@ class PaginationModel {
   
   // conditionals for pagination
   protected function hasNextPage() {
-    
-    if(!$this->page) {
-      $page = 1;
-    } else {
-      $page = $this->page;
-    }
-    
-    if($page >= $this->count / $this->posts_per_page) {
-      return false;
-    } else {
-      return true;
-    };
-
+    if($this->page >= $this->count / $this->posts_per_page) return false;
+    return true;
   }  
   protected function hasPrevPage() {
-    
-    if(!$this->page) {
-      $page = 1;
-    } else {
-      $page = $this->page;
-    }
-    
-    if($page > 1) {
-      return true;
-    } else {
-      return false;
-    };
-
+    if($this->page > 1) return true;
+    return false;
   }
   
 }

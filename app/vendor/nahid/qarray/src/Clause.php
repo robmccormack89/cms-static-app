@@ -206,7 +206,7 @@ class Clause
      * @param object $obj
      * @return array|mixed
      */
-    protected function objectToArray($obj)
+    public function objectToArray($obj)
     {
         if (!is_array($obj) && !is_object($obj)) {
             return $obj;
@@ -347,8 +347,9 @@ class Clause
         if (!is_array($columns)) {
             $columns = func_get_args();
         }
-
         $this->setSelect($columns);
+        
+        // print_r($this->_select);
 
         return $this;
     }
@@ -363,10 +364,14 @@ class Clause
         if (count($columns) <= 0 ) {
             return;
         }
+        
+        // print_r($columns);
 
         foreach ($columns as $key => $column) {
             if (is_string($column)) {
                 $this->_select[$column] = $key;
+                // print_r($this->_select[$column]);
+                // echo('<hr>');
             } elseif(is_callable($column)) {
                 $this->_select[$key] = $column;
             } else {

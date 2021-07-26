@@ -16,14 +16,14 @@ function getTypeTaxSettingBySettingKey(string $type, string $key, string $value,
   return $data;
 }
 
-function type_setting_by_key(string $key, string $value, string $return_key) {
+function type_setting_by_key($key, $value, $return_key) {
   foreach ($GLOBALS["config"]['types'] as $type_setting) if ($type_setting[$key] == $value) {
     $data = $type_setting[$return_key];
   }
   return $data;
 }
 // get taxonomy setting. same as above just added type paramter to get a types taxonomy
-function tax_setting_by_key(string $type, string $key, string $value, string $return) {
+function tax_setting_by_key($type, $key, $value, $return) {
   foreach ($GLOBALS["config"]['types'][$type]['taxonomies'] as $tax_setting) if ($tax_setting[$key] == $value) {
     $data = $tax_setting[$return];
   }

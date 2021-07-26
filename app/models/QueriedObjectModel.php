@@ -1,75 +1,50 @@
 <?php
 namespace Rmcc;
 
-/*
-*
-* This class is used for getting meta data (like title & description) for an archive (like blog & categories term)
-* Create a new ArchiveMetaModel object with $type, $page, $tax & $term properties.
-* $type is a required property
-* The $meta property of the created object contains all the data for the archive meta item
-*
-*/
 class QueriedObjectModel {
   
   public function __construct(
-    string $type, // type key. e.g 'blog'. required for all archive meta
-    int $page = null, // page value for paged pages. will usually come from the request
-    string $tax = null, // taxonomy key. e.g 'categories'. required for getTermMeta & getCollectionMeta
-    string $term = null // term key. e.g 'news'. required for getTermMeta only
+    string $type = null, // type. e.g 'blog'. required
+    string $tax = null, // taxonomy. e.g 'categories'. required for getTermMeta
+    string $term = null // term. e.g 'news'. required for getTermMeta
   ) 
   {
     $this->type = $type; 
-    $this->page = $page; 
     $this->tax = $tax; 
     $this->term = $term; 
-    
-    $this->data = $this->getData(); // this property then contains all our data
   }
   
-  private function getData() {
-    if($this->tax && $this->term) {
-      $data = $this->getTermMeta();
-    } elseif($this->tax && !($this->term)) {
-      $data = $this->getCollectionMeta();
-    } else {
-      $data = $this->getArchiveMeta();
-    }
+  public function getQueriedObject() {
+    if(!$this->type) $data = $this->getBaseMeta();
+    if($this->type && !$this->term) $data = $this->getArchiveMeta();
+    if($this->type && $this->term) $data = $this->getTermMeta();
     return $data;
   }
   
-  // get the archive meta data
+  // get the archive meta. if no type, use the site's base meta
+  private function getBaseMeta() {
+    $q = new Json('../public/json/data.min.json');
+    $data = $q->from('site.meta')->get();
+    return $data;
+  }
+  
+  // get the archive meta from type (blog, portfolio etc)
   private function getArchiveMeta() {
     $q = new Json('../public/json/data.min.json');
     $data = $q->from('site.content_types.'.$this->type.'.meta')->get();
-    if($this->page > 1) $data['title'] = $data['title'].' (Page '.$this->page.')';
     return $data;
   }
   
-  // get the term archive meta
+  // get the archive meta (term)
   private function getTermMeta() {
-    if($this->term == null) {
-
-      $q = new Json('../public/json/data.min.json');
-      $data = $q->from('site.'.$this->type.'.meta')->get();
-      
-    } elseif($this->term) {
-      
+    if($this->term) {
       $q = new Json('../public/json/data.min.json');
       $data = $q->from('site.content_types.'.$this->type.'.taxonomies.'.$this->tax)
       ->where('slug', '=', $this->term)->first();
+    } else {
+      $q = new Json('../public/json/data.min.json');
+      $data = $q->from('site.'.$this->type.'.meta')->get();
     }
-    if($this->page > 1) $data['title'] = $data['title'].' (Page '.$this->page.')';
-    return $data;
-  }
-  
-  // get the term archive meta
-  private function getCollectionMeta() {
-    $q = new Json('../public/json/data.min.json');
-    $data = $q->from('site.content_types.'.$this->type.'.meta')->get();
-    
-    $title = ucfirst($this->tax);
-    $data['title'] = ($this->page > 1) ? $title.' (Page '.$this->page.')' : $title;
-    
     return $data;
   }
 

@@ -46,7 +46,7 @@ $config['types'] = array(
     'taxonomies' => array(
       'technologies' => array(
         'key'  => 'technologies',
-        'single'  => 'techonology',
+        'single'  => 'technology',
         'index_uri' => '/technologies',
       )
     ),
