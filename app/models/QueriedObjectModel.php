@@ -4,7 +4,7 @@ namespace Rmcc;
 class QueriedObjectModel {
   
   public function __construct(
-    string $type = null, // type. e.g 'blog'. required
+    string $type, // type. e.g 'blog'
     string $tax = null, // taxonomy. e.g 'categories'. required for getTermMeta
     string $term = null // term. e.g 'news'. required for getTermMeta
   ) 

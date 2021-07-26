@@ -259,54 +259,54 @@ class QueryModel {
     * 5. SEARCH TERMS: TITLE/EXCERPT
     *
     */
-    // if($_search) {
-    //   // $posts = new Json($posts);
-    //   $posts = $posts->copy();
-    //   $posts = $posts
-    //   ->where(function($query) use ($_search) {
-    //     $query->where('excerpt', 'match', '(?i)'.$_search);
-    //     $query->orWhere('title', 'match', '(?i)'.$_search);
-    //   });
-    // }
+    if($_search) {
+      // $posts = new Json($posts);
+      $posts = $posts->copy();
+      $posts = $posts
+      ->where(function($query) use ($_search) {
+        $query->where('excerpt', 'match', '(?i)'.$_search);
+        $query->orWhere('title', 'match', '(?i)'.$_search);
+      });
+    }
 
     /*
     *
     * 6. DATE: YEAR, MONTH, DAY
     *
     */
-    // if($_date) {
-    // 
-    //   $_year = $this->yearKey();
-    //   $_month = $this->monthKey();
-    //   $_day = $this->dayKey();
-    // 
-    //   $posts = new Json($posts);
-    // 
-    //   // year
-    //   if($_year){
-    //     $posts = $posts
-    //     ->where(function($query) use ($_year) {
-    //       $query->where('date_time', 'year', $_year);
-    //     });
-    //   }
-    // 
-    //   // month
-    //   if($_month){
-    //     $posts = $posts
-    //     ->where(function($query) use ($_month) {
-    //       $query->where('date_time', 'month', $_month);
-    //     });
-    //   }
-    // 
-    //   // day
-    //   if($_day){
-    //     $posts = $posts
-    //     ->where(function($query) use ($_day) {
-    //       $query->where('date_time', 'day', $_day);
-    //     });
-    //   }
-    // 
-    // }
+    if($_date) {
+    
+      $_year = $this->yearKey();
+      $_month = $this->monthKey();
+      $_day = $this->dayKey();
+    
+      $posts = new Json($posts);
+    
+      // year
+      if($_year){
+        $posts = $posts
+        ->where(function($query) use ($_year) {
+          $query->where('date_time', 'year', $_year);
+        });
+      }
+    
+      // month
+      if($_month){
+        $posts = $posts
+        ->where(function($query) use ($_month) {
+          $query->where('date_time', 'month', $_month);
+        });
+      }
+    
+      // day
+      if($_day){
+        $posts = $posts
+        ->where(function($query) use ($_day) {
+          $query->where('date_time', 'day', $_day);
+        });
+      }
+    
+    }
     
     /*
     *
@@ -421,13 +421,13 @@ class QueryModel {
     * 8. SLUG
     *
     */
-    // if($_name) {
-    //   $posts = new Json($posts);
-    //   $posts = $posts
-    //   ->where(function($query) use ($_name) {
-    //     $query->where('slug', 'match', '(?i)'.$_name);
-    //   });
-    // }
+    if($_name) {
+      $posts = new Json($posts);
+      $posts = $posts
+      ->where(function($query) use ($_name) {
+        $query->where('slug', 'match', '(?i)'.$_name);
+      });
+    }
     
     /*
     *
