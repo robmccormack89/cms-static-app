@@ -57,32 +57,69 @@ class QueryModel {
     $this->args = $args;
     $this->query = $this->getString(); // Holds the query string that was passed to the query object
     $this->query_vars = $this->getArray(); // An associative array containing the dissected $query: an array of the query variables and their respective values.
-    $this->queried_object = $this->getQueryQueriedObject(); // Can hold information on the requested category, author, post or Page, archive etc.,.
+    $this->queried_object = $this->getQueriedObject(); // Can hold information on the requested category, author, post or Page, archive etc.,.
     $this->posts = $this->getPosts(); // Gets filled with the requested posts
     $this->post_count = $this->getPostsPerPage(); // The number of posts being displayed. per page
     $this->found_posts = $this->getPostsCount(); // The total number of posts found matching the current query parameters
     $this->max_num_pages = $this->getPostsMaxPages(); // The total number of pages. Is the result of $found_posts / $posts_per_page
-    // $this->init();
+    $this->init();
   }
   public function init() {
-    echo($this->queried_object.': the queried object');
+    // echo($this->queried_object.': the queried object');
+    // echo('<hr>');
+    // echo($this->found_posts.': posts found');
+    // echo('<hr>');
+    // echo($this->post_count.': per_page setting');
+    // echo('<hr>');
+    // echo($this->pagedKey().': page we should be on');
+    // echo('<hr>');
+    // if($this->isPaged()){
+    //   print_r('we are paged!!');
+    //   echo('<hr>');
+    // }
+    // print_r($this->paramsToArgs());
+    // echo('<hr>');
+    // print_r(self::$_argsArray);
+    // echo('<hr>');
+    // echo($this->max_num_pages);
+    // echo('<hr>');
+    
+    print_r($GLOBALS['_context']);
     echo('<hr>');
-    echo($this->found_posts.': posts found');
-    echo('<hr>');
-    echo($this->post_count.': per_page setting');
-    echo('<hr>');
-    echo($this->pagedKey().': page we should be on');
-    echo('<hr>');
-    if($this->isPaged()){
-      print_r('we are paged!!');
-      echo('<hr>');
+  }
+  
+  /*
+  *
+  * The Queried Object
+  * 
+  *
+  */
+  private function getQueriedObject() {
+    $data = $this->getBaseMeta();
+    if(!isset($GLOBALS['_context']['term'])) $data = $this->getArchiveMeta();
+    if(isset($GLOBALS['_context']['term'])) $data = $this->getTermMeta();
+    return $data;
+  }
+  private function getBaseMeta() {
+    $q = new Json('../public/json/data.min.json');
+    $data = $q->from('site.meta')->get();
+    return $data;
+  }
+  private function getArchiveMeta() {
+    $q = new Json('../public/json/data.min.json');
+    $data = $q->from('site.content_types.'.$GLOBALS['_context']['type'].'.meta')->get();
+    return $data;
+  }
+  private function getTermMeta() {
+    if($GLOBALS['_context']['term']) {
+      $q = new Json('../public/json/data.min.json');
+      $data = $q->from('site.content_types.'.$GLOBALS['_context']['type'].'.taxonomies.'.$GLOBALS['_context']['tax'])
+      ->where('slug', '=', $GLOBALS['_context']['term'])->first();
+    } else {
+      $q = new Json('../public/json/data.min.json');
+      $data = $q->from('site.'.$GLOBALS['_context']['type'].'.meta')->get();
     }
-    print_r($this->paramsToArgs());
-    echo('<hr>');
-    print_r(self::$_argsArray);
-    echo('<hr>');
-    echo($this->max_num_pages);
-    echo('<hr>');
+    return $data;
   }
   
   /*
@@ -106,25 +143,6 @@ class QueryModel {
     if(is_array($this->args)) {
       $data = $this->args;
     }
-    
-    return $data;
-  }
-  
-  /*
-  *
-  * Archive Meta Stuff. Getting the archive meta data
-  *
-  */
-  private function getQueryQueriedObject() {
-    
-    if(!$this->typeKey()) $data = (new QueriedObjectModel())->getQueriedObject();
-    
-    if($this->typeKey()) $data = (new QueriedObjectModel(type_setting_by_key('single', $this->typeKey(), 'key')))->getQueriedObject();
-    
-    // $_tax_query = $this->taxQueryKey();
-    // if($_tax_query) {
-    //   $data = (new QueriedObjectModel($type, $tax, $term))->getQueriedObject();
-    // }
     
     return $data;
   }

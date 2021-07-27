@@ -3,15 +3,8 @@ namespace Rmcc;
 
 class PaginationModel {
   
-  public function __construct(
-    int $posts_per_page, // posts per page setting. required. e.g. 4
-    int $page, // requested page value. required. e.g. 2
-    int $count, // all posts count. required. e.g 12
-    string $url // url string for the paged archive to work off of. this will be in the links in the data returned. e.g. '/blog/categories/{$term}/page/'
-  ) 
+  public function __construct(int $count, string $url) 
   {
-    $this->posts_per_page = $posts_per_page; 
-    $this->page = $page; 
     $this->count = $count; 
     $this->url = $url; 
   }
@@ -19,7 +12,7 @@ class PaginationModel {
   // if $count is greater than $posts_per_page, return the pagination data, else return null
   public function getPagination() {
     $data = null;
-    if($this->count > $this->posts_per_page) $data = $this->setPaginationData();
+    if($this->count > $GLOBALS['_context']['per_page']) $data = $this->setPaginationData();
     return $data;
   }
   
@@ -30,12 +23,12 @@ class PaginationModel {
     $data[] = '';
     
     // step 2 - if has next|prev, set the links data, available at .next & .prev
-    if ($this->hasNextPage()) $data['next'] = $this->url.($this->page + 1);
+    if ($this->hasNextPage()) $data['next'] = $this->url.($GLOBALS['_context']['page'] + 1);
 
-    if ($this->hasPrevPage()) $data['prev'] = $this->url.($this->page - 1);
+    if ($this->hasPrevPage()) $data['prev'] = $this->url.($GLOBALS['_context']['page'] - 1);
     
     // step 3 - all posts count divided by posts per page, rounded up to the highest integer
-    $rounded = ceil($this->count / $this->posts_per_page);
+    $rounded = ceil($this->count / $GLOBALS['_context']['per_page']);
     
     // step 4 - set the pagination pata. will be available at .pages
     $output = [];
@@ -45,7 +38,7 @@ class PaginationModel {
       
       // set the active class if req page matches
       $class = "not-active";
-      if ($offset == $this->page) $class = "uk-active";
+      if ($offset == $GLOBALS['_context']['page']) $class = "uk-active";
       
       // setting the data
       $output[] = array(
@@ -64,11 +57,11 @@ class PaginationModel {
   
   // conditionals for pagination
   protected function hasNextPage() {
-    if($this->page >= $this->count / $this->posts_per_page) return false;
+    if($GLOBALS['_context']['page'] >= $this->count / $GLOBALS['_context']['per_page']) return false;
     return true;
   }  
   protected function hasPrevPage() {
-    if($this->page > 1) return true;
+    if($GLOBALS['_context']['page'] > 1) return true;
     return false;
   }
   

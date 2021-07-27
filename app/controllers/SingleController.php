@@ -15,7 +15,6 @@ class SingleController extends CoreController {
     parent::__construct();
     $this->type = $type; // e.g 'page' or 'blog' or 'portfolio'
     $this->slug = $slug; // e.g 'about'. this will usually come from the request unless setting for specific pages
-    
     // the $name property is only used for render() to differenciate between archived & non-archived singular objects
     if($this->type == 'page') {
       $this->name = $this->type;

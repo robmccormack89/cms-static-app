@@ -3,11 +3,12 @@
     
     <figure class="uk-position-relatve uk-inline uk-margin-remove uk-position-relative">
       <a class="uk-link-reset" href="{{post.link}}">
+        {# post.featured_img.src|default('/public/img/stock.jpg') #}
         <img 
         class="" 
-        data-src="{{post.featured_img.src|default('https://picsum.photos/1200/600')}}" 
-        width="1200" 
-        height="600" 
+        data-src="/public/img/stock.jpg" 
+        width="1000" 
+        height="667" 
         alt="{{post.featured_img.alt}}" 
         uk-img>
       </a>
