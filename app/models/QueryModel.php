@@ -175,11 +175,6 @@ class QueryModel {
       if($this->dayParam()){
         $new_args_array['date']['day'] = $this->dayParam();
       }
-      if($this->yearParam() {
-        $new_args_array['date'][] = array(
-          'year' => $this->yearParam()
-        );
-      }
     }
     
     if($this->nameParam()){
