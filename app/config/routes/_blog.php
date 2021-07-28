@@ -8,9 +8,9 @@ namespace Rmcc;
 */
 $router->get('/blog/', function() {
   $params = parse_url($_SERVER['REQUEST_URI']);
-  if (isset($params['query']) && hasCorrectQueryParams($params['query'])) {
+  if (isset($params['query']) && queryParamsExists($params['query'])) {
     parse_str($params['query'], $params_array);
-    if(isset($params_array['p']) && $params_array['p'] == 1){
+    if($_SERVER['REQUEST_URI'] === '/blog?p=1'){
       header('Location: /blog', true, 301);
       exit();
     }

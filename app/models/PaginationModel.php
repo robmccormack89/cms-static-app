@@ -14,6 +14,7 @@ class PaginationModel {
       parse_str($current_url_parsed['query'], $queryArray);
       $queryArray['p'] = $new_part;
       $newQueryStr = http_build_query($queryArray);
+      $newQueryStr = str_replace("%2C", ",", $newQueryStr);
       $url = '?'.$newQueryStr;
     } else {
       $url = '?p='.$new_part;

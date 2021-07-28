@@ -1,6 +1,6 @@
 <?php
 
-function hasCorrectQueryParams($params) {
+function queryParamsExists($params) {
   parse_str($params, $params_array);
   
   // type

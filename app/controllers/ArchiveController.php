@@ -45,6 +45,7 @@ class ArchiveController extends CoreController {
     if(isset($params_array['per_page'])) $GLOBALS['_context']['per_page'] = $params_array['per_page'];
     
     $pre_params = http_build_query($params_array);
+    $pre_params = str_replace("%2C", ",", $pre_params);
     if (strpos($pre_params, 'show_all') !== false) {
       $new_params = str_replace("show_all=", "show_all", $pre_params);
     } else {
