@@ -16,7 +16,7 @@ foreach ($GLOBALS["config"]['type_settings'] as $type_setting) if ($type_setting
 
 echo('<hr>');
 
-function getTypeSettingBySettingKey(
+function typeSettingByKey(
   string $key, // key of item to check against. e.g 'key' or 'items_key' or 'items_singular'
   string $value, // value of item to check against. e.g 'blog' or 'portfolio'
   string $return_key // key of the value to return. e.g 'items_route' 
@@ -39,7 +39,7 @@ function getTypeSettingByAny(
   return $data;
 }
 
-echo(getTypeSettingBySettingKey('index_route', '/blog', 'items_route'));
+echo(typeSettingByKey('index_route', '/blog', 'items_route'));
 echo('<hr>');
 echo(getTypeSettingByAny('blog', 'items_route'));
 echo('<hr>');

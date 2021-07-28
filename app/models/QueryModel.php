@@ -40,7 +40,7 @@ class QueryModel {
     ),
     
     // working. takes string & searches in slugs for matches
-    'name' => 'lorem',
+    'name' => 'sed',
     
     // the pagination stuff. seems to be working...
     'per_page' => 3,
@@ -53,7 +53,7 @@ class QueryModel {
   * Properties based on https://developer.wordpress.org/reference/classes/wp_query/#properties
   *
   */
-  public function __construct(array $args) {
+  public function __construct($args) {
     $this->args = $args;
     $this->query = $this->getString(); // Holds the query string that was passed to the query object
     $this->query_vars = $this->getArray(); // An associative array containing the dissected $query: an array of the query variables and their respective values.
@@ -84,8 +84,8 @@ class QueryModel {
     // echo($this->max_num_pages);
     // echo('<hr>');
     
-    print_r($GLOBALS['_context']);
-    echo('<hr>');
+    // print_r($GLOBALS['_context']);
+    // echo('<hr>');
   }
   
   /*
@@ -169,9 +169,9 @@ class QueryModel {
       if($this->taxParams()){
         $new_args_array['tax_query']['relation'] = 'AND';
         foreach($this->taxParams() as $tax => $value){
-          $type = type_setting_by_key('single', $this->typeParam(), 'key');
+          $type = typeSettingByKey('single', $this->typeParam(), 'key');
           $new_args_array['tax_query'][] = array(
-            'taxonomy' => tax_setting_by_key($type, 'key', $tax, 'single'),
+            'taxonomy' => taxSettingByKey($type, 'key', $tax, 'single'),
             'terms' => explode(',', $value),
             'operator' => 'AND'
           );
@@ -221,79 +221,83 @@ class QueryModel {
   */
   private function getPostsQuery() {
     
+    /*
+    *
+    * 1. set the initial location
+    *
+    */
     $q = new Json('../public/json/data.min.json');
     
-    // dynamic content types (ALL)
-    $content_types = $q->find('site.content_types')->toArray();
-    $results = array();
+    /*
+    *
+    * 2. get all single posts from all content types
+    * This serves as our start query, minus all other queries, we retunr all posts
+    * $posts is set with the posts, and per each modifying query below, we query off $posts & then reset it with the new results
+    *
+    */
+    $content_types = $q->find('site.content_types')->toArray(); // all content types as an array
+    $new_content_types = array(); // creating new array by looping thru each of the content types
     foreach($content_types as $key => $value) {
-      if($key == 'page'){
-        $array = $q->copy()->reset()->find('site.content_types.'.$key)->toArray();
+      $types_array = $q->copy()->reset()->find('site.content_types.'.$key.'.'.typeSettingByKey('key', $key, 'items'))->toArray();
+      if($key == 'page') $types_array = $q->copy()->reset()->find('site.content_types.'.$key)->toArray();
+      $new_content_types[] = $types_array;
+    }
+    //  finally we merge all the posts from the different content types together in a new Json object using Json->collect() & php's array_merge()
+    $posts = (new Json())->collect(array_merge(...$new_content_types));
+    
+    /*
+    *
+    * If type key exists, we need to modifiy $posts according to that
+    *
+    */
+    if($this->typeKey()) {
+      
+      if($this->typeKey() == 'page') {
+        $_location = 'site.content_types.page'; // if given type is page, set $_location based on this. 
       } else {
-        $items = type_setting_by_key('key', $key, 'items');
-        $array = $q->copy()->reset()->find('site.content_types.'.$key.'.'.$items)->toArray();
-      }
-      $results[] = $array;
-    }
-    $posts = (new Json())->collect(array_merge(...$results));
-    $count = $posts->count();
+        // else set $_location based on the registered content types using the given type
+        $type_plural = typeSettingByKey('single', $this->typeKey(), 'items'); // returns 'posts' or 'projects', or null...
+        $type_archive = typeSettingByKey('single', $this->typeKey(), 'key'); // returns 'blog' or 'portfolio', or null...
+        if($type_plural && $type_archive) $_location = 'site.content_types.'.$type_archive.'.'.$type_plural;
+      };
     
-    /*
-    *
-    * 3. GETTING SOME KEY VALUES & SETTING THEM AS VARIABLES TO BE USED BELOW
-    *
-    */
-    $_type = $this->typeKey();
-    $_search = $this->searchKey();
-    $_date = $this->dateKey();
-    $_tax_query = $this->taxQueryKey();
-    $_relation = $this->relationKey();
-    $_name = $this->nameKey();
-    $_per_page = $this->getPostsPerPage();
-    
-    /*
-    *
-    * 4. CONTENT TYPES
-    *
-    */
-    if($_type) {
-      $type_plural = type_setting_by_key('single', $_type, 'items'); // returns 'posts' or 'projects' etc...
-      $type_archive = type_setting_by_key('single', $_type, 'key'); // returns 'blog' or 'portfolio' etc...
-      $_location = 'site.content_types.'.$type_archive.'.'.$type_plural;
-    
-      // set $location based on $_type
-      if($_type == 'page') $_location = 'site.content_types.page';
-    
-      $posts = $q->copy()->reset()->from($_location);
+      // if $_location indeed exists, query posts using it, else set $posts as empty Json object
+      // if the initial type results in a faulty location, we want the result to be empty so this makes sense
+      $posts = ($_location) ? $q->copy()->reset()->from($_location) : new Json();
     }
     
     /*
     *
-    * 5. SEARCH TERMS: TITLE/EXCERPT
+    * If search key exists & $posts also exists....
+    *
+    * remember $posts is still in a Json obj at this point, so $posts->exists() works
+    * we only want to continue the query with $posts existing & in the right format
+    * if $posts doesnt exist, the query is not processed then. which makes sense
     *
     */
-    if($_search) {
-      // $posts = new Json($posts);
-      $posts = $posts->copy();
+    if($this->searchKey() && $posts->exists()) {
+      // $posts = $posts->copy(); // this seems not working or bugged here...
+      $posts = new Json($posts); // create a new json object, this seems working fine...
+      $search_query = $this->searchKey();
       $posts = $posts
-      ->where(function($query) use ($_search) {
-        $query->where('excerpt', 'match', '(?i)'.$_search);
-        $query->orWhere('title', 'match', '(?i)'.$_search);
+      ->where(function($query) use ($search_query) {
+        $query->where('excerpt', 'match', '(?i)'.$search_query);
+        $query->orWhere('title', 'match', '(?i)'.$search_query);
       });
     }
 
     /*
     *
-    * 6. DATE: YEAR, MONTH, DAY
+    * If date key/s exists & $posts also exists....
     *
     */
-    if($_date) {
+    if($this->dateKey() && $posts->exists()) {
+      
+      $posts = new Json($posts); // create the new Json posts object to query against with the previous posts
     
       $_year = $this->yearKey();
       $_month = $this->monthKey();
       $_day = $this->dayKey();
-    
-      $posts = new Json($posts);
     
       // year
       if($_year){
@@ -323,18 +327,18 @@ class QueryModel {
     
     /*
     *
-    * 7. TAXONOMY QUERIES
+    * If tax query key/s exists & $posts also exists....
     *
     */
-    if($_tax_query) {
-      if($_relation == 'OR') {
+    if($this->taxQueryKey() && $posts->exists()) {
+      if($this->relationKey() == 'OR') {
     
         $taxes_i = 0;
-        foreach($_tax_query as $key => $value){
+        foreach($this->taxQueryKey() as $key => $value){
     
           if (is_array($value)) {
             $taxes_iterator = ++$taxes_i;
-            if(array_key_exists('taxonomy', $value)) $tax = tax_setting_by_key($type_archive, 'single', $value['taxonomy'], 'key');
+            if(array_key_exists('taxonomy', $value)) $tax = taxSettingByKey($type_archive, 'single', $value['taxonomy'], 'key');
             if(array_key_exists('terms', $value)) {
               if(array_key_exists('operator', $value)) $op = $value['operator'];  
     
@@ -388,8 +392,8 @@ class QueryModel {
     
       } else {
     
-        foreach ($_tax_query as $key => $value) if (is_array($value)) {
-          if(array_key_exists('taxonomy', $value)) $tax = tax_setting_by_key($type_archive, 'single', $value['taxonomy'], 'key');
+        foreach ($this->taxQueryKey() as $key => $value) if (is_array($value)) {
+          if(array_key_exists('taxonomy', $value)) $tax = taxSettingByKey($type_archive, 'single', $value['taxonomy'], 'key');
           if(array_key_exists('terms', $value)) {
             if(array_key_exists('operator', $value)) $op = $value['operator'];
     
@@ -431,50 +435,63 @@ class QueryModel {
     
     /*
     *
-    * 8. SLUG
+    * If name key/s exists & $posts also exists....
     *
     */
-    if($_name) {
+    if($this->nameKey() && $posts->exists()) {
       $posts = new Json($posts);
+      $name_query = $this->nameKey();
       $posts = $posts
-      ->where(function($query) use ($_name) {
-        $query->where('slug', 'match', '(?i)'.$_name);
+      ->where(function($query) use ($name_query) {
+        $query->where('slug', 'match', '(?i)'.$name_query);
       });
     }
     
     /*
     *
-    * 9 SET THE POSTS COUNT BASED ON THE REMAINING POSTS, AFTER ALL/ANY QUERIES HAVE BEEN MADE
+    * we need to get() the $posts BEFORE paged stuff
+    * we need to set the latest $count BEFORE paged stuff
     *
     */
-    $_count = $posts->count();
+    $posts = $posts->get();
+    $count = $posts->count();
     
     /*
     *
-    * 10. IF isPaged, TAKE THE REMAINING POSTS & CHUNK THEM BASED ON PAGED SETTINGS, ELSE get() THE REMAINING POSTS AS THEY ARE
+    * If is paged, then paged stuff....
     *
     */
-    if($this->isPaged()){
+    if($this->isPaged() && $posts->exists()){
       $posts = new Json($posts);
-      $paged_posts = $posts->chunk($_per_page);
-      $posts = $this->getPagedPosts($paged_posts);
-    } else {
-      $posts = $posts->get();
+      $paged_posts = $posts->chunk($this->getPostsPerPage());
+      $posts = $this->getPagedPosts($paged_posts); // returns an array
     }
     
     /*
     *
-    * 11. SET THE POST TEASES DATA
+    * **. This is the last stage before return.
+    *
+    * If the $posts exists now as a Json object, whether filled or empty or null,
+    * we should convert it to a normal array using Json->toArray(),
+    * and then get the $count off of that using php count.
+    *
+    * This is more reliable as the posts(or lack of) can be checked on the other side as a standard array rather than a Json object,
+    * which is harder to check against. e.g: if($posts) or if(count($posts) > 2) etc....
     *
     */
-    $posts = $this->setPostsTeaseData($posts);
+    if(is_object($posts)) $posts = $posts->toArray(); // If $posts is a Json object, convert it to an array
+    
+    // oh yeah, if $posts count is more than 0, set the post tease data to the $posts....
+    $posts = ($count > 0) ? $this->setPostsTeaseData($posts) : null;
     
     /*
     *
-    * 12. RETURN $data & $count
+    * Finally we return the $posts & the $count variables.
+    * $posts should be an array, either filled with posts or empty,
+    * and $count should be an integer, either 0 or more...
     *
     */
-    return array('posts' => $posts, 'count' => $_count);
+    return array('posts' => $posts, 'count' => $count);
   }
   private function getPostsCount() {
     $data = $this->getPostsQuery();
@@ -502,7 +519,7 @@ class QueryModel {
         if(isset($post['type']) && $post['type'] == 'page'){
           $post['link'] = '/'.$post['slug'];
         } else {
-          $post['link'] = '/'.type_setting_by_key('single', $post['type'], 'key').'/'.type_setting_by_key('single', $post['type'], 'items').'/'.$post['slug'];
+          $post['link'] = '/'.typeSettingByKey('single', $post['type'], 'key').'/'.typeSettingByKey('single', $post['type'], 'items').'/'.$post['slug'];
         }
         $data[] = $post;
       }
@@ -514,7 +531,7 @@ class QueryModel {
     if($posts){
       foreach ($posts as $post) {
         if($post['type'] !== 'page') {
-          $type_key = type_setting_by_key('single', $post['type'], 'key'); // returns 'blog' or 'portfolio'
+          $type_key = typeSettingByKey('single', $post['type'], 'key'); // returns 'blog' or 'portfolio'
           $taxonomies = (isset($GLOBALS['config']['types'][$type_key]['taxes_in_meta'])) ? $GLOBALS['config']['types'][$type_key]['taxes_in_meta'] : null;
           if($taxonomies) {
             foreach($taxonomies as $tax) {

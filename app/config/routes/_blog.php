@@ -7,9 +7,19 @@ namespace Rmcc;
 *
 */
 $router->get('/blog/', function() {
-  Cache::cacheServe(function(){ 
-    (new ArchiveController('blog'))->getMainIndexArchive();
-  });
+  $params = parse_url($_SERVER['REQUEST_URI']);
+  if (isset($params['query']) && hasCorrectQueryParams($params['query'])) {
+    parse_str($params['query'], $params_array);
+    if(isset($params_array['p']) && $params_array['p'] == 1){
+      header('Location: /blog', true, 301);
+      exit();
+    }
+    (new ArchiveController('blog'))->queryMainIndexArchive($params['query']);
+  } else {
+    Cache::cacheServe(function(){ 
+      (new ArchiveController('blog'))->getMainIndexArchive();
+    });
+  }
 });
 
 /*
@@ -17,15 +27,15 @@ $router->get('/blog/', function() {
 * Main Index Archive: Paged
 *
 */
-$router->get('/blog/page/{page}', function($page){
- if ($page == 1) {
-   header('Location: /blog', true, 301);
-   exit();
- }
- Cache::cacheServe(function() use ($page) { 
-   (new ArchiveController('blog', $page))->getMainIndexArchive();
- });
-});
+// $router->get('/blog/page/{page}', function($page){
+//  if ($page == 1) {
+//    header('Location: /blog', true, 301);
+//    exit();
+//  }
+//  Cache::cacheServe(function() use ($page) { 
+//    (new ArchiveController('blog', $page))->getMainIndexArchive();
+//  });
+// });
 
 /*
 *
@@ -47,15 +57,15 @@ $router->get('/blog/posts/{slug}', function($slug) {
 * Term Archives: Paged
 *
 */
-$router->get('/blog/categories/{term}/page/{page}', function($term, $page){
- if ($page == 1) {
-   header('Location: /blog/categories/'.$term, true, 301); // redirect requests for page one of paged archive to main archive
-   exit();
- }
- Cache::cacheServe(function() use ($term, $page) { 
-   (new ArchiveController('blog', $page))->getTaxTermArchive('categories', $term);
- });
-});
+// $router->get('/blog/categories/{term}/page/{page}', function($term, $page){
+//  if ($page == 1) {
+//    header('Location: /blog/categories/'.$term, true, 301); // redirect requests for page one of paged archive to main archive
+//    exit();
+//  }
+//  Cache::cacheServe(function() use ($term, $page) { 
+//    (new ArchiveController('blog', $page))->getTaxTermArchive('categories', $term);
+//  });
+// });
 
 /*
 *
@@ -73,15 +83,15 @@ $router->get('/blog/categories/{term}/', function($term){
 * Term Archives: Paged
 *
 */
-$router->get('/blog/tags/{term}/page/{page}', function($term, $page){
- if ($page == 1) {
-   header('Location: /blog/tags/'.$term, true, 301); // redirect requests for page one of paged archive to main archive
-   exit();
- }
- Cache::cacheServe(function() use ($term, $page) {
-   (new ArchiveController('blog', $page))->getTaxTermArchive('tags', $term);
- });
-});
+// $router->get('/blog/tags/{term}/page/{page}', function($term, $page){
+//  if ($page == 1) {
+//    header('Location: /blog/tags/'.$term, true, 301); // redirect requests for page one of paged archive to main archive
+//    exit();
+//  }
+//  Cache::cacheServe(function() use ($term, $page) {
+//    (new ArchiveController('blog', $page))->getTaxTermArchive('tags', $term);
+//  });
+// });
 
 /*
 *

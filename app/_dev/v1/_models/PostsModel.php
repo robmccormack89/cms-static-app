@@ -157,8 +157,8 @@ class PostsModel {
     if($posts){
       foreach ($posts as $post) {
         
-        $items = getTypeSettingBySettingKey('single', $post['type'], 'items'); // returns 'posts' or 'projects'
-        $type_key = getTypeSettingBySettingKey('single', $post['type'], 'key'); // returns 'blog' or 'portfolio'
+        $items = typeSettingByKey('single', $post['type'], 'items'); // returns 'posts' or 'projects'
+        $type_key = typeSettingByKey('single', $post['type'], 'key'); // returns 'blog' or 'portfolio'
         
         $post['link'] = '/'.$type_key.'/'.$items.'/'.$post['slug'];
         $data[] = $post;
@@ -171,7 +171,7 @@ class PostsModel {
     $data = null;
     if($posts){
       foreach ($posts as $post) {
-        $type_key = getTypeSettingBySettingKey('single', $post['type'], 'key'); // returns 'blog' or 'portfolio'
+        $type_key = typeSettingByKey('single', $post['type'], 'key'); // returns 'blog' or 'portfolio'
         if(isset($GLOBALS['config']['types'][$type_key]['taxes_in_meta'])){
           $taxonomies = $GLOBALS['config']['types'][$type_key]['taxes_in_meta'];
         } else {

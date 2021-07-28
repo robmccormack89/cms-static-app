@@ -1,29 +1,83 @@
 <?php
+
+function hasCorrectQueryParams($params) {
+  parse_str($params, $params_array);
+  
+  // type
+  $_type = (array_key_exists('type', $params_array)) ? $params_array['type'] : false;
+  if($_type){
+    return true;
+  }
+  
+  // taxes
+  $taxes = array();
+  foreach($GLOBALS['config']['types'] as $type){
+    if(array_key_exists('taxonomies', $type)) {
+      foreach($type['taxonomies'] as $tax => $value){
+        $taxes[$tax] = $tax;
+      }
+    }
+  }
+  $result = array_intersect_key($params_array, $taxes);
+  $_taxes = ($result) ? $result : false;
+  if($_taxes){
+    return true;
+  }
+  
+  // search
+  $_search = (array_key_exists('s', $params_array)) ? $params_array['s'] : false;
+  if($_search){
+    return true;
+  }
+  
+  // year
+  $_year = (array_key_exists('year', $params_array) && is_numeric($params_array['year'])) ? $params_array['year'] : false;
+  $_month = (array_key_exists('month', $params_array) && is_numeric($params_array['month'])) ? $params_array['month'] : false;
+  $_day = (array_key_exists('day', $params_array) && is_numeric($params_array['day'])) ? $params_array['day'] : false;
+  if($_year || $_month || $_day) {
+    return true;
+  }
+  
+  // name
+  $_name = (array_key_exists('name', $params_array)) ? $params_array['name'] : false;
+  if($_name){
+    return true;
+  }
+  
+  // per_page
+  $_per_page = (array_key_exists('per_page', $params_array) && is_numeric($params_array['per_page'])) ? $params_array['per_page'] : false;
+  if($_per_page){
+    return true;
+  }
+  
+  // paged page
+  $_page = (array_key_exists('p', $params_array) && is_numeric($params_array['p'])) ? $params_array['p'] : false;
+  if($_page){
+    return true;
+  }
+  
+  // paged page
+  $_show_all = (array_key_exists('show_all', $params_array)) ? true : false;
+  if($_show_all){
+    return true;
+  }
+  
+  return false;
+}
+
 // string $key, // key of item to check against. e.g 'key' or 'items_key' or 'items_singular'
 // string $value, // value of item to check against. e.g 'blog' or 'portfolio'
 // string $return_key // key of the value to return. e.g 'items_route' 
-function getTypeSettingBySettingKey(string $key, string $value, string $return_key) {
+function typeSettingByKey($key, $value, $return_key) {
+  $data = '';
   foreach ($GLOBALS["config"]['types'] as $type_setting) if ($type_setting[$key] == $value) {
     $data = $type_setting[$return_key];
   }
   return $data;
 }
 // get taxonomy setting. same as above just added type paramter to get a types taxonomy
-function getTypeTaxSettingBySettingKey(string $type, string $key, string $value, string $return) {
-  foreach ($GLOBALS["config"]['types'][$type]['taxonomies'] as $tax_setting) if ($tax_setting[$key] == $value) {
-    $data = $tax_setting[$return];
-  }
-  return $data;
-}
-
-function type_setting_by_key($key, $value, $return_key) {
-  foreach ($GLOBALS["config"]['types'] as $type_setting) if ($type_setting[$key] == $value) {
-    $data = $type_setting[$return_key];
-  }
-  return $data;
-}
-// get taxonomy setting. same as above just added type paramter to get a types taxonomy
-function tax_setting_by_key($type, $key, $value, $return) {
+function taxSettingByKey($type, $key, $value, $return) {
+  $data = '';
   foreach ($GLOBALS["config"]['types'][$type]['taxonomies'] as $tax_setting) if ($tax_setting[$key] == $value) {
     $data = $tax_setting[$return];
   }
@@ -56,7 +110,7 @@ function slugToFilename($slug) {
   return $data;
 }
 // get objects in array using key->value
-function getInArray( string $needle, array $haystack, string $column){
+function getInArray(string $needle, array $haystack, string $column){
   $matches = [];
   foreach( $haystack as $item )  if( $item[ $column ] === $needle )  $matches[] = $item;
   return $matches;

@@ -3,10 +3,22 @@ namespace Rmcc;
 
 class PaginationModel {
   
-  public function __construct(int $count, string $url) 
+  public function __construct(int $count) 
   {
-    $this->count = $count; 
-    $this->url = $url; 
+    $this->count = $count;
+  }
+  
+  public function setPaginationLink($new_part) {
+    $current_url_parsed = parse_url($_SERVER['REQUEST_URI']);
+    if(isset($current_url_parsed['query'])){
+      parse_str($current_url_parsed['query'], $queryArray);
+      $queryArray['p'] = $new_part;
+      $newQueryStr = http_build_query($queryArray);
+      $url = '?'.$newQueryStr;
+    } else {
+      $url = '?p='.$new_part;
+    }
+    return $url;
   }
   
   // if $count is greater than $posts_per_page, return the pagination data, else return null
@@ -22,10 +34,35 @@ class PaginationModel {
     // step 1 - setup. data is blank. paged is the archive paging route. if req page is blank, set it to 1
     $data[] = '';
     
+    // parse the url
+    $current_url_parsed = parse_url($_SERVER['REQUEST_URI']);
+    
     // step 2 - if has next|prev, set the links data, available at .next & .prev
-    if ($this->hasNextPage()) $data['next'] = $this->url.($GLOBALS['_context']['page'] + 1);
+    if ($this->hasNextPage()) {
+      $nexturl = $this->setPaginationLink(($GLOBALS['_context']['page'] + 1));
+      // if(isset($current_url_parsed['query'])){
+      //   parse_str($current_url_parsed['query'], $queryArray);
+      //   $queryArray['p'] = ($GLOBALS['_context']['page'] + 1);
+      //   $newQueryStr = http_build_query($queryArray);
+      //   $nexturl = '?'.$newQueryStr;
+      // } else {
+      //   $nexturl = '?p='.($GLOBALS['_context']['page'] + 1);
+      // }
+      $data['next'] = $nexturl;
+    };
 
-    if ($this->hasPrevPage()) $data['prev'] = $this->url.($GLOBALS['_context']['page'] - 1);
+    if ($this->hasPrevPage()) {
+      $prevurl = $this->setPaginationLink(($GLOBALS['_context']['page'] - 1));
+      // if(isset($current_url_parsed['query'])){
+      //   parse_str($current_url_parsed['query'], $queryArrayPrev);
+      //   $queryArrayPrev['p'] = ($GLOBALS['_context']['page'] - 1);
+      //   $newQueryStrPrev = http_build_query($queryArrayPrev);
+      //   $prevurl = '?'.$newQueryStrPrev;
+      // } else {
+      //   $prevurl = '?p='.($GLOBALS['_context']['page'] - 1);
+      // }
+      $data['prev'] = $prevurl;
+    };
     
     // step 3 - all posts count divided by posts per page, rounded up to the highest integer
     $rounded = ceil($this->count / $GLOBALS['_context']['per_page']);
@@ -40,9 +77,18 @@ class PaginationModel {
       $class = "not-active";
       if ($offset == $GLOBALS['_context']['page']) $class = "uk-active";
       
+      // if(isset($current_url_parsed['query'])){
+      //   parse_str($current_url_parsed['query'], $queryArray3);
+      //   $queryArray3['p'] = $offset;
+      //   $newQueryStr3 = http_build_query($queryArray3);
+      //   $newurl = '?'.$newQueryStr3;
+      // } else {
+      //   $newurl = '?p='.$offset;
+      // }
+      $offseturl = $this->setPaginationLink($offset);
       // setting the data
       $output[] = array(
-        'link' => $this->url.$offset, 
+        'link' => $offseturl, 
         'title' => $offset,
         'class' => $class,
       );

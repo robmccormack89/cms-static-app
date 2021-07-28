@@ -32,6 +32,31 @@ class ArchiveController extends CoreController {
     );
   }
   
+  public function queryMainIndexArchive($params) {
+
+    $GLOBALS['_context']['archive'] = 'QueriedMainIndexArchive'; //
+    
+    parse_str($params, $params_array); //
+    
+    $params_array['type'] = typeSettingByKey('key', $this->type, 'single');
+    
+    if(isset($params_array['p'])) $GLOBALS['_context']['page'] = $params_array['p'];
+    if(isset($params_array['show_all'])) $GLOBALS['_context']['paged'] = false;
+    if(isset($params_array['per_page'])) $GLOBALS['_context']['per_page'] = $params_array['per_page'];
+    
+    $pre_params = http_build_query($params_array);
+    if (strpos($pre_params, 'show_all') !== false) {
+      $new_params = str_replace("show_all=", "show_all", $pre_params);
+    } else {
+      $new_params = $pre_params;
+    }
+    $GLOBALS['_context']['string_params'] = $new_params;
+    
+    // set the archive obj context for twig to render
+    $context['archive'] = (new ArchiveModel())->getQueriedArchive();
+    $this->render($context);
+  }
+  
   public function getMainIndexArchive() {
     // set some global variables related to the current context
     $GLOBALS['_context']['archive'] = 'MainIndexArchive';

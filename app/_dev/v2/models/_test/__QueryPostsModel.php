@@ -427,7 +427,7 @@ class QueryPostsModel {
     //     $prev_posts = "prev_posts{$iterator}"; // variable variable with iterator
     //     if(is_array($value)){
     //       $$prev_posts = new Json($posts);
-    //       $tax = getTypeTaxSettingBySettingKey(getTypeSettingBySettingKey('single', $this->query_vars['type'], 'key'), 'single', $value['taxonomy'], 'key');
+    //       $tax = taxSettingByKey(typeSettingByKey('single', $this->query_vars['type'], 'key'), 'single', $value['taxonomy'], 'key');
     // 
     //       if(array_key_exists('operator', $value)) $op = $value['operator'];
     // 
@@ -466,7 +466,7 @@ class QueryPostsModel {
     //     $$prev_posts = new Json($posts);
     //     if(is_array($value)){
     // 
-    //       $tax = getTypeTaxSettingBySettingKey(getTypeSettingBySettingKey('single', $this->query_vars['type'], 'key'), 'single', $value['taxonomy'], 'key');
+    //       $tax = taxSettingByKey(typeSettingByKey('single', $this->query_vars['type'], 'key'), 'single', $value['taxonomy'], 'key');
     // 
     //       if(array_key_exists('operator', $value)) $op = $value['operator'];
     // 
@@ -503,7 +503,7 @@ class QueryPostsModel {
     //   $prev_posts = "prev_posts{$iterator}"; // variable variable with iterator
     //   if(is_array($value)){
     //     $$prev_posts = new Json($posts);
-    //     $tax = getTypeTaxSettingBySettingKey(getTypeSettingBySettingKey('single', $this->query_vars['type'], 'key'), 'single', $value['taxonomy'], 'key');
+    //     $tax = taxSettingByKey(typeSettingByKey('single', $this->query_vars['type'], 'key'), 'single', $value['taxonomy'], 'key');
     //     if(array_key_exists('operator', $value)) $op = $value['operator'];
     // 
     //     foreach($value['terms'] as $term){
@@ -991,8 +991,8 @@ class QueryPostsModel {
 //     if($this->query_vars['type'] == 'page'){
 //       $location = 'site.content_types.page';
 //     } else {
-//       $type_plural = getTypeSettingBySettingKey('single', $this->query_vars['type'], 'items'); // returns 'posts' or 'projects' etc...
-//       $type_archive = getTypeSettingBySettingKey('single', $this->query_vars['type'], 'key'); // returns 'blog' or 'portfolio' etc...
+//       $type_plural = typeSettingByKey('single', $this->query_vars['type'], 'items'); // returns 'posts' or 'projects' etc...
+//       $type_archive = typeSettingByKey('single', $this->query_vars['type'], 'key'); // returns 'blog' or 'portfolio' etc...
 //       $location = 'site.content_types.'.$type_archive.'.'.$type_plural;
 //     }
 // 
@@ -1006,7 +1006,7 @@ class QueryPostsModel {
 //         if(is_array($value)){
 // 
 //           if(array_key_exists('taxonomy', $value)) {
-//             $tax = getTypeTaxSettingBySettingKey(getTypeSettingBySettingKey('single', $this->query_vars['type'], 'key'), 'single', $value['taxonomy'], 'key');
+//             $tax = taxSettingByKey(typeSettingByKey('single', $this->query_vars['type'], 'key'), 'single', $value['taxonomy'], 'key');
 //           }
 // 
 //           if(array_key_exists('terms', $value)) {
@@ -1045,7 +1045,7 @@ class QueryPostsModel {
 //     foreach($this->query_vars['tax_query'] as $key => $value){
 //       if(is_array($value)){
 // 
-//         $tax = getTypeTaxSettingBySettingKey(getTypeSettingBySettingKey('single', $this->query_vars['type'], 'key'), 'single', $value['taxonomy'], 'key');
+//         $tax = taxSettingByKey(typeSettingByKey('single', $this->query_vars['type'], 'key'), 'single', $value['taxonomy'], 'key');
 // 
 //         if(array_key_exists('operator', $value)) $op = $value['operator'];
 // 
@@ -1081,7 +1081,7 @@ class QueryPostsModel {
 //       $prev_posts = "prev_posts{$iterator}"; // variable variable with iterator
 //       if(is_array($value)){
 //         $$prev_posts = new Json($posts);
-//         $tax = getTypeTaxSettingBySettingKey(getTypeSettingBySettingKey('single', $this->query_vars['type'], 'key'), 'single', $value['taxonomy'], 'key');
+//         $tax = taxSettingByKey(typeSettingByKey('single', $this->query_vars['type'], 'key'), 'single', $value['taxonomy'], 'key');
 // 
 //         if(array_key_exists('operator', $value)) $op = $value['operator'];
 // 
@@ -1116,7 +1116,7 @@ class QueryPostsModel {
 //   //   $prev_posts = "prev_posts{$iterator}"; // variable variable with iterator
 //   //   if(is_array($value)){
 //   //     $$prev_posts = new Json($posts);
-//   //     $tax = getTypeTaxSettingBySettingKey(getTypeSettingBySettingKey('single', $this->query_vars['type'], 'key'), 'single', $value['taxonomy'], 'key');
+//   //     $tax = taxSettingByKey(typeSettingByKey('single', $this->query_vars['type'], 'key'), 'single', $value['taxonomy'], 'key');
 //   // 
 //   //     if(array_key_exists('operator', $value)) {
 //   //       $op = $value['operator'];
@@ -1253,8 +1253,8 @@ class QueryPostsModel {
 //   if($this->query_vars['type'] == 'page'){
 //     $location = 'site.content_types.page';
 //   } else {
-//     $type_plural = getTypeSettingBySettingKey('single', $this->query_vars['type'], 'items'); // returns 'posts' or 'projects' etc...
-//     $type_archive = getTypeSettingBySettingKey('single', $this->query_vars['type'], 'key'); // returns 'blog' or 'portfolio' etc...
+//     $type_plural = typeSettingByKey('single', $this->query_vars['type'], 'items'); // returns 'posts' or 'projects' etc...
+//     $type_archive = typeSettingByKey('single', $this->query_vars['type'], 'key'); // returns 'blog' or 'portfolio' etc...
 //     $location = 'site.content_types.'.$type_archive.'.'.$type_plural;
 //   }
 // 
@@ -1298,8 +1298,8 @@ class QueryPostsModel {
 //     if($this->query_vars['type'] == 'page'){
 //       $location = 'site.content_types.page';
 //     } else {
-//       $type_plural = getTypeSettingBySettingKey('single', $this->query_vars['type'], 'items'); // returns 'posts' or 'projects' etc...
-//       $type_archive = getTypeSettingBySettingKey('single', $this->query_vars['type'], 'key'); // returns 'blog' or 'portfolio' etc...
+//       $type_plural = typeSettingByKey('single', $this->query_vars['type'], 'items'); // returns 'posts' or 'projects' etc...
+//       $type_archive = typeSettingByKey('single', $this->query_vars['type'], 'key'); // returns 'blog' or 'portfolio' etc...
 //       $location = 'site.content_types.'.$type_archive.'.'.$type_plural;
 //     }
 // 
@@ -1353,7 +1353,7 @@ class QueryPostsModel {
 // 
 //         // if 'tax_query' array contains key 'taxonomy', set the locations. 'taxonomy' is required
 //         if(array_key_exists('taxonomy', $value)) {
-//           $tax = getTypeTaxSettingBySettingKey(getTypeSettingBySettingKey('single', $this->query_vars['type'], 'key'), 'single', $value['taxonomy'], 'key');
+//           $tax = taxSettingByKey(typeSettingByKey('single', $this->query_vars['type'], 'key'), 'single', $value['taxonomy'], 'key');
 //         };
 // 
 //         // if 'tax_query' array contains key 'terms'. 'terms' is required but can be single value or an array

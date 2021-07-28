@@ -40,8 +40,8 @@ class QueryPostsModel {
     
     if($this->type){
       
-      $items = getTypeSettingBySettingKey('single', $this->type, 'items'); // returns 'posts' or 'projects'
-      $type_key = getTypeSettingBySettingKey('single', $this->type, 'key'); // returns 'blog' or 'portfolio'
+      $items = typeSettingByKey('single', $this->type, 'items'); // returns 'posts' or 'projects'
+      $type_key = typeSettingByKey('single', $this->type, 'key'); // returns 'blog' or 'portfolio'
       
       $q1 = new Json('../public/json/data.min.json');
       $posts = $q1
