@@ -1,7 +1,5 @@
 to do...
 
-1. full query params working off base_url. e.g: https://robertmccormack.com?type=post&year=2021
-
 future improvements..
 
 1. allow multiple types in query string. e.g: type=post,project
