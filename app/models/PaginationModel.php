@@ -8,7 +8,14 @@ class PaginationModel {
     $this->count = $count;
   }
   
-  public function setPaginationLink($new_part) {
+  // if $count is greater than $posts_per_page, return the pagination data, else return null
+  public function getPagination() {
+    $data = null;
+    if($this->count > $GLOBALS['_context']['per_page']) $data = $this->setPaginationData();
+    return $data;
+  }
+  
+  protected function setPaginationLink($new_part) {
     $current_url_parsed = parse_url($_SERVER['REQUEST_URI']);
     if(isset($current_url_parsed['query'])){
       parse_str($current_url_parsed['query'], $queryArray);
@@ -20,13 +27,6 @@ class PaginationModel {
       $url = '?p='.$new_part;
     }
     return $url;
-  }
-  
-  // if $count is greater than $posts_per_page, return the pagination data, else return null
-  public function getPagination() {
-    $data = null;
-    if($this->count > $GLOBALS['_context']['per_page']) $data = $this->setPaginationData();
-    return $data;
   }
   
   // set the pagination data
@@ -41,27 +41,11 @@ class PaginationModel {
     // step 2 - if has next|prev, set the links data, available at .next & .prev
     if ($this->hasNextPage()) {
       $nexturl = $this->setPaginationLink(($GLOBALS['_context']['page'] + 1));
-      // if(isset($current_url_parsed['query'])){
-      //   parse_str($current_url_parsed['query'], $queryArray);
-      //   $queryArray['p'] = ($GLOBALS['_context']['page'] + 1);
-      //   $newQueryStr = http_build_query($queryArray);
-      //   $nexturl = '?'.$newQueryStr;
-      // } else {
-      //   $nexturl = '?p='.($GLOBALS['_context']['page'] + 1);
-      // }
       $data['next'] = $nexturl;
     };
 
     if ($this->hasPrevPage()) {
       $prevurl = $this->setPaginationLink(($GLOBALS['_context']['page'] - 1));
-      // if(isset($current_url_parsed['query'])){
-      //   parse_str($current_url_parsed['query'], $queryArrayPrev);
-      //   $queryArrayPrev['p'] = ($GLOBALS['_context']['page'] - 1);
-      //   $newQueryStrPrev = http_build_query($queryArrayPrev);
-      //   $prevurl = '?'.$newQueryStrPrev;
-      // } else {
-      //   $prevurl = '?p='.($GLOBALS['_context']['page'] - 1);
-      // }
       $data['prev'] = $prevurl;
     };
     
@@ -78,14 +62,6 @@ class PaginationModel {
       $class = "not-active";
       if ($offset == $GLOBALS['_context']['page']) $class = "uk-active";
       
-      // if(isset($current_url_parsed['query'])){
-      //   parse_str($current_url_parsed['query'], $queryArray3);
-      //   $queryArray3['p'] = $offset;
-      //   $newQueryStr3 = http_build_query($queryArray3);
-      //   $newurl = '?'.$newQueryStr3;
-      // } else {
-      //   $newurl = '?p='.$offset;
-      // }
       $offseturl = $this->setPaginationLink($offset);
       // setting the data
       $output[] = array(

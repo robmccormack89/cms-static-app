@@ -8,8 +8,8 @@ class QueryModel {
   * Examples of inputs into this class
   *
   */
-  protected static $_argsString = 'type=post&categories=news,media&tags=css,javascript&s=lorem&year=2021&month=4&day=4&name=lorem&per_page=3&p=1&show_all';
-  protected static $_argsArray = array(
+  protected static $_exampleString = 'type=post&categories=news,media&tags=css,javascript&s=lorem&year=2021&month=4&day=4&name=lorem&per_page=3&p=1&show_all';
+  protected static $_exampleArray = array(
     // working. takes string & content type singular label (post, project etc...)
     'type' => 'post',
     
@@ -62,7 +62,7 @@ class QueryModel {
     $this->post_count = $this->getPostsPerPage(); // The number of posts being displayed. per page
     $this->found_posts = $this->getPostsCount(); // The total number of posts found matching the current query parameters
     $this->max_num_pages = $this->getPostsMaxPages(); // The total number of pages. Is the result of $found_posts / $posts_per_page
-    $this->init();
+    // $this->init();
   }
   public function init() {
     // echo($this->queried_object.': the queried object');
@@ -83,15 +83,13 @@ class QueryModel {
     // echo('<hr>');
     // echo($this->max_num_pages);
     // echo('<hr>');
-    
     // print_r($GLOBALS['_context']);
     // echo('<hr>');
   }
   
   /*
   *
-  * The Queried Object
-  * 
+  * The Queried Object (archive meta)
   *
   */
   private function getQueriedObject() {
@@ -231,7 +229,7 @@ class QueryModel {
     /*
     *
     * 2. get all single posts from all content types
-    * This serves as our start query, minus all other queries, we retunr all posts
+    * This serves as our start query, minus all other queries, we return all posts
     * $posts is set with the posts, and per each modifying query below, we query off $posts & then reset it with the new results
     *
     */

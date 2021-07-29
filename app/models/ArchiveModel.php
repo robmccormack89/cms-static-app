@@ -86,7 +86,7 @@ class ArchiveModel {
     * This may be incorporated into QueryModel as a returned property like $posts_obj->pagination
     *
     */
-    if($GLOBALS['_context']['paged']){
+    if($GLOBALS['_context']['paged'] && !empty($archive['posts'])){
       $archive['pagination'] = (new PaginationModel($posts_obj->found_posts))->getPagination();
       if($GLOBALS['_context']['page'] > 1) $archive['title'] = $archive['title'].' (Page '.$GLOBALS['_context']['page'].')';
     }
@@ -146,7 +146,7 @@ class ArchiveModel {
     * This may be incorporated into QueryModel as a returned property like $posts_obj->pagination
     *
     */
-    if($GLOBALS['_context']['paged']){
+    if($GLOBALS['_context']['paged'] && !empty($archive['posts'])){
       $archive['pagination'] = (new PaginationModel($posts_obj->found_posts))->getPagination();
       if($GLOBALS['_context']['page'] > 1) $archive['title'] = $archive['title'].' (Page '.$GLOBALS['_context']['page'].')';
     }

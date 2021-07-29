@@ -1,5 +1,14 @@
 <?php
 
+function showAllParamFix(string $params_string) {
+  if (strpos($params_string, 'show_all') !== false) {
+    $params = str_replace("show_all=", "show_all", $params_string);
+  } else {
+    $params = $params_string;
+  }
+  return $params;
+}
+
 function queryParamsExists($params) {
   parse_str($params, $params_array);
   

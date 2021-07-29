@@ -6,37 +6,20 @@ namespace Rmcc; // set the Rmcc namespace for using Rmcc classes
 * PORTFOLIO MAIN INDEX
 *
 */
-  
 $router->get('/portfolio/', function() {
-  
-  global $query_type;
-  $query_type = 'portfolio';
-  global $query_context;
-  $query_context = 'MainIndexArchive';
-  
-  Cache::cacheServe(function() { 
-    (new ArchiveController())->getMainIndexArchive('portfolio', true);
-  });
-});
-
-/*
-*
-* PORTFOLIO MAIN INDEX - PAGED
-*
-*/
-
-$router->get('/portfolio/page/{page}', function($page){
- if ($page == 1) {
-   header('Location: /portfolio', true, 301); // redirect requests for page one of paged archive to main archive
-   exit();
- }
- Cache::cacheServe(function() use ($page) { 
-   global $query_type;
-   $query_type = 'portfolio';
-   global $query_context;
-   $query_context = 'MainIndexArchive';
-   (new ArchiveController())->getMainIndexArchive('portfolio', true, $page);
- });
+  $params = parse_url($_SERVER['REQUEST_URI']);
+  if (isset($params['query']) && queryParamsExists($params['query'])) {
+    parse_str($params['query'], $params_array);
+    if($_SERVER['REQUEST_URI'] === '/portfolio?p=1'){
+      header('Location: /portfolio', true, 301);
+      exit();
+    }
+    (new ArchiveController('portfolio'))->queryMainIndexArchive($params['query']);
+  } else {
+    Cache::cacheServe(function(){ 
+      (new ArchiveController('portfolio'))->getMainIndexArchive();
+    });
+  }
 });
 
 /*
@@ -61,6 +44,23 @@ $router->get('/portfolio/projects/{slug}', function($slug) {
 *
 */
 
+// term index
+$router->get('/portfolio/technologies/{term}/', function($term){
+   $params = parse_url($_SERVER['REQUEST_URI']);
+   if (isset($params['query']) && queryParamsExists($params['query'])) {
+     parse_str($params['query'], $params_array);
+     if($_SERVER['REQUEST_URI'] === '/portfolio/technologies/'.$term.'?p=1'){
+       header('Location: /portfolio/technologies/'.$term, true, 301); // redirect requests for page one of paged archive to main archive
+       exit();
+     }
+     (new ArchiveController('portfolio'))->queryTaxTermArchive($params['query'], 'technologies', $term);
+   } else {
+     Cache::cacheServe(function() use ($term) { 
+       (new ArchiveController('portfolio'))->getTaxTermArchive('technologies', $term);
+     });
+   } 
+});
+
 // collection index
 // $router->get('/portfolio/technologies/', function() {
 //   Cache::cacheServe(function() { 
@@ -78,29 +78,3 @@ $router->get('/portfolio/projects/{slug}', function($slug) {
 //     (new TaxonomyArchiveController('portfolio', 'technologies', true, $page))->getTaxCollectionArchive();
 //   });
 // });
-
-// term index
-$router->get('/portfolio/technologies/{term}/', function($term){
-  Cache::cacheServe(function() use ($term) { 
-    global $query_type;
-    $query_type = 'portfolio';
-    global $query_context;
-    $query_context = 'TaxTermArchive';
-    (new ArchiveController())->getTaxTermArchive('portfolio', 'technologies', $term, true);
-  });
-});
-
-// term index - paged
-$router->get('/portfolio/technologies/{term}/page/{page}', function($term, $page){
- if ($page == 1) {
-   header('Location: /portfolio/technologies/'.$term, true, 301); // redirect requests for page one of paged archive to main archive
-   exit();
- }
- Cache::cacheServe(function() use ($term, $page) { 
-   global $query_type;
-   $query_type = 'portfolio';
-   global $query_context;
-   $query_context = 'TaxTermArchive';
-   (new ArchiveController())->getTaxTermArchive('portfolio', 'technologies', $term, true, $page);
- });
-});
