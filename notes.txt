@@ -2,8 +2,8 @@ to do...
 
 1. full query params working off base_url. e.g: https://robertmccormack.com?type=post&year=2021
 
-2. breadcrumbs working -> would be working off off _context array $variables/conditionals
-
 future improvements..
 
 1. allow multiple types in query string. e.g: type=post,project
+
+2. mail.php or something

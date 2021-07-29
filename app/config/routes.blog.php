@@ -19,10 +19,6 @@ $router->get('/blog/', function() {
 
 $router->get('/blog/posts/{slug}', function($slug) {
   Cache::cacheServe(function() use ($slug) { 
-    global $query_type;
-    $query_type = 'blog';
-    global $query_context;
-    $query_context = 'Single';
     (new SingleController('blog', $slug))->getSingle();
   });
 });

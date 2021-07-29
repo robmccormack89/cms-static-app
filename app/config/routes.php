@@ -1,4 +1,5 @@
 <?php
+namespace Rmcc; // set the Rmcc namespace for using Rmcc classes
 use \Bramus\Router\Router as Router; // use the Bramus Router class as Router, initialize it & set the base path
 
 /*
@@ -24,14 +25,17 @@ if ($config['site_protocol'] == "https") {
   }
 }
 
-
 /*
 *
-* HOMEPAGE ROUTE/s
+* HOMEPAGE
 *
 */
 
-include('routes/_home.php');
+$router->get('/', function() {
+  Cache::cacheServe(function() { 
+    (new SingleController('page', 'index'))->getSingle();
+  });
+});
 
 /*
 *
@@ -39,7 +43,7 @@ include('routes/_home.php');
 *
 */
 
-include('routes/_blog.php');
+include('routes.blog.php');
 
 /*
 *
@@ -47,7 +51,7 @@ include('routes/_blog.php');
 *
 */
 
-include('routes/_portfolio.php');
+include('routes.portfolio.php');
 
 /*
 *
@@ -55,7 +59,7 @@ include('routes/_portfolio.php');
 *
 */
 
-include('routes/_pages.php');
+include('routes.pages.php');
 
 
 // 404 error route. in most cases 404 errors will be rendered rather than routed, see CoreController->error()

@@ -16,16 +16,25 @@ class SingleController extends CoreController {
     $this->type = $type; // e.g 'page' or 'blog' or 'portfolio'
     $this->slug = $slug; // e.g 'about'. this will usually come from the request unless setting for specific pages
     // the $name property is only used for render() to differenciate between archived & non-archived singular objects
-    if($this->type == 'page') {
-      $this->name = $this->type;
-    } else {
-      $this->name = $GLOBALS['config']['types'][$this->type]['single'];
-    }
+    $this->name = ($this->type == 'page') ? $this->type : $GLOBALS['config']['types'][$this->type]['single'];
+    
+    $this->init();
+  }
+  
+  private function init() {
+    global $_context;
+    $_context = array(
+      'single' => 'Single',
+      'type' => $this->type,
+      'slug' => $this->slug,
+      'name' => $this->name,
+    );
   }
   
   public function getSingle() {
-    $context['single'] = (new SingleModel($this->type, $this->slug))->single; // set the singular object context using the SingleModel class
-    $this->render($context); // render the context
+    $context['single'] = (new SingleModel($this->type, $this->slug))->single;
+    $context['context'] = $GLOBALS['_context'];
+    $this->render($context);
   }
   
   /*
@@ -55,6 +64,5 @@ class SingleController extends CoreController {
     } else {
       $this->error();
     }
-    
   }
 }

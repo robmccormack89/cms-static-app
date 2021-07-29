@@ -1,7 +1,7 @@
 <?php
 $root = (isset($_SERVER['HTTPS']) ? "https://" : "http://") . $_SERVER['HTTP_HOST'];
 
-// configs
+// the base config settings, accessible via $global or $GLOBALS
 $config['base_url'] = $root;
 $config['language'] = 'en-GB';
 $config['charset'] = 'UTF-8';
@@ -12,7 +12,7 @@ $config['admin_email'] = 'info@example.com';
 $config['php_cache'] = false;
 $config['php_minify'] = false;
 
-// configure this for archived content types. pages is built in & is a singular-type only
+// register new content types here, accessible via $global or $GLOBALS using 'types'
 $config['types'] = array(
   
   'blog'  => array(
@@ -54,4 +54,4 @@ $config['types'] = array(
   
 );
 
-return $config;
+return $config; // return all the config globals
