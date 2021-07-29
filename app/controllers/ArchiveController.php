@@ -3,8 +3,6 @@ namespace Rmcc;
 
 class ArchiveController extends CoreController {
   
-  // dont really need $page anymore as pagination is now based on query params. so can work to remove this 
-  
   public function __construct($type, $posts_per_page = 4) {
     parent::__construct();
     $this->type = $type;
@@ -140,6 +138,14 @@ class ArchiveController extends CoreController {
     */
     $params_array['type'] = typeSettingByKey('key', $this->type, 'single');
     $params_array[$tax] = $term;
+    
+    /*
+    *
+    * add tax & term to the _context array
+    *
+    */
+    $GLOBALS['_context']['tax'] = $tax;
+    $GLOBALS['_context']['term'] = $term;
     
     /*
     *
