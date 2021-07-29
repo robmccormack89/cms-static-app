@@ -10,6 +10,7 @@ return array(
     'Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
     'Symfony\\Polyfill\\Ctype\\' => array($vendorDir . '/symfony/polyfill-ctype'),
     'Rmcc\\' => array($baseDir . '/app/classes', $baseDir . '/app/core', $baseDir . '/app/controllers', $baseDir . '/app/models', $baseDir . '/app/extensions'),
+    'PHPMailer\\PHPMailer\\' => array($vendorDir . '/phpmailer/phpmailer/src'),
     'Nahid\\QArray\\' => array($vendorDir . '/nahid/qarray/src'),
     'Nahid\\JsonQ\\' => array($vendorDir . '/nahid/jsonq/src'),
     'DeepCopy\\' => array($vendorDir . '/myclabs/deep-copy/src/DeepCopy'),

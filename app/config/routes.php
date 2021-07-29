@@ -75,10 +75,10 @@ include('routes.pages.php');
 
 
 // 404 error route. in most cases 404 errors will be rendered rather than routed, see CoreController->error()
-$router->set404(function() {
-  header('HTTP/1.1 404 Not Found');
-  echo '<hr>Error 404';
-});
+// $router->set404(function() {
+//   header('HTTP/1.1 404 Not Found');
+//   echo '<hr>Error 404';
+// });
 
 // go
 $router->run();

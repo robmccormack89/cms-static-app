@@ -1,7 +1,37 @@
 {% extends "page.twig" %}
 
 {% block page_content %}
-  <div class="page-content uk-margin-medium-bottom">
+  {% if msg is empty %}
+    <form method="post" class="uk-child-width-1-1 uk-grid-small" uk-grid>
+      <div class="uk-width-1-2">
+        <label class="uk-form-label" for="to">Department:</label>
+        <select name="to" id="to" class="uk-select">
+          <option value="info">Sales</option>
+          <option value="jobs" selected="selected">Support</option>
+          <option value="me">Accounts</option>
+        </select>
+      </div>
+      <div class="uk-width-1-2">
+        <label class="uk-form-label" for="subject">Subject: <input type="text" name="subject" id="subject" maxlength="255" class="uk-input"></label>
+      </div>
+      <div class="uk-width-1-2">
+        <label class="uk-form-label" for="name">Your name: <input type="text" name="name" id="name" maxlength="255" class="uk-input"></label>
+      </div>
+      <div class="uk-width-1-2">
+        <label class="uk-form-label" for="email">Your email address: <input type="email" name="email" id="email" maxlength="255" class="uk-input"></label>
+      </div>
+      <div>
+        <label class="uk-form-label" for="query">Your question:</label>
+        <textarea cols="30" rows="8" name="query" id="query" placeholder="Your question" class="uk-textarea"></textarea>
+      </div>
+      <div>
+        <input type="submit" value="Submit"  class="uk-button uk-button-primary">
+      </div>
+    </form>
+  {% else %}
+    {{ msg }}
+  {% endif %}
+  <!-- <div class="page-content uk-margin-medium-bottom">
     <p class="uk-dropcap uk-text-lead">Earum voluptas consequuntur et veniam laboriosam. Dolorem sed ad est accusamus animi ut vel corporis. Veniam autem voluptatem nemo assumenda id dolores adipisci. Non dolore aperiam molestiae est explicabo
       nulla est. Iure ut possimus officiis quas.</p>
 
@@ -31,5 +61,5 @@
       <p class="uk-margin-small-bottom">The blockquote element represents content that is quoted from another source, optionally with a citation which must be within a footer or cite element.</p>
       <footer>Someone famous in <cite><a href="#">Source Title</a></cite></footer>
     </blockquote>
-  </div>
+  </div> -->
 {% endblock %}

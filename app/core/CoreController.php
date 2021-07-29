@@ -1,5 +1,7 @@
 <?php
 namespace Rmcc;
+//Import the PHPMailer class into the global namespace
+use PHPMailer\PHPMailer\PHPMailer;
 
 // mainly sets up the twig environment for rendering templates. includes custom caching with rendering
 class CoreController {
@@ -32,6 +34,9 @@ class CoreController {
     $this->twig = new \Twig\Environment($loader, ['cache' => '../app/cache/compilation', 'debug' => true ]);
     $this->twig->addExtension(new \Twig\Extension\DebugExtension());
     
+    // contact form
+    $this->addContactFormToTwig();
+    
     // twig globals
     $this->twig->addGlobal('site', SiteModel::init()->getSite());
     $this->twig->addGlobal('author', AuthorModel::init()->getAuthor());
@@ -44,6 +49,144 @@ class CoreController {
     $this->twig->addGlobal('main_menu_second', $main_menu_second);
     $this->twig->addGlobal('base_url', $GLOBALS['config']['base_url']);
     $this->twig->addGlobal('current_url', $GLOBALS['config']['base_url'].$_SERVER['REQUEST_URI']);
+  }
+  
+  public function addContactFormToTwig() {
+    if (array_key_exists('to', $_POST)) {
+      
+      /*
+      *
+      * Defaults
+      *
+      */
+      $err = false;
+      $msg = '';
+      $email = '';
+      
+      /*
+      *
+      * Apply some basic validation and filtering to the subject
+      *
+      */
+      if (array_key_exists('subject', $_POST)) {
+        $subject = substr(strip_tags($_POST['subject']), 0, 255);
+      } else {
+        $subject = 'No subject given';
+      }
+      
+      /*
+      *
+      * Apply some basic validation and filtering to the query
+      *
+      */
+      if (array_key_exists('query', $_POST)) {
+        //Limit length and strip HTML tags
+        $query = substr(strip_tags($_POST['query']), 0, 16384);
+      } else {
+        $query = '';
+        $msg = 'No query provided!';
+        $err = true;
+      }
+      
+      /*
+      *
+      * Apply some basic validation and filtering to the name
+      *
+      */
+      if (array_key_exists('name', $_POST)) {
+        //Limit length and strip HTML tags
+        $name = substr(strip_tags($_POST['name']), 0, 255);
+      } else {
+        $name = '';
+      }
+      
+      /*
+      *
+      * Validate to address
+      * Never allow arbitrary input for the 'to' address as it will turn your form into a spam gateway!
+      * Substitute appropriate addresses from your own domain, or simply use a single, fixed address
+      *
+      */
+      if (array_key_exists('to', $_POST) && in_array($_POST['to'], ['info', 'jobs', 'me'], true)) {
+        $to = $_POST['to'] . '@robertmccormack.com';
+      } else {
+        $to = 'support@example.com';
+      }
+      
+      /*
+      *
+      * Make sure the address they provided is valid before trying to use it
+      *
+      */
+      if (array_key_exists('email', $_POST) && PHPMailer::validateAddress($_POST['email'])) {
+        $email = $_POST['email'];
+      } else {
+        $msg .= 'Error: invalid email address provided';
+        $err = true;
+      }
+      
+      /*
+      *
+      * If not an error!!
+      *
+      */
+      if (!$err) {
+        $mail = new PHPMailer();
+        $mail->isSMTP();
+        $mail->Host = 'secret';
+        $mail->SMTPAuth   = true; //Enable SMTP authentication
+        $mail->Username   = 'secret'; //SMTP username
+        $mail->Password   = 'secret'; //SMTP password
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; //Enable implicit TLS encryption
+        $mail->Port       = 587; //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+        $mail->CharSet = PHPMailer::CHARSET_UTF8;
+        
+        /*
+        *
+        * It's important not to use the submitter's address as the from address as it's forgery,
+        * which will cause your messages to fail SPF checks.
+        * Use an address in your own domain as the from address, put the submitter's address in a reply-to
+        *
+        */
+        $mail->setFrom('cv@robertmccormack.com', (empty($name) ? 'Contact form' : $name));
+        $mail->addAddress($to);
+        $mail->addReplyTo($email, $name);
+        $mail->Subject = 'Contact form: ' . $subject;
+        $mail->Body = "Contact form submission\n\n" . $query;
+        
+        /*
+        *
+        * If mail didnt send for any reason, display an error with info..
+        * Or display success message
+        *
+        */
+        if (!$mail->send()) {
+          $msg .= 'Mailer Error: ' . $mail->ErrorInfo;
+        } else {
+          $msg .= 'Message sent!';
+        }
+      }
+      
+      /*
+      *
+      * Turn the form data into an array for to add to twig
+      *
+      */
+      $form_array = array(
+        'err' => $err,
+        'msg' => $msg,
+        'email' => $email,
+        'subject' => $subject,
+        'query' => $query,
+        'name' => $name,
+        'to' => $to,
+        'mail' => $mail
+      );
+      
+      foreach($form_array as $key => $value){
+        $this->twig->addGlobal($key, $value);
+      }
+    }
   }
 
   // 404 errors

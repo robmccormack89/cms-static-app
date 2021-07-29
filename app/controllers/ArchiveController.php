@@ -99,13 +99,12 @@ class ArchiveController extends CoreController {
     *
     */
     $context['archive'] = (new ArchiveModel())->getQueriedArchive();
+    $context['context'] = $GLOBALS['_context'];
     if(isset($context['archive']['title'])) {
       $this->render($context);
     } else {
       $this->error();
     }
-    
-    $context['_context'] = $GLOBALS['_context'];
   }
   
   public function queryMainIndexArchive($params) {
@@ -180,13 +179,12 @@ class ArchiveController extends CoreController {
     *
     */
     $context['archive'] = (new ArchiveModel())->getQueriedArchive();
+    $context['context'] = $GLOBALS['_context'];
     if(isset($context['archive']['title'])) {
       $this->render($context);
     } else {
       $this->error();
     }
-    
-    $context['_context'] = $GLOBALS['_context'];
   }
   
   public function getMainIndexArchive() {
@@ -281,13 +279,12 @@ class ArchiveController extends CoreController {
     
     // set the archive obj context for twig to render
     $context['archive'] = (new ArchiveModel())->getQueriedArchive();
+    $context['context'] = $GLOBALS['_context'];
     if(isset($context['archive']['title'])) {
       $this->render($context);
     } else {
       $this->error();
     }
-    
-    $context['_context'] = $GLOBALS['_context'];
   }
   
   public function getTaxTermArchive($tax, $term) {
@@ -381,13 +378,12 @@ class ArchiveController extends CoreController {
       
     // set the archive obj context for twig to render
     $context['archive'] = (new ArchiveModel())->getQueriedTaxonomyArchive();
+    $context['context'] = $GLOBALS['_context'];
     if(isset($context['archive']['title'])) {
       $this->render($context);
     } else {
       $this->error();
     }
-    
-    $context['_context'] = $GLOBALS['_context'];
   }
   
   public function getTaxCollectionArchive($tax) {

@@ -1,3 +1,4 @@
+app/config/secret.txt
 app/_dev
 node_modules/
 .sass-cache/

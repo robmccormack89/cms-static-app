@@ -3,14 +3,12 @@
     <a href="/">Home</a>
   </li>
   
-  {% if archive %}
-  
-    {% if context.archive == 'MainIndexArchive' or context.archive == 'TaxCollectionArchive' or context.archive == 'TaxTermArchive' %}
-      {% if context.archive == 'MainIndexArchive' %}
-        <li><span>{{context.type|capitalize}}</span></li>
-      {% else %}
-        <li><a href="/{{context.type}}">{{context.type|capitalize}}</a></li>
-      {% endif %}
+  {% if context.archive == 'MainIndexArchive' or context.archive == 'TaxCollectionArchive' or context.archive == 'TaxTermArchive' %}
+
+    {% if context.archive == 'MainIndexArchive' %}
+      <li><span>{{context.type|capitalize}}</span></li>
+    {% else %}
+      <li><a href="/{{context.type}}">{{context.type|capitalize}}</a></li>
     {% endif %}
     
     {% if context.archive == 'TaxCollectionArchive' or context.archive == 'TaxTermArchive' %}
@@ -25,6 +23,10 @@
       <li><span>{{context.term|capitalize}}</span></li>
     {% endif %}
     
+  {% endif %}
+  
+  {% if context.archive == 'SiteQuery' %}
+    <li><span>{{archive.title}}</span></li>
   {% endif %}
   
   {% if single and context.single == 'Single' and single.slug != 'index' %}

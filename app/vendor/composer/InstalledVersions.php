@@ -30,7 +30,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => '6e03e44c793b871c88894a2fa52d7499ebf7c87a',
+    'reference' => 'add6435c93df492025ec7fb23899fcf9d3b0f5d1',
     'name' => '__root__',
   ),
   'versions' => 
@@ -42,7 +42,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => '6e03e44c793b871c88894a2fa52d7499ebf7c87a',
+      'reference' => 'add6435c93df492025ec7fb23899fcf9d3b0f5d1',
     ),
     'bramus/router' => 
     array (
@@ -83,6 +83,15 @@ private static $installed = array (
       array (
       ),
       'reference' => '09f5e7d702b938301abe23d888e791d9be655456',
+    ),
+    'phpmailer/phpmailer' => 
+    array (
+      'pretty_version' => 'v6.5.0',
+      'version' => '6.5.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'a5b5c43e50b7fba655f793ad27303cd74c57363c',
     ),
     'symfony/polyfill-ctype' => 
     array (
