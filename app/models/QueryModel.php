@@ -97,8 +97,11 @@ class QueryModel {
   */
   private function getQueriedObject() {
     $data = $this->getBaseMeta();
-    if(!isset($GLOBALS['_context']['term'])) $data = $this->getArchiveMeta();
+    if(isset($GLOBALS['_context']['type']) && !isset($GLOBALS['_context']['term'])) $data = $this->getArchiveMeta();
     if(isset($GLOBALS['_context']['term'])) $data = $this->getTermMeta();
+    if(!isset($GLOBALS['_context']['type']) && $this->typeParam()){
+      $data['title'] = 'Query: '.$this->typeParam();
+    }
     return $data;
   }
   private function getBaseMeta() {
@@ -549,7 +552,11 @@ class QueryModel {
     if($posts){
       foreach ($posts as $post) {
         if(isset($post['type']) && $post['type'] == 'page'){
-          $post['link'] = '/'.$post['slug'];
+          if($post['slug'] == 'index') {
+            $post['link'] = '/';
+          } else {
+            $post['link'] = '/'.$post['slug'];
+          }
         } else {
           $post['link'] = '/'.typeSettingByKey('single', $post['type'], 'key').'/'.typeSettingByKey('single', $post['type'], 'items').'/'.$post['slug'];
         }

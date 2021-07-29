@@ -27,8 +27,8 @@
     
   {% endif %}
   
-  <!-- singles go last -->
   {% if single and context.single == 'Single' and single.slug != 'index' %}
+    <!-- singles go last -->
     {% if context.type %}
       <li><a href="/{{context.type}}">{{context.type|capitalize}}</a></li>
     {% endif %}
