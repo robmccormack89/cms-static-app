@@ -1,0 +1,13 @@
+to do...
+
+1. query terms from taxes model & collection archive routes
+
+2. orderby/sorting added to QueryModel
+
+3. breadcrumbs working -> would be working off off _context array $variables/conditionals
+
+4. full query params working off base_url. e.g: https://robertmccormack.com?type=post&year=2021
+
+future improvements..
+
+1. allow multiple types in query string. e.g: type=post,project

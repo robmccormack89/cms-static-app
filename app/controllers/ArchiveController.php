@@ -59,6 +59,7 @@ class ArchiveController extends CoreController {
     if(isset($params_array['p'])) $GLOBALS['_context']['page'] = $params_array['p'];
     if(isset($params_array['show_all'])) $GLOBALS['_context']['paged'] = false;
     if(isset($params_array['per_page'])) $GLOBALS['_context']['per_page'] = $params_array['per_page'];
+    if(!isset($params_array['per_page'])) $params_array['per_page'] = $GLOBALS['_context']['per_page'];
     
     /*
     *
@@ -83,11 +84,6 @@ class ArchiveController extends CoreController {
     * cosmetic really
     *
     */
-    // if (strpos($pre_params, 'show_all') !== false) {
-    //   $new_params = str_replace("show_all=", "show_all", $pre_params);
-    // } else {
-    //   $new_params = $pre_params;
-    // }
     $new_params = showAllParamFix($pre_params);
     
     /*
@@ -155,6 +151,7 @@ class ArchiveController extends CoreController {
     if(isset($params_array['p'])) $GLOBALS['_context']['page'] = $params_array['p'];
     if(isset($params_array['show_all'])) $GLOBALS['_context']['paged'] = false;
     if(isset($params_array['per_page'])) $GLOBALS['_context']['per_page'] = $params_array['per_page'];
+    if(!isset($params_array['per_page'])) $params_array['per_page'] = $GLOBALS['_context']['per_page'];
     
     /*
     *
@@ -179,11 +176,6 @@ class ArchiveController extends CoreController {
     * cosmetic really
     *
     */
-    // if (strpos($pre_params, 'show_all') !== false) {
-    //   $new_params = str_replace("show_all=", "show_all", $pre_params);
-    // } else {
-    //   $new_params = $pre_params;
-    // }
     $new_params = showAllParamFix($pre_params);
     
     
@@ -206,6 +198,93 @@ class ArchiveController extends CoreController {
     $GLOBALS['_context']['term'] = $term;
     // set the archive obj context for twig to render
     $context['archive'] = (new ArchiveModel())->getTermArchive();
+    $this->render($context);
+  }
+  
+  public function queryTaxCollectionArchive($params, $tax) {
+
+    /*
+    *
+    * set the _context archive
+    *
+    */
+    $GLOBALS['_context']['archive'] = 'QueriedTaxCollectionArchive';
+    
+    /*
+    *
+    * parse the params string into an array (the params have been filtered for relevant ones only in routes)
+    *
+    */
+    parse_str($params, $params_array);
+    
+    /*
+    *
+    * set the type & tax => term based on the data given in routes.
+    * this will be fed into the query string...
+    *
+    */
+    $params_array['taxonomy'] = taxSettingByKey($this->type, 'key', $tax, 'single');
+    
+    /*
+    *
+    * add tax & term to the _context array
+    *
+    */
+    $GLOBALS['_context']['tax'] = $tax;
+    
+    /*
+    *
+    * set the pagination values in the params array
+    *
+    */
+    if(isset($params_array['p'])) $GLOBALS['_context']['page'] = $params_array['p'];
+    if(isset($params_array['show_all'])) $GLOBALS['_context']['paged'] = false;
+    if(isset($params_array['per_page'])) $GLOBALS['_context']['per_page'] = $params_array['per_page'];
+    if(!isset($params_array['per_page'])) $params_array['per_page'] = $GLOBALS['_context']['per_page'];
+    
+    /*
+    *
+    * rebuild the params array into a query string
+    *
+    */
+    $pre_params = http_build_query($params_array);
+    
+    /*
+    *
+    * comma-separated items in the string: commas get changed into '%2C' after http_build_query
+    * this changes fixes this.
+    * cosmetic really
+    *
+    */
+    $pre_params = str_replace("%2C", ",", $pre_params);
+    
+    /*
+    *
+    * when show_all does't have a value, it ends up with an = sign at the end after http_build_query
+    * this code just removes the = from the show_all param
+    * cosmetic really
+    *
+    */
+    $new_params = showAllParamFix($pre_params);
+    
+    /*
+    *
+    * _context->string_params is what the query will be running off. so we set it here to out rebuilt string above
+    *
+    */
+    $GLOBALS['_context']['string_params'] = $new_params;   
+      
+    // set the archive obj context for twig to render
+    $context['archive'] = (new ArchiveModel())->getQueriedTaxonomyArchive();
+    $this->render($context);
+  }
+  
+  public function getTaxCollectionArchive($tax) {
+    // set some global variables related to the current context
+    $GLOBALS['_context']['archive'] = 'TaxCollectionArchive';
+    $GLOBALS['_context']['tax'] = $tax;
+    // set the archive obj context for twig to render
+    $context['archive'] = (new ArchiveModel())->getTaxonomyArchive();
     $this->render($context);
   }
   

@@ -1,11 +1,6 @@
 <?php
 namespace Rmcc; // set the Rmcc namespace for using Rmcc classes
 
-/*
-*
-* PORTFOLIO MAIN INDEX
-*
-*/
 $router->get('/portfolio/', function() {
   $params = parse_url($_SERVER['REQUEST_URI']);
   if (isset($params['query']) && queryParamsExists($params['query'])) {
@@ -22,12 +17,6 @@ $router->get('/portfolio/', function() {
   }
 });
 
-/*
-*
-* PORTFOLIO PROJECTS (SINGULAR)
-*
-*/
-
 $router->get('/portfolio/projects/{slug}', function($slug) {
   Cache::cacheServe(function() use ($slug) {
     global $query_type;
@@ -38,13 +27,6 @@ $router->get('/portfolio/projects/{slug}', function($slug) {
   });
 });
 
-/*
-*
-* TECHNOLOGIES
-*
-*/
-
-// term index
 $router->get('/portfolio/technologies/{term}/', function($term){
    $params = parse_url($_SERVER['REQUEST_URI']);
    if (isset($params['query']) && queryParamsExists($params['query'])) {
@@ -61,20 +43,18 @@ $router->get('/portfolio/technologies/{term}/', function($term){
    } 
 });
 
-// collection index
-// $router->get('/portfolio/technologies/', function() {
-//   Cache::cacheServe(function() { 
-//     (new TaxonomyArchiveController('portfolio', 'technologies', true))->getTaxCollectionArchive();
-//   });
-// });
-
-// collection index - paged
-// $router->get('/portfolio/technologies/page/{page}', function($page){
-//   if ($page == 1) {
-//     header('Location: /portfolio/technologies', true, 301);
-//     exit();
-//   }
-//   Cache::cacheServe(function() use ($page) { 
-//     (new TaxonomyArchiveController('portfolio', 'technologies', true, $page))->getTaxCollectionArchive();
-//   });
-// });
+$router->get('/portfolio/technologies/', function() {
+  $params = parse_url($_SERVER['REQUEST_URI']);
+  if (isset($params['query']) && queryParamsExists($params['query'])) {
+    parse_str($params['query'], $params_array);
+    if($_SERVER['REQUEST_URI'] === '/portfolio/technologies?p=1' || $_SERVER['REQUEST_URI'] === '/portfolio/technologies/?p=1'){
+      header('Location: /portfolio/technologies', true, 301);
+      exit();
+    }
+    (new ArchiveController('portfolio'))->queryTaxCollectionArchive($params['query'], 'technologies');
+  } else {
+    Cache::cacheServe(function(){ 
+      (new ArchiveController('portfolio'))->getTaxCollectionArchive('technologies');
+    });
+  }
+});

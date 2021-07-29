@@ -18,6 +18,21 @@ function queryParamsExists($params) {
     return true;
   }
   
+  $_taxonomy = (array_key_exists('taxonomy', $params_array)) ? $params_array['taxonomy'] : false;
+  if($_taxonomy){
+    return true;
+  }
+  
+  $_order = (array_key_exists('order', $params_array)) ? $params_array['order'] : false;
+  if($_order){
+    return true;
+  }
+  
+  $_orderby = (array_key_exists('orderby', $params_array)) ? $params_array['orderby'] : false;
+  if($_orderby){
+    return true;
+  }
+  
   // taxes
   $taxes = array();
   foreach($GLOBALS['config']['types'] as $type){
