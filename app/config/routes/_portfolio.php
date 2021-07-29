@@ -1,11 +1,11 @@
 <?php
-namespace Rmcc; // set the Rmcc namespace for using Rmcc classes
+namespace Rmcc;
 
 $router->get('/portfolio/', function() {
   $params = parse_url($_SERVER['REQUEST_URI']);
   if (isset($params['query']) && queryParamsExists($params['query'])) {
     parse_str($params['query'], $params_array);
-    if($_SERVER['REQUEST_URI'] === '/portfolio?p=1'){
+    if($_SERVER['REQUEST_URI'] === '/portfolio?p=1' || $_SERVER['REQUEST_URI'] === '/portfolio/?p=1'){
       header('Location: /portfolio', true, 301);
       exit();
     }
@@ -31,7 +31,7 @@ $router->get('/portfolio/technologies/{term}/', function($term){
    $params = parse_url($_SERVER['REQUEST_URI']);
    if (isset($params['query']) && queryParamsExists($params['query'])) {
      parse_str($params['query'], $params_array);
-     if($_SERVER['REQUEST_URI'] === '/portfolio/technologies/'.$term.'?p=1'){
+     if($_SERVER['REQUEST_URI'] === '/portfolio/technologies/'.$term.'?p=1' || $_SERVER['REQUEST_URI'] === '/portfolio/technologies/'.$term.'/?p=1'){
        header('Location: /portfolio/technologies/'.$term, true, 301); // redirect requests for page one of paged archive to main archive
        exit();
      }

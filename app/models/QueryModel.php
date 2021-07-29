@@ -42,6 +42,9 @@ class QueryModel {
     // working. takes string & searches in slugs for matches
     'name' => 'sed',
     
+    'orderby' => 'title', // title, slug: title is default
+    'order' => 'DESC', // ASC DESC: ASC is default
+    
     // the pagination stuff. seems to be working...
     'per_page' => 3,
     'p' => 1,
@@ -175,6 +178,14 @@ class QueryModel {
           );
         }
       }
+    }
+    
+    if($this->orderbyParam()){
+      $new_args_array['orderby'] = $this->orderbyParam();
+    }
+    
+    if($this->orderParam()){
+      $new_args_array['order'] = $this->orderParam();
     }
     
     if($this->searchParam()){
@@ -445,6 +456,29 @@ class QueryModel {
       });
     }
     
+    // ordering
+    if($posts->exists()) {
+      if($this->orderbyKey()) {
+        $posts = new Json($posts);
+        $orderby_query = $this->orderbyKey();
+        if($this->orderKey() == 'DESC' || $this->orderKey() == 'desc') {
+          $posts = $posts->sortBy($orderby_query, 'desc');
+        } else {
+          $posts = $posts->sortBy($orderby_query);
+        }
+      } else {
+        $posts = new Json($posts);
+        $orderby_query = $this->orderbyKey();
+        if($this->orderKey() == 'DESC' || $this->orderKey() == 'desc') {
+          $posts = $posts->sortBy('title', 'desc');
+        } elseif($this->orderKey() == 'ASC' || $this->orderKey() == 'asc') {
+          $posts = $posts->sortBy('title');
+        } else {
+          $posts = $posts; // default when no orderby or no order. appears as entered into the json
+        }
+      }
+    }
+    
     /*
     *
     * we need to get() the $posts BEFORE paged stuff
@@ -628,6 +662,16 @@ class QueryModel {
     if(array_key_exists('day', $string_args)) return $string_args['day'];
     return false;
   }
+  private function orderbyParam() {
+    $string_args = $this->paramsDissect();
+    if(array_key_exists('orderby', $string_args)) return $string_args['orderby'];
+    return false;
+  }
+  private function orderParam() {
+    $string_args = $this->paramsDissect();
+    if(array_key_exists('order', $string_args)) return $string_args['order'];
+    return false;
+  }
   private function perPageParam() {
     $string_args = $this->paramsDissect();
     if(array_key_exists('per_page', $string_args)) return $string_args['per_page'];
@@ -691,6 +735,14 @@ class QueryModel {
   private function dayKey() {
     $date = $this->dateKey();
     if(array_key_exists('day', $date)) return $date['day'];
+    return false;
+  }
+  private function orderbyKey() {
+    if($this->query_vars && array_key_exists('orderby', $this->query_vars)) return $this->query_vars['orderby'];
+    return false;
+  }
+  private function orderKey() {
+    if($this->query_vars && array_key_exists('order', $this->query_vars)) return $this->query_vars['order'];
     return false;
   }
   private function perPageKey() {

@@ -1,7 +1,5 @@
 to do...
 
-1. query terms from taxes model & collection archive routes
-
 2. orderby/sorting added to QueryModel
 
 3. breadcrumbs working -> would be working off off _context array $variables/conditionals

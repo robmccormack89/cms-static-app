@@ -3,8 +3,7 @@ namespace Rmcc;
 
 class PaginationModel {
   
-  public function __construct(int $count) 
-  {
+  public function __construct(int $count) {
     $this->count = $count;
   }
   
