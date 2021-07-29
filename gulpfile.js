@@ -9,10 +9,10 @@ var sass = require("gulp-sass"),
     cssnano = require("cssnano");
 
 var paths = {
-    styles: {
-      src: "public/scss/*.scss",
-      dest: "public/css/"
-    }
+  styles: {
+    src: "public/scss/*.scss",
+    dest: "public/css/"
+  }
 };
 
 function style() {

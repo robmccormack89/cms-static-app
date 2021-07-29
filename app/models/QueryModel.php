@@ -67,28 +67,7 @@ class QueryModel {
     $this->max_num_pages = $this->getPostsMaxPages(); // The total number of pages. Is the result of $found_posts / $posts_per_page
     // $this->init();
   }
-  public function init() {
-    // echo($this->queried_object.': the queried object');
-    // echo('<hr>');
-    // echo($this->found_posts.': posts found');
-    // echo('<hr>');
-    // echo($this->post_count.': per_page setting');
-    // echo('<hr>');
-    // echo($this->pagedKey().': page we should be on');
-    // echo('<hr>');
-    // if($this->isPaged()){
-    //   print_r('we are paged!!');
-    //   echo('<hr>');
-    // }
-    // print_r($this->paramsToArgs());
-    // echo('<hr>');
-    // print_r(self::$_argsArray);
-    // echo('<hr>');
-    // echo($this->max_num_pages);
-    // echo('<hr>');
-    // print_r($GLOBALS['_context']);
-    // echo('<hr>');
-  }
+  public function init() {}
   
   /*
   *

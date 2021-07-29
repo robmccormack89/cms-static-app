@@ -1,7 +1,0 @@
-to do...
-
-future improvements..
-
-1. allow multiple types in query string. e.g: type=post,project
-
-2. mail.php or something
