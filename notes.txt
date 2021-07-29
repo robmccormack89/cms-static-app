@@ -1,10 +1,8 @@
 to do...
 
-2. orderby/sorting added to QueryModel
+1. full query params working off base_url. e.g: https://robertmccormack.com?type=post&year=2021
 
-3. breadcrumbs working -> would be working off off _context array $variables/conditionals
-
-4. full query params working off base_url. e.g: https://robertmccormack.com?type=post&year=2021
+2. breadcrumbs working -> would be working off off _context array $variables/conditionals
 
 future improvements..
 
