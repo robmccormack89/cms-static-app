@@ -73,37 +73,19 @@ class PaginationModel {
     $data['pages'] = $output;
     
     // step 5 - results count html
-    
-    // {% set page_offset = context.page - 1 %}
-    // {% set addifier = page_offset * context.per_page %}
-    // {% set result_start = addifier + 1 %}
-    // {% set result_end = context.page * context.per_page %}
     $page_offset = $GLOBALS['_context']['page'] - 1;
     $addifier = $page_offset * $GLOBALS['_context']['per_page'];
     $result_start = $addifier + 1;
     $result_end = $GLOBALS['_context']['page'] * $GLOBALS['_context']['per_page'];
     
-    // {% if result_end > archive.count %}
-    //   {% set result_end = archive.count %}
-    // {% endif %}
     if($result_end > $this->count) {
       $result_end = $this->count;
     }
     
-    // {% if context.per_page == 1 %}
-    //   Showing Page {{context.page}} of {{archive.count}} results
-    // {% endif %}
     if($GLOBALS['_context']['per_page'] == 1) {
       $results_text = 'Showing Page '.$GLOBALS['_context']['page'].' of '.$this->count.' results';
     }
     
-    // {% if context.per_page > 1 and context.per_page < archive.count and context.paged == TRUE %}
-    //   {% if result_end > result_start %}
-    //     Showing {{result_start}}-{{result_end}} of {{archive.count}} results
-    //   {% else %}
-    //     Showing {{result_end}} of {{archive.count}} results
-    //   {% endif %}
-    // {% endif %}
     if($GLOBALS['_context']['per_page'] > 1 && $GLOBALS['_context']['per_page'] < $this->count && $GLOBALS['_context']['paged'] == TRUE) {
       if($result_end > $result_start) {
         $results_text = 'Showing '.$result_start.'-'.$result_end.' of '.$this->count.' results';
@@ -112,9 +94,6 @@ class PaginationModel {
       }
     }
     
-    // {% if context.per_page >= archive.count or context.paged == FALSE %}
-    //   Showing all {{archive.count}} results
-    // {% endif %}
     if($GLOBALS['_context']['per_page'] >= $this->count || $GLOBALS['_context']['paged'] == FALSE) {
       $results_text = 'Showing all '.$this->count.' results';
     }
