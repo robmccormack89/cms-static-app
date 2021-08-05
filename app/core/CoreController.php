@@ -14,15 +14,17 @@ class CoreController {
     // ini_set('display_startup_errors', '1');
     // error_reporting(E_ALL);
     
+    // (new Resize)->resize('C:\xampp\htdocs\robertmccormack.com\public\img\test.jpg', 500, 500);
+    // self::resize('C:\xampp\htdocs\robertmccormack.com\public\img\test.jpg', 500, 500);
+    // self::resize('https://robertmccormack.com/public/img/test.jpg', 500, 500);
+    
     // twig stuff
     $loader = new \Twig\Loader\FilesystemLoader(
       array(
         '../app/views/',
-        '../app/views/_one',
-        '../app/views/_one/parts',
-        '../app/views/_two',
-        '../app/views/_two/parts',
         '../app/views/archive',
+        '../app/views/archive/blog',
+        '../app/views/archive/portfolio',
         '../app/views/parts',
         '../app/views/single',
         '../app/views/single/page',
@@ -33,6 +35,27 @@ class CoreController {
     );
     $this->twig = new \Twig\Environment($loader, ['cache' => '../app/cache/compilation', 'debug' => true ]);
     $this->twig->addExtension(new \Twig\Extension\DebugExtension());
+    
+    // remove query params from a given string/url
+    $filter = new \Twig\TwigFilter('strtokparams', function ($string) {
+      return strtok($string);
+    });
+    $this->twig->addFilter($filter);
+    
+    $resize_filter = new \Twig\TwigFilter('resize', function ($src, $w, $h = null, $crop = 'default') {
+      return self::resize($src, $w, $h, $crop);
+    });
+    $this->twig->addFilter($resize_filter);
+    
+    $function = new \Twig\TwigFunction('get_terms', function ($tax) {
+      $args = array(
+        'taxonomy' => $tax,
+        'show_all' => true
+      );
+      $terms_obj = new QueryTermsModel($args);
+      return $terms_obj->terms;
+    });
+    $this->twig->addFunction($function);
     
     // contact form
     $this->addContactFormToTwig();
@@ -49,6 +72,32 @@ class CoreController {
     $this->twig->addGlobal('main_menu_second', $main_menu_second);
     $this->twig->addGlobal('base_url', $GLOBALS['config']['base_url']);
     $this->twig->addGlobal('current_url', $GLOBALS['config']['base_url'].$_SERVER['REQUEST_URI']);
+    $this->twig->addGlobal('current_url_no_params', strtok($GLOBALS['config']['base_url'].$_SERVER['REQUEST_URI'], "?"));
+    $this->twig->addGlobal('get', $_GET);
+  }
+  
+  public static function resize($src, $w, $h, $crop) {
+		if (!is_numeric($w) && is_string($w)) return $src;
+    
+    $path = parse_url($src, PHP_URL_PATH);
+    $full_path = $_SERVER['DOCUMENT_ROOT'].$path;
+    
+		$op = new Resize($w, $h, $crop);
+		return pathToURL(self::_operate($full_path, $op));
+	}
+  
+  // this function will call methods from the Resize class
+  // filename() takes the src filename & produces the new filename
+  // run() will do the image processing & saving stuff.. just calling it will save the new image
+  // run() requires the src filename & new filename
+  // this method will return a url, which will either be the src url or the new cropped url
+  // we should check here if the new filename exists before we do the run() processing
+  private static function _operate($src, $op) {
+    $destination_path = $op->filename($src);
+    if(!file_exists($destination_path)) {
+      $op->run($src, $destination_path);
+    }
+    return $destination_path;
   }
   
   public function addContactFormToTwig() {

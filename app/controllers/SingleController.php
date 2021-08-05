@@ -55,11 +55,15 @@ class SingleController extends CoreController {
       $format2 = $this->slug.'.twig'; // e.g hello.twig or about.twig
       $format3 = $this->name.'.twig'; // e.g page.twig or post.twig
       
-      if ($this->twig->getLoader()->exists($format1)) : $this->templateRender($format1, $context);
-      elseif ($this->twig->getLoader()->exists($format2)) : $this->templateRender($format2, $context);
-      elseif ($this->twig->getLoader()->exists($format3)) : $this->templateRender($format3, $context);
-      else : $this->templateRender('single.twig', $context);
-      endif;
+      if($this->twig->getLoader()->exists($format1)){
+        $this->templateRender($format1, $context);
+      } elseif($this->twig->getLoader()->exists($format2)) {
+        $this->templateRender($format2, $context);
+      } elseif($this->twig->getLoader()->exists($format3)) {
+        $this->templateRender($format3, $context);
+      } else {
+        $this->templateRender('single.twig', $context);
+      }
       
     } else {
       $this->error();

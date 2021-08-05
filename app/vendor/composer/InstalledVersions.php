@@ -30,7 +30,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => 'add6435c93df492025ec7fb23899fcf9d3b0f5d1',
+    'reference' => 'ab78876b561d148f804975459c7e6d5e0d2adaa0',
     'name' => '__root__',
   ),
   'versions' => 
@@ -42,16 +42,25 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => 'add6435c93df492025ec7fb23899fcf9d3b0f5d1',
+      'reference' => 'ab78876b561d148f804975459c7e6d5e0d2adaa0',
     ),
     'bramus/router' => 
     array (
-      'pretty_version' => '1.5',
-      'version' => '1.5.0.0',
+      'pretty_version' => '1.6',
+      'version' => '1.6.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => '6adc0182dc6b0ebc22fd10543f65a36de10d8c05',
+      'reference' => 'd2cf97d5c471e272ac5a2a88b652bc75089c8ae3',
+    ),
+    'imagine/imagine' => 
+    array (
+      'pretty_version' => '1.2.4',
+      'version' => '1.2.4.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'd2e18be6e930ca169e4f921ef73ebfc061bf55d8',
     ),
     'myclabs/deep-copy' => 
     array (
@@ -104,12 +113,12 @@ private static $installed = array (
     ),
     'symfony/polyfill-mbstring' => 
     array (
-      'pretty_version' => 'v1.23.0',
-      'version' => '1.23.0.0',
+      'pretty_version' => 'v1.23.1',
+      'version' => '1.23.1.0',
       'aliases' => 
       array (
       ),
-      'reference' => '2df51500adbaebdc4c38dea4c89a2e131c45c8a1',
+      'reference' => '9174a3d80210dca8daa7f31fec659150bbeabfc6',
     ),
     'twig/twig' => 
     array (

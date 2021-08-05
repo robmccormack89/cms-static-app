@@ -10,6 +10,9 @@
 // #17161a // dark
 // #1a191d // lighter dark
 $global-secondary-background: #17161a; // dark
+// 3. custom variable overwrites
+$offcanvas-bar-background: #fff;
+$offcanvas-bar-color-mode: none;
 
 // custom mixin overwrites
 // @import "theme/accordion-mixins.scss";

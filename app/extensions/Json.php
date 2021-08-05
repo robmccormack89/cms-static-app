@@ -1,10 +1,17 @@
 <?php
+/**
+ * This is an extension of Jsonq in order to use custom conditionals
+ * Adds truematch conditional (based on match) to use regex across the fill key
+ * Adds the year/month/day formatted conditionals
+ * Condition_model below Json contains the conditions functions
+ *
+ */
 namespace Rmcc;
 use Nahid\JsonQ\Jsonq as Jsonq;
-
-// This is an extension of Jsonq in order to use a custom conditional (overwrites the match conditional to use regex across the fill key)
+ 
 class Json extends Jsonq {
   
+  // custom conditions map array; adds custom conditionals to it
   protected static $_conditionsMap = [
     '=' => 'equal',
     'eq' => 'equal',
@@ -33,6 +40,7 @@ class Json extends Jsonq {
     'startswith' => 'startWith',
     'endswith' => 'endWith',
     'match' => 'match',
+    'truematch' => 'truematch',
     'contains' => 'contains',
     'dates' => 'dateEqual',
     'year' => 'yearEqual',
@@ -73,8 +81,8 @@ class Json extends Jsonq {
 
 use Nahid\QArray\Exceptions\KeyNotPresentException;
 
-final class Condition_model
-{
+final class Condition_model {
+  
   /**
    * Simple equals
    *
@@ -301,6 +309,29 @@ final class Condition_model
 
       return false;
   }
+
+  /**
+   * Match with pattern
+   *
+   * @param mixed $value
+   * @param string $comparable
+   *
+   * @return bool
+   */
+  public static function match($value, $comparable)
+  {
+      if (is_array($comparable) || is_array($value) || is_object($comparable) || is_object($value)) {
+          return false;
+      }
+  
+      $comparable = trim($comparable);
+  
+      if (preg_match("/^$comparable$/", $value)) {
+          return true;
+      }
+  
+      return false;
+  }
   
   /**
    * Match with pattern*** OVERWRITE from Qarray
@@ -310,7 +341,7 @@ final class Condition_model
    *
    * @return bool
    */
-  public static function match($value, $comparable)
+  public static function truematch($value, $comparable)
   {
       if (is_array($comparable) || is_array($value) || is_object($comparable) || is_object($value)) {
           return false;
@@ -324,29 +355,6 @@ final class Condition_model
 
       return false;
   }
-
-  /**
-   * Match with pattern
-   *
-   * @param mixed $value
-   * @param string $comparable
-   *
-   * @return bool
-   */
-  // public static function match($value, $comparable)
-  // {
-  //     if (is_array($comparable) || is_array($value) || is_object($comparable) || is_object($value)) {
-  //         return false;
-  //     }
-  // 
-  //     $comparable = trim($comparable);
-  // 
-  //     if (preg_match("/^$comparable$/", $value)) {
-  //         return true;
-  //     }
-  // 
-  //     return false;
-  // }
 
   /**
    * Contains substring in string
@@ -467,4 +475,5 @@ final class Condition_model
 
       return false;
   }
+  
 }

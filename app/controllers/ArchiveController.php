@@ -3,7 +3,7 @@ namespace Rmcc;
 
 class ArchiveController extends CoreController {
   
-  public function __construct($type = null, $posts_per_page = 4) {
+  public function __construct($type = null, $posts_per_page = 7) {
     parent::__construct();
     $this->type = $type;
     $this->posts_per_page = $posts_per_page;
@@ -402,7 +402,17 @@ class ArchiveController extends CoreController {
   }
   
   protected function render($context) {
-    $this->templateRender('archive.twig', $context);
+    
+    if($GLOBALS['_context']['archive'] = 'MainIndexArchive' && $this->twig->getLoader()->exists($GLOBALS['_context']['type'].'.twig')) {
+      $this->templateRender($GLOBALS['_context']['type'].'.twig', $context);
+    } elseif($GLOBALS['_context']['archive'] = 'TaxTermArchive' && isset($GLOBALS['_context']['term']) && $this->twig->getLoader()->exists($GLOBALS['_context']['term'].'.twig')) {
+      $this->templateRender($GLOBALS['_context']['term'].'.twig', $context);
+    } elseif($GLOBALS['_context']['archive'] = 'TaxCollectionArchive' && isset($GLOBALS['_context']['tax']) && $this->twig->getLoader()->exists($GLOBALS['_context']['tax'].'.twig')) {
+      $this->templateRender($GLOBALS['_context']['tax'].'.twig', $context);
+    } else {
+      $this->templateRender('archive.twig', $context);
+    }
+    
   }
   
 }

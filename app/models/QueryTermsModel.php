@@ -228,12 +228,15 @@ class QueryTermsModel {
   }
   private function setTermTeaseLinkData($terms) {
     foreach ($terms as $term) {
-      $term['link'] = '/'.$GLOBALS['_context']['type'].'/'.$GLOBALS['_context']['tax'].'/'.$term['slug'];
+      $term['link'] = '/'.$term['type'].'/'.$term['tax'].'/'.$term['slug'];
       $term['excerpt'] = $term['description'];
+      $term['posts_count'] = getPostsCountFromATerm($term['type'], $term['tax'], $term['slug']);
       $data[] = $term;
     }
     return $data;
   }
+  
+  
   
   /*
   *

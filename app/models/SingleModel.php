@@ -21,10 +21,33 @@ class SingleModel {
   // get the singular object
   private function getSinglular() {
     $q = new Json('../public/json/data.min.json');
-    $data = $q->from($this->getSinglularLocation())
+    $single = $q->from($this->getSinglularLocation())
     ->where('slug', '=', $this->slug)
     ->first();
-    return $data;
+    
+    if($single['type'] !== 'page') {
+      $type_key = typeSettingByKey('single', $single['type'], 'key'); // returns 'blog' or 'portfolio'
+      $taxonomies = (isset($GLOBALS['config']['types'][$type_key]['taxes_in_meta'])) ? $GLOBALS['config']['types'][$type_key]['taxes_in_meta'] : null;
+      if($taxonomies) {
+        foreach($taxonomies as $tax) {
+          if(isset($single[$tax])){
+            $terms = $single[$tax];
+            foreach ($terms as &$term) {
+              $term = array(
+                'link' => '/'.$type_key.'/'.$tax.'/'.$term,
+                'slug' => $term,
+                'title' => term_title_from_slug($type_key, $tax, $term)
+              );
+            }
+            $single[$tax] = null;
+            $new_post[$tax] = $terms;
+            $single['taxonomies'] = $new_post;
+          }
+        }
+      }
+    }
+    
+    return $single;
   }
   
   // this method sets the location of the data based on $type & $key.

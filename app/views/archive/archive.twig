@@ -26,46 +26,42 @@
 {% endblock %}
 
 {% block content %}
-  {{archive.context.archive}}
   <div id="Archive{{archive.title}}" class="archive" data-template="archive.twig">
-
-  <header class="uk-section uk-section-muted uk-section-small uk-text-center theme-border-top theme-border-bottom">
-    <div class="uk-container uk-container-small">
-      <h1 class="uk-article-title uk-text-bold">{{archive.title}}</h1>
-      <hr class="uk-divider-small">
-      <p class="uk-text-lead">{{archive.description}}</p>
-    </div>
-  </header>
-
-  <div class="uk-container">
-    
-    {% include 'breads.twig' %}
-    
-    <div class="uk-section uk-section-small">
-      <div class="uk-grid" uk-grid>
-        
-        <section class="left-section uk-width-2-3@m">
-          {% block page_content %}
+    <header class="uk-section uk-section-muted uk-section-small uk-text-center theme-border-top theme-border-bottom">
+      <div class="uk-container uk-container-small">
+        <h1 class="uk-article-title uk-text-bold">{{archive.title}}</h1>
+        <hr class="uk-divider-small">
+        <p class="uk-text-lead">{{archive.description}}</p>
+      </div>
+    </header>
+    <div class="uk-container">
+      
+      {% include 'breads.twig' %}
+      
+      <div class="uk-section uk-section-small">
+        <div class="uk-grid" uk-grid>
           
-          {% include 'pagination.twig' %}
+          <section class="left-section uk-width-2-3@m">
+            {% block page_content %}
+            
+              {% include 'pagination.twig' %}
+            
+              <div class="archive-posts">
+                {% if archive.posts %}
+                  {% for post in archive.posts %}
+                    {% include 'tease.twig' %}
+                  {% endfor %}
+                {% else %}
+                  <span class="uk-text-lead uk-text-emphasis">No posts found here...</span>
+                {% endif %}
+              </div>
+            {% endblock %}
+          </section>
           
-            <div class="archive-posts">
-              {% if archive.posts %}
-                {% for post in archive.posts %}
-                  {% include 'tease.twig' %}
-                {% endfor %}
-              {% else %}
-                <span class="uk-text-lead uk-text-emphasis">No posts found here...</span>
-              {% endif %}
-            </div>
-          {% endblock %}
-        </section>
-        
-        {% include 'sidebar.twig' %}
-        
+          {% include 'sidebar.twig' %}
+          
+        </div>
       </div>
     </div>
   </div>
-</div>
 {% endblock %}
-

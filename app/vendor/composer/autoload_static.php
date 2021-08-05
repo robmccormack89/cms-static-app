@@ -37,6 +37,10 @@ class ComposerStaticInit64cbe79c77ec134d82e1c4ab04756a78
             'Nahid\\QArray\\' => 13,
             'Nahid\\JsonQ\\' => 12,
         ),
+        'I' => 
+        array (
+            'Imagine\\' => 8,
+        ),
         'D' => 
         array (
             'DeepCopy\\' => 9,
@@ -75,6 +79,10 @@ class ComposerStaticInit64cbe79c77ec134d82e1c4ab04756a78
         'Nahid\\JsonQ\\' => 
         array (
             0 => __DIR__ . '/..' . '/nahid/jsonq/src',
+        ),
+        'Imagine\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/imagine/imagine/src',
         ),
         'DeepCopy\\' => 
         array (

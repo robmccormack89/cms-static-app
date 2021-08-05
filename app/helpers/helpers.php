@@ -1,5 +1,22 @@
 <?php
 
+function pathToURL($path) {
+  
+  $path = str_replace("C:/xampp/htdocs/robertmccormack.com", "", realpath($path));
+  
+  //Replace backslashes to slashes if exists, because no URL use backslashes
+  $path = str_replace("\\", "/", realpath($path));
+
+  //if the $path does not contain the document root in it, then it is not reachable
+  $pos = strpos($path, $_SERVER['DOCUMENT_ROOT']);
+  if ($pos === false) return false;
+
+  //just cut the DOCUMENT_ROOT part of the $path
+  return substr($path, strlen($_SERVER['DOCUMENT_ROOT']));
+  //Note: usually /images is the same with http://somedomain.com/images,
+  //      So let's not bother adding domain name here.
+}
+
 function showAllParamFix(string $params_string) {
   if (strpos($params_string, 'show_all') !== false) {
     $params = str_replace("show_all=", "show_all", $params_string);

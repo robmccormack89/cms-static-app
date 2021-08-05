@@ -1,5 +1,5 @@
 app/config/secret.txt
-
+app/views/_dev
 node_modules/
 .sass-cache/
 compilation_cache/

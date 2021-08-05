@@ -67,7 +67,9 @@ class QueryModel {
     $this->max_num_pages = $this->getPostsMaxPages(); // The total number of pages. Is the result of $found_posts / $posts_per_page
     // $this->init();
   }
-  public function init() {}
+  public function init() {
+    print_r($this->found_posts);
+  }
   
   /*
   *
@@ -272,8 +274,8 @@ class QueryModel {
       $search_query = $this->searchKey();
       $posts = $posts
       ->where(function($query) use ($search_query) {
-        $query->where('excerpt', 'match', '(?i)'.$search_query);
-        $query->orWhere('title', 'match', '(?i)'.$search_query);
+        $query->where('excerpt', 'truematch', '(?i)'.$search_query);
+        $query->orWhere('title', 'truematch', '(?i)'.$search_query);
       });
     }
 
@@ -434,7 +436,7 @@ class QueryModel {
       $name_query = $this->nameKey();
       $posts = $posts
       ->where(function($query) use ($name_query) {
-        $query->where('slug', 'match', '(?i)'.$name_query);
+        $query->where('slug', 'truematch', '(?i)'.$name_query);
       });
     }
     

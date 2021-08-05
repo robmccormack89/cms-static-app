@@ -3,6 +3,16 @@
 // any generalized functions that get json data
 use Rmcc\Json;
 
+function getPostsCountFromATerm($type, $tax, $term) {
+  $q = new Json('../public/json/data.min.json');
+  $_types = typeSettingByKey('key', $type, 'items');
+  $posts = $q->from('site.content_types.'.$type.'.'.$_types)
+  ->where($tax, 'any', $term)
+  ->get();
+  
+  return $posts->count();
+}
+
 // getting the TermTitleFromSlug for setPostsTeaseTerms() in PostsModel
 // in the case of post teases or posts singulars, we will only ever know the slugs of taxonomy terms that a post has
 // this function is to get the title of a term based on its slug.
