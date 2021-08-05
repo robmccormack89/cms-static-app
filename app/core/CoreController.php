@@ -82,9 +82,9 @@ class CoreController {
     if (!is_numeric($w) && is_string($w)) return $src;
     $path = parse_url($src, PHP_URL_PATH);
     $full_path = $_SERVER['DOCUMENT_ROOT'].$path;
-		$op = new Resize($w, $h, $crop);
-		return pathToURL(self::_resize($full_path, $op));
-	}
+    $op = new Resize($w, $h, $crop);
+    return pathToURL(self::_resize($full_path, $op));
+  }
 
   private static function _resize($src, $op) {
     $file_extension = substr(strrchr($src, '.'), 1);
