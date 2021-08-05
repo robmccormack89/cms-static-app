@@ -14,10 +14,6 @@ class CoreController {
     // ini_set('display_startup_errors', '1');
     // error_reporting(E_ALL);
     
-    // (new Resize)->resize('C:\xampp\htdocs\robertmccormack.com\public\img\test.jpg', 500, 500);
-    // self::resize('C:\xampp\htdocs\robertmccormack.com\public\img\test.jpg', 500, 500);
-    // self::resize('https://robertmccormack.com/public/img/test.jpg', 500, 500);
-    
     // twig stuff
     $loader = new \Twig\Loader\FilesystemLoader(
       array(
@@ -77,27 +73,23 @@ class CoreController {
   }
   
   public static function resize($src, $w, $h, $crop) {
-		if (!is_numeric($w) && is_string($w)) return $src;
-    
+    if (!is_numeric($w) && is_string($w)) return $src;
     $path = parse_url($src, PHP_URL_PATH);
     $full_path = $_SERVER['DOCUMENT_ROOT'].$path;
-    
 		$op = new Resize($w, $h, $crop);
-		return pathToURL(self::_operate($full_path, $op));
+		return pathToURL(self::_resize($full_path, $op));
 	}
-  
-  // this function will call methods from the Resize class
-  // filename() takes the src filename & produces the new filename
-  // run() will do the image processing & saving stuff.. just calling it will save the new image
-  // run() requires the src filename & new filename
-  // this method will return a url, which will either be the src url or the new cropped url
-  // we should check here if the new filename exists before we do the run() processing
-  private static function _operate($src, $op) {
-    $destination_path = $op->filename($src);
-    if(!file_exists($destination_path)) {
-      $op->run($src, $destination_path);
+
+  private static function _resize($src, $op) {
+    $file_extension = substr(strrchr($src, '.'), 1);
+    $file_name = basename($src, '.'.$file_extension);
+    $destination_path = $op->filename($file_name, $file_extension);
+    $dir = dirname($src).'/';
+    $destination = $dir.$destination_path;
+    if(!file_exists($destination)) {
+      $op->run($src, $destination);
     }
-    return $destination_path;
+    return $destination;
   }
   
   public function addContactFormToTwig() {

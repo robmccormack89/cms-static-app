@@ -1,7 +1,6 @@
 {% extends "single.twig" %}
 
 {% block styles %}
-
   <style>
     ins, mark {
       background: #9ff8d0;
@@ -41,7 +40,6 @@
     }
     
   </style>
-  
   {% if single.featured_img %}
     <!-- 
       sticky header with image/primary bg
@@ -112,7 +110,6 @@
       }
     </style>
   {% endif %}
-  
 {% endblock %}
 
 {% block header %}
@@ -238,7 +235,7 @@
 
   {% if single.featured_img %}
     {% set main_leader_class = 'uk-light' %}
-    {% set main_leader_style = 'background-image: url(https://source.unsplash.com/1920x1280/?technology);' %}
+    {% set main_leader_style = 'background-image: url(' ~ single.featured_img.src|resize(1920, 600, 'bottom') ~ ');' %}
     {% set main_leader_overlay = 'uk-overlay-primary' %}
   {% endif %}
   
