@@ -13,4 +13,3 @@ notes.md
 beautify.html
 app/cache/compilation/*
 !app/cache/compilation/.gitkeep
-to_do.txt

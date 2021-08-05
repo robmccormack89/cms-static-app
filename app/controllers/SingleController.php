@@ -40,28 +40,37 @@ class SingleController extends CoreController {
   /*
   *
   * This method is used to render singular objects according to a template hierarchy.
-  * The first check is to see if the singular object is allowed, else throws a 404. See isSingleAllowed() for conditions when 404 errors get thrown
-  * Secondly, it checks to see if a file exists using the format: $type-$slug.twig, e.g post-hello.twig, page-about.twig etc.
-  * Thirdly, it checks to see if a file exists using the format: $slug.twig, e.g hello.twig, about.twig etc.
-  * Fourthly, it checks to see if a file exists using the format: $type.twig, e.g page.twig, post.twig etc.
-  * And lastly, if none of the above exist, it renders the singular object using single.twig
   *
   */
   protected function render($context) {
     if (isSingleAllowed($context['single'])) {
       
-      $slug = slugToFilename($context['single']['slug']);
-      $format1 = $this->name.'-'.$this->slug.'.twig'; // e.g post-hello.twig or page-about.twig
-      $format2 = $this->slug.'.twig'; // e.g hello.twig or about.twig
-      $format3 = $this->name.'.twig'; // e.g page.twig or post.twig
+      $_type = (isset($context['single']['type'])) ? $context['single']['type'] : $this->name;
+      $_format = (isset($context['single']['format'])) ? $context['single']['format'] : 'default';
+      $_slug = $context['single']['slug'];
+      
+      $format1 = $_type.'-'.$_slug.'.twig'; // post-lorem-ipsum-dolor.twig
+      $format2 = $_type.'_'.$_format.'.twig'; // post_video.twig
+      $format3 = $_slug.'.twig'; // hello.twig||index.twig
+      $format4 = $_type.'.twig'; // post.twig
       
       if($this->twig->getLoader()->exists($format1)){
         $this->templateRender($format1, $context);
-      } elseif($this->twig->getLoader()->exists($format2)) {
+      }
+
+      elseif($this->twig->getLoader()->exists($format2)) {
         $this->templateRender($format2, $context);
-      } elseif($this->twig->getLoader()->exists($format3)) {
+      }
+
+      elseif($this->twig->getLoader()->exists($format3)) {
         $this->templateRender($format3, $context);
-      } else {
+      }
+      
+      elseif($this->twig->getLoader()->exists($format4)) {
+        $this->templateRender($format4, $context);
+      }
+      
+      else {
         $this->templateRender('single.twig', $context);
       }
       

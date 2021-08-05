@@ -403,13 +403,26 @@ class ArchiveController extends CoreController {
   
   protected function render($context) {
     
-    if($GLOBALS['_context']['archive'] = 'MainIndexArchive' && $this->twig->getLoader()->exists($GLOBALS['_context']['type'].'.twig')) {
-      $this->templateRender($GLOBALS['_context']['type'].'.twig', $context);
-    } elseif($GLOBALS['_context']['archive'] = 'TaxTermArchive' && isset($GLOBALS['_context']['term']) && $this->twig->getLoader()->exists($GLOBALS['_context']['term'].'.twig')) {
-      $this->templateRender($GLOBALS['_context']['term'].'.twig', $context);
-    } elseif($GLOBALS['_context']['archive'] = 'TaxCollectionArchive' && isset($GLOBALS['_context']['tax']) && $this->twig->getLoader()->exists($GLOBALS['_context']['tax'].'.twig')) {
-      $this->templateRender($GLOBALS['_context']['tax'].'.twig', $context);
-    } else {
+    $_type = (isset($GLOBALS['_context']['type'])) ? $GLOBALS['_context']['type'] : null;
+    $_tax = (isset($GLOBALS['_context']['tax']) && isset($GLOBALS['_context']['type'])) ? $GLOBALS['_context']['tax'] : null;
+    $_term = (isset($GLOBALS['_context']['term']) && isset($GLOBALS['_context']['tax'])) ? $GLOBALS['_context']['term'] : null;
+    
+    // TaxTermArchive
+    if($GLOBALS['_context']['archive'] = 'TaxTermArchive' && $this->twig->getLoader()->exists($_tax.'-'.$_term.'.twig')) {
+      $this->templateRender($_tax.'-'.$_term.'.twig', $context); // // categories-news.twig
+    }
+    
+    // TaxCollectionArchive
+    elseif($GLOBALS['_context']['archive'] = 'TaxCollectionArchive' && $this->twig->getLoader()->exists($_type.'-'.$_tax.'.twig')) {
+      $this->templateRender($_type.'-'.$_tax.'.twig', $context); // blog-categories.twig
+    }
+    
+    // MainIndexArchive
+    elseif($GLOBALS['_context']['archive'] = 'MainIndexArchive' && $this->twig->getLoader()->exists($_type.'.twig')) {
+      $this->templateRender($_type.'.twig', $context); // blog.twig
+    }
+    
+    else {
       $this->templateRender('archive.twig', $context);
     }
     

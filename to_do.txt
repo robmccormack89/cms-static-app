@@ -1,0 +1,25 @@
+to do...
+
+future improvements..
+
+1. allow multiple types in query string. e.g: type=post,project
+
+---
+
+1. about template
+
+2. contact template
+
+3. portfolio template
+
+4. project template
+
+5. 404 template
+
+6. search template
+
+8. homepage template
+
+9. post content
+
+10. 

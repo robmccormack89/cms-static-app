@@ -14,54 +14,203 @@
 
 {% block styles %}
   <style>
-    /* tease */
-    .item img {
-      max-height: 300px;
-      object-fit: cover;
+    .archive-header {
+      margin-top: 140px!important;
     }
-    .pagination-nav .uk-navbar-item {
-      min-height: 50px;
+    @media only screen and (max-width: 767px) {
+      .archive-header {
+        margin-top: 100px!important;
+      }
     }
   </style>
+  {% block archive_styles %}
+  {% endblock %}
+{% endblock %}
+
+{% block header %}
+  <header id="SiteHeader" class="site-header uk-position-top uk-position-z-index">
+    <div uk-sticky="animation: uk-animation-slide-top; sel-target: .main-navbar; cls-active: uk-navbar-sticky uk-background-default; cls-inactive: uk-navbar-transparent; top: 200">
+      {% include 'main-navbar.twig' %}
+    </div>
+  </header>
 {% endblock %}
 
 {% block content %}
-  <div id="Archive{{archive.title}}" class="archive" data-template="archive.twig">
-    <header class="uk-section uk-section-muted uk-section-small uk-text-center theme-border-top theme-border-bottom">
-      <div class="uk-container uk-container-small">
-        <h1 class="uk-article-title uk-text-bold">{{archive.title}}</h1>
-        <hr class="uk-divider-small">
-        <p class="uk-text-lead">{{archive.description}}</p>
-      </div>
+  <div id="Archive" class="archive uk-container" data-template="archive.twig">
+    
+    <!-- blog header -->
+    <header class="archive-header blog-header uk-section">
+      <h1 class="uk-heading-medium uk-margin-remove">{{archive.title}}</h1>
+      <p class="uk-text-meta uk-margin-small-top uk-width-3-5@m">{{archive.description}}</p>
     </header>
-    <div class="uk-container">
-      
-      {% include 'breads.twig' %}
-      
-      <div class="uk-section uk-section-small">
-        <div class="uk-grid" uk-grid>
+    
+    {% block before_archive_content %}
+    {% endblock %}
+    
+    {% block archive_content %}
+      <!-- blog main content -->
+      <div class="archive-main uk-section uk-section-small">
+        <div class="uk-grid uk-flex" uk-grid>
           
-          <section class="left-section uk-width-2-3@m">
-            {% block page_content %}
+          <!-- blog posts -->
+          <section class="archive-posts uk-margin-bottom uk-width-3-4@m">
             
-              {% include 'pagination.twig' %}
+            <!-- blog posts grid -->
+            <div class="posts-grid uk-child-width-1-2@m uk-grid-column-medium uk-grid-row-large" uk-grid="masonry: true">
+              {% if archive.posts %}
+                {% for post in archive.posts %}
+                  <article class="the-post">
+                    
+                    <!-- tease featured -->
+                    {% if post.featured_img %}
+                      {% if post.format == 'audio' or post.format == 'video' %}
+                        {% if post.featured_img.frame_src %}
+                          <figure class="blog-grid-image uk-cover-container uk-height-medium">
+                            <iframe src="{{post.featured_img.frame_src}}" class="object-fitting uk-border-rounded" frameborder="0" allowfullscreen></iframe>
+                          </figure>
+                        {% endif %}
+                      {% else %}
+                        <figure class="blog-grid-image">
+                          <a class="uk-inline uk-link-reset hover-grow-wrap uk-border-rounded" href="{{post.link}}">
+                            <img class="uk-border-rounded" data-src="{{post.featured_img.src|resize(500)}}" data-width data-height alt="{{post.featured_img.alt}}" uk-img>
+                          </a>
+                        </figure>
+                      {% endif %}
+                    {% endif %}
+                    
+                    <!-- tease meta -->
+                    {% if post.taxonomies.categories or post.taxonomies.technologies or post.read_time %}
+                      <div class="post-details uk-margin uk-margin-small-bottom">
+                        {% if post.taxonomies.categories %}
+                          <div class="category-holder uk-inline">
+                            {% for cat in post.taxonomies.categories %}
+                              {% if not loop.last %}
+                                <a class="category uk-link-reset" title="{{cat.title}}" href="{{cat.link}}">{{cat.title}}</a>,
+                              {% else %}
+                                <a class="category uk-link-reset" title="{{cat.title}}" href="{{cat.link}}">{{cat.title}}</a>
+                              {% endif %}
+                            {% endfor %}
+                          </div>
+                        {% endif %}
+                        {% if post.taxonomies.technologies %}
+                          <div class="category-holder uk-inline">
+                            {% for tech in post.taxonomies.technologies %}
+                              {% if not loop.last %}
+                                <a class="category uk-link-reset" title="{{tech.title}}" href="{{tech.link}}">{{tech.title}}</a>,
+                              {% else %}
+                                <a class="category uk-link-reset" title="{{tech.title}}" href="{{tech.link}}">{{tech.title}}</a>
+                              {% endif %}
+                            {% endfor %}
+                          </div>
+                        {% endif %}
+                        {% if post.read_time %}
+                          <span class="post-meta-estimate">{{post.read_time}} read</span>
+                        {% endif %}
+                      </div>
+                    {% endif %}
+                    
+                    <!-- tease title -->
+                    <h3 class="blog-grid-headline uk-margin-remove">
+                      <a class="uk-link-heading" href="{{post.link}}">{{post.title}}.</a>
+                    </h3>
+                    
+                    <!-- tease excerpt -->
+                    {% if post.excerpt %}
+                      {% if post.format == 'quote' %}
+                        <blockquote cite="#">
+                          <p class="uk-margin-remove">{{post.excerpt}}</p>
+                        </blockquote>
+                      {% else %}
+                        <p class="post-excerpt uk-margin-small-top">{{post.excerpt}}....</p>
+                      {% endif %}
+                    {% endif %}
+                    
+                    <!-- tease link -->
+                    <a class="style-btn uk-text-capitalize uk-animation-toggle" href="{{post.link}}" tabindex="0">
+                      Read more <i class="fas fa-arrow-right uk-margin-small-left uk-animation-slide-left"></i>
+                    </a>
+                    
+                  </article>
+                {% endfor %}
+              {% else %}
+                <span class="uk-text-emphasis">No posts found here...</span>
+              {% endif %}
+            </div>
             
-              <div class="archive-posts">
-                {% if archive.posts %}
-                  {% for post in archive.posts %}
-                    {% include 'tease.twig' %}
+            <!-- blog pagination -->
+            {% if (archive.pagination.next or archive.pagination.prev) %}
+              <div class="archive-pagination uk-section">
+                <ul class="uk-pagination">
+                  {% if archive.pagination.prev %}
+                    <li>
+                      <a class="prev style-btn uk-text-capitalize uk-animation-toggle" href="{{archive.pagination.prev}}" tabindex="0">
+                        <i class="fas fa-arrow-left uk-margin-small-right uk-animation-slide-right"></i> Previous
+                      </a>
+                    </li>
+                  {% endif %}
+                  {% for page in archive.pagination.pages %}
+                    {% if page.class == 'uk-active' %}
+                      <li class="{{page.class}}"><span>{{page.title}}</span></li>
+                    {% else %}
+                      <li class="{{page.class}}"><a class="style-btn" href="{{page.link}}">{{page.title}}</a></li>
+                    {% endif %}
                   {% endfor %}
-                {% else %}
-                  <span class="uk-text-lead uk-text-emphasis">No posts found here...</span>
-                {% endif %}
+                  {% if archive.pagination.next %}
+                    <li>
+                      <a class="next style-btn uk-text-capitalize uk-animation-toggle" href="{{archive.pagination.next}}" tabindex="0">
+                        Next <i class="fas fa-arrow-right uk-margin-small-left uk-animation-slide-left"></i>
+                      </a>
+                    </li>
+                  {% endif %}
+                </ul>
               </div>
-            {% endblock %}
+            {% endif %}
+            
           </section>
           
-          {% include 'sidebar.twig' %}
+          <!-- blog sidebar widgets area -->
+          <aside class="archive-sidebar uk-width-1-4@m uk-flex-first@m">
+            <!-- search widget -->
+            <div class="widget search-widget uk-margin-medium">
+              <form method="GET" action="{{current_url|strtokparams}}" id="ArchiveSearch" class="uk-search uk-search-default uk-width-1-1">
+                {% for key, val in get %}
+                  {% if key == 'show_all' %}
+                    <input type="hidden" name="{{key|escape}}" />
+                  {% endif %}
+                  {% if key != 'url' and key != 'show_all' and key != 's' %}
+                    <input type="hidden" name="{{key|escape}}" value="{{val|escape}}" />
+                  {% endif %}
+                {% endfor %}
+                <span class="uk-search-icon-flip uk-icon uk-search-icon"><i class="fas fa-search"></i></span>
+                <input class="uk-search-input uk-border-rounded uk-form-large uk-width-1-1" pattern=".*\S+.*" form="ArchiveSearch" minlength="3" minlength="25" autocomplete="off" list="SearchAuto" name="s" id="s" type="search" placeholder="Search">
+              </form>
+              <datalist id="SearchAuto">
+                <option value="handshake">
+                <option value="release">
+                <option value="assets">
+                <option value="validation">
+                <option value="metrics">
+              </datalist>
+            </div>
+            {% block archive_widgets %}
+            {% endblock %}
+          </aside>
           
         </div>
       </div>
-    </div>
+    {% endblock %}
+    
+    {% block after_archive_content %}
+    {% endblock %}
+    
   </div>
+{% endblock %}
+
+{% block footer_top %}
+{% endblock %}
+
+{% block footer %}
+  <footer id="Footer" class="dark-footer uk-section uk-section-small uk-background-muted">
+    {% include 'footer-main.twig' %}
+  </footer>
 {% endblock %}

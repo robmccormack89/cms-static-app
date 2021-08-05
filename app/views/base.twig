@@ -70,24 +70,27 @@
       
       */
   
+      /* header layered position */
       .site-header {
         z-index: 2;
       }
-      .site-header .uk-navbar-nav>li>a {
-        text-transform: capitalize;
-      }
-      .site-header .uk-navbar-item, .site-header .uk-navbar-nav>li>a, .site-header .uk-navbar-toggle {
-        font-size: 1rem;
-      }
+      
+      /* header third level dropdown */
       .site-header .third-drop {
         left: 140px!important;
         top: 30px!important;
       }
-      .site-header a p.uk-text-small {
-        color: #ffffffc7!important;
+      
+      /* header navbar items text */
+      .site-header .uk-navbar-nav>li>a {
+        text-transform: capitalize;
       }
-      .site-header .uk-navbar-container:not(.uk-navbar-transparent) {
-        background: #ffffff;
+      
+      /* header navbar items font size */
+      .site-header .uk-navbar-item, 
+      .site-header .uk-navbar-nav>li>a, 
+      .site-header .uk-navbar-toggle {
+        font-size: 1rem;
       }
       
       /* header logo subtext positioning */
@@ -103,7 +106,7 @@
         font-size: .7rem;
       }
       
-      /* header logo padding & margins */
+      /* header & logo padding & margins */
       .site-header nav {
         padding-bottom: 20px;
         padding-top: 20px;
@@ -130,16 +133,41 @@
         line-height: 16px;
       }
       
+      /* header logo decoration */
       .site-header .site-logo {
         text-decoration: none!important;
       }
-      .site-header .uk-navbar-nav>li>a, .site-header .uk-navbar-nav>li:hover>a, .site-header .uk-navbar-nav>li>a.uk-open, .site-header .uk-navbar-nav>li>a:focus, 
-      .site-logo, .site-logo:hover, .site-logo:focus {
+      
+      /* header dark/light colors */
+      .site-header .uk-background-default .uk-navbar-item, 
+      .site-header .uk-background-default .uk-navbar-nav>li>a,
+      .site-header .uk-background-default .uk-navbar-nav>li:hover>a, 
+      .site-header .uk-background-default .uk-navbar-nav>li>a.uk-open, 
+      .site-header .uk-background-default .uk-navbar-nav>li>a:focus,
+      .site-header .uk-navbar-transparent .uk-navbar-item, 
+      .site-header .uk-navbar-transparent .uk-navbar-nav>li>a,
+      .site-header .uk-navbar-transparent .uk-navbar-nav>li:hover>a, 
+      .site-header .uk-navbar-transparent .uk-navbar-nav>li>a.uk-open, 
+      .site-header .uk-navbar-transparent .uk-navbar-nav>li>a:focus {
         color: #1a191d;
       }
-      .uk-light .uk-navbar-item, .uk-light .uk-navbar-nav>li>a, .uk-light .uk-navbar-toggle {
-        color: #fff;
-      }    
+      .uk-light .site-header .uk-background-default .uk-navbar-item, 
+      .uk-light .site-header .uk-background-default .uk-navbar-nav>li>a,
+      .uk-light .site-header .uk-background-default .uk-navbar-nav>li:hover>a, 
+      .uk-light .site-header .uk-background-default .uk-navbar-nav>li>a.uk-open, 
+      .uk-light .site-header .uk-background-default .uk-navbar-nav>li>a:focus,
+      .uk-light .site-header .uk-navbar-transparent .uk-navbar-item, 
+      .uk-light .site-header .uk-navbar-transparent .uk-navbar-nav>li>a,
+      .uk-light .site-header .uk-navbar-transparent .uk-navbar-nav>li:hover>a, 
+      .uk-light .site-header .uk-navbar-transparent .uk-navbar-nav>li>a.uk-open, 
+      .uk-light .site-header .uk-navbar-transparent .uk-navbar-nav>li>a:focus ,
+      .uk-light.uk-navbar-transparent .uk-navbar-item, 
+      .uk-light.uk-navbar-transparent .uk-navbar-nav>li>a,
+      .uk-light.uk-navbar-transparent .uk-navbar-nav>li:hover>a, 
+      .uk-light.uk-navbar-transparent .uk-navbar-nav>li>a.uk-open, 
+      .uk-light.uk-navbar-transparent .uk-navbar-nav>li>a:focus {
+        color: #fff!important;
+      }
       
       /* 
       
@@ -375,7 +403,7 @@
         transition: .2s transform linear;
       }
       .hover-grow-wrap:hover img {
-        transform: scale(1.2);
+        transform: scale(1.1);
       }
       
       /* 
@@ -389,6 +417,10 @@
         width:100%;
         object-fit:cover;
       }
+      .object-fit-cover {
+        object-fit:cover;
+      }
+      
       
       /* 
       
@@ -424,23 +456,26 @@
       
       */
       
-      .uk-input, .uk-select, .uk-search-default .uk-search-input {
+      /* input & select inputs */
+      .uk-input, .uk-select {
         background-color: #f8f8f8;
         border: none;
         transition: .1s ease-in-out;
         transition-property: background-color,border-color;
       }
+      
+      /* input & select inputs: hover & focus */
       .uk-input:focus, .uk-input:hover, 
-      .uk-search-default .uk-search-input:focus, .uk-search-default .uk-search-input:hover, 
       .uk-select:focus, .uk-select:hover {
         background-color: #f3f3f3;
       }
-      .uk-input:focus, .uk-search-default .uk-search-input:focus {
-        /* border: 1px solid #e0e0e0; */
-      }
-      .uk-light .uk-input, .uk-light .uk-select, .uk-light .uk-search-default .uk-search-input {
+      
+      /* input & select inputs: uk-light */
+      .uk-light .uk-input, .uk-light .uk-select {
         background-color: rgba(255,255,255,.05);
       }
+      
+      /* uk-form-large size */
       .uk-form-large:not(textarea):not([multiple]):not([size]) {
         height: 45px;
         padding-left: 12px;
@@ -449,17 +484,32 @@
       .uk-form-large {
         font-size: 1rem;
       }
-      ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+      
+      /* placeholder text color */
+      ::placeholder {
         color: #777777!important;
-        opacity: 1!important; /* Firefox */
+        opacity: 1!important;
       }
-      :-ms-input-placeholder { /* Internet Explorer 10-11 */
+      :-ms-input-placeholder {
         color: #777777;
       }
-      ::-ms-input-placeholder { /* Microsoft Edge */
+      ::-ms-input-placeholder {
         color: #777777;
       }
       
+      /* search inputs */
+      .uk-search-default .uk-search-input {
+        background-color: #f8f8f8;
+        border: none;
+        transition: .1s ease-in-out;
+        transition-property: background-color,border-color;
+      }
+      .uk-search-default .uk-search-input:focus, .uk-search-default .uk-search-input:hover {
+        background-color: #f3f3f3;
+      }
+      .uk-light .uk-search-default .uk-search-input {
+        background-color: rgba(255,255,255,.05);
+      }
       .uk-search .uk-search-icon {
         color: #17161a;
       }
@@ -467,6 +517,14 @@
         height: 50px;
         padding-left: 15px;
         padding-right: 35px;
+      }
+      
+      /* hide data list dropdown icon for autopopulated suggestions inputs */
+      input::-webkit-calendar-picker-indicator {
+        display: none!important;
+      }
+      [list]::-webkit-calendar-picker-indicator {
+        display: none!important;
       }
       
       /* 
@@ -558,7 +616,8 @@
         margin-top: -2px;
         color: #d90a2c;
       }
-      .category-holder .category {
+      .category-holder .category,
+      .technology-holder .technology {
         font-weight: 500;
       }
       .the-post .blog-grid-headline {
@@ -586,9 +645,10 @@
       
       /* 
       
-      New pagination
+      Pagination
       
       */
+      
       .archive-pagination .uk-pagination>.uk-active>* {
         color: #d90a2c;
       }
@@ -620,9 +680,11 @@
       
       /* Desktops & tablets landscape*/
       @media only screen and (max-width: 1199px) {
+        
         .uk-heading-large {
           font-size: 4rem;
         }
+        
       }
       
       /* Tablets portrait*/
@@ -630,9 +692,11 @@
         
       }
       @media only screen and (max-width: 959px) {
+        
         .uk-heading-large {
           font-size: 4rem;
         }
+        
       }
       
       /* Phones landscape */
@@ -640,25 +704,30 @@
         
       }
       @media only screen and (min-width: 768px) {
+        
         #CTA {
           margin-top: -90px;
         }
         #CTA .uk-background-cover {
           margin: 100px 0;
         }
+        
       }
       @media only screen and (max-width: 767px) {
+        
         .uk-h1, h1 {
           font-size: 1.9rem;
         }
         .uk-h2, h2 {
           font-size: 1.5rem;
         }
+        
         #Work .work-item img {
           max-height: 250px;
           width: 100%;
           object-fit: cover;
         }
+        
         #CTA .uk-background-cover.uk-height-large {
           height: 150px;
         }
@@ -668,6 +737,7 @@
         #CTA .uk-padding-large {
           padding: 20px;
         }
+        
         #Services .services-item img{
           max-height: 160px;
           width: 100%;
@@ -679,12 +749,14 @@
         #Services *+.uk-grid-margin, #Services .uk-grid+.uk-grid, #Services .uk-grid>.uk-grid-margin {
             margin-top: 10px;
         }
+        
         #PersonalLeader .leader-height {
           min-height: calc(70vh);
         }
         #PersonalLeader .leader-heading {
           font-size: 2.7rem;
         }
+        
         #FooterTop .uk-grid-column-small>*, #FooterTop .uk-grid-small>* {
           padding-left: 15px;
         }
@@ -696,9 +768,11 @@
           padding-left: 10px;
           padding-right: 10px;
         }
+        
         .uk-heading-large {
           font-size: 3rem;
         }
+        
       }
       
       /* Phones portrait*/
@@ -707,13 +781,6 @@
       }
       @media only screen and (max-width: 479px) {
         
-      }
-      
-      input::-webkit-calendar-picker-indicator {
-        display: none!important;
-      }
-      [list]::-webkit-calendar-picker-indicator {
-        display: none!important;
       }
       
     </style>
@@ -913,56 +980,7 @@
     
     {% block footer %}
       <footer id="Footer" class="default-footer home-footer uk-section uk-section-small uk-background-default">
-        <div class="uk-container">
-          <div class="footer-main">
-            <div class="uk-child-width-1-2@s uk-child-width-1-4@m" uk-grid>
-              <div>
-                <h4 class="site-logo uk-text-emphasis uk-link-reset uk-text-bold uk-margin-remove">
-                  web<br>
-                  designer<br>
-                  developer
-                </h4>
-                <p class="uk-text-small uk-margin-remove uk-text-italic by-rmcc-text">obmccormack89</p>
-              </div>
-              <div>
-                <h3 class="uk-h5">Rotterdam</h3>
-                <ul class="uk-list uk-list-collapse">
-                  <li>Ohio Digital Media LTD.</li>
-                  <li>Graaf Florisstraat 22A,</li>
-                  <li>3021 CH Rotterdam</li>
-                </ul>
-                <h3 class="uk-h5">Barcelona</h3>
-                <ul class="uk-list uk-list-collapse">
-                  <li>Ohio Digital LTD.</li>
-                  <li>365 Gran Via de Corts</li>
-                  <li>Catalanes, BA 08015</li>
-                </ul>
-              </div>
-              <div>
-                <h3 class="uk-h5">Work inquiries</h3>
-                <ul class="uk-list uk-list-collapse">
-                  <li>Interested in working with us?</li>
-                  <li><a href="#" class="uk-button uk-button-text uk-text-lowercase">jobs@robertmccormack.com</a></li>
-                </ul>
-                <h3 class="uk-h5">Career</h3>
-                <li>Looking for a job opportunity?</li>
-                <li><a href="#" class="uk-button uk-button-text uk-text-capitalize">See open positions <i class="fas fa-arrow-right fa-sm"></i></a></li>
-              </div>
-              <div>
-                <h3 class="uk-h5">Sign up for our newsletter</h3>
-              </div>
-            </div>
-          </div>
-          <hr class="uk-margin-medium-bottom uk-margin-large-top">
-          <div class="footer-bottom">
-            <div class="uk-child-width-1-2@m" uk-grid>
-              <div class="uk-text-small">© 2021 <span class="uk-text-bold uk-text-emphasis">{{site.title}}</span>. Made with passion by  <span class="uk-text-bold uk-text-emphasis">{{author.name}}</span></div>
-              <div class="uk-text-right@m">
-                <a href="#" class="uk-button uk-button-text uk-text-capitalize">Privacy & Cookie Policy</a> | <a href="#" class="uk-button uk-button-text uk-text-capitalize">Terms of Service</a>
-              </div>
-            </div>
-          </div>
-        </div>
+        {% include 'footer-main.twig' %}
       </footer>
     {% endblock %}
     

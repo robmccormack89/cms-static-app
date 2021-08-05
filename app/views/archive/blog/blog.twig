@@ -1,365 +1,156 @@
 {% extends "archive.twig" %}
 
-{% block styles %}
-  <style>
-  </style>
+{% block archive_styles %}
 {% endblock %}
 
-{% block content %}
-  <div id="BlogArchive" class="archive blog-archive uk-container" data-template="blog.twig" data-template-extends="archive.twig">
-    
-    <!-- blog header -->
-    <header class="archive-header blog-header uk-section">
-      <h1 class="uk-heading-medium uk-margin-remove">{{archive.title}}</h1>
-      <p class="uk-text-meta uk-margin-small-top uk-width-3-5@m">{{archive.description}}</p>
-    </header>
-    
-    <form method="GET" action="/blog" id="ArchiveFilters">
-      {% for key, val in get %}
-        {% if key == 'show_all' %}
-          <input type="hidden" name="{{key|escape}}" />
-        {% endif %}
-        {% if key != 'url' and key != 'show_all' and key != 'categories' and key != 'tags' %}
-          <input type="hidden" name="{{key|escape}}" value="{{val|escape}}" />
-        {% endif %}
-      {% endfor %}
-    </form>
-    
-    <form method="GET" action="/blog" id="ArchiveFiltersMobile">
-      {% for key, val in get %}
-        {% if key == 'show_all' %}
-          <input type="hidden" name="{{key|escape}}" />
-        {% endif %}
-        {% if key != 'url' and key != 'show_all' and key != 'categories' and key != 'tags' %}
-          <input type="hidden" name="{{key|escape}}" value="{{val|escape}}" />
-        {% endif %}
-      {% endfor %}
-    </form>
-    
-    <!-- blog toolbar -->
-    <nav class="archive-toolbar uk-grid uk-grid-match uk-flex uk-flex-middle uk-grid-collapse" uk-grid>
-      <div class="blog-breads uk-width-expand">
-        {% include 'breads.twig' %}
-      </div>
-      <div class="blog-filters uk-width-auto">
-        <div class="filter-button uk-hidden@m" uk-grid>
-          <a href="#offcanvas-usage" uk-toggle class="uk-button uk-button-secondary uk-border-rounded uk-button-small uk-text-capitalize"><i class="fas fa-filter"></i> Filter</a>
-          <div id="offcanvas-usage" uk-offcanvas="overlay: true">
-            <div class="uk-offcanvas-bar">
-              <a class="uk-offcanvas-close uk-padding-remove"><i class="fas fa-times"></i></a>
-              <ul class="uk-nav uk-nav-default">
-                <li class="uk-nav-header uk-text-bold">
-                  {% if archive.pagination.results %}
-                    {{archive.pagination.results}}
-                  {% endif %}
-                </li>
-                <li class="uk-margin-small">
-                  <div class="cats-dropdown">
-                    <div class="select-inline">
-                      <div class="select-holder">
-                        {% set categories = get_terms('category') %}
-                        <select class="uk-select uk-border-rounded" name="categories" id="categories" autocomplete="off" form="ArchiveFiltersMobile" onchange="this.form.submit();">
-                          <option {% if get.categories == '' and cat.slug not in get.url %}selected{% endif %} disabled hidden>Categories</option>
-                          {% for cat in categories %}
-                            {% if cat.posts_count > 0  %}
-                              <option value="{{cat.slug}}" {% if get.categories == cat.slug or cat.slug in get.url %}selected{% endif %}>{{cat.title}}</option>
-                            {% endif %}
-                          {% endfor %}
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-                <li class="uk-margin-small">
-                  <div class="tags-dropdown">
-                    <div class="select-inline">
-                      <div class="select-holder">
-                        {% set tags = get_terms('tag') %}
-                        <select class="uk-select uk-border-rounded" name="tags" id="tags" autocomplete="off" form="ArchiveFiltersMobile" onchange="this.form.submit();">
-                          <option {% if get.tags == '' and tag.slug not in get.url %}selected{% endif %} disabled hidden>Tags</option>
-                          {% for tag in tags %}
-                            {% if tag.posts_count > 0  %}
-                              <option value="{{tag.slug}}" {% if get.tags == tag.slug or tag.slug in get.url %}selected{% endif %}>{{tag.title}}</option>
-                            {% endif %}
-                          {% endfor %}
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div class="desktop-filters uk-grid-match uk-flex uk-flex-middle uk-grid-small uk-visible@m uk-margin-remove" uk-grid>
-          <div class="results-count uk-width-auto">
-            <p class="uk-text-bold uk-text-emphasis uk-text-small">
-              {% if archive.pagination.results %}
-                {{archive.pagination.results}}
-              {% endif %}
-            </p>
-          </div>
-          <div class="cats-dropdown uk-width-auto">
-            <div class="select-inline">
-              <div class="select-holder">
-                {% set categories = get_terms('category') %}
-                <select class="uk-select uk-border-rounded" name="categories" id="categories" autocomplete="off" form="ArchiveFilters" onchange="this.form.submit();">
-                  <option {% if get.categories == '' and cat.slug not in get.url %}selected{% endif %} disabled hidden>Categories</option>
-                  {% for cat in categories %}
-                    {% if cat.posts_count > 0  %}
-                      <option value="{{cat.slug}}" {% if get.categories == cat.slug or cat.slug in get.url %}selected{% endif %}>{{cat.title}}</option>
-                    {% endif %}
-                  {% endfor %}
-                </select>
-              </div>
-            </div>
-          </div>
-          <div class="tags-dropdown uk-width-auto">
-            <div class="select-inline">
-              <div class="select-holder">
-                {% set tags = get_terms('tag') %}
-                <select class="uk-select uk-border-rounded" name="tags" id="tags" autocomplete="off" form="ArchiveFilters" onchange="this.form.submit();">
-                  <option {% if get.tags == '' and tag.slug not in get.url %}selected{% endif %} disabled hidden>Tags</option>
-                  {% for tag in tags %}
-                    {% if tag.posts_count > 0  %}
-                      <option value="{{tag.slug}}" {% if get.tags == tag.slug or tag.slug in get.url %}selected{% endif %}>{{tag.title}}</option>
-                    {% endif %}
-                  {% endfor %}
-                </select>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </nav>
-    
-    <!-- blog main content -->
-    <div class="archive-main uk-section uk-section-small">
-      <div class="uk-grid uk-flex" uk-grid>
-        
-        <!-- blog posts -->
-        <section class="archive-posts uk-width-3-4@m">
-          
-          <!-- blog posts grid -->
-          <div class="posts-grid uk-child-width-1-2@m uk-grid-column-medium uk-grid-row-large" uk-grid="masonry: true">
-            
-            {% if archive.posts %}
-              {% for post in archive.posts %}
-                <article class="the-post">
-                  
-                  <!-- tease featured -->
-                  {% if post.featured_img %}
-                    {% if post.format == 'video' %}
-                      <figure class="blog-grid-image uk-cover-container uk-height-medium">
-                        <iframe src="{{post.featured_img.src}}" class="object-fitting" frameborder="0" allowfullscreen uk-cover></iframe>
-                      </figure>
-                    {% else %}
-                      <figure class="blog-grid-image">
-                        <a class="uk-inline uk-link-reset hover-grow-wrap" href="{{post.link}}">
-                          <img class="uk-border-rounded" data-src="{{post.featured_img.src}}" data-width data-height alt="{{post.featured_img.alt}}" uk-img>
-                        </a>
-                      </figure>
-                    {% endif %}
-                  {% endif %}
-                  
-                  <!-- tease meta -->
-                  {% if post.taxonomies.categories or post.read_time %}
-                    <div class="post-details uk-margin uk-margin-small-bottom">
-                      {% if post.taxonomies.categories %}
-                        <div class="category-holder uk-inline">
-                          {% for cat in post.taxonomies.categories %}
-                            {% if not loop.last %}
-                              <a class="category uk-link-reset" title="{{cat.title}}" href="{{cat.link}}">{{cat.title}}</a>,
-                            {% else %}
-                              <a class="category uk-link-reset" title="{{cat.title}}" href="{{cat.link}}">{{cat.title}}</a>
-                            {% endif %}
-                          {% endfor %}
-                        </div>
-                      {% endif %}
-                      {% if post.read_time %}
-                        <span class="post-meta-estimate">{{post.read_time}} read</span>
-                      {% endif %}
-                    </div>
-                  {% endif %}
-                  
-                  <!-- tease title -->
-                  <h3 class="blog-grid-headline uk-margin-remove">
-                    <a class="uk-link-heading" href="{{post.link}}">{{post.title}}.</a>
-                  </h3>
-                  
-                  <!-- tease excerpt -->
-                  {% if post.excerpt %}
-                    {% if post.format == 'quote' %}
-                      <blockquote cite="#">
-                        <p class="uk-margin-remove">{{post.excerpt}}</p>
-                      </blockquote>
-                    {% else %}
-                      <p class="post-excerpt uk-margin-small-top">{{post.excerpt}}....</p>
-                    {% endif %}
-                  {% endif %}
-                  
-                  <!-- tease link -->
-                  <a class="style-btn uk-text-capitalize uk-animation-toggle" href="{{post.link}}" tabindex="0">
-                    Read more <i class="fas fa-arrow-right uk-margin-small-left uk-animation-slide-left"></i>
-                  </a>
-                  
-                </article>
-              {% endfor %}
-            {% else %}
-              <span class="uk-text-lead uk-text-emphasis">No posts found here...</span>
-            {% endif %}
-            
-          </div>
-          
-          <!-- blog pagination -->
-          {% if (archive.pagination.next or archive.pagination.prev) %}
-            <div class="archive-pagination uk-section">
-              <ul class="uk-pagination">
-                {% if archive.pagination.prev %}
-                  <li>
-                    <a class="prev style-btn uk-text-capitalize uk-animation-toggle" href="{{archive.pagination.prev}}" tabindex="0">
-                      <i class="fas fa-arrow-left uk-margin-small-right uk-animation-slide-right"></i> Previous
-                    </a>
-                  </li>
+{% block before_archive_content %}
+  <!-- filters form -->
+  <form method="GET" action="/blog" id="ArchiveFilters">
+    {% for key, val in get %}
+      {% if key == 'show_all' %}
+        <input type="hidden" name="{{key|escape}}" />
+      {% endif %}
+      {% if key != 'url' and key != 'show_all' and key != 'categories' and key != 'tags' %}
+        <input type="hidden" name="{{key|escape}}" value="{{val|escape}}" />
+      {% endif %}
+    {% endfor %}
+  </form>
+  <!-- mobile filters form -->
+  <form method="GET" action="/blog" id="ArchiveFiltersMobile">
+    {% for key, val in get %}
+      {% if key == 'show_all' %}
+        <input type="hidden" name="{{key|escape}}" />
+      {% endif %}
+      {% if key != 'url' and key != 'show_all' and key != 'categories' and key != 'tags' %}
+        <input type="hidden" name="{{key|escape}}" value="{{val|escape}}" />
+      {% endif %}
+    {% endfor %}
+  </form>
+  <!-- blog toolbar -->
+  <nav class="archive-toolbar uk-grid uk-grid-match uk-flex uk-flex-middle uk-grid-collapse" uk-grid>
+    <div class="blog-breads uk-width-expand">
+      {% include 'breads.twig' %}
+    </div>
+    <div class="blog-filters uk-width-auto">
+      <div class="filter-button uk-hidden@m" uk-grid>
+        <a href="#offcanvas-usage" uk-toggle class="uk-button uk-button-secondary uk-border-rounded uk-button-small uk-text-capitalize"><i class="fas fa-filter"></i> Filter</a>
+        <div id="offcanvas-usage" uk-offcanvas="overlay: true">
+          <div class="uk-offcanvas-bar">
+            <a class="uk-offcanvas-close uk-padding-remove"><i class="fas fa-times"></i></a>
+            <ul class="uk-nav uk-nav-default">
+              <li class="uk-nav-header uk-text-bold">
+                {% if archive.pagination.results %}
+                  {{archive.pagination.results}}
                 {% endif %}
-                {% for page in archive.pagination.pages %}
-                  {% if page.class == 'uk-active' %}
-                    <li class="{{page.class}}"><span>{{page.title}}</span></li>
-                  {% else %}
-                    <li class="{{page.class}}"><a class="style-btn" href="{{page.link}}">{{page.title}}</a></li>
+              </li>
+              <li class="uk-margin-small">
+                <div class="cats-dropdown">
+                  <div class="select-inline">
+                    <div class="select-holder">
+                      {% set categories = get_terms('category') %}
+                      <select class="uk-select uk-border-rounded" name="categories" id="categories" autocomplete="off" form="ArchiveFiltersMobile" onchange="this.form.submit();">
+                        <option {% if get.categories == '' and cat.slug not in get.url %}selected{% endif %} disabled hidden>Categories</option>
+                        {% for cat in categories %}
+                          {% if cat.posts_count > 0  %}
+                            <option value="{{cat.slug}}" {% if get.categories == cat.slug or cat.slug in get.url %}selected{% endif %}>{{cat.title}}</option>
+                          {% endif %}
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li class="uk-margin-small">
+                <div class="tags-dropdown">
+                  <div class="select-inline">
+                    <div class="select-holder">
+                      {% set tags = get_terms('tag') %}
+                      <select class="uk-select uk-border-rounded" name="tags" id="tags" autocomplete="off" form="ArchiveFiltersMobile" onchange="this.form.submit();">
+                        <option {% if get.tags == '' and tag.slug not in get.url %}selected{% endif %} disabled hidden>Tags</option>
+                        {% for tag in tags %}
+                          {% if tag.posts_count > 0  %}
+                            <option value="{{tag.slug}}" {% if get.tags == tag.slug or tag.slug in get.url %}selected{% endif %}>{{tag.title}}</option>
+                          {% endif %}
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="desktop-filters uk-grid-match uk-flex uk-flex-middle uk-grid-small uk-visible@m uk-margin-remove" uk-grid>
+        <div class="results-count uk-width-auto">
+          <p class="uk-text-bold uk-text-emphasis uk-text-small">
+            {% if archive.pagination.results %}
+              {{archive.pagination.results}}
+            {% endif %}
+          </p>
+        </div>
+        <div class="cats-dropdown uk-width-auto">
+          <div class="select-inline">
+            <div class="select-holder">
+              {% set categories = get_terms('category') %}
+              <select class="uk-select uk-border-rounded" name="categories" id="categories" autocomplete="off" form="ArchiveFilters" onchange="this.form.submit();">
+                <option {% if get.categories == '' and cat.slug not in get.url %}selected{% endif %} disabled hidden>Categories</option>
+                {% for cat in categories %}
+                  {% if cat.posts_count > 0  %}
+                    <option value="{{cat.slug}}" {% if get.categories == cat.slug or cat.slug in get.url %}selected{% endif %}>{{cat.title}}</option>
                   {% endif %}
                 {% endfor %}
-                {% if archive.pagination.next %}
-                  <li>
-                    <a class="next style-btn uk-text-capitalize uk-animation-toggle" href="{{archive.pagination.next}}" tabindex="0">
-                      Next <i class="fas fa-arrow-right uk-margin-small-left uk-animation-slide-left"></i>
-                    </a>
-                  </li>
-                {% endif %}
-              </ul>
+              </select>
             </div>
-          {% endif %}
-          
-        </section>
-        
-        <!-- blog sidebar widgets area -->
-        <aside class="archive-sidebar uk-width-1-4@m uk-flex-first@m">
-          
-          <!-- search widget -->
-          <div class="widget search-widget uk-margin-medium">
-            <form method="GET" action="{{current_url|strtokparams}}" id="ArchiveSearch" class="uk-search uk-search-default uk-width-1-1">
-              {% for key, val in get %}
-                {% if key == 'show_all' %}
-                  <input type="hidden" name="{{key|escape}}" />
-                {% endif %}
-                {% if key != 'url' and key != 'show_all' and key != 's' %}
-                  <input type="hidden" name="{{key|escape}}" value="{{val|escape}}" />
-                {% endif %}
-              {% endfor %}
-              <span class="uk-search-icon-flip uk-icon uk-search-icon"><i class="fas fa-search"></i></span>
-              <input class="uk-search-input uk-border-rounded uk-form-large uk-width-1-1" pattern=".*\S+.*" form="ArchiveSearch" minlength="3" minlength="25" autocomplete="off" list="SearchAuto" name="s" id="s" type="search" placeholder="Search">
-            </form>
-            <datalist id="SearchAuto">
-              <option value="handshake">
-              <option value="release">
-              <option value="assets">
-              <option value="validation">
-              <option value="metrics">
-            </datalist>
           </div>
-          
-          <!-- cats list widget -->
-          <div class="widget blog-cats-widget uk-margin-medium">
-            <h3 class="widget-title uk-h5">Categories</h3>
-            {% set widget_categories = get_terms('category') %}
-            <ul class="uk-list">
-              {% for cat in widget_categories %}
-                {% if cat.posts_count > 0  %}
-                  <li class="{% if get.categories == cat.slug or cat.slug in get.url %}uk-active{% endif %}">
-                    <a class="uk-link-text" href="{{cat.link}}">{{cat.title}} ({{cat.posts_count}})</a>
-                  </li>
-                {% endif %}
-              {% endfor %}
-            </ul>
+        </div>
+        <div class="tags-dropdown uk-width-auto">
+          <div class="select-inline">
+            <div class="select-holder">
+              {% set tags = get_terms('tag') %}
+              <select class="uk-select uk-border-rounded" name="tags" id="tags" autocomplete="off" form="ArchiveFilters" onchange="this.form.submit();">
+                <option {% if get.tags == '' and tag.slug not in get.url %}selected{% endif %} disabled hidden>Tags</option>
+                {% for tag in tags %}
+                  {% if tag.posts_count > 0  %}
+                    <option value="{{tag.slug}}" {% if get.tags == tag.slug or tag.slug in get.url %}selected{% endif %}>{{tag.title}}</option>
+                  {% endif %}
+                {% endfor %}
+              </select>
+            </div>
           </div>
-          
-          <!-- tags list widget -->
-          <div class="widget blog-tags-widget uk-margin-medium">
-            <h3 class="widget-title uk-h5">Tags</h3>
-            {% set widget_tags = get_terms('tag') %}
-            <ul class="uk-list">
-              {% for tag in widget_tags %}
-                {% if tag.posts_count > 0  %}
-                  <li class="{% if get.tags == tag.slug or tag.slug in get.url %}uk-active{% endif %}">
-                    <a class="uk-link-text" href="{{tag.link}}">{{tag.title}} ({{tag.posts_count}})</a>
-                  </li>
-                {% endif %}
-              {% endfor %}
-            </ul>
-          </div>
-          
-        </aside>
-        
+        </div>
       </div>
     </div>
-    
+  </nav>
+{% endblock %}
+
+{% block archive_widgets %}
+  <!-- cats list widget -->
+  <div class="widget blog-cats-widget uk-margin-medium">
+    <h3 class="widget-title uk-h5">Categories</h3>
+    {% set widget_categories = get_terms('category') %}
+    <ul class="uk-list">
+      {% for cat in widget_categories %}
+        {% if cat.posts_count > 0  %}
+          <li class="{% if get.categories == cat.slug or cat.slug in get.url %}uk-active{% endif %}">
+            <a class="uk-link-text" href="{{cat.link}}">{{cat.title}} ({{cat.posts_count}})</a>
+          </li>
+        {% endif %}
+      {% endfor %}
+    </ul>
   </div>
-{% endblock %}
-
-{% block footer_top %}
-{% endblock %}
-
-{% block footer %}
-  <footer id="Footer" class="dark-footer uk-section uk-section-small uk-background-muted">
-    <div class="uk-container">
-      <div class="footer-main uk-padding uk-padding-remove-horizontal">
-        <div class="uk-child-width-1-2@s uk-child-width-1-4@m" uk-grid>
-          <div>
-            <h4 class="site-logo uk-text-emphasis uk-link-reset uk-text-bold uk-margin-remove">
-              web<br>
-              designer<br>
-              developer
-            </h4>
-            <p class="uk-text-small uk-margin-remove uk-text-italic by-rmcc-text">robmccormack89</p>
-          </div>
-          <div>
-            <h3 class="uk-h5">Rotterdam</h3>
-            <ul class="uk-list uk-list-collapse">
-              <li>Ohio Digital Media LTD.</li>
-              <li>Graaf Florisstraat 22A,</li>
-              <li>3021 CH Rotterdam</li>
-            </ul>
-            <h3 class="uk-h5">Barcelona</h3>
-            <ul class="uk-list uk-list-collapse">
-              <li>Ohio Digital LTD.</li>
-              <li>365 Gran Via de Corts</li>
-              <li>Catalanes, BA 08015</li>
-            </ul>
-          </div>
-          <div>
-            <h3 class="uk-h5">Work inquiries</h3>
-            <ul class="uk-list uk-list-collapse">
-              <li>Interested in working with us?</li>
-              <li><a href="#" class="uk-button uk-button-text uk-text-lowercase">jobs@robertmccormack.com</a></li>
-            </ul>
-            <h3 class="uk-h5">Career</h3>
-            <li>Looking for a job opportunity?</li>
-            <li><a href="#" class="uk-button uk-button-text uk-text-capitalize">See open positions <i class="fas fa-arrow-right fa-sm"></i></a></li>
-          </div>
-          <div>
-            <h3 class="uk-h5">Sign up for our newsletter</h3>
-          </div>
-        </div>
-      </div>
-      <hr class="uk-margin-medium-bottom uk-margin-large-top">
-      <div class="footer-bottom">
-        <div class="uk-child-width-1-2@m" uk-grid>
-          <div class="uk-text-small">© 2021 <span class="uk-text-bold uk-text-emphasis">{{site.title}}</span>. Made with passion by  <span class="uk-text-bold uk-text-emphasis">{{author.name}}</span></div>
-          <div class="uk-text-right@m">
-            <a href="#" class="uk-button uk-button-text uk-text-capitalize">Privacy & Cookie Policy</a> | <a href="#" class="uk-button uk-button-text uk-text-capitalize">Terms of Service</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </footer>
+  <!-- tags list widget -->
+  <div class="widget blog-tags-widget uk-margin-medium">
+    <h3 class="widget-title uk-h5">Tags</h3>
+    {% set widget_tags = get_terms('tag') %}
+    <ul class="uk-list">
+      {% for tag in widget_tags %}
+        {% if tag.posts_count > 0  %}
+          <li class="{% if get.tags == tag.slug or tag.slug in get.url %}uk-active{% endif %}">
+            <a class="uk-link-text" href="{{tag.link}}">{{tag.title}} ({{tag.posts_count}})</a>
+          </li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  </div>
 {% endblock %}

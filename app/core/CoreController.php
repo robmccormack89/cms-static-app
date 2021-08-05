@@ -20,12 +20,18 @@ class CoreController {
         '../app/views/',
         '../app/views/archive',
         '../app/views/archive/blog',
+        '../app/views/archive/blog/categories',
+        '../app/views/archive/blog/tags',
         '../app/views/archive/portfolio',
+        '../app/views/archive/portfolio/technologies',
         '../app/views/parts',
         '../app/views/single',
         '../app/views/single/page',
+        '../app/views/single/page/content',
         '../app/views/single/post',
+        '../app/views/single/post/content',
         '../app/views/single/project',
+        '../app/views/single/project/content',
         '../app/views/parts',
       )
     );

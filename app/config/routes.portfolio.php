@@ -9,10 +9,10 @@ $router->get('/portfolio/', function() {
       header('Location: /portfolio', true, 301);
       exit();
     }
-    (new ArchiveController('portfolio'))->queryMainIndexArchive($params['query']);
+    (new ArchiveController('portfolio', 24))->queryMainIndexArchive($params['query']);
   } else {
     Cache::cacheServe(function(){ 
-      (new ArchiveController('portfolio'))->getMainIndexArchive();
+      (new ArchiveController('portfolio', 24))->getMainIndexArchive();
     });
   }
 });

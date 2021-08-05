@@ -1,80 +1,19 @@
-{% extends "single.twig" %}
-
-{% block styles %}
-  <style>
-    ins, mark {
-      background: #9ff8d0;
-      color: #17161a;
-    }
-    a {
-      font-weight: 500;
-    }
-    .uk-label {
-      background-color: #8888881a;
-      transition: .1s ease-in-out;
-      transition-property: background-color,color;
-    }
-    .uk-label:hover, .uk-label:focus {
-      background-color: #d90a2c;
-      color: #fff!important;
-    }
-    
-    .tags-grid.uk-grid-small {
-      margin-left: -8px;
-    }
-    .tags-grid.uk-grid-small>* {
-      padding-left: 8px;
-    }
-    
-    .uk-light strong {
-      color: #fff;
-    }
-    
-    .single-cover-details {
-      margin-top: 140px!important;
-    }
-    @media only screen and (max-width: 767px) {
-      .single-cover-details {
-        margin-top: 100px!important;
-      }
-    }
-    
-    @media (min-width: 960px) {
-      .section-small-bottom {
-        padding-bottom: 30px;
-      }
-    }
-    .section-small-bottom {
-      padding-bottom: 10px;
-    }
-    
-    .uk-background-pink {
-      background-color: #ffecf3;
-    }
-    .uk-light .uk-background-pink {
-      background-color: #17161a;
-    }
-    
-    .uk-overlay-primary {
-      background: rgb(26 25 29 / 57%);
-    }
-  </style>
-{% endblock %}
+{% extends "post.twig" %}
 
 {% block header %}
   <header id="SiteHeader" class="site-header uk-position-top uk-position-z-index">
-    <div uk-sticky="{{ (single.featured_img) ? 'animation: uk-animation-slide-top; sel-target: .main-navbar; cls-active: uk-navbar-sticky uk-background-default; cls-inactive: uk-navbar-transparent uk-light; top: 200' : 'animation: uk-animation-slide-top; sel-target: .main-navbar; cls-active: uk-navbar-sticky uk-background-default; cls-inactive: uk-navbar-transparent; top: 200' }}">
+    <div uk-sticky="animation: uk-animation-slide-top; sel-target: .main-navbar; cls-active: uk-navbar-sticky uk-background-default; cls-inactive: uk-navbar-transparent; top: 200">
       {% include 'main-navbar.twig' %}
     </div>
   </header>
 {% endblock %}
 
 {% block content %}
-  <div id="post{{single.slug}}" class="post-{{single.slug}}" data-template="post.twig">
+  <div id="post{{single.slug}}" class="post-{{single.slug}}" data-template="post_video.twig">
     
     <!-- main single cover: beneath sticky header -->
-    <section id="MainSingleCover" class="uk-background-cover uk-flex uk-flex-center uk-flex-middle {{ (single.featured_img) ? 'uk-light' : '' }}" style="{{ (single.featured_img) ? 'background-image: url(' ~ single.featured_img.src|resize(1920, 600, 'center') ~ ');' : '' }}">
-      <div class="{{ (single.featured_img) ? 'uk-section uk-overlay-primary' : 'uk-background-pink uk-section' }} uk-width-1-1">
+    <section id="MainSingleCover" class="uk-background-cover uk-flex uk-flex-center uk-flex-middle">
+      <div class="uk-section section-small-bottom uk-width-1-1">
         <div class="uk-container uk-container-medium">
           <div class="single-cover-details uk-width-1-1">
             
@@ -162,13 +101,4 @@
     </section>
     
   </div>
-{% endblock %}
-
-{% block footer_top %}
-{% endblock %}
-
-{% block footer %}
-  <footer id="Footer" class="dark-footer uk-section uk-section-small uk-background-muted">
-    {% include 'footer-main.twig' %}
-  </footer>
 {% endblock %}
