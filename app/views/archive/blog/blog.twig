@@ -7,7 +7,7 @@
 
 {% block content %}
   {% set some_image = 'https://robertmccormack.com/public/img/test.jpg' %}
-  <img src="{{some_image|resize(500, 500)}}">
+  <img src="{{some_image|resize(500, 500)}}" hidden>
   <div id="BlogArchive" class="archive blog-archive uk-container" data-template="blog.twig" data-template-extends="archive.twig">
     
     <!-- blog header -->
