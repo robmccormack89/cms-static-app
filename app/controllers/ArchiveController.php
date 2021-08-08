@@ -28,13 +28,15 @@ class ArchiveController extends CoreController {
   }
   
   public function querySite($params) {
+    
+    global $_context;
 
     /*
     *
     * set the _context archive
     *
     */
-    $GLOBALS['_context']['archive'] = 'SiteQuery';
+    $_context['archive'] = 'SiteQuery';
     
     /*
     *
@@ -56,10 +58,10 @@ class ArchiveController extends CoreController {
     * set the pagination values in the params array
     *
     */
-    if(isset($params_array['p'])) $GLOBALS['_context']['page'] = $params_array['p'];
-    if(isset($params_array['show_all'])) $GLOBALS['_context']['paged'] = false;
-    if(isset($params_array['per_page'])) $GLOBALS['_context']['per_page'] = $params_array['per_page'];
-    if(!isset($params_array['per_page'])) $params_array['per_page'] = $GLOBALS['_context']['per_page'];
+    if(isset($params_array['p'])) $_context['page'] = $params_array['p'];
+    if(isset($params_array['show_all'])) $_context['paged'] = false;
+    if(isset($params_array['per_page'])) $_context['per_page'] = $params_array['per_page'];
+    if(!isset($params_array['per_page'])) $params_array['per_page'] = $_context['per_page'];
     
     /*
     *
@@ -91,7 +93,7 @@ class ArchiveController extends CoreController {
     * _context->string_params is what the query will be running off. so we set it here to out rebuilt string above
     *
     */
-    $GLOBALS['_context']['string_params'] = $new_params;
+    $_context['string_params'] = $new_params;
     
     /*
     *
@@ -99,7 +101,7 @@ class ArchiveController extends CoreController {
     *
     */
     $context['archive'] = (new ArchiveModel())->getQueriedArchive();
-    $context['context'] = $GLOBALS['_context'];
+    $context['context'] = $_context;
     if(isset($context['archive']['title'])) {
       $this->render($context);
     } else {
@@ -108,13 +110,15 @@ class ArchiveController extends CoreController {
   }
   
   public function queryMainIndexArchive($params) {
+    
+    global $_context;
 
     /*
     *
     * set the _context archive
     *
     */
-    $GLOBALS['_context']['archive'] = 'MainIndexArchive';
+    $_context['archive'] = 'MainIndexArchive';
     
     /*
     *
@@ -136,10 +140,10 @@ class ArchiveController extends CoreController {
     * set the pagination values in the params array
     *
     */
-    if(isset($params_array['p'])) $GLOBALS['_context']['page'] = $params_array['p'];
-    if(isset($params_array['show_all'])) $GLOBALS['_context']['paged'] = false;
-    if(isset($params_array['per_page'])) $GLOBALS['_context']['per_page'] = $params_array['per_page'];
-    if(!isset($params_array['per_page'])) $params_array['per_page'] = $GLOBALS['_context']['per_page'];
+    if(isset($params_array['p'])) $_context['page'] = $params_array['p'];
+    if(isset($params_array['show_all'])) $_context['paged'] = false;
+    if(isset($params_array['per_page'])) $_context['per_page'] = $params_array['per_page'];
+    if(!isset($params_array['per_page'])) $params_array['per_page'] = $_context['per_page'];
     
     /*
     *
@@ -171,7 +175,7 @@ class ArchiveController extends CoreController {
     * _context->string_params is what the query will be running off. so we set it here to out rebuilt string above
     *
     */
-    $GLOBALS['_context']['string_params'] = $new_params;
+    $_context['string_params'] = $new_params;
     
     /*
     *
@@ -179,7 +183,7 @@ class ArchiveController extends CoreController {
     *
     */
     $context['archive'] = (new ArchiveModel())->getQueriedArchive();
-    $context['context'] = $GLOBALS['_context'];
+    $context['context'] = $_context;
     if(isset($context['archive']['title'])) {
       $this->render($context);
     } else {
@@ -188,12 +192,13 @@ class ArchiveController extends CoreController {
   }
   
   public function getMainIndexArchive() {
+    global $_context;
     // set some global variables related to the current context
-    $GLOBALS['_context']['archive'] = 'MainIndexArchive';
+    $_context['archive'] = 'MainIndexArchive';
     // set the archive obj context for twig to render
     $context['archive'] = (new ArchiveModel())->getArchive();
     
-    $context['context'] = $GLOBALS['_context'];
+    $context['context'] = $_context;
     if(isset($context['archive']['title'])) {
       $this->render($context);
     } else {
@@ -203,12 +208,14 @@ class ArchiveController extends CoreController {
   
   public function queryTaxTermArchive($params, $tax, $term) {
     
+    global $_context;
+    
     /*
     *
     * set the _context archive
     *
     */
-    $GLOBALS['_context']['archive'] = 'TaxTermArchive';
+    $_context['archive'] = 'TaxTermArchive';
     
     /*
     *
@@ -231,18 +238,18 @@ class ArchiveController extends CoreController {
     * add tax & term to the _context array
     *
     */
-    $GLOBALS['_context']['tax'] = $tax;
-    $GLOBALS['_context']['term'] = $term;
+    $_context['tax'] = $tax;
+    $_context['term'] = $term;
     
     /*
     *
     * set the pagination values in the params array
     *
     */
-    if(isset($params_array['p'])) $GLOBALS['_context']['page'] = $params_array['p'];
-    if(isset($params_array['show_all'])) $GLOBALS['_context']['paged'] = false;
-    if(isset($params_array['per_page'])) $GLOBALS['_context']['per_page'] = $params_array['per_page'];
-    if(!isset($params_array['per_page'])) $params_array['per_page'] = $GLOBALS['_context']['per_page'];
+    if(isset($params_array['p'])) $_context['page'] = $params_array['p'];
+    if(isset($params_array['show_all'])) $_context['paged'] = false;
+    if(isset($params_array['per_page'])) $_context['per_page'] = $params_array['per_page'];
+    if(!isset($params_array['per_page'])) $params_array['per_page'] = $_context['per_page'];
     
     /*
     *
@@ -275,11 +282,11 @@ class ArchiveController extends CoreController {
     * _context->string_params is what the query will be running off. so we set it here to out rebuilt string above
     *
     */
-    $GLOBALS['_context']['string_params'] = $new_params;
+    $_context['string_params'] = $new_params;
     
     // set the archive obj context for twig to render
     $context['archive'] = (new ArchiveModel())->getQueriedArchive();
-    $context['context'] = $GLOBALS['_context'];
+    $context['context'] = $_context;
     if(isset($context['archive']['title'])) {
       $this->render($context);
     } else {
@@ -288,14 +295,15 @@ class ArchiveController extends CoreController {
   }
   
   public function getTaxTermArchive($tax, $term) {
+    global $_context;
     // set some global variables related to the current context
-    $GLOBALS['_context']['archive'] = 'TaxTermArchive';
-    $GLOBALS['_context']['tax'] = $tax;
-    $GLOBALS['_context']['term'] = $term;
+    $_context['archive'] = 'TaxTermArchive';
+    $_context['tax'] = $tax;
+    $_context['term'] = $term;
     // set the archive obj context for twig to render
     $context['archive'] = (new ArchiveModel())->getTermArchive();
     
-    $context['context'] = $GLOBALS['_context'];
+    $context['context'] = $_context;
     if(isset($context['archive']['title'])) {
       $this->render($context);
     } else {
@@ -304,13 +312,15 @@ class ArchiveController extends CoreController {
   }
   
   public function queryTaxCollectionArchive($params, $tax) {
+    
+    global $_context;
 
     /*
     *
     * set the _context archive
     *
     */
-    $GLOBALS['_context']['archive'] = 'TaxCollectionArchive';
+    $_context['archive'] = 'TaxCollectionArchive';
     
     /*
     *
@@ -332,17 +342,17 @@ class ArchiveController extends CoreController {
     * add tax & term to the _context array
     *
     */
-    $GLOBALS['_context']['tax'] = $tax;
+    $_context['tax'] = $tax;
     
     /*
     *
     * set the pagination values in the params array
     *
     */
-    if(isset($params_array['p'])) $GLOBALS['_context']['page'] = $params_array['p'];
-    if(isset($params_array['show_all'])) $GLOBALS['_context']['paged'] = false;
-    if(isset($params_array['per_page'])) $GLOBALS['_context']['per_page'] = $params_array['per_page'];
-    if(!isset($params_array['per_page'])) $params_array['per_page'] = $GLOBALS['_context']['per_page'];
+    if(isset($params_array['p'])) $_context['page'] = $params_array['p'];
+    if(isset($params_array['show_all'])) $_context['paged'] = false;
+    if(isset($params_array['per_page'])) $_context['per_page'] = $params_array['per_page'];
+    if(!isset($params_array['per_page'])) $params_array['per_page'] = $_context['per_page'];
     
     /*
     *
@@ -374,11 +384,11 @@ class ArchiveController extends CoreController {
     * _context->string_params is what the query will be running off. so we set it here to out rebuilt string above
     *
     */
-    $GLOBALS['_context']['string_params'] = $new_params;   
+    $_context['string_params'] = $new_params;   
       
     // set the archive obj context for twig to render
     $context['archive'] = (new ArchiveModel())->getQueriedTaxonomyArchive();
-    $context['context'] = $GLOBALS['_context'];
+    $context['context'] = $_context;
     if(isset($context['archive']['title'])) {
       $this->render($context);
     } else {
@@ -387,13 +397,14 @@ class ArchiveController extends CoreController {
   }
   
   public function getTaxCollectionArchive($tax) {
+    global $_context;
     // set some global variables related to the current context
-    $GLOBALS['_context']['archive'] = 'TaxCollectionArchive';
-    $GLOBALS['_context']['tax'] = $tax;
+    $_context['archive'] = 'TaxCollectionArchive';
+    $_context['tax'] = $tax;
     // set the archive obj context for twig to render
     $context['archive'] = (new ArchiveModel())->getTaxonomyArchive();
     
-    $context['context'] = $GLOBALS['_context'];
+    $context['context'] = $_context;
     if(isset($context['archive']['title'])) {
       $this->render($context);
     } else {
@@ -403,22 +414,24 @@ class ArchiveController extends CoreController {
   
   protected function render($context) {
     
-    $_type = (isset($GLOBALS['_context']['type'])) ? $GLOBALS['_context']['type'] : null;
-    $_tax = (isset($GLOBALS['_context']['tax']) && isset($GLOBALS['_context']['type'])) ? $GLOBALS['_context']['tax'] : null;
-    $_term = (isset($GLOBALS['_context']['term']) && isset($GLOBALS['_context']['tax'])) ? $GLOBALS['_context']['term'] : null;
+    global $_context;
+    
+    $_type = (isset($_context['type'])) ? $_context['type'] : null;
+    $_tax = (isset($_context['tax']) && isset($_context['type'])) ? $_context['tax'] : null;
+    $_term = (isset($_context['term']) && isset($_context['tax'])) ? $_context['term'] : null;
     
     // TaxTermArchive
-    if($GLOBALS['_context']['archive'] = 'TaxTermArchive' && $this->twig->getLoader()->exists($_tax.'-'.$_term.'.twig')) {
+    if($_context['archive'] = 'TaxTermArchive' && $this->twig->getLoader()->exists($_tax.'-'.$_term.'.twig')) {
       $this->templateRender($_tax.'-'.$_term.'.twig', $context); // // categories-news.twig
     }
     
     // TaxCollectionArchive
-    elseif($GLOBALS['_context']['archive'] = 'TaxCollectionArchive' && $this->twig->getLoader()->exists($_type.'-'.$_tax.'.twig')) {
+    elseif($_context['archive'] = 'TaxCollectionArchive' && $this->twig->getLoader()->exists($_type.'-'.$_tax.'.twig')) {
       $this->templateRender($_type.'-'.$_tax.'.twig', $context); // blog-categories.twig
     }
     
     // MainIndexArchive
-    elseif($GLOBALS['_context']['archive'] = 'MainIndexArchive' && $this->twig->getLoader()->exists($_type.'.twig')) {
+    elseif($_context['archive'] = 'MainIndexArchive' && $this->twig->getLoader()->exists($_type.'.twig')) {
       $this->templateRender($_type.'.twig', $context); // blog.twig
     }
     

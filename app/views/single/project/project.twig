@@ -1,0 +1,115 @@
+{% extends 'post.twig' %}
+
+{% block styles %}
+  {{ parent() }}
+  <style>
+    .project-page-content {
+      font-size: 17px;
+      line-height: 1.65;
+      padding-bottom: 8.8vh;
+      padding-top: 8.8vh;
+      padding-right: 10px;
+    }
+    .project-content {
+      z-index: 1;
+    }
+    .footer-project {
+      margin-top: -5px!important;
+      z-index: 1;
+      position: relative;
+    }
+    
+    .uk-light {
+      color: hsla(0,0%,100%,.9);
+    }
+    .uk-light strong {
+      color: #fff;
+    }
+    
+    figure.gallery-img {
+      margin: 0 0 10px;
+    }
+    *+figure.gallery-img {
+      margin-top: 10px;
+    }
+    
+    .footer-project .uk-text-meta {
+      font-size: 0.9rem;
+      /* color: #fff; */
+    }
+    .uk-light .footer-project .uk-text-meta {
+      color: #fff!important;
+    }
+    
+    #MainSingleContent {
+      padding-bottom: 0;
+    }
+  </style>
+{% endblock %}
+
+{% block post_cover %}
+  {% include single.style.type ? '_project_cover_' ~ single.style.type ~ '.twig' : '_project_cover.twig' %}
+{% endblock %}
+
+{% block post_content %}
+  <section id="MainSingleContent" class="uk-container uk-section uk-section-small">
+    
+    {% block _breads %}
+      <div class="uk-margin-medium">
+        {% include 'breads.twig' %}
+      </div>
+    {% endblock %}
+    
+    {% block _content %}
+      <div class="project-content">
+        <div class="uk-child-width-1-2@m" uk-grid>
+          <div class="project-gallery">
+            {% block _project_gallery %}
+              {% for img in single.gallery %}
+                <figure class="gallery-img">
+                  <img class="uk-border-rounded" data-src="{{img.src|resize(650)}}" data-width data-height alt="{{img.alt}}" uk-img>
+                </figure>
+              {% endfor %}
+            {% endblock %}
+          </div>
+          <div class="project-content">
+            <div class="project-page-content uk-padding" uk-sticky="offset: 60; bottom: true">
+              {% block _project_content %}
+                {% include single.excerpt ? '_project_excerpt.twig' ignore missing  %}
+                {% include single.project_goal ? '_project_goal.twig' ignore missing  %}
+                {% include (single.project_metas or single.author) ? '_project_metas.twig' ignore missing  %}
+              {% endblock %}
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endblock %}
+    
+  </section>
+{% endblock %}
+
+{% block footer_top %}
+  <div id="TopFooter" class="footer-project uk-section uk-section-large uk-background-muted uk-background-muted-light">
+    <div class="uk-container">
+      <p class="uk-text-meta uk-text-uppercase uk-text-bold uk-margin-small-bottom">Let’s collaborate</p>
+      <div class="uk-grid-collapse uk-flex uk-flex-middle" uk-grid>
+        <div class="uk-width-expand">
+          <h3 class="uk-heading-medium uk-margin-remove-top">Got a project?</h3>
+        </div>
+        <div class="uk-width-auto">
+          <a href="#" class="uk-button uk-button-secondary uk-border-rounded uk-button-small uk-text-capitalize">Contact Us <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+      <hr>
+      <div class="uk-width-1-2@m">
+        <p>We’re a <strong>team of creatives</strong> who are excited about unique ideas and help fin-tech companies to <strong>create amazing identity</strong> by crafting top-notch UI/UX.</p>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block footer %}
+  <footer id="Footer" class="dark-footer uk-section uk-section-small uk-background-secondary uk-light">
+    {% include 'footer-main.twig' %}
+  </footer>
+{% endblock %}

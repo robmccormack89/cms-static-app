@@ -4,6 +4,7 @@ namespace Rmcc;
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
 use Imagine\Image\Point;
+use Imagine\Image\ImageInterface;
 
 class Resize {
 
@@ -33,6 +34,8 @@ class Resize {
   */
   public function filename($src_filename, $src_extension) {
     
+    $new_filename = '';
+    
     $width_string = round($this->w, 0);
     if(!$this->h) {
       $new_string = '-'.$width_string;
@@ -47,6 +50,8 @@ class Resize {
   }
   
   public function run($load_filename, $save_filename) {
+    
+    if(!file_exists($load_filename)) return;
     
     list($iwidth, $iheight) = getimagesize($load_filename); // get some data from original img with getimagesize() & save as variables using list()
     $ratio = $iwidth / $iheight; // original img ratio
@@ -98,6 +103,17 @@ class Resize {
       }
       $new_photo = $photo->crop(new Point($crop_x, $crop_y), new Box($this->w, $this->h));
     }
-    $new_photo->save($save_filename); // then save it with the new filename
+    
+    $options = array(
+      'resolution-units' => ImageInterface::RESOLUTION_PIXELSPERINCH,
+      'resolution-x' => 300,
+      'resolution-y' => 300,
+      'jpeg_quality' => 100,
+      'png_compression_level' => 9,
+      'webp_quality' => 100,
+      'resampling-filter' => ImageInterface::FILTER_LANCZOS,
+    );
+    
+    $new_photo->save($save_filename, $options); // then save it with the new filename
   }
 }

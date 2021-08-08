@@ -1,0 +1,12 @@
+{# 
+
+  Blog post header for a featured image background
+  
+  if no featured_img, works for the pink/muted/light bg
+
+#}
+<header id="SiteHeader" class="site-header uk-position-top uk-position-z-index">
+  <div uk-sticky="{{ (single.featured_img) ? 'animation: uk-animation-slide-top; sel-target: .main-navbar; cls-active: uk-navbar-sticky uk-background-default; cls-inactive: uk-navbar-transparent uk-light; top: 200' : 'animation: uk-animation-slide-top; sel-target: .main-navbar; cls-active: uk-navbar-sticky uk-background-default; cls-inactive: uk-navbar-transparent; top: 200' }}">
+    {% include 'main-navbar.twig' %}
+  </div>
+</header>

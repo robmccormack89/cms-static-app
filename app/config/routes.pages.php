@@ -7,9 +7,9 @@ namespace Rmcc; // set the Rmcc namespace for using Rmcc classes
 *
 */
 
-$router->post('/contact', function() {
-  Cache::cacheServe(function() { 
-    (new SingleController('page', 'contact'))->getSingle();
+$router->post('/{slug}', function($slug) {
+  Cache::cacheServe(function() use ($slug) { 
+    (new SingleController('page', $slug))->getContact();
   });
 });
 

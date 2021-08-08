@@ -1,0 +1,22 @@
+<style>
+  .uk-background-pink {
+    background-color: {{ (single.style.color) ? single.style.color : '#ffecf3' }};
+  }
+</style>
+<section id="MainSingleCover" class="project-cover uk-background-cover uk-flex uk-flex-center uk-flex-middle">
+  <div class="uk-background-pink uk-section uk-width-1-1">
+    <div class="uk-container">
+      <div class="single-cover-details uk-width-1-1">
+        
+        {% if single.taxonomies.technologies or post.date_time %}
+          {% include '_project_meta.twig' %}
+        {% endif %}
+        
+        <h1 class="uk-heading-large uk-margin-remove-top uk-width-3-5@m">{{single.title}}.</h1>
+        
+        <p class="uk-text-meta uk-margin-small-top uk-width-3-5@m">{{single.excerpt|raw}}</p>
+        
+      </div>
+    </div>
+  </div>
+</section>

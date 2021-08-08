@@ -27,6 +27,7 @@ function showAllParamFix(string $params_string) {
 }
 
 function queryParamsExists($params) {
+  global $config;
   parse_str($params, $params_array);
   
   // type
@@ -52,7 +53,7 @@ function queryParamsExists($params) {
   
   // taxes
   $taxes = array();
-  foreach($GLOBALS['config']['types'] as $type){
+  foreach($config['types'] as $type){
     if(array_key_exists('taxonomies', $type)) {
       foreach($type['taxonomies'] as $tax => $value){
         $taxes[$tax] = $tax;
@@ -110,16 +111,18 @@ function queryParamsExists($params) {
 // string $value, // value of item to check against. e.g 'blog' or 'portfolio'
 // string $return_key // key of the value to return. e.g 'items_route' 
 function typeSettingByKey($key, $value, $return_key) {
+  global $config;
   $data = '';
-  foreach ($GLOBALS["config"]['types'] as $type_setting) if ($type_setting[$key] == $value) {
+  foreach ($config['types'] as $type_setting) if ($type_setting[$key] == $value) {
     $data = $type_setting[$return_key];
   }
   return $data;
 }
 // get taxonomy setting. same as above just added type paramter to get a types taxonomy
 function taxSettingByKey($type, $key, $value, $return) {
+  global $config;
   $data = '';
-  foreach ($GLOBALS["config"]['types'][$type]['taxonomies'] as $tax_setting) if ($tax_setting[$key] == $value) {
+  foreach ($config['types'][$type]['taxonomies'] as $tax_setting) if ($tax_setting[$key] == $value) {
     $data = $tax_setting[$return];
   }
   return $data;
@@ -127,8 +130,9 @@ function taxSettingByKey($type, $key, $value, $return) {
 
 // check to see if singular page is status, visitor ip & author_ip
 function isSingleAllowed($page) {
+  global $config;
   if($page) {
-    if ($page['status'] == 'draft' && $_SERVER['REMOTE_ADDR'] == $GLOBALS['config']['author_ip']) {
+    if ($page['status'] == 'draft' && $_SERVER['REMOTE_ADDR'] == $config['author_ip']) {
       return true;
     } elseif($page['status'] == 'published') {
       return true;

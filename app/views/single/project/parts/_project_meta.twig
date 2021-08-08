@@ -1,0 +1,16 @@
+<div class="post-details uk-margin uk-margin-small-bottom">
+  {% if single.taxonomies.technologies %}
+    <div class="taxonomy-holder uk-inline">
+      {% for tech in single.taxonomies.technologies %}
+        {% if not loop.last %}
+          <a class="taxonomy uk-link-reset" title="{{tech.title}}" href="{{tech.link}}">{{tech.title}}</a>,
+        {% else %}
+          <a class="taxonomy uk-link-reset" title="{{tech.title}}" href="{{tech.link}}">{{tech.title}}</a>
+        {% endif %}
+      {% endfor %}
+    </div>
+  {% endif %}
+  {% if single.date_time %}
+    <span class="post-meta-estimate">{{single.date_time|date("F j, Y")}}</span>
+  {% endif %}
+</div>

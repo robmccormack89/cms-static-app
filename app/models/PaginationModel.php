@@ -100,6 +100,8 @@ class PaginationModel {
     
     $data['results'] = $results_text;
     
+    $data['results_count'] = $this->count;
+    
     // step 6 - return it all
     return $data;
   }

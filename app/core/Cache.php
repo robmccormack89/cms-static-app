@@ -11,8 +11,10 @@ class Cache {
   // Cache the contents to a cache file
   public static function cacheFile() {
     
+    global $config;
+    
     // if caching is enabled
-    if($GLOBALS['config']['php_cache']) {
+    if($config['php_cache']) {
     
       // part 1 - prepare requested string for use as a file name. see helpers
       
@@ -55,6 +57,8 @@ class Cache {
   }
   // serving the cached files when they exist
   public static function cacheServe($callback) {
+    
+    global $config;
       
     // part 1 - prepare requested string for use as a file name. see helpers
     $req = $_SERVER["REQUEST_URI"];
@@ -72,7 +76,7 @@ class Cache {
     }
     
     // part 3 - minify the output, see above function
-    if($GLOBALS['config']['php_minify']) {
+    if($config['php_minify']) {
       ob_start('minifyOutput');
     }
     
@@ -87,8 +91,8 @@ class Cache {
     }
 
     // part 5 - Serve from the cache if it is younger than $cachetime
-    if (file_exists($cachefile) && time() - $cachetime < filemtime($cachefile) && $GLOBALS['config']['php_cache'] && !($qr)) {
-      echo "<!-- Cached copy, generated ".date('H:i', filemtime($cachefile))." -->\n";
+    if (file_exists($cachefile) && time() - $cachetime < filemtime($cachefile) && $config['php_cache'] && !($qr)) {
+      echo "<!-- Cached copy, generated ".date('H:i', filemtime($cachefile))." by Rmcc\Cache https://github.com/robmccormack89/portfolio-static/blob/master/app/core/Cache.php -->\n";
       readfile($cachefile);
       exit;
     } else {

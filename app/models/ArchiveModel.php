@@ -5,12 +5,14 @@ class ArchiveModel {
   
   public function getQueriedArchive() {
     
+    global $_context;
+    
     /*
     *
     * 1. Use the QueryModel to get the posts object using the string_params
     *
     */
-    $posts_obj = new QueryModel($GLOBALS['_context']['string_params']);
+    $posts_obj = new QueryModel($_context['string_params']);
     
     /*
     *
@@ -39,13 +41,15 @@ class ArchiveModel {
     */
     if(!empty($archive['posts'])){
       $archive['pagination'] = (new PaginationModel($posts_obj->found_posts))->getPagination();
-      if($GLOBALS['_context']['page'] > 1) $archive['title'] = $archive['title'].' (Page '.$GLOBALS['_context']['page'].')';
+      if($_context['page'] > 1) $archive['title'] = $archive['title'].' (Page '.$_context['page'].')';
     }
     
     return $archive;
   }
 
   public function getArchive() {
+    
+    global $_context;
 
     /*
     *
@@ -54,10 +58,10 @@ class ArchiveModel {
     *
     */
     $args = array(
-      'type' => typeSettingByKey('key', $GLOBALS['_context']['type'], 'single'),
-      'per_page' => $GLOBALS['_context']['per_page'],
-      'p' => $GLOBALS['_context']['page'],
-      'show_all' => ($GLOBALS['_context']['paged']) ? false : true
+      'type' => typeSettingByKey('key', $_context['type'], 'single'),
+      'per_page' => $_context['per_page'],
+      'p' => $_context['page'],
+      'show_all' => ($_context['paged']) ? false : true
     );
     $posts_obj = new QueryModel($args);
     
@@ -88,13 +92,15 @@ class ArchiveModel {
     */
     if(!empty($archive['posts'])){
       $archive['pagination'] = (new PaginationModel($posts_obj->found_posts))->getPagination();
-      if($GLOBALS['_context']['page'] > 1) $archive['title'] = $archive['title'].' (Page '.$GLOBALS['_context']['page'].')';
+      if($_context['page'] > 1) $archive['title'] = $archive['title'].' (Page '.$_context['page'].')';
     }
 
     return $archive;
   }
   
   public function getTermArchive() {
+    
+    global $_context;
     
     /*
     *
@@ -103,19 +109,19 @@ class ArchiveModel {
     *
     */
     $args = array(
-      'type' => typeSettingByKey('key', $GLOBALS['_context']['type'], 'single'),
+      'type' => typeSettingByKey('key', $_context['type'], 'single'),
       'tax_query' => array(
         // relation is required for now as there are checks based the iteration of the first array in this sequence, which should be 2nd when relation exists
         'relation' => 'AND', // working: 'AND', 'OR'. Deaults to 'AND'.
         array(
-          'taxonomy' => taxSettingByKey($GLOBALS['_context']['type'], 'key', $GLOBALS['_context']['tax'], 'single'), // working. takes taxonomy string taxSettingByKey($type_archive, 'single', $value['taxonomy'], 'key');
-          'terms' => array($GLOBALS['_context']['term']), // working. takes array
+          'taxonomy' => taxSettingByKey($_context['type'], 'key', $_context['tax'], 'single'), // working. takes taxonomy string taxSettingByKey($type_archive, 'single', $value['taxonomy'], 'key');
+          'terms' => array($_context['term']), // working. takes array
           'operator' => 'AND' // 'AND', 'IN', 'NOT IN'. 'IN' is default. AND means posts must have all terms in the array. In means just one.
         ),
       ),
-      'per_page' => $GLOBALS['_context']['per_page'],
-      'p' => $GLOBALS['_context']['page'],
-      'show_all' => ($GLOBALS['_context']['paged']) ? false : true
+      'per_page' => $_context['per_page'],
+      'p' => $_context['page'],
+      'show_all' => ($_context['paged']) ? false : true
     );
     $posts_obj = new QueryModel($args);
     
@@ -148,7 +154,7 @@ class ArchiveModel {
     */
     if(!empty($archive['posts'])){
       $archive['pagination'] = (new PaginationModel($posts_obj->found_posts))->getPagination();
-      if($GLOBALS['_context']['page'] > 1) $archive['title'] = $archive['title'].' (Page '.$GLOBALS['_context']['page'].')';
+      if($_context['page'] > 1) $archive['title'] = $archive['title'].' (Page '.$_context['page'].')';
     }
     
     return $archive;
@@ -156,16 +162,18 @@ class ArchiveModel {
   
   public function getTaxonomyArchive() {
     
+    global $_context;
+    
     /*
     *
     * 1. Use the QueryTermsModel to get the terms_obj using the $args
     *
     */
     $args = array(
-      'taxonomy' => taxSettingByKey($GLOBALS['_context']['type'], 'key', $GLOBALS['_context']['tax'], 'single'),
-      'per_page' => $GLOBALS['_context']['per_page'],
-      'p' => $GLOBALS['_context']['page'],
-      'show_all' => ($GLOBALS['_context']['paged']) ? false : true
+      'taxonomy' => taxSettingByKey($_context['type'], 'key', $_context['tax'], 'single'),
+      'per_page' => $_context['per_page'],
+      'p' => $_context['page'],
+      'show_all' => ($_context['paged']) ? false : true
     );
     $terms_obj = new QueryTermsModel($args);
     
@@ -193,9 +201,9 @@ class ArchiveModel {
     *
     */
     
-    if($GLOBALS['_context']['paged'] && !empty($archive['posts'])){
+    if($_context['paged'] && !empty($archive['posts'])){
       $archive['pagination'] = (new PaginationModel($terms_obj->found_terms))->getPagination();
-      if($GLOBALS['_context']['page'] > 1) $archive['title'] = $archive['title'].' (Page '.$GLOBALS['_context']['page'].')';
+      if($_context['page'] > 1) $archive['title'] = $archive['title'].' (Page '.$_context['page'].')';
     }
     
     return $archive;
@@ -203,12 +211,14 @@ class ArchiveModel {
   
   public function getQueriedTaxonomyArchive() {
     
+    global $_context;
+    
     /*
     *
     * 1. Use the QueryModel to get the posts object using the string_params
     *
     */
-    $terms_obj = new QueryTermsModel($GLOBALS['_context']['string_params']);
+    $terms_obj = new QueryTermsModel($_context['string_params']);
     
     /*
     *
@@ -236,9 +246,9 @@ class ArchiveModel {
     *
     */
     
-    if($GLOBALS['_context']['paged'] && !empty($archive['posts'])){
+    if($_context['paged'] && !empty($archive['posts'])){
       $archive['pagination'] = (new PaginationModel($terms_obj->found_terms))->getPagination();
-      if($GLOBALS['_context']['page'] > 1) $archive['title'] = $archive['title'].' (Page '.$GLOBALS['_context']['page'].')';
+      if($_context['page'] > 1) $archive['title'] = $archive['title'].' (Page '.$_context['page'].')';
     }
     
     return $archive;

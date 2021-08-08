@@ -49,12 +49,13 @@ class QueryTermsModel {
   }
   // get the term archive meta
   private function getCollectionMeta() {
+    global $_context;
     $q = new Json('../public/json/data.min.json');
     
-    $data = $q->from('site.content_types.'.$GLOBALS['_context']['type'].'.meta')->get();
+    $data = $q->from('site.content_types.'.$_context['type'].'.meta')->get();
     
-    if($this->taxonomyKey() && taxSettingByKey($GLOBALS['_context']['type'], 'single', $this->taxonomyKey(), 'key')) {
-      $_tax = taxSettingByKey($GLOBALS['_context']['type'], 'single', $this->taxonomyKey(), 'key');
+    if($this->taxonomyKey() && taxSettingByKey($_context['type'], 'single', $this->taxonomyKey(), 'key')) {
+      $_tax = taxSettingByKey($_context['type'], 'single', $this->taxonomyKey(), 'key');
       $data['title'] = ucfirst($_tax);
     }
     
@@ -134,6 +135,8 @@ class QueryTermsModel {
   */
   private function getTermsQuery() {
     
+    global $_context;
+    
     /*
     *
     * 1. set the initial location
@@ -143,9 +146,9 @@ class QueryTermsModel {
     
     $terms = new Json();
     
-    if($this->taxonomyKey() && taxSettingByKey($GLOBALS['_context']['type'], 'single', $this->taxonomyKey(), 'key')) {
-      $_tax = taxSettingByKey($GLOBALS['_context']['type'], 'single', $this->taxonomyKey(), 'key');
-      $terms = $q->from('site.content_types.'.$GLOBALS['_context']['type'].'.taxonomies.'.$_tax);
+    if($this->taxonomyKey() && taxSettingByKey($_context['type'], 'single', $this->taxonomyKey(), 'key')) {
+      $_tax = taxSettingByKey($_context['type'], 'single', $this->taxonomyKey(), 'key');
+      $terms = $q->from('site.content_types.'.$_context['type'].'.taxonomies.'.$_tax);
     }
     
     if($terms->exists()) {

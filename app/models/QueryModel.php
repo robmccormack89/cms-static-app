@@ -77,10 +77,11 @@ class QueryModel {
   *
   */
   private function getQueriedObject() {
+    global $_context;
     $data = $this->getBaseMeta();
-    if(isset($GLOBALS['_context']['type']) && !isset($GLOBALS['_context']['term'])) $data = $this->getArchiveMeta();
-    if(isset($GLOBALS['_context']['term'])) $data = $this->getTermMeta();
-    if(!isset($GLOBALS['_context']['type']) && $this->typeParam()){
+    if(isset($_context['type']) && !isset($_context['term'])) $data = $this->getArchiveMeta();
+    if(isset($_context['term'])) $data = $this->getTermMeta();
+    if(!isset($_context['type']) && $this->typeParam()){
       $data['title'] = 'Query: '.$this->typeParam();
     }
     return $data;
@@ -91,18 +92,20 @@ class QueryModel {
     return $data;
   }
   private function getArchiveMeta() {
+    global $_context;
     $q = new Json('../public/json/data.min.json');
-    $data = $q->from('site.content_types.'.$GLOBALS['_context']['type'].'.meta')->get();
+    $data = $q->from('site.content_types.'.$_context['type'].'.meta')->get();
     return $data;
   }
   private function getTermMeta() {
-    if($GLOBALS['_context']['term']) {
+    global $_context;
+    if($_context['term']) {
       $q = new Json('../public/json/data.min.json');
-      $data = $q->from('site.content_types.'.$GLOBALS['_context']['type'].'.taxonomies.'.$GLOBALS['_context']['tax'])
-      ->where('slug', '=', $GLOBALS['_context']['term'])->first();
+      $data = $q->from('site.content_types.'.$_context['type'].'.taxonomies.'.$_context['tax'])
+      ->where('slug', '=', $_context['term'])->first();
     } else {
       $q = new Json('../public/json/data.min.json');
-      $data = $q->from('site.'.$GLOBALS['_context']['type'].'.meta')->get();
+      $data = $q->from('site.'.$_context['type'].'.meta')->get();
     }
     return $data;
   }
@@ -547,12 +550,13 @@ class QueryModel {
     return $data;
   }
   private function setPostTeaseTermData($posts) {
+    global $config;
     $data = null;
     if($posts){
       foreach ($posts as $post) {
         if($post['type'] !== 'page') {
           $type_key = typeSettingByKey('single', $post['type'], 'key'); // returns 'blog' or 'portfolio'
-          $taxonomies = (isset($GLOBALS['config']['types'][$type_key]['taxes_in_meta'])) ? $GLOBALS['config']['types'][$type_key]['taxes_in_meta'] : null;
+          $taxonomies = (isset($config['types'][$type_key]['taxes_in_meta'])) ? $config['types'][$type_key]['taxes_in_meta'] : null;
           if($taxonomies) {
             foreach($taxonomies as $tax) {
               if(isset($post[$tax])){
@@ -612,9 +616,10 @@ class QueryModel {
     return false;
   }
   private function taxParams() {
+    global $config;
     $string_args = $this->paramsDissect();
     $taxes = array();
-    foreach($GLOBALS['config']['types'] as $type){
+    foreach($config['types'] as $type){
       if(array_key_exists('taxonomies', $type)) {
         foreach($type['taxonomies'] as $tax => $value){
           $taxes[$tax] = $tax;

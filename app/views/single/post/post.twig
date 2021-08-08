@@ -1,6 +1,7 @@
 {% extends "single.twig" %}
 
 {% block styles %}
+  {{ parent() }}
   <style>
     ins, mark {
       background: #9ff8d0;
@@ -10,9 +11,13 @@
       font-weight: 500;
     }
     .uk-label {
-      background-color: #8888881a;
+      background-color: #f8f8f8;
+      color: #17161a;
       transition: .1s ease-in-out;
       transition-property: background-color,color;
+    }
+    .uk-light .uk-label {
+      color: #17161a!important;
     }
     .uk-label:hover, .uk-label:focus {
       background-color: #d90a2c;
@@ -48,118 +53,94 @@
       padding-bottom: 10px;
     }
     
-    .uk-background-pink {
-      background-color: #ffecf3;
-    }
-    .uk-light .uk-background-pink {
-      background-color: #17161a;
-    }
-    
     .uk-overlay-primary {
       background: rgb(26 25 29 / 57%);
     }
   </style>
+  {% if single.style.type == 'light' or single.style.type == 'dark' %}
+    <style>
+      blockquote {
+        border-left: 5px solid {{ (single.style.color) ? single.style.color : '#d90a2c' }};
+      }
+      a, .uk-link {
+        color: {{ (single.style.color) ? single.style.color : '#d90a2c' }};
+      }
+      .uk-light .uk-label, .uk-label:hover, .uk-label:focus,
+      .uk-light .uk-background-muted-light {
+        background-color: {{ (single.style.color) ? single.style.color : '#d90a2c' }};
+      }
+      .uk-button-secondary:focus, .uk-button-secondary:hover {
+        background-color: {{ (single.style.color) ? single.style.color : '#d90a2c' }};
+      }
+    </style>
+    {% if single.style.type == 'dark' %}
+      <style>
+        .taxonomy-holder:not(.no-divider)::after {
+          color: #fff;
+        }
+      </style>
+    {% endif %}
+    {% if single.style.type == 'light' %}
+      <style>
+        .uk-background-pink {
+          background-color: {{ (single.style.color) ? single.style.color : '#ffecf3' }};
+        }
+      </style>
+    {% endif %}
+  {% endif %}
 {% endblock %}
 
 {% block header %}
-  <header id="SiteHeader" class="site-header uk-position-top uk-position-z-index">
-    <div uk-sticky="{{ (single.featured_img) ? 'animation: uk-animation-slide-top; sel-target: .main-navbar; cls-active: uk-navbar-sticky uk-background-default; cls-inactive: uk-navbar-transparent uk-light; top: 200' : 'animation: uk-animation-slide-top; sel-target: .main-navbar; cls-active: uk-navbar-sticky uk-background-default; cls-inactive: uk-navbar-transparent; top: 200' }}">
-      {% include 'main-navbar.twig' %}
-    </div>
-  </header>
+  {% include single.style.type ? '_post_header_' ~ single.style.type ~ '.twig' : '_post_header.twig' %}
 {% endblock %}
 
 {% block content %}
   <div id="post{{single.slug}}" class="post-{{single.slug}}" data-template="post.twig">
     
-    <!-- main single cover: beneath sticky header -->
-    <section id="MainSingleCover" class="uk-background-cover uk-flex uk-flex-center uk-flex-middle {{ (single.featured_img) ? 'uk-light' : '' }}" style="{{ (single.featured_img) ? 'background-image: url(' ~ single.featured_img.src|resize(1920, 600, 'center') ~ ');' : '' }}">
-      <div class="{{ (single.featured_img) ? 'uk-section uk-overlay-primary' : 'uk-background-pink uk-section' }} uk-width-1-1">
-        <div class="uk-container uk-container-medium">
-          <div class="single-cover-details uk-width-1-1">
-            
-            <!-- the meta: cats & read_time -->
-            {% if single.taxonomies.categories or post.read_time %}
-              <div class="post-details uk-margin uk-margin-small-bottom">
-                {% if single.taxonomies.categories %}
-                  <div class="category-holder uk-inline">
-                    {% for cat in single.taxonomies.categories %}
-                      {% if not loop.last %}
-                        <a class="category uk-link-reset" title="{{cat.title}}" href="{{cat.link}}">{{cat.title}}</a>,
-                      {% else %}
-                        <a class="category uk-link-reset" title="{{cat.title}}" href="{{cat.link}}">{{cat.title}}</a>
-                      {% endif %}
-                    {% endfor %}
-                  </div>
-                {% endif %}
-                {% if single.read_time %}
-                  <span class="post-meta-estimate">{{single.read_time}} read</span>
-                {% endif %}
-              </div>
-            {% endif %}
-            
-            <!-- the heading -->
-            <h1 class="uk-heading-large uk-margin-remove-top">{{single.title}}.</h1>
-            
-            <!-- sub-meta: author & published -->
-            <div class="uk-margin-medium">
-              <div class="uk-child-width-auto" uk-grid>
-                <div class="uk-text-emphasis">
-                  Author<br>
-                  <strong>{{single.author}}</strong>
-                </div>
-                <div class="uk-text-emphasis">
-                  Published<br>
-                  <strong>{{single.date_time|date("F j, Y")}}</strong>
-                </div>
-                <div></div>
-              </div>
-            </div>
-            
-            {# 
-              if format = video|audio, & iframe src exists, do the iframe
-            #}
-            {% if single.featured_img and single.featured_img.frame_src and (single.format == 'video' or single.format == 'audio') %}
-              <figure class="blog-grid-image uk-cover-container uk-height-large">
-                <iframe src="{{single.featured_img.frame_src}}" class="object-fitting" frameborder="0" allowfullscreen></iframe>
-              </figure>
-            {% endif %}
-            
-          </div>
-        </div>
-      </div>
-    </section>
+    {% block post_cover %}
+      {% include single.style.type ? '_post_cover_' ~ single.style.type ~ '.twig' : '_post_cover.twig' %}
+    {% endblock %}
     
-    <!-- main single content -->
-    <section id="MainSingleContent" class="uk-container uk-container-medium uk-section uk-section-small">
-      
-      <!-- single breads -->
-      <div class="uk-margin-medium">
-        {% include 'breads.twig' %}
-      </div>
-      
-      <!-- single content -->
-      {% block page_content %}
-        <div class="uk-margin-large-bottom">Nothing to see here. Yet...</div>
-      {% endblock %}
-      
-      <!-- single meta: tags -->
-      <div class="post-tags">
-        {% if single.taxonomies.tags %}
-          <div class="tags-grid uk-grid-small uk-flex uk-flex-middle uk-child-width-auto" uk-grid>
-            <div>
-              Tagged with:
-            </div>
-            {% for tag in single.taxonomies.tags %}
-              <div>
-                <a class="uk-label uk-border-rounded uk-text-capitalize uk-link-reset" title="{{tag.title}}" href="{{tag.link}}">{{tag.title}}</a>
-              </div>
-            {% endfor %}
+    {% block post_content %}
+      <section id="MainSingleContent" class="uk-container uk-container-medium uk-section uk-section-small">
+        
+        {% block _breads %}
+          <div class="uk-margin-medium">
+            {% include 'breads.twig' %}
           </div>
-        {% endif %}
-      </div>
-      
-    </section>
+        {% endblock %}
+        
+        {% block _content %}
+          <div class="uk-margin-large-bottom">
+            {% if single.content %}
+              <p>{{single.content|raw}}.</p>
+            {% else %}
+              {% if single.excerpt %}
+                <p>{{single.excerpt|raw}}. More to follow...</p>
+              {% endif %}
+            {% endif %}
+          </div>
+        {% endblock %}
+        
+        {% block _meta %}
+          {% if single.taxonomies.tags %}
+            <div class="post-tags">
+                <div class="tags-grid uk-grid-small uk-flex uk-flex-middle uk-child-width-auto" uk-grid>
+                  <div>
+                    Tagged with:
+                  </div>
+                  {% for tag in single.taxonomies.tags %}
+                    <div>
+                      <a class="uk-label uk-border-rounded uk-text-capitalize uk-link-reset" title="{{tag.title}}" href="{{tag.link}}">{{tag.title}}</a>
+                    </div>
+                  {% endfor %}
+                </div>
+            </div>
+          {% endif %}
+        {% endblock %}
+        
+      </section>
+    {% endblock %}
     
   </div>
 {% endblock %}

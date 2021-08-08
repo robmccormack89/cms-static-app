@@ -11,15 +11,19 @@ class SingleModel {
   *
   */
   public function __construct() {
-    $this->type = $GLOBALS['_context']['type']; // e.g 'page' or 'blog' or 'portfolio'
-    $this->slug = $GLOBALS['_context']['slug']; // e.g 'about'. this will usually come from the request unless setting for specific pages
+    global $_context;
+    global $config;
+    $this->type = $_context['type']; // e.g 'page' or 'blog' or 'portfolio'
+    $this->slug = $_context['slug']; // e.g 'about'. this will usually come from the request unless setting for specific pages
     // the $key property is used for locating the singular data based on the given $type
-    $this->key = (isset($GLOBALS['config']['types'][$this->type]['items'])) ? $GLOBALS['config']['types'][$this->type]['items'] : null;
+    $this->key = (isset($config['types'][$this->type]['items'])) ? $config['types'][$this->type]['items'] : null;
     $this->single = $this->getSinglular(); // this property then contains all our data
   }
   
   // get the singular object
   private function getSinglular() {
+    global $config;
+    
     $q = new Json('../public/json/data.min.json');
     $single = $q->from($this->getSinglularLocation())
     ->where('slug', '=', $this->slug)
@@ -27,7 +31,7 @@ class SingleModel {
     
     if($single['type'] !== 'page') {
       $type_key = typeSettingByKey('single', $single['type'], 'key'); // returns 'blog' or 'portfolio'
-      $taxonomies = (isset($GLOBALS['config']['types'][$type_key]['taxes_in_meta'])) ? $GLOBALS['config']['types'][$type_key]['taxes_in_meta'] : null;
+      $taxonomies = (isset($config['types'][$type_key]['taxes_in_meta'])) ? $config['types'][$type_key]['taxes_in_meta'] : null;
       if($taxonomies) {
         foreach($taxonomies as $tax) {
           if(isset($single[$tax])){

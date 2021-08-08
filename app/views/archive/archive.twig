@@ -13,18 +13,9 @@
 {% endblock %}
 
 {% block styles %}
+  {{ parent() }}
   <style>
-    .archive-header {
-      margin-top: 140px!important;
-    }
-    @media only screen and (max-width: 767px) {
-      .archive-header {
-        margin-top: 100px!important;
-      }
-    }
   </style>
-  {% block archive_styles %}
-  {% endblock %}
 {% endblock %}
 
 {% block header %}
@@ -39,13 +30,10 @@
   <div id="Archive" class="archive uk-container" data-template="archive.twig">
     
     <!-- blog header -->
-    <header class="archive-header blog-header uk-section">
+    <header class="default-page-header uk-section">
       <h1 class="uk-heading-medium uk-margin-remove">{{archive.title}}</h1>
       <p class="uk-text-meta uk-margin-small-top uk-width-3-5@m">{{archive.description}}</p>
     </header>
-    
-    {% block before_archive_content %}
-    {% endblock %}
     
     {% block archive_content %}
       <!-- blog main content -->
@@ -82,23 +70,23 @@
                     {% if post.taxonomies.categories or post.taxonomies.technologies or post.read_time %}
                       <div class="post-details uk-margin uk-margin-small-bottom">
                         {% if post.taxonomies.categories %}
-                          <div class="category-holder uk-inline">
+                          <div class="taxonomy-holder uk-inline">
                             {% for cat in post.taxonomies.categories %}
                               {% if not loop.last %}
-                                <a class="category uk-link-reset" title="{{cat.title}}" href="{{cat.link}}">{{cat.title}}</a>,
+                                <a class="taxonomy uk-link-reset" title="{{cat.title}}" href="{{cat.link}}">{{cat.title}}</a>,
                               {% else %}
-                                <a class="category uk-link-reset" title="{{cat.title}}" href="{{cat.link}}">{{cat.title}}</a>
+                                <a class="taxonomy uk-link-reset" title="{{cat.title}}" href="{{cat.link}}">{{cat.title}}</a>
                               {% endif %}
                             {% endfor %}
                           </div>
                         {% endif %}
                         {% if post.taxonomies.technologies %}
-                          <div class="category-holder uk-inline">
+                          <div class="taxonomy-holder uk-inline">
                             {% for tech in post.taxonomies.technologies %}
                               {% if not loop.last %}
-                                <a class="category uk-link-reset" title="{{tech.title}}" href="{{tech.link}}">{{tech.title}}</a>,
+                                <a class="taxonomy uk-link-reset" title="{{tech.title}}" href="{{tech.link}}">{{tech.title}}</a>,
                               {% else %}
-                                <a class="category uk-link-reset" title="{{tech.title}}" href="{{tech.link}}">{{tech.title}}</a>
+                                <a class="taxonomy uk-link-reset" title="{{tech.title}}" href="{{tech.link}}">{{tech.title}}</a>
                               {% endif %}
                             {% endfor %}
                           </div>
@@ -110,7 +98,7 @@
                     {% endif %}
                     
                     <!-- tease title -->
-                    <h3 class="blog-grid-headline uk-margin-remove">
+                    <h3 class="post-headline uk-margin-remove">
                       <a class="uk-link-heading" href="{{post.link}}">{{post.title}}.</a>
                     </h3>
                     
@@ -118,10 +106,10 @@
                     {% if post.excerpt %}
                       {% if post.format == 'quote' %}
                         <blockquote cite="#">
-                          <p class="uk-margin-remove">{{post.excerpt}}</p>
+                          <p class="uk-margin-remove">{{post.excerpt|raw}}</p>
                         </blockquote>
                       {% else %}
-                        <p class="post-excerpt uk-margin-small-top">{{post.excerpt}}....</p>
+                        <p class="post-excerpt uk-margin-small-top">{{post.excerpt|raw}}....</p>
                       {% endif %}
                     {% endif %}
                     
@@ -170,37 +158,34 @@
           
           <!-- blog sidebar widgets area -->
           <aside class="archive-sidebar uk-width-1-4@m uk-flex-first@m">
-            <!-- search widget -->
-            <div class="widget search-widget uk-margin-medium">
-              <form method="GET" action="{{current_url|strtokparams}}" id="ArchiveSearch" class="uk-search uk-search-default uk-width-1-1">
-                {% for key, val in get %}
-                  {% if key == 'show_all' %}
-                    <input type="hidden" name="{{key|escape}}" />
-                  {% endif %}
-                  {% if key != 'url' and key != 'show_all' and key != 's' %}
-                    <input type="hidden" name="{{key|escape}}" value="{{val|escape}}" />
-                  {% endif %}
-                {% endfor %}
-                <span class="uk-search-icon-flip uk-icon uk-search-icon"><i class="fas fa-search"></i></span>
-                <input class="uk-search-input uk-border-rounded uk-form-large uk-width-1-1" pattern=".*\S+.*" form="ArchiveSearch" minlength="3" minlength="25" autocomplete="off" list="SearchAuto" name="s" id="s" type="search" placeholder="Search">
-              </form>
-              <datalist id="SearchAuto">
-                <option value="handshake">
-                <option value="release">
-                <option value="assets">
-                <option value="validation">
-                <option value="metrics">
-              </datalist>
-            </div>
             {% block archive_widgets %}
+              <!-- search widget -->
+              <div class="widget search-widget uk-margin-medium">
+                <form method="GET" action="{{current_url|strtokparams}}" id="ArchiveSearch" class="uk-search uk-search-default uk-width-1-1">
+                  {% for key, val in get %}
+                    {% if key == 'show_all' %}
+                      <input type="hidden" name="{{key|escape}}" />
+                    {% endif %}
+                    {% if key != 'url' and key != 'show_all' and key != 's' %}
+                      <input type="hidden" name="{{key|escape}}" value="{{val|escape}}" />
+                    {% endif %}
+                  {% endfor %}
+                  <span class="uk-search-icon-flip uk-icon uk-search-icon"><i class="fas fa-search"></i></span>
+                  <input class="uk-search-input uk-border-rounded uk-form-large uk-width-1-1" pattern=".*\S+.*" form="ArchiveSearch" minlength="3" minlength="25" autocomplete="off" list="SearchAuto" name="s" id="s" type="search" placeholder="Search">
+                </form>
+                <datalist id="SearchAuto">
+                  <option value="handshake">
+                  <option value="release">
+                  <option value="assets">
+                  <option value="validation">
+                  <option value="metrics">
+                </datalist>
+              </div>
             {% endblock %}
           </aside>
           
         </div>
       </div>
-    {% endblock %}
-    
-    {% block after_archive_content %}
     {% endblock %}
     
   </div>

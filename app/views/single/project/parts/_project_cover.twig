@@ -1,0 +1,28 @@
+{# 
+
+  POrtfolio project cover with a featured image background
+
+  This fits behind the sticky header
+
+  If featured_img exists, applies featured_img as bg with uk-light & overlay classes
+
+  If no featured_img, does a pink background with uk-dark styling, which changes with the dark/light button
+
+#}
+<section id="MainSingleCover" class="project-cover uk-background-cover uk-flex uk-flex-center uk-flex-middle {{ (single.featured_img) ? 'uk-light' : '' }}" style="{{ (single.featured_img) ? 'background-image: url(' ~ single.featured_img.src|resize(1920, 600, 'center') ~ ');' : '' }}">
+  <div class="{{ (single.featured_img) ? 'uk-section uk-overlay-primary' : 'uk-background-pink uk-section' }} uk-width-1-1">
+    <div class="uk-container">
+      <div class="single-cover-details uk-width-1-1">
+        
+        {% if single.taxonomies.technologies or post.date_time %}
+          {% include '_project_meta.twig' %}
+        {% endif %}
+        
+        <h1 class="uk-heading-large uk-margin-remove-top uk-width-3-5@m">{{single.title}}.</h1>
+        
+        <p class="uk-text-meta uk-margin-small-top uk-width-3-5@m">{{single.excerpt|raw}}</p>
+        
+      </div>
+    </div>
+  </div>
+</section>

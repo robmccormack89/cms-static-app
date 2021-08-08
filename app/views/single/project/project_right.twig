@@ -1,0 +1,30 @@
+{% extends 'project.twig' %}
+
+{% block styles %}
+  {{ parent() }}
+  <style>
+    .project-page-content {
+      padding-right: 10px;
+      padding-left: 0px;
+    }
+  </style>
+{% endblock %}
+
+{% block _content %}
+  <div class="project-content">
+    <div class="uk-child-width-1-2@m" uk-grid>
+      <div class="project-content">
+        <div class="project-page-content uk-padding" uk-sticky="offset: 60; bottom: true">
+          {% block _project_content %}
+            {{ parent() }}
+          {% endblock %}
+        </div>
+      </div>
+      <div class="project-gallery">
+        {% block _project_gallery %}
+          {{ parent() }}
+        {% endblock %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

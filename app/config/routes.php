@@ -17,7 +17,7 @@ $router->setBasePath('/');
 *
 */
 
-if ($config['site_protocol'] == "https") {
+if ($config['enable_https']) {
   if ($_SERVER['HTTPS'] != 'on') {
     $url = "https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
     header('Location: ' . $url, true, 301);
@@ -47,6 +47,12 @@ $router->get('/', function() {
     });
   }
   
+});
+
+$router->post('/{slug}', function() {
+  Cache::cacheServe(function() { 
+    (new SingleController('page', 'index'))->getContact();
+  });
 });
 
 /*
