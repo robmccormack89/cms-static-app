@@ -14,9 +14,7 @@
     <div class="uk-container">
       <div class="single-cover-details uk-width-1-1">
         
-        {% if single.taxonomies.technologies or post.date_time %}
-          {% include '_project_meta.twig' %}
-        {% endif %}
+        {% include (single.taxonomies.technologies or single.date_time) ? '_post_meta.twig' ignore missing  %}
         
         <h1 class="uk-heading-large uk-margin-remove-top uk-width-3-5@m">{{single.title}}.</h1>
         

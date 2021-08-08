@@ -4,21 +4,13 @@
       <div class="single-cover-details uk-width-1-1">
         <div class="uk-child-width-1-2@m uk-grid-large" uk-grid>
           <div>
-            {% if single.taxonomies.technologies or post.date_time %}
-              {% include '_project_meta.twig' %}
-            {% endif %}
+            {% include (single.taxonomies.technologies or single.date_time) ? '_post_meta.twig' ignore missing  %}
             <h1 class="uk-heading-large uk-margin-remove-top">{{single.title}}.</h1>
-            {% if single.excerpt %}
-              {% include '_project_excerpt.twig' %}
-            {% endif %}
+            {% include single.excerpt ? '_project_excerpt.twig' ignore missing  %}
           </div>
           <div>
-            {% if single.project_goal %}
-              {% include '_project_goal.twig' %}
-            {% endif %}
-            {% if single.project_metas or single.author %}
-              {% include '_project_metas.twig' %}
-            {% endif %}
+            {% include single.project_goal ? '_project_goal.twig' ignore missing  %}
+            {% include (single.project_metas or single.author) ? '_project_metas.twig' ignore missing  %}
           </div>
         </div>
       </div>
