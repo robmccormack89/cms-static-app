@@ -24,6 +24,137 @@ class SingleController extends CoreController {
     $this->init();
   }
   
+  if (array_key_exists('name', $_POST)) {
+    
+    // ajax defaults
+    date_default_timezone_set('Etc/UTC');
+    $isAjax = !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
+
+    // form fields defaults
+    $err = false;
+    $display_msg = '';
+    $email = '';
+    
+    // form fields & validations
+    if (array_key_exists('name', $_POST)) {
+      $name = substr(strip_tags($_POST['name']), 0, 255);
+    } else {
+      $display_msg = 'Error: no name provided';
+      $err = true;
+    }
+    if (array_key_exists('email', $_POST) && PHPMailer::validateAddress($_POST['email'])) {
+      $email = $_POST['email'];
+    } else {
+      $display_msg .= 'Error: invalid email address provided';
+      $err = true;
+    }
+    if (array_key_exists('phone', $_POST)) {
+      $phone = substr(strip_tags($_POST['phone']), 0, 255);
+    } else {
+      $phone = 'No phone number provided';
+    }
+    if (array_key_exists('subject', $_POST)) {
+      $subject = substr(strip_tags($_POST['subject']), 0, 255);
+    } else {
+      $subject = 'No subject provided';
+    }
+    if (array_key_exists('company', $_POST)) {
+      $company = substr(strip_tags($_POST['company']), 0, 255);
+    } else {
+      $company = 'No company provided';
+    }
+    if (array_key_exists('budget', $_POST) && in_array($_POST['budget'], ['under-5k', '5-10k', 'over-10k', 'not-applicable'], true)) {
+      $budget = $_POST['budget'];
+    } else {
+      $budget = 'No budget provided';
+    }
+    
+    // if no error exists, setup to do the mailer stuff
+    if (!$err) {
+      
+      $mail = new PHPMailer();
+      $mail->isSMTP();
+      $mail->isHTML(true);
+      $mail->Host = 'localhost';
+      $mail->Port = 25;
+      $mail->Host = 'nl1-lr6.supercp.com'; // secret***
+      $mail->SMTPAuth   = true; //Enable SMTP authentication
+      $mail->Username   = 'secret'; //SMTP username secret***
+      $mail->Password   = 'secret'; //SMTP password secret***
+      $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; //Enable implicit TLS encryption
+      $mail->Port       = 587; //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+      $mail->CharSet = PHPMailer::CHARSET_UTF8;
+      
+      /*
+      *
+      * It's important not to use the submitter's address as the from address as it's forgery,
+      * which will cause your messages to fail SPF checks.
+      * Use an address in your own domain as the from address, put the submitter's address in a reply-to
+      *
+      */
+      $mail->setFrom('info@robertmccormack.com', (empty($name) ? 'Contact form' : $name));
+      $mail->addAddress('cv@robertmccormack.com');
+      $mail->addReplyTo($email, $name);
+      $mail->Subject = $subject ? 'New Contact form: '.$subject : 'New Contact form submission';
+      $mail->Body = $mail->msgHTML($this->twig->render('email_template.twig',array(
+        'name' => $name,
+        'email' => $email,
+        'phone' => $phone,
+        'subject' => $subject,
+        'company' => $company,
+        'budget' => $budget,
+      )));
+
+      //Send the message, check for errors
+      if (!$mail->send()) {
+        
+        //The reason for failing to send will be in $mail->ErrorInfo
+        //but it's unsafe to display errors directly to users - process the error, log it on your server.
+        if ($isAjax) {
+          http_response_code(500);
+        }
+
+        $response = [
+          "status" => false,
+          "message" => 'Sorry, something went wrong. Please try again later.'
+        ];
+          
+      } else {
+        $response = [
+          "status" => true,
+          "message" => 'Message sent! Thanks for contacting us.'
+        ];
+      }
+      
+    }
+    
+    //Validate address selection before trying to use it
+    if (array_key_exists('dept', $_POST) && array_key_exists($_POST['dept'], $addresses)) {
+      $mail->addAddress($addresses[$_POST['dept']]);
+    } else {
+      //Fall back to a fixed address if dept selection is invalid or missing
+      $mail->addAddress('support@example.com');
+    }
+    
+    //Put the submitter's address in a reply-to header
+    //This will fail if the address provided is invalid,
+    //in which case we should ignore the whole request
+    if ($mail->addReplyTo($_POST['email'], $_POST['name'])) {
+      $mail->addAddress($addresses[$_POST['dept']]);
+    } else {
+      $response = [
+        "status" => false,
+        "message" => 'Invalid email address, message ignored.'
+      ];
+    }
+
+    if ($isAjax) {
+      header('Content-type:application/json;charset=utf-8');
+      echo json_encode($response);
+      exit();
+    }
+  }
+  
   private function init() {
     global $_context;
     $_context = array(
