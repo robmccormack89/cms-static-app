@@ -93,10 +93,10 @@ class SingleController extends CoreController {
         $mail->isHTML(true);
         $mail->Host = 'localhost';
         $mail->Port = 25;
-        $mail->Host = 'secret'; // secret
+        $mail->Host = ''; // secret
         $mail->SMTPAuth   = true;
-        $mail->Username   = 'secret'; // secret
-        $mail->Password   = 'secret'; // secret
+        $mail->Username   = ''; // secret
+        $mail->Password   = ''; // secret
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port       = 587;
         $mail->CharSet = PHPMailer::CHARSET_UTF8;
