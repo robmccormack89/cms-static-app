@@ -5,10 +5,12 @@
   
   {% if context.archive == 'MainIndexArchive' or context.archive == 'TaxCollectionArchive' or context.archive == 'TaxTermArchive' %}
 
-    {% if context.archive == 'MainIndexArchive' %}
-      <li><span>{{context.type|capitalize}}</span></li>
-    {% else %}
-      <li><a href="/{{context.type}}">{{context.type|capitalize}}</a></li>
+    {% if single.type != 'page' %}
+      {% if context.archive == 'MainIndexArchive' %}
+        <li><span>{{context.type|capitalize}}</span></li>
+      {% else %}
+        <li><a href="/{{context.type}}">{{context.type|capitalize}}</a></li>
+      {% endif %}
     {% endif %}
     
     {% if context.archive == 'TaxCollectionArchive' or context.archive == 'TaxTermArchive' %}
@@ -31,7 +33,7 @@
   
   {% if single and context.single == 'Single' and single.slug != 'index' %}
     <!-- singles go last -->
-    {% if context.type %}
+    {% if context.type and context.type != 'page' %}
       <li><a href="/{{context.type}}">{{context.type|capitalize}}</a></li>
     {% endif %}
     <li><span>{{single.title}}</span></li>

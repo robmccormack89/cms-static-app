@@ -1,54 +1,111 @@
 {% extends "page.twig" %}
 
 {% block _content %}
-  {% if form_display_msg is empty %}
-    <form method="post" class="uk-child-width-1-1 uk-grid-small" uk-grid>
-      <div class="uk-width-1-2">
-        <label class="uk-form-label uk-text-bold" for="name">Name (required)</label>
-        <div class="uk-form-controls">
-          <input class="uk-input uk-border-rounded uk-form-large" name="name" id="name" type="text" placeholder="Your name..">
-        </div>
+  <div id="status-message">
+    {% if resonse is defined %}
+      {{response.message}}
+    {% endif %}
+  </div>
+  <style>
+    .fa-spinner {
+      display: none;
+      animation: fa-spin 1s linear infinite;
+    }
+    .fa-spinner.display {
+      display: inline-block;
+    }
+  </style>
+  <form method="post" id="contact-form" class="uk-child-width-1-1 uk-grid-small" uk-grid>
+    <div class="uk-width-1-2">
+      <label class="uk-form-label uk-text-bold" for="name">Name (required)</label>
+      <div class="uk-form-controls">
+        <input class="uk-input uk-border-rounded uk-form-large" name="name" id="name" type="text" placeholder="Your name..">
       </div>
-      <div class="uk-width-1-2">
-        <label class="uk-form-label uk-text-bold" for="email">Email (required)</label>
-        <div class="uk-form-controls">
-          <input class="uk-input uk-border-rounded uk-form-large" name="email" id="email" type="email" placeholder="Your email address..">
-        </div>
+    </div>
+    <div class="uk-width-1-2">
+      <label class="uk-form-label uk-text-bold" for="email">Email (required)</label>
+      <div class="uk-form-controls">
+        <input class="uk-input uk-border-rounded uk-form-large" name="email" id="email" type="email" placeholder="Your email address..">
       </div>
-      <div class="uk-width-1-2">
-        <label class="uk-form-label uk-text-bold" for="phone">Phone (optional)</label>
-        <div class="uk-form-controls">
-          <input class="uk-input uk-border-rounded uk-form-large" name="phone" id="phone" type="tel" placeholder="Your phone number..">
-        </div>
+    </div>
+    <div class="uk-width-1-2">
+      <label class="uk-form-label uk-text-bold" for="phone">Phone (optional)</label>
+      <div class="uk-form-controls">
+        <input class="uk-input uk-border-rounded uk-form-large" name="phone" id="phone" type="tel" placeholder="Your phone number..">
       </div>
-      <div class="uk-width-1-2">
-        <label class="uk-form-label uk-text-bold" for="subject">Subject (optional)</label>
-        <div class="uk-form-controls">
-          <input class="uk-input uk-border-rounded uk-form-large" name="subject" id="subject" type="text" maxlength="255" placeholder="What your message is about..">
-        </div>
+    </div>
+    <div class="uk-width-1-2">
+      <label class="uk-form-label uk-text-bold" for="subject">Subject (optional)</label>
+      <div class="uk-form-controls">
+        <input class="uk-input uk-border-rounded uk-form-large" name="subject" id="subject" type="text" maxlength="255" placeholder="What your message is about..">
       </div>
-      <div class="uk-width-1-2">
-        <label class="uk-form-label uk-text-bold" for="company">Company (optional)</label>
-        <div class="uk-form-controls">
-          <input class="uk-input uk-border-rounded uk-form-large" name="company" id="company" type="text" placeholder="Your company name..">
-        </div>
+    </div>
+    <div class="uk-width-1-2">
+      <label class="uk-form-label uk-text-bold" for="company">Company (optional)</label>
+      <div class="uk-form-controls">
+        <input class="uk-input uk-border-rounded uk-form-large" name="company" id="company" type="text" placeholder="Your company name..">
       </div>
-      <div class="uk-width-1-2">
-        <label class="uk-form-label uk-text-bold" for="budget">Choose a Budget (optional)</label>
-        <div class="uk-form-controls">
-          <select class="uk-select uk-border-rounded uk-form-large" name="budget" id="budget">
-            <option value="under-5k">Less than €5,000</option>
-            <option value="5-10k">€5,000-€10,000</option>
-            <option value="over-10k">Over €10,000</option>
-            <option value="not-applicable">Not applicable</option>
-          </select>
-        </div>
+    </div>
+    <div class="uk-width-1-2">
+      <label class="uk-form-label uk-text-bold" for="budget">Choose a Budget (optional)</label>
+      <div class="uk-form-controls">
+        <select class="uk-select uk-border-rounded uk-form-large" name="budget" id="budget">
+          <option value="under-5k">Less than €5,000</option>
+          <option value="5-10k">€5,000-€10,000</option>
+          <option value="over-10k">Over €10,000</option>
+          <option value="not-applicable">Not applicable</option>
+        </select>
       </div>
-      <div>
-        <input type="submit" value="Submit" class="uk-button uk-button-primary uk-button-small uk-button-secondary uk-border-rounded">
-      </div>
-    </form>
-  {% else %}
-    <p>{{form_display_msg}}</p>
-  {% endif %}
+    </div>
+    <div>
+      <button id="FormSubmit" type="submit" class="uk-button uk-button-primary uk-button-small uk-button-secondary uk-border-rounded uk-text-capitalize">
+        Submit <i id="loading" class="fas fa-spinner"></i>
+      </button>
+    </div>
+  </form>
+  <script type="application/javascript">
+    const form = document.getElementById("contact-form");
+    function email(data) {
+      const message = document.getElementById("status-message");
+      displayLoading();
+      fetch('', {
+        method: "POST",
+        body: data,
+        headers: {
+         'X-Requested-With' : 'XMLHttpRequest'
+        }
+      })
+      .then(response => response.json())
+      .then(response => {
+        hideLoading()
+        message.innerHTML = response.message;
+        if (response.status == true) {
+          form.reset();
+        }
+      })
+      .catch(error => {
+        error.json().then(response => {
+          message.innerHTML = response.message
+        })
+      })
+    }
+    const submitEvent = form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const formData = new FormData(form);
+      email(formData);
+    })
+    const loader = document.querySelector("#loading");
+    // showing loading
+    function displayLoading() {
+      loader.classList.add("display");
+      // to stop loading after some time
+      setTimeout(() => {
+        loader.classList.remove("display");
+      }, 5000);
+    }
+    // hiding loading 
+    function hideLoading() {
+      loader.classList.remove("display");
+    }
+  </script>
 {% endblock %}
