@@ -49,7 +49,8 @@ $router->get('/', function() {
   
 });
 
-$router->post('/{slug}', function() {
+// contact form post route, Homepage!
+$router->post('/', function() {
   Cache::cacheServe(function() { 
     (new SingleController('page', 'index'))->getContact();
   });
@@ -57,19 +58,11 @@ $router->post('/{slug}', function() {
 
 /*
 *
-* BLOG ROUTES
+* ARCHIVED ROUTES (content_types defined in $config['types'])
 *
 */
 
-include('routes.blog.php');
-
-/*
-*
-* PORTFOLIO ROUTES
-*
-*/
-
-include('routes.portfolio.php');
+include('routes.archived.php');
 
 /*
 *

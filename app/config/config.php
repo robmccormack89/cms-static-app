@@ -128,9 +128,9 @@ $config['types']['blog']['taxonomies']['categories'] = array(
   'index_uri' => '/categories',
 );
 $config['types']['blog']['taxonomies']['tags'] = array(
-  'key'  => 'categories',
-  'single'  => 'category',
-  'index_uri' => '/categories',
+  'key'  => 'tags',
+  'single'  => 'tag',
+  'index_uri' => '/tags',
 );
 
 // register 'portfolio' content_type 
