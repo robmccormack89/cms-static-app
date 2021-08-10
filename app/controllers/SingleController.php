@@ -20,7 +20,8 @@ class SingleController extends CoreController {
     $this->slug = $slug; // e.g 'about'. this will usually come from the request unless setting for specific pages
     // the $name property is only used for render() to differenciate between archived & non-archived singular objects
     $this->name = ($this->type == 'page') ? $this->type : $config['types'][$this->type]['single'];
-    
+    $q = new Json($config['json_secret']);
+    $this->secret = $q->fetch();
     $this->init();
   }
   
@@ -35,7 +36,6 @@ class SingleController extends CoreController {
   }
   
   public function getContact() {
-    
     global $_context;
     if (array_key_exists('name', $_POST) && array_key_exists('email', $_POST)) {
       
@@ -93,10 +93,10 @@ class SingleController extends CoreController {
         $mail->isHTML(true);
         $mail->Host = 'localhost';
         $mail->Port = 25;
-        $mail->Host = ''; // secret
+        $mail->Host = $this->secret['mail_host']; // secret
         $mail->SMTPAuth   = true;
-        $mail->Username   = ''; // secret
-        $mail->Password   = ''; // secret
+        $mail->Username   = $this->secret['mail_u']; // secret
+        $mail->Password   = $this->secret['mail_p']; // secret
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port       = 587;
         $mail->CharSet = PHPMailer::CHARSET_UTF8;
@@ -106,7 +106,7 @@ class SingleController extends CoreController {
         $mail->addAddress('cv@robertmccormack.com');
         $mail->addReplyTo($email, $name);
         $mail->Subject = $subject ? 'New Contact form: '.$subject : 'New Contact form submission';
-        $mail->Body = $mail->msgHTML($this->twig->render('email_template.twig',array(
+        $mail->Body = $mail->msgHTML($this->twig->render('contact-form-template.twig',array(
           'name' => $name,
           'email' => $email,
           'phone' => $phone,
@@ -124,7 +124,7 @@ class SingleController extends CoreController {
   
           $response = [
             "status" => false,
-            "message" => '<p class="uk-margin uk-text-warning uk-text-bold uk-margin">Sorry, something went wrong. Please try again later.</p>'
+            "message" => '<p class="uk-margin uk-text-danger uk-text-bold uk-margin">Sorry, something went wrong. Please try again later.</p>'
           ];
             
         } else {
@@ -134,27 +134,32 @@ class SingleController extends CoreController {
           ];
         }
         
+        $form_array = array(
+          'err' => $err,
+          'response' => $response,
+          'name' => $name,
+          'email' => $email,
+          'phone' => $phone,
+          'subject' => $subject,
+          'company' => $company,
+          'budget' => $budget,
+          'mail' => $mail
+        );
+        
       } else {
         // if error exists, set the resonse data with the error/display message & set status to false
         $response = [
           "status" => false,
           "message" => '<p class="uk-margin uk-text-warning uk-text-bold uk-margin">'.$display_msg.'</p>'
         ];
+        $form_array = array(
+          'err' => $err,
+          'form_display_msg' => $display_msg,
+          'response' => $response,
+        );
       }
       
       // Turn the form data into an array to add to the twig context
-      $form_array = array(
-        'err' => $err,
-        'form_display_msg' => $display_msg,
-        'response' => $response,
-        'name' => $name,
-        'email' => $email,
-        'phone' => $phone,
-        'subject' => $subject,
-        'company' => $company,
-        'budget' => $budget,
-        'mail' => $mail
-      );
       foreach($form_array as $key => $value){
         $context[$key] = $value;
       }
@@ -184,26 +189,34 @@ class SingleController extends CoreController {
   *
   */
   protected function render($context) {
-    if (isSingleAllowed($context['single'])) {
+    $is_published = ($context['single']['status'] == 'published');
+    $is_draft = ($context['single']['status'] == 'draft');
+    $is_author_ip = ($_SERVER['REMOTE_ADDR'] == $this->secret['local_ip']);
+    
+    if ($context['single'] && (($is_draft && $is_author_ip) || $is_published)) {
       
       $_type = (isset($context['single']['type'])) ? $context['single']['type'] : $this->name;
       $_format = (isset($context['single']['format'])) ? $context['single']['format'] : 'default';
       $_slug = $context['single']['slug'];
       
-      $format1 = $_slug.'.twig'; // creativo-para-jovenes.twig
+      $slugged = slugToFilename($_slug);
+      $format1 = $slugged.'.twig'; // creativo-para-jovenes.twig
       $format2 = $_type.'_'.$_format.'.twig'; // post_video.twig
       $format3 = $_type.'.twig'; // post.twig
       
       if($this->twig->getLoader()->exists($format1)){
         $this->templateRender($format1, $context);
+        exit();
       }
       
-      elseif($this->twig->getLoader()->exists($format2)) {
+      if($this->twig->getLoader()->exists($format2)) {
         $this->templateRender($format2, $context);
+        exit();
       }
 
-      elseif($this->twig->getLoader()->exists($format3)) {
+      if($this->twig->getLoader()->exists($format3)) {
         $this->templateRender($format3, $context);
+        exit();
       }
       
       else {

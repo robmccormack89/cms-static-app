@@ -50,15 +50,17 @@ class QueryTermsModel {
   // get the term archive meta
   private function getCollectionMeta() {
     global $_context;
-    $q = new Json('../public/json/data.min.json');
-    
-    $data = $q->from('site.content_types.'.$_context['type'].'.meta')->get();
-    
+    $the_type = $_context['type'];
+    global $config;
     if($this->taxonomyKey() && taxSettingByKey($_context['type'], 'single', $this->taxonomyKey(), 'key')) {
+      // get taxonomy meta from $config
       $_tax = taxSettingByKey($_context['type'], 'single', $this->taxonomyKey(), 'key');
-      $data['title'] = ucfirst($_tax);
+      $data = $config['types'][$the_type]['taxonomies'][$_tax]['meta'];
+    } else {
+      // get base meta if no tax key
+      $q = new Json($config['json_data']);
+      $data = $q->from('site.content_types.'.$_context['type'].'.meta')->get();
     }
-    
     return $data;
   }
   
@@ -136,13 +138,14 @@ class QueryTermsModel {
   private function getTermsQuery() {
     
     global $_context;
+    global $config;
     
     /*
     *
     * 1. set the initial location
     *
     */
-    $q = new Json('../public/json/data.min.json');
+    $q = new Json($config['json_data']);
     
     $terms = new Json();
     

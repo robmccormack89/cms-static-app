@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="{{configs.language}}">
+<html lang="{{config.language}}">
 
   <head>
     
-    <meta charset="{{configs.charset}}">
+    <meta charset="{{config.charset}}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="Content-Type" content="text/html; charset={{configs.charset}}" />
+    <meta http-equiv="Content-Type" content="text/html; charset={{config.charset}}" />
     
     {% block google_fonts %}
       <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,11 +21,11 @@
         {
           "@context": "https://schema.org/",
           "@type": "WebSite",
-          "name": "{{configs.site_title}}",
-          "url": "{{configs.base_url}}",
+          "name": "{{config.site_title}}",
+          "url": "{{config.base_url}}",
           "potentialAction": {
             "@type": "SearchAction",
-            "target": "{{configs.base_url}}/?s={search_term_string}",
+            "target": "{{config.base_url}}/?s={search_term_string}",
             "query-input": "required name=search_term_string"
           }
         }
@@ -35,17 +35,17 @@
         {
           "@context": "https://schema.org/",
           "@type": "Person",
-          "name": "{{configs.name}}",
-          "url": "{{configs.base_url}}",
-          "image": "{{configs.avatar_src}}",
+          "name": "{{config.name}}",
+          "url": "{{config.base_url}}",
+          "image": "{{config.avatar_src}}",
           "sameAs": [
-            "{{configs.github_url}}",
-            "{{configs.base_url}}"
+            "{{config.github_url}}",
+            "{{config.base_url}}"
           ],
-          "jobTitle": "{{configs.job}}",
+          "jobTitle": "{{config.job}}",
           "worksFor": {
             "@type": "Organization",
-            "name": "{{configs.name}}"
+            "name": "{{config.name}}"
           }  
         }
       </script>
@@ -687,7 +687,9 @@
           margin-top: 140px!important;
         }
         .default-page-header .uk-text-meta,
-        .project-cover .uk-text-meta {
+        .project-cover .uk-text-meta,
+        .page-cover .uk-text-meta,
+        .project-content .uk-text-meta {
           font-size:17px;
           height: 100%;
           line-height: 1.65;
@@ -696,7 +698,11 @@
         .uk-light.default-page-header .uk-text-meta, 
         .uk-light.project-cover .uk-text-meta,
         .uk-light .default-page-header .uk-text-meta, 
-        .uk-light .project-cover .uk-text-meta {
+        .uk-light .project-cover .uk-text-meta,
+        .uk-light .page-cover .uk-text-meta,
+        .uk-light.page-cover .uk-text-meta,
+        .uk-light .project-content .uk-text-meta,
+        .uk-light.project-content .uk-text-meta {
           color: #fff!important; 
         }
         

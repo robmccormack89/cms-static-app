@@ -1,0 +1,18 @@
+{% extends "_single_cover.twig" %}
+
+{% block single_cover %}
+  <section id="MainSingleCover" class="uk-background-cover uk-flex uk-flex-center uk-flex-middle {{ (single.featured_img) ? 'uk-light' : '' }}" style="{{ (single.featured_img) ? 'background-image: url(' ~ single.featured_img.src|resize(1920, 600, 'center') ~ ');' : '' }}">
+    <div class="{{ (single.featured_img) ? 'uk-section uk-overlay-primary' : 'uk-background-pink uk-section' }} uk-width-1-1">
+      {% block single_cover_content %}
+        <div class="uk-container">
+          <div class="page-cover single-cover-details uk-width-1-1">
+            <h1 class="uk-heading-large uk-margin-remove-top">{{single.title}}.</h1>
+            {% if single.excerpt %}
+              <p class="uk-text-meta uk-margin-small-top uk-width-3-5@m">{{single.excerpt|raw}}</p>
+            {% endif %}
+          </div>
+        </div>
+      {% endblock %}
+    </div>
+  </section>
+{% endblock %}

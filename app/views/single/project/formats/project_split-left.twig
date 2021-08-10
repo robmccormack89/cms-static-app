@@ -1,0 +1,69 @@
+{% extends 'project.twig' %}
+
+{% block styles %}
+  {{ parent() }}
+  <style>
+    .project-page-content {
+      padding-right: 8.8vh;
+      padding-left: 8.8vh;
+      padding-top: 15vh;
+    }
+  </style>
+{% endblock %}
+
+{% block header %}
+  {% include '_post_header_light.twig' %}
+{% endblock %}
+
+{% block single_cover %}
+{% endblock %}
+
+{% block single_content %}
+  <section id="MainSingleContent" class="uk-background-default">
+    
+    {% block _content %}
+      <div class="project-content">
+        <div class="uk-child-width-1-2@m uk-grid-collapse" uk-grid>
+          <div class="project-gallery">
+            {% block _project_gallery %}
+              {% for img in single.gallery %}
+                <figure class="gallery-img">
+                  <img class="uk-border-rounded" data-src="{{img.src|resize(1100)}}" data-width data-height alt="{{img.alt}}" uk-img>
+                </figure>
+              {% endfor %}
+            {% endblock %}
+          </div>
+          <div class="project-content">
+            <div class="project-page-content uk-padding" uk-sticky="offset: 60; bottom: true">
+              {% block _project_metas %}
+                {% if single.taxonomies.technologies or single.date_time %}
+                  <div class="post-details uk-margin uk-margin-small-bottom">
+                    {% if single.taxonomies.technologies %}
+                      <div class="taxonomy-holder uk-inline">
+                        {% for tech in single.taxonomies.technologies %}
+                          {% if not loop.last %}
+                            <a class="taxonomy uk-link-reset" title="{{tech.title}}" href="{{tech.link}}">{{tech.title}}</a>,
+                          {% else %}
+                            <a class="taxonomy uk-link-reset" title="{{tech.title}}" href="{{tech.link}}">{{tech.title}}</a>
+                          {% endif %}
+                        {% endfor %}
+                      </div>
+                    {% endif %}
+                    {% if single.date_time %}
+                      <span class="post-meta-estimate">{{single.date_time|date("F j, Y")}}</span>
+                    {% endif %}
+                  </div>
+                {% endif %}
+              {% endblock %}
+              <h1 class="uk-heading-large uk-margin-remove-top">{{single.title}}.</h1>
+              {% block _project_content %}
+                {{ parent() }}
+              {% endblock %}
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endblock %}
+    
+  </section>
+{% endblock %}

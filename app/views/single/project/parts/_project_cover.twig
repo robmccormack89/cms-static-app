@@ -1,26 +1,36 @@
-{# 
+{% extends "_single_cover.twig" %}
 
-  POrtfolio project cover with a featured image background
-
-  This fits behind the sticky header
-
-  If featured_img exists, applies featured_img as bg with uk-light & overlay classes
-
-  If no featured_img, does a pink background with uk-dark styling, which changes with the dark/light button
-
-#}
-<section id="MainSingleCover" class="project-cover uk-background-cover uk-flex uk-flex-center uk-flex-middle {{ (single.featured_img) ? 'uk-light' : '' }}" style="{{ (single.featured_img) ? 'background-image: url(' ~ single.featured_img.src|resize(1920, 600, 'center') ~ ');' : '' }}">
-  <div class="{{ (single.featured_img) ? 'uk-section uk-overlay-primary' : 'uk-background-pink uk-section' }} uk-width-1-1">
-    <div class="uk-container">
-      <div class="single-cover-details uk-width-1-1">
-        
-        {% include (single.taxonomies.technologies or single.date_time) ? '_post_meta.twig' ignore missing  %}
-        
-        <h1 class="uk-heading-large uk-margin-remove-top uk-width-3-5@m">{{single.title}}.</h1>
-        
-        <p class="uk-text-meta uk-margin-small-top uk-width-3-5@m">{{single.excerpt|raw}}</p>
-        
-      </div>
+{% block single_cover %}
+  <section id="MainSingleCover" class="uk-background-cover uk-flex uk-flex-center uk-flex-middle {{ (single.featured_img) ? 'uk-light' : '' }}" style="{{ (single.featured_img) ? 'background-image: url(' ~ single.featured_img.src|resize(1920, 600, 'center') ~ ');' : '' }}">
+    <div class="{{ (single.featured_img) ? 'uk-section uk-overlay-primary' : 'uk-background-pink uk-section' }} uk-width-1-1">
+      {% block single_cover_content %}
+        <div class="uk-container">
+          <div class="project-cover single-cover-details uk-width-1-1">
+            {% if single.taxonomies.technologies or single.date_time %}
+              <div class="post-details uk-margin uk-margin-small-bottom">
+                {% if single.taxonomies.technologies %}
+                  <div class="taxonomy-holder uk-inline">
+                    {% for tech in single.taxonomies.technologies %}
+                      {% if not loop.last %}
+                        <a class="taxonomy uk-link-reset" title="{{tech.title}}" href="{{tech.link}}">{{tech.title}}</a>,
+                      {% else %}
+                        <a class="taxonomy uk-link-reset" title="{{tech.title}}" href="{{tech.link}}">{{tech.title}}</a>
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                {% endif %}
+                {% if single.date_time %}
+                  <span class="post-meta-estimate">{{single.date_time|date("F j, Y")}}</span>
+                {% endif %}
+              </div>
+            {% endif %}
+            <h1 class="uk-heading-large uk-margin-remove-top uk-width-3-5@m">{{single.title}}.</h1>
+            {% if single.excerpt %}
+              <p class="uk-text-meta uk-margin-small-top uk-width-3-5@m">{{single.excerpt|raw}}</p>
+            {% endif %}
+          </div>
+        </div>
+      {% endblock %}
     </div>
-  </div>
-</section>
+  </section>
+{% endblock %}

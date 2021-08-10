@@ -1,155 +1,40 @@
 {% extends "single.twig" %}
 
-{% block styles %}
-  {{ parent() }}
-  <style>
-    ins, mark {
-      background: #9ff8d0;
-      color: #17161a;
-    }
-    a {
-      font-weight: 500;
-    }
-    .uk-label {
-      background-color: #f8f8f8;
-      color: #17161a;
-      transition: .1s ease-in-out;
-      transition-property: background-color,color;
-    }
-    .uk-light .uk-label {
-      color: #17161a!important;
-    }
-    .uk-label:hover, .uk-label:focus {
-      background-color: #d90a2c;
-      color: #fff!important;
-    }
-    
-    .tags-grid.uk-grid-small {
-      margin-left: -8px;
-    }
-    .tags-grid.uk-grid-small>* {
-      padding-left: 8px;
-    }
-    
-    .uk-light strong {
-      color: #fff;
-    }
-    
-    .single-cover-details {
-      margin-top: 140px!important;
-    }
-    @media only screen and (max-width: 767px) {
-      .single-cover-details {
-        margin-top: 100px!important;
-      }
-    }
-    
-    @media (min-width: 960px) {
-      .section-small-bottom {
-        padding-bottom: 30px;
-      }
-    }
-    .section-small-bottom {
-      padding-bottom: 10px;
-    }
-    
-    .uk-overlay-primary {
-      background: rgb(26 25 29 / 57%);
-    }
-  </style>
-  {% if single.style.type == 'light' or single.style.type == 'dark' %}
-    <style>
-      blockquote {
-        border-left: 5px solid {{ (single.style.color) ? single.style.color : '#d90a2c' }};
-      }
-      a, .uk-link {
-        color: {{ (single.style.color) ? single.style.color : '#d90a2c' }};
-      }
-      .uk-light .uk-label, .uk-label:hover, .uk-label:focus,
-      .uk-light .uk-background-muted-light {
-        background-color: {{ (single.style.color) ? single.style.color : '#d90a2c' }};
-      }
-      .uk-button-secondary:focus, .uk-button-secondary:hover {
-        background-color: {{ (single.style.color) ? single.style.color : '#d90a2c' }};
-      }
-    </style>
-    {% if single.style.type == 'dark' %}
-      <style>
-        .taxonomy-holder:not(.no-divider)::after {
-          color: #fff;
-        }
-      </style>
-    {% endif %}
-    {% if single.style.type == 'light' %}
-      <style>
-        .uk-background-pink {
-          background-color: {{ (single.style.color) ? single.style.color : '#ffecf3' }};
-        }
-      </style>
-    {% endif %}
-  {% endif %}
-{% endblock %}
-
 {% block header %}
   {% include single.style.type ? '_post_header_' ~ single.style.type ~ '.twig' : '_post_header.twig' %}
 {% endblock %}
 
-{% block content %}
-  <div id="post{{single.slug}}" class="post-{{single.slug}}" data-template="post.twig">
+{% block single_cover %}
+  {% include single.style.type ? '_post_cover_' ~ single.style.type ~ '.twig' : '_post_cover.twig' %}
+{% endblock %}
+
+{% block single_content %}
+  <section id="MainSingleContent" class="uk-container uk-container-medium uk-section uk-section-small">
     
-    {% block post_cover %}
-      {% include single.style.type ? '_post_cover_' ~ single.style.type ~ '.twig' : '_post_cover.twig' %}
+    {% block _breads %}
+      {{parent()}}
     {% endblock %}
     
-    {% block post_content %}
-      <section id="MainSingleContent" class="uk-container uk-container-medium uk-section uk-section-small">
-        
-        {% block _breads %}
-          <div class="uk-margin-medium">
-            {% include 'breads.twig' %}
-          </div>
-        {% endblock %}
-        
-        {% block _content %}
-          <div class="uk-margin-large-bottom">
-            {% if single.content %}
-              <p>{{single.content|raw}}.</p>
-            {% else %}
-              {% if single.excerpt %}
-                <p>{{single.excerpt|raw}}. More to follow...</p>
-              {% endif %}
-            {% endif %}
-          </div>
-        {% endblock %}
-        
-        {% block _meta %}
-          {% if single.taxonomies.tags %}
-            <div class="post-tags">
-                <div class="tags-grid uk-grid-small uk-flex uk-flex-middle uk-child-width-auto" uk-grid>
-                  <div>
-                    Tagged with:
-                  </div>
-                  {% for tag in single.taxonomies.tags %}
-                    <div>
-                      <a class="uk-label uk-border-rounded uk-text-capitalize uk-link-reset" title="{{tag.title}}" href="{{tag.link}}">{{tag.title}}</a>
-                    </div>
-                  {% endfor %}
-                </div>
+    {% block _content %}
+      {{parent()}}
+    {% endblock %}
+    
+    {% block _meta %}
+      {% if single.taxonomies.tags %}
+        <div class="post-tags uk-margin-large">
+          <div class="tags-grid uk-grid-small uk-flex uk-flex-middle uk-child-width-auto" uk-grid>
+            <div>
+              Tagged with:
             </div>
-          {% endif %}
-        {% endblock %}
-        
-      </section>
+            {% for tag in single.taxonomies.tags %}
+              <div>
+                <a class="uk-label uk-border-rounded uk-text-capitalize uk-link-reset" title="{{tag.title}}" href="{{tag.link}}">{{tag.title}}</a>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
     {% endblock %}
     
-  </div>
-{% endblock %}
-
-{% block footer_top %}
-{% endblock %}
-
-{% block footer %}
-  <footer id="Footer" class="dark-footer uk-section uk-section-small uk-background-muted">
-    {% include 'footer-main.twig' %}
-  </footer>
+  </section>
 {% endblock %}

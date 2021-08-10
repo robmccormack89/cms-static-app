@@ -1,1 +1,9 @@
-{% extends "post.twig" %}
+{% extends "single.twig" %}
+
+{% block header %}
+  {% include single.style.type ? '_post_header_' ~ single.style.type ~ '.twig' : '_post_header.twig' %}
+{% endblock %}
+
+{% block single_cover %}
+  {% include single.style.type ? '_page_cover_' ~ single.style.type ~ '.twig' : '_page_cover.twig' %}
+{% endblock %}

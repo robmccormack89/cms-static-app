@@ -4,7 +4,7 @@
 * Enable debug mode. Set to false for production
 *
 */
-$config['enable_debug_mode'] = false;
+$config['enable_debug_mode'] = true;
 
 /*
 *
@@ -50,14 +50,6 @@ $config['charset'] = 'UTF-8';
 
 /*
 *
-* Set this for a kind of 'draft' mode on posts.
-* Probably want to remove this or find another way for drafting single posts
-*
-*/
-$config['author_ip'] = '127.0.0.1';
-
-/*
-*
 * This is probaly redundant / can be set in the json data 
 *
 */
@@ -70,6 +62,16 @@ $config['admin_email'] = 'info@example.com';
 */
 $config['php_cache'] = false;
 $config['php_minify'] = false;
+
+/*
+*
+* Json data Locations
+*
+*/
+
+$config['json_data'] = '../public/json/data.min.json';
+// $config['json_secret'] = '../public/json/_secret.json';
+$config['json_secret'] = '../public/json/secret.json';
 
 /*
 *
@@ -89,11 +91,14 @@ $config['twig_templates_locations'] = array(
   'single',
   'single/page',
   'single/page/content',
+  'single/page/parts',
   'single/post',
   'single/post/content',
+  'single/post/formats',
   'single/post/parts',
   'single/project',
   'single/project/content',
+  'single/project/formats',
   'single/project/parts',
 );
 
@@ -110,37 +115,76 @@ $config['twig_templates_locations'] = array(
 */
 $config['types'] = array();
 
-// register 'blog' content_type 
+/*
+*
+* Blog registration
+*
+*/
+
 $config['types']['blog'] = array(
-  'key'  => 'blog',
-  'items' => 'posts',
-  'single' => 'post',
-  'index_uri' => '/blog',
-  'items_uri' => '/posts'
+  'key'  => 'blog', // used as main key/main archive url
+  'items' => 'posts', // used as post items key/in singular urls
+  'single' => 'post', // used as singular key such as in queries
+  'meta' => array(
+    'title'  => 'My Blog', // MainIndexArchive title
+    'description' => 'Something more descriptive goes here...', // MainIndexArchive description
+    'meta_title' => '',
+    'meta_description' => '',
+  ),
 );
 
-// register blog's taxonomies (categories, tags)
+/*
+*
+* Blog taxonomies registration (categories, tags)
+*
+*/
+
 $config['types']['blog']['taxes_in_meta'] = array('categories', 'tags');
 $config['types']['blog']['taxonomies'] = array();
 $config['types']['blog']['taxonomies']['categories'] = array(
-  'key'  => 'categories',
-  'single'  => 'category',
-  'index_uri' => '/categories',
+  'key'  => 'categories', // used as main key/archive url
+  'single'  => 'category', // used as singular key such as in queries
+  'meta' => array(
+    'title'  => 'Categories', // CollectionArchive title
+    'description' => 'Handshake release assets validation metrics first mover advantage ownership prototype', // CollectionArchive description
+    'meta_title' => '',
+    'meta_description' => '',
+  ),
 );
 $config['types']['blog']['taxonomies']['tags'] = array(
   'key'  => 'tags',
   'single'  => 'tag',
-  'index_uri' => '/tags',
+  'meta' => array(
+    'title'  => 'Tags',
+    'description' => 'Handshake release assets validation metrics first mover advantage ownership prototype',
+    'meta_title' => '',
+    'meta_description' => '',
+  ),
 );
 
-// register 'portfolio' content_type 
+/*
+*
+* Portfolio registration
+*
+*/
+
 $config['types']['portfolio'] = array(
   'key'  => 'portfolio',
   'items' => 'projects',
   'single' => 'project',
-  'index_uri' => '/portfolio',
-  'items_uri' => '/projects'
+  'meta' => array(
+    'title'  => 'Portfolio',
+    'description' => 'Handshake release assets validation metrics first mover advantage ownership prototype',
+    'meta_title' => '',
+    'meta_description' => '',
+  ),
 );
+
+/*
+*
+* Portfolio taxonomies registration (technologies)
+*
+*/
 
 // register portfolio's taxonomies (technologies)
 $config['types']['portfolio']['taxes_in_meta'] = array('technologies');
@@ -148,7 +192,12 @@ $config['types']['portfolio']['taxonomies'] = array();
 $config['types']['portfolio']['taxonomies']['technologies'] = array(
   'key'  => 'technologies',
   'single'  => 'technology',
-  'index_uri' => '/technologies',
+  'meta' => array(
+    'title'  => 'Technologies',
+    'description' => 'Handshake release assets validation metrics first mover advantage ownership prototype',
+    'meta_title' => '',
+    'meta_description' => '',
+  ),
 );
 
 return $config;

@@ -1,34 +1,11 @@
-{# 
+{% extends "_post_cover.twig" %}
 
-  Blog post cover with a primary colour background
-
-  This fits behind the sticky header
-
-  This Blog post header only gets processed when single.style.type exists & is set to 'dark'
-  
-  uk-light class is added in this case
-
-  If single.style.color property exists, this is used as the background color, else #17161a is used
-  
-  This colour stays applied even after dark/light switch, likewise the uk-light styling
-
-  This cover is designed for having a primary colour type of bg
-
-#}
-<section id="MainSingleCover" class="uk-background-cover uk-flex uk-flex-center uk-flex-middle uk-light">
-  <div class="uk-section uk-width-1-1" style="{{ (single.style.color) ? 'background-color: ' ~ single.style.color ~ ';' : 'background-color: #17161a;' }}">
-    <div class="uk-container uk-container-medium">
-      <div class="single-cover-details uk-width-1-1">
-        
-        {% include (single.taxonomies.categories or single.read_time) ? '_post_meta.twig' ignore missing  %}
-        
-        <h1 class="uk-heading-large uk-margin-remove-top">{{single.title}}.</h1>
-        
-        {% include (single.author or single.date_time) ? '_post_meta_sub.twig' ignore missing  %}
-        
-        {% include (single.featured_img.frame_src and (single.format == 'video' or single.format == 'audio')) ? '_post_featured_frame.twig' ignore missing  %}
-        
-      </div>
+{% block single_cover %}
+  <section id="MainSingleCover" class="uk-background-cover uk-flex uk-flex-center uk-flex-middle uk-light">
+    <div class="uk-section uk-width-1-1" style="{{ (single.style.color) ? 'background-color: ' ~ single.style.color ~ ';' : 'background-color: #17161a;' }}">
+      {% block single_cover_content %}
+        {{parent()}}
+      {% endblock %}
     </div>
-  </div>
-</section>
+  </section>
+{% endblock %}

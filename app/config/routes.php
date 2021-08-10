@@ -18,7 +18,7 @@ $router->setBasePath('/');
 */
 
 if ($config['enable_https']) {
-  if ($_SERVER['HTTPS'] != 'on') {
+  if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'on') {
     $url = "https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
     header('Location: ' . $url, true, 301);
     exit();
@@ -51,9 +51,7 @@ $router->get('/', function() {
 
 // contact form post route, Homepage!
 $router->post('/', function() {
-  Cache::cacheServe(function() { 
-    (new SingleController('page', 'index'))->getContact();
-  });
+  (new SingleController('page', 'index'))->getContact();
 });
 
 /*
@@ -70,7 +68,16 @@ include('routes.archived.php');
 *
 */
 
-include('routes.pages.php');
+// contact form post route, contact page!
+$router->post('/contact', function() {
+  (new SingleController('page', 'contact'))->getContact();
+});
+
+$router->get('/{slug}', function($slug) {
+  Cache::cacheServe(function() use ($slug) { 
+    (new SingleController('page', $slug))->getSingle();
+  });
+});
 
 
 // 404 error route. in most cases 404 errors will be rendered rather than routed, see CoreController->error()

@@ -1,0 +1,12 @@
+RewriteEngine on
+
+RewriteRule ^$ public/
+RewriteRule (.*) public/$1
+
+<If "-f %{DOCUMENT_ROOT} . '/maintenance'">
+  RewriteCond %{REQUEST_URI} !/maintenance
+  RewriteRule \.*$ /maintenance [R=302,L]
+</If>
+<Else>
+  Redirect 301 /maintenance /
+</Else>

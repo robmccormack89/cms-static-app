@@ -86,26 +86,32 @@ class QueryModel {
     }
     return $data;
   }
+  // Site Meta
   private function getBaseMeta() {
-    $q = new Json('../public/json/data.min.json');
+    global $config;
+    $q = new Json($config['json_data']);
     $data = $q->from('site.meta')->get();
     return $data;
   }
+  // Type Meta
   private function getArchiveMeta() {
     global $_context;
-    $q = new Json('../public/json/data.min.json');
-    $data = $q->from('site.content_types.'.$_context['type'].'.meta')->get();
+    $the_type = $_context['type'];
+    global $config;
+    $data = $config['types'][$the_type]['meta'];
     return $data;
   }
+  // Term Meta
   private function getTermMeta() {
     global $_context;
+    $the_type = $_context['type'];
+    global $config;
     if($_context['term']) {
-      $q = new Json('../public/json/data.min.json');
+      $q = new Json($config['json_data']);
       $data = $q->from('site.content_types.'.$_context['type'].'.taxonomies.'.$_context['tax'])
       ->where('slug', '=', $_context['term'])->first();
     } else {
-      $q = new Json('../public/json/data.min.json');
-      $data = $q->from('site.'.$_context['type'].'.meta')->get();
+      $data = $config['types'][$the_type]['meta'];
     }
     return $data;
   }
@@ -216,13 +222,13 @@ class QueryModel {
   *
   */
   private function getPostsQuery() {
-    
+    global $config;
     /*
     *
     * 1. set the initial location
     *
     */
-    $q = new Json('../public/json/data.min.json');
+    $q = new Json($config['json_data']);
     
     /*
     *

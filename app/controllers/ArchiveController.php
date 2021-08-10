@@ -423,16 +423,19 @@ class ArchiveController extends CoreController {
     // TaxTermArchive
     if($_context['archive'] = 'TaxTermArchive' && $this->twig->getLoader()->exists($_tax.'-'.$_term.'.twig')) {
       $this->templateRender($_tax.'-'.$_term.'.twig', $context); // // categories-news.twig
+      exit();
     }
     
     // TaxCollectionArchive
     elseif($_context['archive'] = 'TaxCollectionArchive' && $this->twig->getLoader()->exists($_type.'-'.$_tax.'.twig')) {
       $this->templateRender($_type.'-'.$_tax.'.twig', $context); // blog-categories.twig
+      exit();
     }
     
     // MainIndexArchive
     elseif($_context['archive'] = 'MainIndexArchive' && $this->twig->getLoader()->exists($_type.'.twig')) {
       $this->templateRender($_type.'.twig', $context); // blog.twig
+      exit();
     }
     
     else {

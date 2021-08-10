@@ -1,19 +1,65 @@
-<section id="MainSingleCover" class="project-cover uk-background-cover uk-flex uk-flex-center uk-flex-middle {{ (single.featured_img) ? 'uk-light' : '' }}" style="{{ (single.featured_img) ? 'background-image: url(' ~ single.featured_img.src|resize(1920, 600, 'center') ~ ');' : '' }}">
-  <div class="{{ (single.featured_img) ? 'uk-section uk-overlay-primary' : 'uk-background-pink uk-section' }} uk-width-1-1">
-    <div class="uk-container">
-      <div class="single-cover-details uk-width-1-1">
-        <div class="uk-child-width-1-2@m uk-grid-large" uk-grid>
-          <div>
-            {% include (single.taxonomies.technologies or single.date_time) ? '_post_meta.twig' ignore missing  %}
-            <h1 class="uk-heading-large uk-margin-remove-top">{{single.title}}.</h1>
-            {% include single.excerpt ? '_project_excerpt.twig' ignore missing  %}
-          </div>
-          <div>
-            {% include single.project_goal ? '_project_goal.twig' ignore missing  %}
-            {% include (single.project_metas or single.author) ? '_project_metas.twig' ignore missing  %}
-          </div>
+{% extends "_project_cover.twig" %}
+
+{% block single_cover_content %}
+  <div class="uk-container">
+    <div class="project-cover single-cover-details uk-width-1-1">
+      <div class="uk-child-width-1-2@m uk-grid-large" uk-grid>
+        <div>
+          {% if single.taxonomies.technologies or single.date_time %}
+            <div class="post-details uk-margin uk-margin-small-bottom">
+              {% if single.taxonomies.technologies %}
+                <div class="taxonomy-holder uk-inline">
+                  {% for tech in single.taxonomies.technologies %}
+                    {% if not loop.last %}
+                      <a class="taxonomy uk-link-reset" title="{{tech.title}}" href="{{tech.link}}">{{tech.title}}</a>,
+                    {% else %}
+                      <a class="taxonomy uk-link-reset" title="{{tech.title}}" href="{{tech.link}}">{{tech.title}}</a>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+              {% endif %}
+              {% if single.date_time %}
+                <span class="post-meta-estimate">{{single.date_time|date("F j, Y")}}</span>
+              {% endif %}
+            </div>
+          {% endif %}
+          <h1 class="uk-heading-large uk-margin-remove-top">{{single.title}}.</h1>
+          {% if single.excerpt %}
+            <p class="uk-text-meta">{{single.excerpt|raw}}</p>
+          {% endif %}
+        </div>
+        <div>
+          {% if single.project_goal %}
+            <div class="project-goal uk-margin">
+              <strong>Client Goal:</strong>
+              <p>{{single.project_goal}}</p>
+            </div>
+          {% endif %}
+          {% if single.project_meta or single.author %}
+            {% if single.project_goal %}
+              <hr>
+            {% endif %}
+            <div class="project-meta-grid uk-child-width-auto" uk-grid>
+              {% for meta in single.project_meta %}
+                <div>
+                  <strong>{{meta.title}}</strong>
+                  <p class="uk-text-small uk-margin-small-top">
+                    {{meta.subs|join(',<br> ')|raw}}
+                  </p>
+                </div>
+              {% endfor %}
+              {% if single.author %}
+                <div>
+                  <strong>Author</strong>
+                  <p class="uk-text-small uk-margin-small-top">
+                    {{single.author}}
+                  </p>
+                </div>
+              {% endif %}
+            </div>
+          {% endif %}
         </div>
       </div>
     </div>
   </div>
-</section>
+{% endblock %}

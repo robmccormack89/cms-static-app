@@ -24,7 +24,7 @@ class SingleModel {
   private function getSinglular() {
     global $config;
     
-    $q = new Json('../public/json/data.min.json');
+    $q = new Json($config['json_data']);
     $single = $q->from($this->getSinglularLocation())
     ->where('slug', '=', $this->slug)
     ->first();

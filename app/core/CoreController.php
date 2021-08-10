@@ -54,7 +54,7 @@ class CoreController {
     // twig globals: Site, Author & Configs
     $this->twig->addGlobal('site', SiteModel::init()->getSite());
     $this->twig->addGlobal('author', AuthorModel::init()->getAuthor());
-    $this->twig->addGlobal('configs', $config);
+    $this->twig->addGlobal('config', $config);
     
     // menus
     $main_menu = new MenuModel('main-menu');
