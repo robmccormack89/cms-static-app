@@ -1,0 +1,308 @@
+<style>
+  /* modal general */
+  .uk-modal-full {
+    overflow-y: scroll;
+  }
+  .uk-modal-full .uk-modal-dialog {
+    background: rgb(26 25 29 / 98%);
+    min-height: calc(100vh)!important;
+    max-height: calc(100vh)!important;
+  }
+  .uk-modal-close-full {
+    background-color: #ffffff00!important;
+    left: 0;
+  }
+  @media (min-width: 1200px) {
+    .uk-padding-large {
+      padding: 70px;
+    }
+  }
+  
+  /* utility */
+  .pull-up-80 {
+    margin-top: -80px;
+  }
+  
+  /* position the sub on hover with anim */
+  .modal-nav .uk-nav-sub {
+    position: absolute;
+    top: 0;
+    left: calc(100% + 60px);
+    width: calc(100% + 60px);
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0.3s linear, opacity 0.3s linear;
+    transition-delay: .05s;
+  }
+  .modal-nav li.uk-position-relative:hover .uk-nav-sub {
+    visibility:visible;
+    opacity:1;
+    transition-delay: 0s;
+  }
+  
+  /* hover effects */
+  .modal-nav li.with-subs>a span.menu-item-number,
+  .modal-nav li.with-subs>a span.uk-h1,
+  .modal-nav li.with-subs>a .uk-width-medium,
+  .modal-nav .uk-nav-sub li .uk-h1,
+  .uk-modal-full .uk-modal-close-full,
+  .modal-nav li.with-subs>a .uk-width-auto {
+    transition: all 0.5s ease;
+  }
+  
+  .modal-nav li.with-subs>a span.menu-item-number {
+    opacity: 1;
+    visibility: visible;
+  }
+  .modal-nav li.with-subs>a:hover span.menu-item-number,
+  .modal-nav li.with-subs>a:focus span.menu-item-number {
+    visibility: hidden;
+    opacity: 0;
+  }
+  .modal-nav li.with-subs>a:hover span.uk-h1,
+  .modal-nav li.with-subs>a:focus span.uk-h1 {
+    color: #d90a2c;
+  }
+  .modal-nav li.with-subs>a:hover .uk-width-medium,
+  .modal-nav li.with-subs>a:focus .uk-width-medium {
+    padding-left: 4rem;
+  }
+  .modal-nav li.with-subs>a:hover .uk-width-auto,
+  .modal-nav li.with-subs>a:focus .uk-width-auto {
+    color: #d90a2c;
+    transform: scale(.8);
+  }
+  .modal-nav .uk-nav-sub li:hover .uk-h1,
+  .modal-nav .uk-nav-sub li:focus .uk-h1 {
+    padding-left: 2rem;
+    color: #d90a2c;
+  }
+  .uk-modal-full .uk-modal-close-full:hover,
+  .uk-modal-full .uk-modal-close-full:focus {
+    color: #d90a2c;
+  }
+  
+  .uk-button-tertiary,
+  .uk-light .uk-button-tertiary {
+    background-color: #1a191d; 
+  }
+  .uk-sticky-below .uk-button-tertiary:hover,
+  .uk-light .uk-sticky-below .uk-button-tertiary {
+    background-color: #d90a2c!important; 
+    color: #fff;
+  }
+  .uk-light .uk-sticky-below .uk-button-tertiary:hover {
+    background-color: #fff!important; 
+    color: #1a191d;
+  }
+</style>
+
+<nav class="main-navbar uk-container uk-container-expand" uk-navbar>
+  <div class="mobile-menu uk-navbar-left">
+    <ul class="mobile-menu-toggle uk-navbar-nav">
+      <li>
+        <a class="uk-navbar-toggle" href="#modal-full" uk-toggle>
+          <i class="fas fa-bars"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div class="main-menu-logo uk-navbar-center">
+    <div class="uk-navbar-center-left">
+      <div>
+        <ul class="main-menu-nav uk-navbar-nav uk-visible@m">
+          {% if main_menu %}
+            {% for item in main_menu_first %}
+              <li class="menu-item {{item.class}}">
+                <a href="{{item.link}}"><p class="uk-text-small">0{{loop.index}}</p>{{item.title}}</a>
+                {% if item.children %}
+                  <div class="uk-navbar-dropdown">
+                    <ul class="uk-nav uk-navbar-dropdown-nav">
+                      {% for child_item in item.children %}
+                        <li class="menu-item {{child_item.class}}">
+                          <a href="{{child_item.link}}">{{child_item.title}}</a>
+                          {% if child_item.children %}
+                            <div class="third-drop uk-navbar-dropdown">
+                              <ul class="uk-nav uk-navbar-dropdown-nav">
+                                {% for third_item in child_item.children %}
+                                  <li class="menu-item {{third_item.class}}"><a href="{{third_item.link}}">{{third_item.title}}</a></li>
+                                {% endfor %}
+                              </ul>
+                            </div>
+                          {% endif %}
+                        </li>
+                      {% endfor %}  
+                    </ul>
+                  </div>
+                {% endif %}
+              </li>
+            {% endfor %}  
+          {% else %}
+            <li class="menu-item">Add a menu with the slug main-menu to data.json</li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+    <div class="logo-item uk-navbar-item uk-position-relative">
+      <a class="site-logo uk-link-reset uk-margin-remove" href="/">
+        web<br>
+        designer<br>
+        developer<br>
+      </a>
+      <span class="uk-text-small uk-margin-remove uk-text-italic by-rmcc-text">
+        robmccormack89
+      </span>
+    </div>
+    <div class="uk-navbar-center-right">
+      <div>
+        <ul class="main-menu-nav uk-navbar-nav uk-visible@m">
+          {% if main_menu %}
+            {% for item in main_menu_second %}
+              <li class="menu-item {{item.class}}">
+                <a href="{{item.link}}"><p class="uk-text-small">0{{loop.index + main_menu_first|length}}</p>{{item.title}}</a>
+                {% if item.children %}
+                  <div class="uk-navbar-dropdown">
+                    <ul class="uk-nav uk-navbar-dropdown-nav">
+                      {% for child_item in item.children %}
+                        <li class="menu-item {{child_item.class}}">
+                          <a href="{{child_item.link}}">{{child_item.title}}</a>
+                          {% if child_item.children %}
+                            <div class="third-drop uk-navbar-dropdown">
+                              <ul class="uk-nav uk-navbar-dropdown-nav">
+                                {% for third_item in child_item.children %}
+                                  <li class="menu-item {{third_item.class}}"><a href="{{third_item.link}}">{{third_item.title}}</a></li>
+                                {% endfor %}
+                              </ul>
+                            </div>
+                          {% endif %}
+                        </li>
+                      {% endfor %}  
+                    </ul>
+                  </div>
+                {% endif %}
+              </li>
+            {% endfor %}  
+          {% else %}
+            <li class="menu-item">Add a menu with the slug main-menu to data.json</li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="darklight uk-navbar-right">
+    <ul class="dark-light-switcher pull-right-15 uk-navbar-nav">
+      <li>
+        <a class="">
+          <i class="fas fa-search"></i>
+        </a>
+      </li>
+      <li>
+        <a id="DarkSwitch" class="uk-navbar-toggle darklight-switch" {{dark_light_def.moon_link_show_hide}}>
+          <i class="far fa-moon"></i>
+        </a>
+      </li>
+      <li>
+        <a id="LightSwitch" class="uk-navbar-toggle darklight-switch" {{dark_light_def.sun_link_show_hide}}>
+          <i class="fas fa-sun"></i>
+        </a>
+      </li>
+    </ul>
+    <a href="#" class="uk-button uk-button-primary uk-button-small uk-button-tertiary uk-border-rounded uk-text-capitalize uk-margin-left">Download my CV <i class="fas fa-download"></i></a>
+  </div>
+</nav>
+
+<div id="modal-full" class="uk-modal-full uk-light" uk-modal>
+  <div class="uk-modal-dialog uk-padding-large uk-position-relative">
+    <a class="uk-modal-close-full uk-position-top-left uk-padding-large"><i class="fas fa-times fa-2x"></i></a>
+    
+    <div class="uk-position-center-left uk-padding-large uk-padding-remove-vertical">
+      <ul class="modal-nav uk-nav uk-nav-default pull-up-80">
+        <li class="with-subs uk-active uk-position-relative">
+          <a href="#">
+            <div class="uk-grid uk-flex uk-flex-middle" uk-grid>
+              <div class="uk-width-medium">
+                <span class="menu-item-number uk-text-meta uk-text-top">01</span><span class="uk-h1">Pages</span>
+              </div>
+              <div class="uk-width-auto"><i class="fas fa-plus"></i></div>
+            </div>
+          </a>
+          <ul class="uk-nav-sub">
+            <li><a href="#"><span class="uk-h1">About</span></a></li>
+            <li><a href="#"><span class="uk-h1">Contact</span></a></li>
+            <li><a href="#"><span class="uk-h1">404 page</span></a></li>
+            <li><a href="#"><span class="uk-h1">Coming Soon</span></a></li>
+          </ul>
+        </li>
+        <li class="with-subs uk-position-relative">
+          <a href="#">
+            <div class="uk-grid uk-flex uk-flex-middle" uk-grid>
+              <div class="uk-width-medium">
+                <span class="menu-item-number uk-text-meta uk-text-top">02</span><span class="uk-h1">Projects</span>
+              </div>
+              <div class="uk-width-auto"><i class="fas fa-plus"></i></div>
+            </div>
+          </a>
+          <ul class="uk-nav-sub">
+            <li><a href="#"><span class="uk-h1">Grid view</span></a></li>
+            <li><a href="#"><span class="uk-h1">List View</span></a></li>
+            <li><a href="#"><span class="uk-h1">Single</span></a></li>
+          </ul>
+        </li>
+        <li class="with-subs uk-position-relative">
+          <a href="#">
+            <div class="uk-grid uk-flex uk-flex-middle" uk-grid>
+              <div class="uk-width-medium">
+                <span class="menu-item-number uk-text-meta uk-text-top">03</span><span class="uk-h1">Blog</span>
+              </div>
+              <div class="uk-width-auto"><i class="fas fa-plus"></i></div>
+            </div>
+          </a>
+          <ul class="uk-nav-sub">
+            <li><a href="#"><span class="uk-h1">About</span></a></li>
+            <li><a href="#"><span class="uk-h1">Contact</span></a></li>
+            <li><a href="#"><span class="uk-h1">404 page</span></a></li>
+            <li><a href="#"><span class="uk-h1">Coming Soon</span></a></li>
+          </ul>
+        </li>
+        <li class="with-subs uk-position-relative">
+          <a href="#">
+            <div class="uk-grid uk-flex uk-flex-middle" uk-grid>
+              <div class="uk-width-medium">
+                <span class="menu-item-number uk-text-meta uk-text-top">04</span><span class="uk-h1">Shop</span>
+              </div>
+              <div class="uk-width-auto"><i class="fas fa-plus"></i></div>
+            </div>
+          </a>
+          <ul class="uk-nav-sub">
+            <li><a href="#"><span class="uk-h1">Buy now</span></a></li>
+            <li><a href="#"><span class="uk-h1">Grid</span></a></li>
+            <li><a href="#"><span class="uk-h1">List</span></a></li>
+            <li><a href="#"><span class="uk-h1">Product</span></a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#">
+            <span class="menu-item-number uk-text-meta uk-text-top">05</span><span class="uk-h1">Purchase</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+    
+    <div class="uk-position-bottom-left uk-padding-large">
+      <strong>Get In Touch</strong><br>
+      541 Melville Ave, Palo Alto, CA 94301,<br>
+      ask@ohio.clbthemes.com<br>
+      Ph: +1.831.705.5448
+    </div>
+    <div class="uk-position-bottom-center uk-padding-large">
+      Browse this project on <a href="#" class="uk-text-decoration-none">Github <i class="fab fa-github"></i></a>
+    </div>
+    <div class="uk-position-bottom-right uk-padding-large uk-text-right">
+      <strong>Get In Touch</strong><br>
+      541 Melville Ave, Palo Alto, CA 94301,<br>
+      ask@ohio.clbthemes.com<br>
+      Ph: +1.831.705.5448
+    </div>
+    
+  </div>
+</div>

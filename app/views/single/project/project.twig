@@ -2,6 +2,7 @@
 
 {% block styles %}
   {{ parent() }}
+  <!-- single project: base styles -->
   <style>
     .project-page-content {
       font-size: 17px;
@@ -45,26 +46,6 @@
       padding-bottom: 0;
     }
   </style>
-  {% if single.format == 'bottom' and single.style.type == 'dark' %}
-    <style>
-      blockquote {
-        border-left: 5px solid #fff;
-      }
-    </style>
-  {% endif %}
-  {% if single.format == 'bottom' and single.style.type == 'light' %}
-    <style>
-      blockquote, .uk-hr, hr {
-        border-color: #17161a;
-      }
-      .uk-light blockquote  {
-        border-color: {{ (single.style.color) ? single.style.color : '#ffecf3' }};;
-      }
-      .uk-light .uk-background-muted-light {
-        background-color: #1e1c22;
-      }
-    </style>
-  {% endif %}
 {% endblock %}
 
 {% block header %}
@@ -132,27 +113,9 @@
 {% endblock %}
 
 {% block footer_top %}
-  <div id="TopFooter" class="footer-project uk-section uk-section-large uk-background-muted uk-background-muted-light">
-    <div class="uk-container">
-      <p class="uk-text-meta uk-text-uppercase uk-text-bold uk-margin-small-bottom">Let’s collaborate</p>
-      <div class="uk-grid-collapse uk-flex uk-flex-middle" uk-grid>
-        <div class="uk-width-expand">
-          <h3 class="uk-heading-medium uk-margin-remove-top">Got a project?</h3>
-        </div>
-        <div class="uk-width-auto">
-          <a href="#" class="uk-button uk-button-secondary uk-border-rounded uk-button-small uk-text-capitalize">Contact Us <i class="fas fa-arrow-right"></i></a>
-        </div>
-      </div>
-      <hr>
-      <div class="uk-width-1-2@m">
-        <p>We’re a <strong>team of creatives</strong> who are excited about unique ideas and help fin-tech companies to <strong>create amazing identity</strong> by crafting top-notch UI/UX.</p>
-      </div>
-    </div>
-  </div>
+  {% include 'footer-project.twig' %}
 {% endblock %}
 
 {% block footer %}
-  <footer id="Footer" class="dark-footer uk-section uk-section-small uk-background-secondary uk-light">
-    {% include 'footer-main.twig' %}
-  </footer>
+  {% include 'footer-dark.twig' %}
 {% endblock %}

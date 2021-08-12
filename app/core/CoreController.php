@@ -7,7 +7,7 @@ class CoreController {
   public function __construct() {
     
     global $config;
-    
+
     // twig configs
     $loader = new \Twig\Loader\FilesystemLoader($config['twig_templates_locations'], $config['twig_templates_base_location']);
     $loader->prependPath('/');

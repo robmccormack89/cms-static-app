@@ -1,7 +1,7 @@
 {% extends "_single_cover.twig" %}
 
 {% block single_cover %}
-  <section id="MainSingleCover" class="uk-background-cover uk-flex uk-flex-center uk-flex-middle {{ (single.featured_img) ? 'uk-light' : '' }}" style="{{ (single.featured_img) ? 'background-image: url(' ~ single.featured_img.src|resize(1920, 600, 'center') ~ ');' : '' }}">
+  <section id="MainSingleCover" class="uk-background-cover uk-flex uk-flex-center uk-flex-middle {{ (single.featured_img) ? 'uk-light' : '' }}" {{ (single.featured_img) ? 'uk-parallax="bgy: -120"' : '' }} style="{{ (single.featured_img) ? 'background-image: url(' ~ single.featured_img.src|resize(1920, 600, 'center') ~ ');' : '' }}">
     <div class="{{ (single.featured_img) ? 'uk-section uk-overlay-primary' : 'uk-background-pink uk-section' }} uk-width-1-1">
       {% block single_cover_content %}
         <div class="uk-container">
@@ -9,6 +9,16 @@
             <h1 class="uk-heading-large uk-margin-remove-top">{{single.title}}.</h1>
             {% if single.excerpt %}
               <p class="uk-text-meta uk-margin-small-top uk-width-3-5@m">{{single.excerpt|raw}}</p>
+            {% endif %}
+            {% if single.slug == 'contact' %}
+              <a href="#contact-form" class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize uk-button-small" uk-scroll="offset: 60">Fill in the form <i class="fas fa-angle-down fa-sm"></i></a>
+            {% elseif single.slug == 'about' %}
+              <a href="/portfolio" class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize uk-button-small">
+                <div class="uk-flex uk-flex-middle">
+                  <div>Check out my portfolio</div>
+                  <div><i class="fas fa-angle-right uk-margin-small-left"></i></div>
+                </div>
+              </a>
             {% endif %}
           </div>
         </div>

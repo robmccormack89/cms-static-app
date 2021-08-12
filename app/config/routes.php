@@ -1,6 +1,6 @@
 <?php
-namespace Rmcc; // set the Rmcc namespace for using Rmcc classes
-use \Bramus\Router\Router as Router; // use the Bramus Router class as Router, initialize it & set the base path
+namespace Rmcc;
+use \Bramus\Router\Router as Router;
 
 /*
 *
@@ -18,7 +18,7 @@ $router->setBasePath('/');
 */
 
 if ($config['enable_https']) {
-  if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'on') {
+  if ($_SERVER['HTTPS'] != 'on') {
     $url = "https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
     header('Location: ' . $url, true, 301);
     exit();

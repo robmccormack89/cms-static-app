@@ -41,19 +41,11 @@ $config['app_path'] = $_SERVER['DOCUMENT_ROOT'];
 
 /*
 *
-* Set the $root variables, with http/https, depending on whether or not https is available on the server..
-* The $root variable is used in the base of global url variables
+* Language & Charset
 *
 */
 $config['language'] = 'en-GB';
 $config['charset'] = 'UTF-8';
-
-/*
-*
-* This is probaly redundant / can be set in the json data 
-*
-*/
-$config['admin_email'] = 'info@example.com';
 
 /*
 *
@@ -70,8 +62,8 @@ $config['php_minify'] = false;
 */
 
 $config['json_data'] = '../public/json/data.min.json';
-// $config['json_secret'] = '../public/json/_secret.json';
-$config['json_secret'] = '../public/json/secret.json';
+$config['json_secret'] = '../public/json/_secret.json';
+// $config['json_secret'] = '../public/json/secret.json';
 
 /*
 *
@@ -82,6 +74,11 @@ $config['json_secret'] = '../public/json/secret.json';
 $config['twig_templates_base_location'] = '../app/views/';
 $config['twig_templates_locations'] = array(
   'parts',
+  'parts/archive',
+  'parts/email',
+  'parts/footer',
+  'parts/header',
+  'parts/seo',
   'archive',
   'archive/blog',
   'archive/blog/categories',
@@ -186,7 +183,6 @@ $config['types']['portfolio'] = array(
 *
 */
 
-// register portfolio's taxonomies (technologies)
 $config['types']['portfolio']['taxes_in_meta'] = array('technologies');
 $config['types']['portfolio']['taxonomies'] = array();
 $config['types']['portfolio']['taxonomies']['technologies'] = array(

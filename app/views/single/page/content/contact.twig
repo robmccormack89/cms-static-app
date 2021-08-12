@@ -2,6 +2,7 @@
 
 {% block styles %}
   {{ parent() }}
+  <!-- contact page styles -->
   <style>
     .fa-spinner {
       display: none;
@@ -10,63 +11,119 @@
     .fa-spinner.display {
       display: inline-block;
     }
+    
+    @media (min-width: 1200px) {
+      .contact-details-left-main {
+        margin-right: 70px;
+      }
+    }
   </style>
 {% endblock %}
 
 {% block _content %}
-  <div id="status-message">
-    {% if resonse is defined %}
-      {{response.message}}
-    {% endif %}
+  <div class="contact-details-section uk-child-width-1-2@m uk-grid-large uk-margin-medium" uk-grid>
+    <div class="contact-details-left">
+      <h2 class="uk-h3">Get in Touch</h2>
+      <div class="uk-grid-small" uk-grid>
+        <div class="contact-details-left-main uk-width-auto@m">
+          <ul class="uk-list uk-list-collapse uk-margin">
+            <li>General Inquiries</li>
+            <li class=""><a href="mailto:#" class="uk-text-bold uk-link-text">info@robertmccormack.com</a></li>
+          </ul>
+          <ul class="uk-list uk-list-collapse">
+            <li>Available times:</li>
+            <li class="uk-text-emphasis">Monday – Friday</li>
+            <li class="uk-text-emphasis">9am to 5pm</li>
+          </ul>
+        </div>
+        <div class="contact-details-left-additional uk-width-expand@m">
+          <ul class="uk-list uk-list-collapse uk-margin">
+            <li>Current Clients</li>
+            <li class=""><a href="mailto:#" class="uk-text-bold uk-link-text">jobs@robertmccormack.com</a></li>
+          </ul>
+          <ul class="uk-list uk-list-collapse">
+            <li>Assistance hours:</li>
+            <li class="uk-text-emphasis">7 days-a-week</li>
+            <li class="uk-text-emphasis">9am to 8pm</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="contact-details-right">
+      <div class="uk-child-width-1-2@m uk-grid-large uk-margin-large" uk-grid>
+        <div>
+          <h2 class="uk-h3">Located in</h2>
+          <ul class="uk-list uk-list-collapse">
+            <li>Mullingar,</li>
+            <li>Co. Westmeath,</li>
+            <li>Ireland</li>
+          </ul>
+        </div>
+        <div>
+          <h2 class="uk-h3">Find me on</h2>
+          <li><a href="#" class="uk-text-bold uk-link-text"><i class="fab fa-github"></i> Github</a></li>
+          <li><a href="#" class="uk-text-bold uk-link-text"><i class="fab fa-facebook-f"></i> Facebook</a></li>
+          <li><a href="#" class="uk-text-bold uk-link-text"><i class="fab fa-slack"></i> Slack</a></li>
+        </div>
+      </div>
+    </div>
   </div>
-  <form method="post" id="contact-form" class="uk-child-width-1-2@m uk-grid-small" uk-grid>
-    <div>
-      <label class="uk-form-label uk-text-bold" for="name">Name (required)</label>
-      <div class="uk-form-controls">
-        <input class="uk-input uk-border-rounded uk-form-large" name="name" id="name" type="text" placeholder="Your name..">
+  <hr>
+  <div class="contact-form-section uk-section uk-section-xsmall">
+    <div id="status-message">
+      {% if resonse is defined %}
+        {{response.message}}
+      {% endif %}
+    </div>
+    <form method="post" id="contact-form" class="uk-child-width-1-2@m uk-grid-small" uk-grid>
+      <div>
+        <label class="uk-form-label uk-text-bold" for="name">Name (required)</label>
+        <div class="uk-form-controls">
+          <input class="uk-input uk-border-rounded uk-form-large" name="name" id="name" type="text" placeholder="Your name..">
+        </div>
       </div>
-    </div>
-    <div>
-      <label class="uk-form-label uk-text-bold" for="email">Email (required)</label>
-      <div class="uk-form-controls">
-        <input class="uk-input uk-border-rounded uk-form-large" name="email" id="email" type="email" placeholder="Your email address..">
+      <div>
+        <label class="uk-form-label uk-text-bold" for="email">Email (required)</label>
+        <div class="uk-form-controls">
+          <input class="uk-input uk-border-rounded uk-form-large" name="email" id="email" type="email" placeholder="Your email address..">
+        </div>
       </div>
-    </div>
-    <div>
-      <label class="uk-form-label uk-text-bold" for="phone">Phone (optional)</label>
-      <div class="uk-form-controls">
-        <input class="uk-input uk-border-rounded uk-form-large" name="phone" id="phone" type="tel" placeholder="Your phone number..">
+      <div>
+        <label class="uk-form-label uk-text-bold" for="phone">Phone (optional)</label>
+        <div class="uk-form-controls">
+          <input class="uk-input uk-border-rounded uk-form-large" name="phone" id="phone" type="tel" placeholder="Your phone number..">
+        </div>
       </div>
-    </div>
-    <div>
-      <label class="uk-form-label uk-text-bold" for="subject">Subject (optional)</label>
-      <div class="uk-form-controls">
-        <input class="uk-input uk-border-rounded uk-form-large" name="subject" id="subject" type="text" maxlength="255" placeholder="What your message is about..">
+      <div>
+        <label class="uk-form-label uk-text-bold" for="subject">Subject (optional)</label>
+        <div class="uk-form-controls">
+          <input class="uk-input uk-border-rounded uk-form-large" name="subject" id="subject" type="text" maxlength="255" placeholder="What your message is about..">
+        </div>
       </div>
-    </div>
-    <div>
-      <label class="uk-form-label uk-text-bold" for="company">Company (optional)</label>
-      <div class="uk-form-controls">
-        <input class="uk-input uk-border-rounded uk-form-large" name="company" id="company" type="text" placeholder="Your company name..">
+      <div>
+        <label class="uk-form-label uk-text-bold" for="company">Company (optional)</label>
+        <div class="uk-form-controls">
+          <input class="uk-input uk-border-rounded uk-form-large" name="company" id="company" type="text" placeholder="Your company name..">
+        </div>
       </div>
-    </div>
-    <div>
-      <label class="uk-form-label uk-text-bold" for="budget">Choose a Budget (optional)</label>
-      <div class="uk-form-controls">
-        <select class="uk-select uk-border-rounded uk-form-large" name="budget" id="budget">
-          <option value="under-5k">Less than €5,000</option>
-          <option value="5-10k">€5,000-€10,000</option>
-          <option value="over-10k">Over €10,000</option>
-          <option value="not-applicable">Not applicable</option>
-        </select>
+      <div>
+        <label class="uk-form-label uk-text-bold" for="budget">Choose a Budget (optional)</label>
+        <div class="uk-form-controls">
+          <select class="uk-select uk-border-rounded uk-form-large" name="budget" id="budget">
+            <option value="under-5k">Less than €5,000</option>
+            <option value="5-10k">€5,000-€10,000</option>
+            <option value="over-10k">Over €10,000</option>
+            <option value="not-applicable">Not applicable</option>
+          </select>
+        </div>
       </div>
-    </div>
-    <div class="uk-width-auto">
-      <button id="FormSubmit" type="submit" class="uk-button uk-button-primary uk-button-small uk-button-secondary uk-border-rounded uk-text-capitalize">
-        Submit <i id="loading" class="fas fa-spinner"></i>
-      </button>
-    </div>
-  </form>
+      <div class="uk-width-auto">
+        <button id="FormSubmit" type="submit" class="uk-button uk-button-small uk-button-primary uk-border-rounded uk-text-capitalize">
+          Submit <i id="loading" class="fas fa-spinner"></i>
+        </button>
+      </div>
+    </form>
+  </div>
 {% endblock %}
 
 {% block scripts %}
@@ -83,15 +140,6 @@
         }
       })
       .then(response => response.json())
-      // .then(async response => {
-      //   try {
-      //     const data = await response.json()
-      //     console.log('response data?', data)
-      //   } catch(error) {
-      //     console.log('Error happened here!')
-      //     console.error(error)
-      //   }
-      // })
       .then(response => {
         hideLoading()
         message.innerHTML = response.message;

@@ -1,0 +1,33 @@
+<!-- WebSite -->
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org/",
+    "@type": "WebSite",
+    "name": "{{config.site_title}}",
+    "url": "{{config.base_url}}",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "{{config.base_url}}/?s={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+</script>
+<!-- Person -->
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org/",
+    "@type": "Person",
+    "name": "{{config.name}}",
+    "url": "{{config.base_url}}",
+    "image": "{{config.avatar_src}}",
+    "sameAs": [
+      "{{config.github_url}}",
+      "{{config.base_url}}"
+    ],
+    "jobTitle": "{{config.job}}",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "{{config.name}}"
+    }  
+  }
+</script>

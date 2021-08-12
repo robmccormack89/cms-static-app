@@ -1,21 +1,11 @@
 {% extends "base.twig" %}
 
 {% block seo_meta %}
-  <title>{{archive.meta_title|default(archive.title ~ ' | ' ~ site.title)}}</title>
-  <meta name="description" content="{{archive.meta_description|default(archive.description)}}">
-  <link rel="canonical" href="{{current_url}}" />
-  <meta property="og:type" content="article" />
-  <meta property="og:title" content="{{archive.meta_title|default(archive.title ~ ' | ' ~ site.title)}}" />
-  <meta property="og:description" content="{{archive.meta_description|default(archive.description)}}" />
-  <meta property="og:image" content="{{base_url}}{{archive.featured_img.src}}" />
-  <meta property="og:url" content="{{current_url}}" />
-  <meta property="og:site_name" content="{{site.title}}" />
+  {% include 'archive-seo.twig' %}
 {% endblock %}
 
 {% block styles %}
   {{ parent() }}
-  <style>
-  </style>
 {% endblock %}
 
 {% block header %}
@@ -29,14 +19,12 @@
 {% block content %}
   <div id="Archive" class="archive uk-container" data-template="archive.twig">
     
-    <!-- blog header -->
     <header class="default-page-header uk-section">
       <h1 class="uk-heading-medium uk-margin-remove">{{archive.title}}</h1>
       <p class="uk-text-meta uk-margin-small-top uk-width-3-5@m">{{archive.description}}</p>
     </header>
     
     {% block archive_content %}
-      <!-- blog main content -->
       <div class="archive-main uk-section uk-section-small">
         <div class="uk-grid uk-flex" uk-grid>
           

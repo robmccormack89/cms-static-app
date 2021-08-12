@@ -6,6 +6,11 @@
     <meta charset="{{config.charset}}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset={{config.charset}}" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/public/apple-touch-icon.png">
+    <link rel="icon" type="image/ico" href="/public/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/public/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/public/favicon-16x16.png">
+    <link rel="manifest" href="/public/site.webmanifest">
     
     {% block google_fonts %}
       <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,39 +21,7 @@
     {% endblock %}
     
     {% block base_seo_meta %}
-      <!-- WebSite -->
-      <script type="application/ld+json">
-        {
-          "@context": "https://schema.org/",
-          "@type": "WebSite",
-          "name": "{{config.site_title}}",
-          "url": "{{config.base_url}}",
-          "potentialAction": {
-            "@type": "SearchAction",
-            "target": "{{config.base_url}}/?s={search_term_string}",
-            "query-input": "required name=search_term_string"
-          }
-        }
-      </script>
-      <!-- Person -->
-      <script type="application/ld+json">
-        {
-          "@context": "https://schema.org/",
-          "@type": "Person",
-          "name": "{{config.name}}",
-          "url": "{{config.base_url}}",
-          "image": "{{config.avatar_src}}",
-          "sameAs": [
-            "{{config.github_url}}",
-            "{{config.base_url}}"
-          ],
-          "jobTitle": "{{config.job}}",
-          "worksFor": {
-            "@type": "Organization",
-            "name": "{{config.name}}"
-          }  
-        }
-      </script>
+      {% include 'base-seo.twig' %}
     {% endblock %}
     
     {% block seo_meta %}
@@ -64,14 +37,8 @@
     {% endblock %}
     
     {% block styles %}
+      <!-- header -->
       <style>
-      
-        /* 
-        
-        GLOBAL: Header
-        
-        */
-    
         /* header layered position */
         .site-header {
           z-index: 2;
@@ -156,16 +123,38 @@
           color: #fff!important;
         }
         
-        /* 
         
-        GLOBAL: Backgrounds
-        
-        */
-        
+        /* site logo */
+        .site-logo, 
+        .site-header .site-logo {
+          /* font-family: 'Raleway', sans-serif; */
+          /* font-family: 'Quicksand', sans-serif; */
+          font-family: 'Montserrat', sans-serif;
+          text-decoration: none!important;
+          font-weight: 700;
+          letter-spacing: -1px;
+          font-size: 1.5rem;
+          line-height: 20px;
+        }
+        .site-header .uk-sticky-below .site-logo {
+          font-size: 1.2rem;
+          line-height: 16px;
+        }
+        .by-rmcc-text {
+          /* font-family: 'Raleway', sans-serif; */
+          /* font-family: 'Quicksand', sans-serif; */
+          font-family: 'Montserrat', sans-serif;
+          font-weight: 400;
+        }
+      </style>
+      <!-- bgs -->
+      <style>
+        .uk-background-primary {
+          background-color: #d90a2c;
+        }
         .uk-background-secondary {
           background-color: #17161a;
         }
-        
         /* custom class: uk-background-pink */
         .uk-background-pink {
           background-color: #ffecf3;
@@ -173,7 +162,6 @@
         .uk-light .uk-background-pink {
           background-color: #17161a;
         }
-        
         /* custom class: uk-background-muted-light */
         .uk-background-muted-light {
           background-color: #f9f9f9;
@@ -192,75 +180,64 @@
         .uk-light .uk-background-muted-light .uk-select {
           background-color: #17161a;
         }
-        
-        /* 
-        
-        GLOBAL: Containers
-        
-        */
-      
-        .uk-container {
-          /* max-width: 1300px; */
-          max-width: 1250px;
-        }
-        .uk-container-medium {
-          max-width: 1100px;
-        }
-        .uk-container-large {
-          max-width: 1400px;
-        }
-        .uk-container-small {
-          max-width: 900px;
-        }
-        .uk-container-expand {
-          max-width: none;
-        }
-        
-        /* 
-        
-        GLOBAL: Grids
-        
-        */
-        
-        .uk-grid-collapse>*, .uk-grid-column-collapse>* {
-          padding-left: 0;
-        }
-        
-        
-        /* 
-        
-        GLOBAL: Buttons
-        
-        */
-        
+      </style>
+      <!-- buttons -->
+      <style>
+        /* all */
         .uk-button {
           font-weight: 600;
         }
-        .uk-background-primary {
-          background-color: #d90a2c;
-        }
-        .uk-button-secondary {
-          background-color: #17161a;
-        }
-        .uk-button-secondary:focus, .uk-button-secondary:hover,
-        .uk-light .uk-button-secondary:focus, .uk-light .uk-button-secondary:hover {
+        
+        /* primary */
+        .uk-button-primary,
+        .uk-light .uk-button-primary,
+        .uk-light.uk-button-primary  {
           background-color: #d90a2c;
           color: #fff;
         }
-        .uk-light .uk-button-secondary {
-          background-color: #fff;
-          color: #1a191d;
+        .uk-button-primary:hover,
+        .uk-button-primary:focus {
+          background-color: #17161a;
         }
+        .uk-light .uk-button-primary:hover,
+        .uk-light .uk-button-primary:focus {
+          background-color: #fff;
+          color: #17161a;
+        }
+        
+        .uk-button-secondary {
+          background-color: #17161a;
+          color: #fff;
+        }
+        .uk-light .uk-button-secondary {
+          background-color: #d90a2c;
+          color: #fff;
+        }
+        /* secondary hovers */
+        .uk-button-secondary:focus, 
+        .uk-button-secondary:hover {
+          background-color: #d90a2c;
+          color: #fff;
+        }
+        .uk-light .uk-button-secondary:focus, 
+        .uk-light .uk-button-secondary:hover {
+          background-color: #fff;
+          color: #17161a;
+        }
+        
+        /* text mod */
         .uk-button-text:before {
           border-width: 2px;
         }
+        
+        /* small mod */
         .uk-button-small {
           font-size: 1rem;
           line-height: 34px;
           padding: 0px 15px;
         }
         
-        /* add to links with uk-text-capitalize uk-animation-toggle */
+        /* sylized link, used on homepage cover */
         .style-btn {
           color: #17161a;
           transition: .2s ease-in-out;
@@ -289,78 +266,9 @@
         a, .uk-link {
           color: #d90a2c;
         }
-        
-        /* 
-        
-        GLOBAL: Fonts & Text
-        
-        */
-        
-        html {
-          color: #17161a;
-          /* font-family: -apple-system,BlinkMacSystemFont,Roboto,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol"; */
-          /* font-family: 'Quicksand', sans-serif; */
-          font-family: 'Work Sans', sans-serif;
-          /* font-weight: 500; */
-          text-rendering: optimizeLegibility;
-          -webkit-font-smoothing: antialiased;
-          -moz-osx-font-smoothing: grayscale;
-        }
-        .uk-navbar-item, .uk-navbar-nav>li>a, .uk-navbar-toggle {
-          /* font-family: 'Raleway', sans-serif; */
-          /* font-family: 'Quicksand', sans-serif; */
-          font-family: 'Montserrat', sans-serif;
-          font-weight: 400;
-        }
-        .uk-h1, .uk-h2, .uk-h3, .uk-h4, .uk-h5, .uk-h6, .uk-heading-2xlarge, .uk-heading-large, .uk-heading-medium, .uk-heading-small, .uk-heading-xlarge, 
-        h1, h2, h3, h4, h5, h6 {
-          /* font-family: 'Raleway', sans-serif; */
-          /* font-family: 'Quicksand', sans-serif; */
-          font-family: 'Montserrat', sans-serif;
-          font-weight: 700;
-          color: #17161a;
-        }
-        .uk-h1, .uk-h2, .uk-h3, .uk-h4, .uk-h5, .uk-h6, .uk-heading-small, 
-        h1, h2, h3, h4, h5, h6 {
-          letter-spacing: -1px;
-        }
-        .uk-heading-2xlarge, .uk-heading-large, .uk-heading-medium, .uk-heading-xlarge {
-          letter-spacing: -3px;
-        }
-        .uk-text-bold,
-        strong {
-          font-weight: 700;
-        }
-        
-        /* site logo */
-        .site-logo, 
-        .site-header .site-logo {
-          /* font-family: 'Raleway', sans-serif; */
-          /* font-family: 'Quicksand', sans-serif; */
-          font-family: 'Montserrat', sans-serif;
-          text-decoration: none!important;
-          font-weight: 700;
-          letter-spacing: -1px;
-          font-size: 1.5rem;
-          line-height: 20px;
-        }
-        .site-header .uk-sticky-below .site-logo {
-          font-size: 1.2rem;
-          line-height: 16px;
-        }
-        .by-rmcc-text {
-          /* font-family: 'Raleway', sans-serif; */
-          /* font-family: 'Quicksand', sans-serif; */
-          font-family: 'Montserrat', sans-serif;
-          font-weight: 400;
-        }
-        
-        /* 
-        
-        HOME: #PersonalLeader
-        
-        */
-        
+      </style>
+      <!-- homepage -->
+      <style>
         #PersonalLeader {
           overflow: hidden;
         }
@@ -405,6 +313,23 @@
           background: rgb(34 34 34 / 46%);
         }
         
+        /* 
+        
+        HOME: #CTA
+        
+        */
+        
+        #CTA .uk-accordion-title:focus, .uk-accordion-title:hover {
+          color: #fff;
+        }
+        #CTA .uk-accordion-title:before {
+          float: left;
+          margin-left: 0;
+          margin-right: 10px;
+        }
+      </style>
+      <!-- utility -->
+      <style>
         /* 
         
         GLOBAL: Img hover effects
@@ -459,42 +384,66 @@
         .object-fit-cover {
           object-fit:cover;
         }
-        
-        
-        /* 
-        
-        HOME: #CTA
-        
-        */
-        
-        #CTA .uk-accordion-title:focus, .uk-accordion-title:hover {
-          color: #fff;
+      </style>
+      <!-- containers -->
+      <style>
+        .uk-container {
+          /* max-width: 1300px; */
+          max-width: 1250px;
         }
-        #CTA .uk-accordion-title:before {
-          float: left;
-          margin-left: 0;
-          margin-right: 10px;
+        .uk-container-medium {
+          max-width: 1100px;
         }
-        
-        /* 
-        
-        #FooterTop
-        
-        */
-        
-        #FooterTop *+.uk-grid-margin-medium, #FooterTop .uk-grid+.uk-grid-medium, #FooterTop .uk-grid+.uk-grid-row-medium, #FooterTop .uk-grid-medium>.uk-grid-margin, #FooterTop .uk-grid-row-medium>.uk-grid-margin {
-          margin-top: 20px;
+        .uk-container-large {
+          max-width: 1400px;
         }
-        #FooterTop .uk-grid-column-small>*, #FooterTop .uk-grid-small>* {
-          padding-left: 20px;
+        .uk-container-small {
+          max-width: 900px;
         }
-        
-        /* 
-        
-        Inputs
-        
-        */
-        
+        .uk-container-expand {
+          max-width: none;
+        }
+      </style>
+      <!-- text/fonts -->
+      <style>
+        html {
+          color: #17161a;
+          /* font-family: -apple-system,BlinkMacSystemFont,Roboto,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol"; */
+          /* font-family: 'Quicksand', sans-serif; */
+          font-family: 'Work Sans', sans-serif;
+          /* font-weight: 500; */
+          text-rendering: optimizeLegibility;
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
+        }
+        .uk-navbar-item, .uk-navbar-nav>li>a, .uk-navbar-toggle {
+          /* font-family: 'Raleway', sans-serif; */
+          /* font-family: 'Quicksand', sans-serif; */
+          font-family: 'Montserrat', sans-serif;
+          font-weight: 400;
+        }
+        .uk-h1, .uk-h2, .uk-h3, .uk-h4, .uk-h5, .uk-h6, .uk-heading-2xlarge, .uk-heading-large, .uk-heading-medium, .uk-heading-small, .uk-heading-xlarge, 
+        h1, h2, h3, h4, h5, h6 {
+          /* font-family: 'Raleway', sans-serif; */
+          /* font-family: 'Quicksand', sans-serif; */
+          font-family: 'Montserrat', sans-serif;
+          font-weight: 700;
+          color: #17161a;
+        }
+        .uk-h1, .uk-h2, .uk-h3, .uk-h4, .uk-h5, .uk-h6, .uk-heading-small, 
+        h1, h2, h3, h4, h5, h6 {
+          letter-spacing: -1px;
+        }
+        .uk-heading-2xlarge, .uk-heading-large, .uk-heading-medium, .uk-heading-xlarge {
+          letter-spacing: -3px;
+        }
+        .uk-text-bold,
+        strong {
+          font-weight: 700;
+        }
+      </style>
+      <!-- form inputs -->
+      <style>
         /* input & select inputs */
         .uk-input, .uk-select, .uk-textarea {
           background-color: #f8f8f8;
@@ -568,7 +517,18 @@
         [list]::-webkit-calendar-picker-indicator {
           display: none!important;
         }
-        
+      </style>
+      <!-- footer -->
+      <style>
+        #FooterTop *+.uk-grid-margin-medium, #FooterTop .uk-grid+.uk-grid-medium, #FooterTop .uk-grid+.uk-grid-row-medium, #FooterTop .uk-grid-medium>.uk-grid-margin, #FooterTop .uk-grid-row-medium>.uk-grid-margin {
+          margin-top: 20px;
+        }
+        #FooterTop .uk-grid-column-small>*, #FooterTop .uk-grid-small>* {
+          padding-left: 20px;
+        }
+      </style>
+      <!-- post tease -->
+      <style>
         /* 
         
         the single post tease post
@@ -615,74 +575,9 @@
           padding-right: 15px;
           line-height: 1.5;
         }
-        
-        /* 
-        
-        Breadcrumbs
-        
-        */
-        
-        .uk-breadcrumb span, .uk-breadcrumb a {
-          color: #17161a;
-        }
-        .uk-breadcrumb>:last-child>a:not([href]), .uk-breadcrumb>:last-child>span {
-          color: #8a8a8a;
-          font-weight: 500;
-        }
-        .uk-breadcrumb>:nth-child(n+2):not(.uk-first-column):before {
-          color: #17161a;
-          content: "\f054";
-          font-family: 'Font Awesome 5 Free';
-          font-style: normal;
-          font-variant: normal;
-          text-rendering: auto;
-          -webkit-font-smoothing: antialiased;
-          font-weight: 900;
-          display: inline-block;
-          font-size: .75rem;
-          margin: 0 10px 0 6px;
-        }
-        
-        /* 
-        
-        Widgets
-        
-        */
-        
-        .widget .uk-list a {
-          color: #17161a;
-          transition: .2s ease-in-out;
-          transition-property: color;
-        }
-        .uk-light .widget .uk-list a {
-          color: #fff;
-        }
-        .widget .uk-list a:hover, .widget .uk-list li.uk-active a {
-          color: #d90a2c;
-          text-decoration: none;
-        }
-        h3.widget-title {
-          font-weight: 600;
-          letter-spacing: 0;
-          color: #6a696c;
-        }
-        
-        /* 
-        
-        Pagination
-        
-        */
-        
-        .archive-pagination .uk-pagination>.uk-active>* {
-          color: #d90a2c;
-        }
-        
-        /* 
-        
-        Default page header: plain bg, big heading etc...
-        
-        */
-        
+      </style>
+      <!-- covers -->
+      <style>
         .default-page-header {
           margin-top: 140px!important;
         }
@@ -705,14 +600,64 @@
         .uk-light.project-content .uk-text-meta {
           color: #fff!important; 
         }
-        
-        
-        /* 
-        
-        Responsive Devices
-        
-        */
-        
+      </style>
+      <!-- breads -->
+      <style>
+        .uk-breadcrumb span, .uk-breadcrumb a {
+          color: #17161a;
+        }
+        .uk-breadcrumb>:last-child>a:not([href]), .uk-breadcrumb>:last-child>span {
+          color: #8a8a8a;
+          font-weight: 500;
+        }
+        .uk-breadcrumb>:nth-child(n+2):not(.uk-first-column):before {
+          color: #17161a;
+          content: "\f054";
+          font-family: 'Font Awesome 5 Free';
+          font-style: normal;
+          font-variant: normal;
+          text-rendering: auto;
+          -webkit-font-smoothing: antialiased;
+          font-weight: 900;
+          display: inline-block;
+          font-size: .75rem;
+          margin: 0 10px 0 6px;
+        }
+      </style>
+      <!-- widgets -->
+      <style>
+        .widget .uk-list a {
+          color: #17161a;
+          transition: .2s ease-in-out;
+          transition-property: color;
+        }
+        .uk-light .widget .uk-list a {
+          color: #fff;
+        }
+        .widget .uk-list a:hover, .widget .uk-list li.uk-active a {
+          color: #d90a2c;
+          text-decoration: none;
+        }
+        h3.widget-title {
+          font-weight: 600;
+          letter-spacing: 0;
+          color: #6a696c;
+        }
+      </style>
+      <!-- pagination -->
+      <style>
+        .archive-pagination .uk-pagination>.uk-active>* {
+          color: #d90a2c;
+        }
+      </style>
+      <!-- grids -->
+      <style>
+        .uk-grid-collapse>*, .uk-grid-column-collapse>* {
+          padding-left: 0;
+        }
+      </style>
+      <!-- Responsive -->
+      <style>
         /* Large Desktops */
         @media only screen and (min-width: 1200px) {
           
@@ -840,124 +785,15 @@
         @media only screen and (max-width: 479px) {
           
         }
-        
       </style>
     {% endblock %}
     
   </head>
   
-  <body>
+  <body class="uk-light">
     
     {% block header %}
-      <header id="SiteHeader" class="site-header default-header home-header uk-position-z-index">
-        <nav class="uk-background-default uk-container uk-container-expand" uk-navbar>
-          <div class="mobile-menu uk-navbar-left">
-            <ul class="mobile-menu-toggle uk-navbar-nav">
-              <li>
-                <a class="uk-navbar-toggle" href="#">
-                  <i class="fas fa-bars"></i>
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div class="main-menu-logo uk-navbar-center">
-            <div class="uk-navbar-center-left">
-              <div>
-                <ul class="main-menu-nav uk-navbar-nav uk-visible@m">
-                  {% if main_menu %}
-                    {% for item in main_menu_first %}
-                      <li class="menu-item {{item.class}}">
-                        <a href="{{item.link}}"><p class="uk-text-small">0{{loop.index}}</p>{{item.title}}</a>
-                        {% if item.children %}
-                          <div class="uk-navbar-dropdown">
-                            <ul class="uk-nav uk-navbar-dropdown-nav">
-                              {% for child_item in item.children %}
-                                <li class="menu-item {{child_item.class}}">
-                                  <a href="{{child_item.link}}">{{child_item.title}}</a>
-                                  {% if child_item.children %}
-                                    <div class="third-drop uk-navbar-dropdown">
-                                      <ul class="uk-nav uk-navbar-dropdown-nav">
-                                        {% for third_item in child_item.children %}
-                                          <li class="menu-item {{third_item.class}}"><a href="{{third_item.link}}">{{third_item.title}}</a></li>
-                                        {% endfor %}
-                                      </ul>
-                                    </div>
-                                  {% endif %}
-                                </li>
-                              {% endfor %}  
-                            </ul>
-                          </div>
-                        {% endif %}
-                      </li>
-                    {% endfor %}  
-                  {% else %}
-                    <li class="menu-item">Add a menu with the slug main-menu to data.json</li>
-                  {% endif %}
-                </ul>
-              </div>
-            </div>
-            <div class="logo-item uk-navbar-item uk-position-relative">
-              <a class="site-logo uk-text-bold uk-h4 uk-margin-remove" href="#">
-                web<br>
-                designer<br>
-                developer<br>
-              </a>
-              <span class="uk-text-small uk-margin-remove uk-text-italic by-rmcc-text">
-                robmccormack89
-              </span>
-            </div>
-            <div class="uk-navbar-center-right">
-              <div>
-                <ul class="main-menu-nav uk-navbar-nav uk-visible@m">
-                  {% if main_menu %}
-                    {% for item in main_menu_second %}
-                      <li class="menu-item {{item.class}}">
-                        <a href="{{item.link}}"><p class="uk-text-small">0{{loop.index + main_menu_first|length}}</p>{{item.title}}</a>
-                        {% if item.children %}
-                          <div class="uk-navbar-dropdown">
-                            <ul class="uk-nav uk-navbar-dropdown-nav">
-                              {% for child_item in item.children %}
-                                <li class="menu-item {{child_item.class}}">
-                                  <a href="{{child_item.link}}">{{child_item.title}}</a>
-                                  {% if child_item.children %}
-                                    <div class="third-drop uk-navbar-dropdown">
-                                      <ul class="uk-nav uk-navbar-dropdown-nav">
-                                        {% for third_item in child_item.children %}
-                                          <li class="menu-item {{third_item.class}}"><a href="{{third_item.link}}">{{third_item.title}}</a></li>
-                                        {% endfor %}
-                                      </ul>
-                                    </div>
-                                  {% endif %}
-                                </li>
-                              {% endfor %}  
-                            </ul>
-                          </div>
-                        {% endif %}
-                      </li>
-                    {% endfor %}  
-                  {% else %}
-                    <li class="menu-item">Add a menu with the slug main-menu to data.json</li>
-                  {% endif %}
-                </ul>
-              </div>
-            </div>
-          </div>
-          <div class="darklight uk-navbar-right">
-            <ul class="dark-light-switcher pull-right-15 uk-navbar-nav">
-              <li>
-                <a id="DarkSwitch" class="uk-navbar-toggle darklight-switch" {{dark_light_def.moon_link_show_hide}}>
-                  <i class="far fa-moon"></i>
-                </a>
-              </li>
-              <li>
-                <a id="LightSwitch" class="uk-navbar-toggle darklight-switch" {{dark_light_def.sun_link_show_hide}}>
-                  <i class="fas fa-sun"></i>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </nav>
-      </header>
+      {% include 'header.twig' %}
     {% endblock %}
 
     <main id="MainContent" role="main">
@@ -967,84 +803,11 @@
     </main>
 
     {% block footer_top %}
-      <section id="FooterTop" class="uk-section uk-background-default">
-        <div class="uk-container">
-          <div class="uk-grid-large" uk-grid>
-            <div class="uk-width-2-3@m">
-              <p class="uk-text-meta uk-text-uppercase uk-text-bold uk-margin-small-bottom">Say Hello</p>
-              <h2 class="uk-h1 uk-margin-remove">Request a free quote</h2>
-              {% if form_display_msg is empty %}
-                <form method="post" class="uk-grid-column-small uk-grid-row-medium uk-margin-medium-top uk-form-stacked" uk-grid>
-                  <div class="uk-width-1-2">
-                    <label class="uk-form-label uk-text-bold" for="name">Name (required)</label>
-                    <div class="uk-form-controls">
-                      <input class="uk-input uk-border-rounded uk-form-large" name="name" id="name" type="text" placeholder="Your name..">
-                    </div>
-                  </div>
-                  <div class="uk-width-1-2">
-                    <label class="uk-form-label uk-text-bold" for="email">Email (required)</label>
-                    <div class="uk-form-controls">
-                      <input class="uk-input uk-border-rounded uk-form-large" name="email" id="email" type="email" placeholder="Your email address..">
-                    </div>
-                  </div>
-                  <div class="uk-width-1-2">
-                    <label class="uk-form-label uk-text-bold" for="phone">Phone (optional)</label>
-                    <div class="uk-form-controls">
-                      <input class="uk-input uk-border-rounded uk-form-large" name="phone" id="phone" type="tel" placeholder="Your phone number..">
-                    </div>
-                  </div>
-                  <div class="uk-width-1-2">
-                    <label class="uk-form-label uk-text-bold" for="subject">Subject (optional)</label>
-                    <div class="uk-form-controls">
-                      <input class="uk-input uk-border-rounded uk-form-large" name="subject" id="subject" type="text" maxlength="255" placeholder="What your message is about..">
-                    </div>
-                  </div>
-                  <div class="uk-width-1-2">
-                    <label class="uk-form-label uk-text-bold" for="company">Company (optional)</label>
-                    <div class="uk-form-controls">
-                      <input class="uk-input uk-border-rounded uk-form-large" name="company" id="company" type="text" placeholder="Your company name..">
-                    </div>
-                  </div>
-                  <div class="uk-width-1-2">
-                    <label class="uk-form-label uk-text-bold" for="budget">Choose a Budget (optional)</label>
-                    <div class="uk-form-controls">
-                      <select class="uk-select uk-border-rounded uk-form-large" name="budget" id="budget">
-                        <option value="under-5k">Less than €5,000</option>
-                        <option value="5-10k">€5,000-€10,000</option>
-                        <option value="over-10k">Over €10,000</option>
-                        <option value="not-applicable">Not applicable</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div>
-                    <input type="submit" value="Submit" class="uk-button uk-button-primary uk-button-small uk-button-secondary uk-border-rounded">
-                  </div>
-                </form>
-              {% else %}
-                <p>{{form_display_msg}}</p>
-              {% endif %}
-            </div>
-            <div class="uk-width-1-3@m">
-              <p class="uk-text-meta uk-text-uppercase uk-text-bold uk-margin-small-bottom">Get in Touch</p>
-              <h2 class="uk-h1 uk-margin-remove">Email me</h2>
-              <p>
-                For project inquiries only:<br>
-                <a class="uk-button uk-button-text uk-text-lowercase">info@robertmccormack.com</a>
-              </p>
-              <p class="uk-margin-medium-top">
-                For other questions:<br>
-                <a class="uk-button uk-button-text uk-text-lowercase">info@robertmccormack.com</a>
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+      {% include 'footer-top.twig' %}
     {% endblock %}
     
     {% block footer %}
-      <footer id="Footer" class="default-footer home-footer uk-section uk-section-small uk-background-default">
-        {% include 'footer-main.twig' %}
-      </footer>
+      {% include 'footer.twig' %}
     {% endblock %}
     
     {% block base_scripts %}
