@@ -12,8 +12,8 @@ class CoreController {
     $loader = new \Twig\Loader\FilesystemLoader($config['twig_templates_locations'], $config['twig_templates_base_location']);
     $loader->prependPath('/');
     
-    // $_environ = ['cache' => '../app/cache/compilation'];
-    $_environ = ['cache' => false];
+    $_environ = ['cache' => '../app/cache/compilation'];
+    // $_environ = ['cache' => false];
     // error reporting
     if($config['enable_debug_mode']) {
       ini_set('display_errors', 1);
