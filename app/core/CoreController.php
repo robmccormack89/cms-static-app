@@ -52,6 +52,7 @@ class CoreController {
     $this->twig->addFunction($get_terms);
     
     // twig globals: Site, Author & Configs
+    $this->twig->addGlobal('app', AppModel::init()->getApp());
     $this->twig->addGlobal('site', SiteModel::init()->getSite());
     $this->twig->addGlobal('author', AuthorModel::init()->getAuthor());
     $this->twig->addGlobal('config', $config);

@@ -1,43 +1,97 @@
 <!DOCTYPE html>
-<html lang="{{config.language}}">
+<html lang="en-GB">
 
   <head>
     
-    <meta charset="{{config.charset}}">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="Content-Type" content="text/html; charset={{config.charset}}" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="apple-touch-icon" sizes="180x180" href="/public/apple-touch-icon.png">
     <link rel="icon" type="image/ico" href="/public/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/public/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/public/favicon-16x16.png">
     <link rel="manifest" href="/public/site.webmanifest">
     
-    {% block google_fonts %}
-      <link rel="preconnect" href="https://fonts.googleapis.com">
+          <link rel="preconnect" href="https://fonts.googleapis.com">
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
       <!-- <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@900&family=Raleway:wght@400;500;700&display=swap" rel="stylesheet"> -->
       <!-- <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@900&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet"> -->
       <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Playfair+Display:wght@900&family=Work+Sans&display=swap" rel="stylesheet">
-    {% endblock %}
-    
-    {% block base_seo_meta %}
-      {% include 'base-seo.twig' %}
-    {% endblock %}
-    
-    {% block seo_meta %}
-    {% endblock %}
-    
-    {% block base_styles %}
-      <!-- base uikit scss build -->
+        
+          <!-- WebSite -->
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org/",
+    "@type": "WebSite",
+    "name": "",
+    "url": "https://robertmccormack.com",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://robertmccormack.com/?s={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+</script>
+<!-- Person -->
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org/",
+    "@type": "Person",
+    "name": "",
+    "url": "https://robertmccormack.com",
+    "image": "",
+    "sameAs": [
+      "",
+      "https://robertmccormack.com"
+    ],
+    "jobTitle": "",
+    "worksFor": {
+      "@type": "Organization",
+      "name": ""
+    }  
+  }
+</script>        
+      <title>Contact | Robert McCormack</title>
+<meta name="description" content="If you want to talk about a new project idea, have an issue with your website that needs fixing, or just want to know more, fill in the contact form below or send me an email at &lt;strong&gt;info@robertmccormack.com&lt;/strong&gt;.">
+<link rel="canonical" href="https://robertmccormack.com/contact" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Contact | Robert McCormack" />
+<meta property="og:description" content="If you want to talk about a new project idea, have an issue with your website that needs fixing, or just want to know more, fill in the contact form below or send me an email at &lt;strong&gt;info@robertmccormack.com&lt;/strong&gt;." />
+<meta property="og:image" content="https://robertmccormack.com/public/img/meeting3.jpg" />
+<meta property="og:url" content="https://robertmccormack.com/contact" />
+<meta property="og:site_name" content="Robert McCormack" />
+<!-- BlogPosting -->
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://robertmccormack.com"
+    },
+    "headline": "Some Heading",
+    "description": "Lorem Ipsum",
+    "image": "https://robertmccormack.com/public/img/image.jpg",  
+    "author": {
+      "@type": "Person",
+      "name": "Robert McCormack"
+    },  
+    "publisher": {
+      "@type": "Person",
+      "name": "Robert McCormack"
+    },
+    "datePublished": "April 4, 2021",
+    "dateModified": "2021-04-04"
+  }
+</script>    
+          <!-- base uikit scss build -->
       <link rel="stylesheet" type="text/css" href="/public/css/base.css">
       <!-- font awesome scss build -->
       <link rel="stylesheet" type="text/css" href="/public/css/global.css">
       <!-- base uikit scripts: no icons -->
       <script src="/public/js/global/base.min.js"></script>
-    {% endblock %}
-    
-    {% block styles %}
-      <!-- header -->
+        
+              <!-- header -->
       <style>
         /* header layered position */
         .site-header {
@@ -893,37 +947,529 @@
           
         }
       </style>
-    {% endblock %}
+    
+  <style>
+    ins, mark {
+      background: #9ff8d0;
+      color: #17161a;
+    }
+    a {
+      font-weight: 500;
+    }
+    .uk-label {
+      background-color: #f8f8f8;
+      color: #17161a;
+      transition: .1s ease-in-out;
+      transition-property: background-color,color;
+    }
+    .uk-light .uk-label {
+      color: #17161a!important;
+    }
+    .uk-label:hover, .uk-label:focus {
+      background-color: #d90a2c;
+      color: #fff!important;
+    }
+    
+    .tags-grid.uk-grid-small {
+      margin-left: -8px;
+    }
+    .tags-grid.uk-grid-small>* {
+      padding-left: 8px;
+    }
+    
+    .uk-light strong {
+      color: #fff;
+    }
+    
+    .single-cover-details {
+      margin-top: 140px!important;
+    }
+    @media only screen and (max-width: 767px) {
+      .single-cover-details {
+        margin-top: 100px!important;
+      }
+    }
+    
+    @media (min-width: 960px) {
+      .section-small-bottom {
+        padding-bottom: 30px;
+      }
+    }
+    .section-small-bottom {
+      padding-bottom: 10px;
+    }
+    
+    .uk-overlay-primary {
+      background: rgb(26 25 29 / 57%);
+    }
+  </style>
+  
+  <!-- contact page styles -->
+  <style>
+    .fa-spinner {
+      display: none;
+      animation: fa-spin 1s linear infinite;
+    }
+    .fa-spinner.display {
+      display: inline-block;
+    }
+    
+    @media (min-width: 1200px) {
+      .contact-details-left-main {
+        margin-right: 70px;
+      }
+    }
+  </style>
     
   </head>
   
   <body class="uk-light">
     
-    {% block header %}
-      {% include 'header.twig' %}
-    {% endblock %}
+        <header id="SiteHeader" class="site-header uk-position-top uk-position-z-index">
+    <div uk-sticky="animation: uk-animation-slide-top; sel-target: .main-navbar; cls-active: uk-navbar-sticky uk-background-default; cls-inactive: uk-navbar-transparent uk-light; top: 200">
+      <nav class="main-navbar uk-container uk-container-expand" uk-navbar>
+  <div class="mobile-menu uk-navbar-left">
+    <ul class="mobile-menu-toggle uk-navbar-nav">
+      <li>
+        <a class="uk-navbar-toggle" href="#modal-full" uk-toggle>
+          <i class="fas fa-bars"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div class="main-menu-logo uk-navbar-center">
+    <div class="uk-navbar-center-left">
+      <div>
+        <ul class="main-menu-nav uk-navbar-nav uk-visible@m">
+                                    <li class="menu-item ">
+                <a href="/"><p class="uk-text-small">01</p>Home</a>
+                              </li>
+                          <li class="menu-item ">
+                <a href="/about"><p class="uk-text-small">02</p>About</a>
+                                  <div class="uk-navbar-dropdown">
+                    <ul class="uk-nav uk-navbar-dropdown-nav">
+                                              <li class="menu-item ">
+                          <a href="/about/more">More</a>
+                                                  </li>
+                        
+                    </ul>
+                  </div>
+                              </li>
+                          <li class="menu-item ">
+                <a href="/blog"><p class="uk-text-small">03</p>Blog</a>
+                                  <div class="uk-navbar-dropdown">
+                    <ul class="uk-nav uk-navbar-dropdown-nav">
+                                              <li class="menu-item ">
+                          <a href="/blog/categories">Categories</a>
+                                                      <div class="third-drop uk-navbar-dropdown">
+                              <ul class="uk-nav uk-navbar-dropdown-nav">
+                                                                  <li class="menu-item "><a href="/blog/categories/news">News</a></li>
+                                                                  <li class="menu-item "><a href="/blog/categories/media">Media</a></li>
+                                                              </ul>
+                            </div>
+                                                  </li>
+                                              <li class="menu-item ">
+                          <a href="/blog/tags">Tags</a>
+                                                  </li>
+                        
+                    </ul>
+                  </div>
+                              </li>
+              
+                  </ul>
+      </div>
+    </div>
+    <div class="logo-item uk-navbar-item uk-position-relative">
+      <a class="site-logo uk-link-reset uk-margin-remove" href="/">
+        web<br>
+        designer<br>
+        developer<br>
+      </a>
+      <span class="uk-text-small uk-margin-remove uk-text-italic by-rmcc-text">
+        robmccormack89
+      </span>
+    </div>
+    <div class="uk-navbar-center-right">
+      <div>
+        <ul class="main-menu-nav uk-navbar-nav uk-visible@m">
+                                    <li class="menu-item ">
+                <a href="/portfolio"><p class="uk-text-small">04</p>Portfolio</a>
+                                  <div class="uk-navbar-dropdown">
+                    <ul class="uk-nav uk-navbar-dropdown-nav">
+                                              <li class="menu-item ">
+                          <a href="/portfolio/technologies">Technologies</a>
+                                                      <div class="third-drop uk-navbar-dropdown">
+                              <ul class="uk-nav uk-navbar-dropdown-nav">
+                                                                  <li class="menu-item "><a href="/portfolio/technologies/twig">Twig</a></li>
+                                                                  <li class="menu-item "><a href="/portfolio/technologies/css">CSS</a></li>
+                                                              </ul>
+                            </div>
+                                                  </li>
+                        
+                    </ul>
+                  </div>
+                              </li>
+                          <li class="menu-item uk-active">
+                <a href="/contact"><p class="uk-text-small">05</p>Contact</a>
+                              </li>
+              
+                  </ul>
+      </div>
+    </div>
+  </div>
+  <div class="darklight uk-navbar-right">
+    <ul class="dark-light-switcher pull-right-15 uk-navbar-nav">
+      <li>
+        <a class="">
+          <i class="fas fa-search"></i>
+        </a>
+      </li>
+      <li>
+        <a id="DarkSwitch" class="uk-navbar-toggle darklight-switch" >
+          <i class="far fa-moon"></i>
+        </a>
+      </li>
+      <li>
+        <a id="LightSwitch" class="uk-navbar-toggle darklight-switch" >
+          <i class="fas fa-sun"></i>
+        </a>
+      </li>
+    </ul>
+    <a href="#" class="uk-button uk-button-primary uk-button-small uk-button-tertiary uk-border-rounded uk-text-capitalize uk-margin-left">Download my CV <i class="fas fa-download"></i></a>
+  </div>
+</nav>
+<div id="modal-full" class="uk-modal-full uk-light" uk-modal>
+  <div class="uk-modal-dialog uk-padding-large uk-position-relative">
+    <a class="uk-modal-close-full uk-position-top-left uk-padding-large"><i class="fas fa-times fa-2x"></i></a>
+    
+    <div class="uk-position-center-left uk-padding-large uk-padding-remove-vertical">
+      <ul class="modal-nav uk-nav uk-nav-default pull-up-80">
+        <li class="with-subs uk-active uk-position-relative">
+          <a href="#">
+            <div class="uk-grid uk-flex uk-flex-middle" uk-grid>
+              <div class="uk-width-medium">
+                <span class="menu-item-number uk-text-meta uk-text-top">01</span><span class="uk-h1">Pages</span>
+              </div>
+              <div class="uk-width-auto"><i class="fas fa-plus"></i></div>
+            </div>
+          </a>
+          <ul class="uk-nav-sub">
+            <li><a href="#"><span class="uk-h1">About</span></a></li>
+            <li><a href="#"><span class="uk-h1">Contact</span></a></li>
+            <li><a href="#"><span class="uk-h1">404 page</span></a></li>
+            <li><a href="#"><span class="uk-h1">Coming Soon</span></a></li>
+          </ul>
+        </li>
+        <li class="with-subs uk-position-relative">
+          <a href="#">
+            <div class="uk-grid uk-flex uk-flex-middle" uk-grid>
+              <div class="uk-width-medium">
+                <span class="menu-item-number uk-text-meta uk-text-top">02</span><span class="uk-h1">Projects</span>
+              </div>
+              <div class="uk-width-auto"><i class="fas fa-plus"></i></div>
+            </div>
+          </a>
+          <ul class="uk-nav-sub">
+            <li><a href="#"><span class="uk-h1">Grid view</span></a></li>
+            <li><a href="#"><span class="uk-h1">List View</span></a></li>
+            <li><a href="#"><span class="uk-h1">Single</span></a></li>
+          </ul>
+        </li>
+        <li class="with-subs uk-position-relative">
+          <a href="#">
+            <div class="uk-grid uk-flex uk-flex-middle" uk-grid>
+              <div class="uk-width-medium">
+                <span class="menu-item-number uk-text-meta uk-text-top">03</span><span class="uk-h1">Blog</span>
+              </div>
+              <div class="uk-width-auto"><i class="fas fa-plus"></i></div>
+            </div>
+          </a>
+          <ul class="uk-nav-sub">
+            <li><a href="#"><span class="uk-h1">About</span></a></li>
+            <li><a href="#"><span class="uk-h1">Contact</span></a></li>
+            <li><a href="#"><span class="uk-h1">404 page</span></a></li>
+            <li><a href="#"><span class="uk-h1">Coming Soon</span></a></li>
+          </ul>
+        </li>
+        <li class="with-subs uk-position-relative">
+          <a href="#">
+            <div class="uk-grid uk-flex uk-flex-middle" uk-grid>
+              <div class="uk-width-medium">
+                <span class="menu-item-number uk-text-meta uk-text-top">04</span><span class="uk-h1">Shop</span>
+              </div>
+              <div class="uk-width-auto"><i class="fas fa-plus"></i></div>
+            </div>
+          </a>
+          <ul class="uk-nav-sub">
+            <li><a href="#"><span class="uk-h1">Buy now</span></a></li>
+            <li><a href="#"><span class="uk-h1">Grid</span></a></li>
+            <li><a href="#"><span class="uk-h1">List</span></a></li>
+            <li><a href="#"><span class="uk-h1">Product</span></a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#">
+            <span class="menu-item-number uk-text-meta uk-text-top">05</span><span class="uk-h1">Purchase</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+    
+    <div class="uk-position-bottom-left uk-padding-large">
+      <strong>Get In Touch</strong><br>
+      Mullingar, Co. Westmeath, Ireland<br>
+      info@robertmccormack.com
+    </div>
+    <div class="uk-position-bottom-center uk-padding-large">
+      © 2021 <span class="uk-text-bold uk-text-emphasis">Robert McCormack</span>
+    </div>
+    <div class="uk-position-bottom-right uk-padding-large uk-text-right">
+      <strong>I'm Available</strong><br>
+      Find me on <a href="#" class="uk-text-decoration-none"><i class="fab fa-facebook-f"></i> Facebook</a><br>
+      Browse this project on <a href="https://github.com/robmccormack89" class="uk-text-decoration-none">Github <i class="fab fa-github"></i></a>
+    </div>
+  </div>
+</div>    </div>
+  </header>
 
     <main id="MainContent" role="main">
-      {% block content %}
-        Sorry, Nothing to Display! Content goes here...
-      {% endblock %}
+        <div class="single single-contact" data-template="single.twig">
+    
+        <section id="MainSingleCover" class="uk-background-cover uk-flex uk-flex-center uk-flex-middle uk-light" uk-parallax="bgy: -120" style="background-image: url(/public/img/meeting3-1920x600_center.jpg);">
+    <div class="uk-section uk-overlay-primary uk-width-1-1">
+              <div class="uk-container">
+          <div class="page-cover single-cover-details uk-width-1-1">
+            <h1 class="uk-heading-large uk-margin-remove-top">Contact.</h1>
+                          <p class="uk-text-meta uk-margin-small-top uk-width-3-5@m">If you want to talk about a new project idea, have an issue with your website that needs fixing, or just want to know more, fill in the contact form below or send me an email at <strong>info@robertmccormack.com</strong>.</p>
+                                      <a href="#contact-form" class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize uk-button-small" uk-scroll="offset: 60">Fill in the form <i class="fas fa-angle-down fa-sm"></i></a>
+                      </div>
+        </div>
+          </div>
+  </section>
+    
+          <section id="MainSingleContent" class="uk-container uk-section uk-section-small">
+        
+                  <div class="uk-margin-medium">
+            <ul class="uk-breadcrumb uk-margin-remove">
+  <li>
+    <a href="/">Home</a>
+  </li>
+  
+    
+    
+      <!-- singles go last -->
+        <li><span>Contact</span></li>
+  </ul>          </div>
+                
+          <div class="contact-details-section uk-child-width-1-2@m uk-grid-large uk-margin-medium" uk-grid>
+    <div class="contact-details-left">
+      <h2 class="uk-h3">Get in Touch</h2>
+      <div class="uk-grid-small" uk-grid>
+        <div class="contact-details-left-main uk-width-auto@m">
+          <ul class="uk-list uk-list-collapse uk-margin">
+            <li>General Inquiries</li>
+            <li class=""><a href="mailto:#" class="uk-text-bold uk-link-text">info@robertmccormack.com</a></li>
+          </ul>
+          <ul class="uk-list uk-list-collapse">
+            <li>Available times:</li>
+            <li class="uk-text-emphasis">Monday – Friday</li>
+            <li class="uk-text-emphasis">9am to 5pm</li>
+          </ul>
+        </div>
+        <div class="contact-details-left-additional uk-width-expand@m">
+          <ul class="uk-list uk-list-collapse uk-margin">
+            <li>Current Clients</li>
+            <li class=""><a href="mailto:#" class="uk-text-bold uk-link-text">jobs@robertmccormack.com</a></li>
+          </ul>
+          <ul class="uk-list uk-list-collapse">
+            <li>Assistance hours:</li>
+            <li class="uk-text-emphasis">7 days-a-week</li>
+            <li class="uk-text-emphasis">9am to 8pm</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="contact-details-right">
+      <div class="uk-child-width-1-2@m uk-grid-large uk-margin-large" uk-grid>
+        <div>
+          <h2 class="uk-h3">Located in</h2>
+          <ul class="uk-list uk-list-collapse">
+            <li>Mullingar,</li>
+            <li>Co. Westmeath,</li>
+            <li>Ireland</li>
+          </ul>
+        </div>
+        <div>
+          <h2 class="uk-h3">Find me on</h2>
+          <li><a href="#" class="uk-text-bold uk-link-text"><i class="fab fa-github"></i> Github</a></li>
+          <li><a href="#" class="uk-text-bold uk-link-text"><i class="fab fa-facebook-f"></i> Facebook</a></li>
+          <li><a href="#" class="uk-text-bold uk-link-text"><i class="fab fa-slack"></i> Slack</a></li>
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr>
+  <div class="contact-form-section uk-section uk-section-xsmall">
+    <div id="status-message">
+          </div>
+    <form method="post" id="contact-form" class="uk-child-width-1-2@m uk-grid-small" uk-grid>
+      <div>
+        <label class="uk-form-label uk-text-bold" for="name">Name (required)</label>
+        <div class="uk-form-controls">
+          <input class="uk-input uk-border-rounded uk-form-large" name="name" id="name" type="text" placeholder="Your name..">
+        </div>
+      </div>
+      <div>
+        <label class="uk-form-label uk-text-bold" for="email">Email (required)</label>
+        <div class="uk-form-controls">
+          <input class="uk-input uk-border-rounded uk-form-large" name="email" id="email" type="email" placeholder="Your email address..">
+        </div>
+      </div>
+      <div>
+        <label class="uk-form-label uk-text-bold" for="phone">Phone (optional)</label>
+        <div class="uk-form-controls">
+          <input class="uk-input uk-border-rounded uk-form-large" name="phone" id="phone" type="tel" placeholder="Your phone number..">
+        </div>
+      </div>
+      <div>
+        <label class="uk-form-label uk-text-bold" for="subject">Subject (optional)</label>
+        <div class="uk-form-controls">
+          <input class="uk-input uk-border-rounded uk-form-large" name="subject" id="subject" type="text" maxlength="255" placeholder="What your message is about..">
+        </div>
+      </div>
+      <div>
+        <label class="uk-form-label uk-text-bold" for="company">Company (optional)</label>
+        <div class="uk-form-controls">
+          <input class="uk-input uk-border-rounded uk-form-large" name="company" id="company" type="text" placeholder="Your company name..">
+        </div>
+      </div>
+      <div>
+        <label class="uk-form-label uk-text-bold" for="budget">Choose a Budget (optional)</label>
+        <div class="uk-form-controls">
+          <select class="uk-select uk-border-rounded uk-form-large" name="budget" id="budget">
+            <option value="under-5k">Less than €5,000</option>
+            <option value="5-10k">€5,000-€10,000</option>
+            <option value="over-10k">Over €10,000</option>
+            <option value="not-applicable">Not applicable</option>
+          </select>
+        </div>
+      </div>
+      <div class="uk-width-auto">
+        <button id="FormSubmit" type="submit" class="uk-button uk-button-small uk-button-primary uk-border-rounded uk-text-capitalize">
+          Submit <i id="loading" class="fas fa-spinner"></i>
+        </button>
+      </div>
+    </form>
+  </div>
+        
+      </section>
+        
+  </div>
     </main>
 
-    {% block footer_top %}
-      {% include 'footer-top.twig' %}
-    {% endblock %}
+        
+      <footer id="Footer" class="dark-footer uk-section uk-section-small uk-background-muted">
+    <div class="uk-container">
+  <div class="footer-main uk-padding uk-padding-remove-horizontal">
+    <div class="uk-child-width-1-2@s uk-child-width-1-4@m" uk-grid>
+      <div>
+        <h4 class="site-logo uk-text-emphasis uk-link-reset uk-text-bold uk-margin-remove">
+          web<br>
+          designer<br>
+          developer
+        </h4>
+        <p class="uk-text-small uk-margin-remove uk-text-italic by-rmcc-text">robmccormack89</p>
+        <p class="uk-text-small uk-margin-small-top uk-text-italic">"I design &amp; code beautifully simple things; I love what I do."</p>
+      </div>
+      <div>
+        <h3 class="uk-h5">Located in:</h3>
+        <ul class="uk-list uk-list-collapse">
+          <li>Mullingar,</li>
+          <li>Co. Westmeath,</li>
+          <li>Ireland</li>
+        </ul>
+        <h3 class="uk-h5">Available:</h3>
+        <ul class="uk-list uk-list-collapse">
+          <li>Monday – Friday</li>
+          <li>9am to 5pm</li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="uk-h5">General inquiries</h3>
+        <ul class="uk-list uk-list-collapse">
+          <li>Got a new project or an issue that needs fixing?</li>
+          <li><a href="#" class="uk-button uk-button-text uk-text-lowercase">info@robertmccormack.com</a></li>
+        </ul>
+        <h3 class="uk-h5">Current customers</h3>
+        <li>Current clients email me at</li>
+        <li><a href="#" class="uk-button uk-button-text uk-text-lowercase">jobs@robertmccormack.com</a></li>
+      </div>
+      <div>
+        <h3 class="uk-h5">Find me on</h3>
+        <ul class="uk-grid-small uk-child-width-auto uk-text-small" uk-grid>
+          <li><a href="#" class="uk-link-text"><i class="fab fa-github"></i> Github</a></li>
+          <li><a href="#" class="uk-link-text"><i class="fab fa-facebook-f"></i> Facebook</a></li>
+          <li><a href="#" class="uk-link-text"><i class="fab fa-slack"></i> Slack</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <hr class="uk-margin-medium-bottom uk-margin-large-top">
+  <div class="footer-bottom">
+    <div class="uk-child-width-1-2@m" uk-grid>
+      <div class="uk-text-small">© 2021 <span class="uk-text-bold uk-text-emphasis">Robert McCormack</span>. Find out how this project was made on <a href="#" class="uk-text-bold uk-link-text">Github</a></div>
+      <div class="uk-text-right@m">
+        <a href="#" class="uk-button uk-button-text uk-text-capitalize">Privacy & Cookie Policy</a> | <a href="#" class="uk-button uk-button-text uk-text-capitalize">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+</div>  </footer>
     
-    {% block footer %}
-      {% include 'footer.twig' %}
-    {% endblock %}
-    
-    {% block base_scripts %}
-      <script type='text/javascript' src='/public/js/global/global.min.js'></script>
+          <script type='text/javascript' src='/public/js/global/global.min.js'></script>
       <script type='text/javascript' src='/public/js/theme.js'></script>
-    {% endblock %}
-
-    {% block scripts %}
-    {% endblock %}
+    
+      <script type="application/javascript">
+    const form = document.getElementById("contact-form");
+    function email(data) {
+      const message = document.getElementById("status-message");
+      displayLoading();
+      fetch('', {
+        method: "POST",
+        body: data,
+        headers: {
+         'X-Requested-With' : 'XMLHttpRequest'
+        }
+      })
+      .then(response => response.json())
+      .then(response => {
+        hideLoading();
+        message.innerHTML = response.message;
+        if (response.status == true) {
+          form.reset();
+        }
+      })
+      .catch(error => {
+        error.json().then(response => {
+          message.innerHTML = response.message
+        })
+      })
+    };
+    const submitEvent = form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const formData = new FormData(form);
+      email(formData);
+    });
+    const loader = document.querySelector("#loading");
+    function displayLoading() {
+      loader.classList.add("display");
+      setTimeout(() => {
+        loader.classList.remove("display");
+      }, 5000);
+    };
+    function hideLoading() {
+      loader.classList.remove("display");
+    };
+  </script>
     
   </body>
 </html>

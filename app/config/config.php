@@ -52,8 +52,8 @@ $config['charset'] = 'UTF-8';
 * Set these to enable php caching & minification
 *
 */
-$config['php_cache'] = false;
-$config['php_minify'] = false;
+$config['php_cache'] = true;
+$config['php_minify'] = true;
 
 /*
 *

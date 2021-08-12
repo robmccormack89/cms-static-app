@@ -141,7 +141,7 @@
       })
       .then(response => response.json())
       .then(response => {
-        hideLoading()
+        hideLoading();
         message.innerHTML = response.message;
         if (response.status == true) {
           form.reset();
@@ -152,24 +152,21 @@
           message.innerHTML = response.message
         })
       })
-    }
+    };
     const submitEvent = form.addEventListener("submit", (event) => {
       event.preventDefault();
       const formData = new FormData(form);
       email(formData);
-    })
+    });
     const loader = document.querySelector("#loading");
-    // showing loading
     function displayLoading() {
       loader.classList.add("display");
-      // to stop loading after some time
       setTimeout(() => {
         loader.classList.remove("display");
       }, 5000);
-    }
-    // hiding loading 
+    };
     function hideLoading() {
       loader.classList.remove("display");
-    }
+    };
   </script>
 {% endblock %}

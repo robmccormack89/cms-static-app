@@ -7,6 +7,9 @@ class ArchiveController extends CoreController {
     parent::__construct();
     $this->type = $type;
     $this->posts_per_page = $posts_per_page;
+    if($this->type = 'portfolio'){
+      $this->posts_per_page = 10;
+    }
     $this->paged = $this->setPaged();
     $this->init(); // init some globals
   }

@@ -1,102 +1,3 @@
-<style>
-  /* modal general */
-  .uk-modal-full {
-    overflow-y: scroll;
-  }
-  .uk-modal-full .uk-modal-dialog {
-    background: rgb(26 25 29 / 98%);
-    min-height: calc(100vh)!important;
-    max-height: calc(100vh)!important;
-  }
-  .uk-modal-close-full {
-    background-color: #ffffff00!important;
-    left: 0;
-  }
-  @media (min-width: 1200px) {
-    .uk-padding-large {
-      padding: 70px;
-    }
-  }
-  
-  /* utility */
-  .pull-up-80 {
-    margin-top: -80px;
-  }
-  
-  /* position the sub on hover with anim */
-  .modal-nav .uk-nav-sub {
-    position: absolute;
-    top: 0;
-    left: calc(100% + 60px);
-    width: calc(100% + 60px);
-    visibility: hidden;
-    opacity: 0;
-    transition: visibility 0.3s linear, opacity 0.3s linear;
-    transition-delay: .05s;
-  }
-  .modal-nav li.uk-position-relative:hover .uk-nav-sub {
-    visibility:visible;
-    opacity:1;
-    transition-delay: 0s;
-  }
-  
-  /* hover effects */
-  .modal-nav li.with-subs>a span.menu-item-number,
-  .modal-nav li.with-subs>a span.uk-h1,
-  .modal-nav li.with-subs>a .uk-width-medium,
-  .modal-nav .uk-nav-sub li .uk-h1,
-  .uk-modal-full .uk-modal-close-full,
-  .modal-nav li.with-subs>a .uk-width-auto {
-    transition: all 0.5s ease;
-  }
-  
-  .modal-nav li.with-subs>a span.menu-item-number {
-    opacity: 1;
-    visibility: visible;
-  }
-  .modal-nav li.with-subs>a:hover span.menu-item-number,
-  .modal-nav li.with-subs>a:focus span.menu-item-number {
-    visibility: hidden;
-    opacity: 0;
-  }
-  .modal-nav li.with-subs>a:hover span.uk-h1,
-  .modal-nav li.with-subs>a:focus span.uk-h1 {
-    color: #d90a2c;
-  }
-  .modal-nav li.with-subs>a:hover .uk-width-medium,
-  .modal-nav li.with-subs>a:focus .uk-width-medium {
-    padding-left: 4rem;
-  }
-  .modal-nav li.with-subs>a:hover .uk-width-auto,
-  .modal-nav li.with-subs>a:focus .uk-width-auto {
-    color: #d90a2c;
-    transform: scale(.8);
-  }
-  .modal-nav .uk-nav-sub li:hover .uk-h1,
-  .modal-nav .uk-nav-sub li:focus .uk-h1 {
-    padding-left: 2rem;
-    color: #d90a2c;
-  }
-  .uk-modal-full .uk-modal-close-full:hover,
-  .uk-modal-full .uk-modal-close-full:focus {
-    color: #d90a2c;
-  }
-  
-  .uk-button-tertiary,
-  .uk-light .uk-button-tertiary {
-    background-color: #1a191d; 
-  }
-  .uk-sticky-below .uk-button-tertiary:hover,
-  .uk-light .uk-sticky-below .uk-button-tertiary {
-    background-color: #d90a2c!important; 
-    color: #fff;
-  }
-  .uk-light .uk-sticky-below .uk-button-tertiary:hover {
-    background-color: #fff!important; 
-    color: #1a191d;
-  }
-</style>
-
 <nav class="main-navbar uk-container uk-container-expand" uk-navbar>
   <div class="mobile-menu uk-navbar-left">
     <ul class="mobile-menu-toggle uk-navbar-nav">
@@ -210,7 +111,6 @@
     <a href="#" class="uk-button uk-button-primary uk-button-small uk-button-tertiary uk-border-rounded uk-text-capitalize uk-margin-left">Download my CV <i class="fas fa-download"></i></a>
   </div>
 </nav>
-
 <div id="modal-full" class="uk-modal-full uk-light" uk-modal>
   <div class="uk-modal-dialog uk-padding-large uk-position-relative">
     <a class="uk-modal-close-full uk-position-top-left uk-padding-large"><i class="fas fa-times fa-2x"></i></a>
@@ -290,19 +190,16 @@
     
     <div class="uk-position-bottom-left uk-padding-large">
       <strong>Get In Touch</strong><br>
-      541 Melville Ave, Palo Alto, CA 94301,<br>
-      ask@ohio.clbthemes.com<br>
-      Ph: +1.831.705.5448
+      Mullingar, Co. Westmeath, Ireland<br>
+      info@robertmccormack.com
     </div>
     <div class="uk-position-bottom-center uk-padding-large">
-      Browse this project on <a href="#" class="uk-text-decoration-none">Github <i class="fab fa-github"></i></a>
+      © 2021 <span class="uk-text-bold uk-text-emphasis">{{site.title}}</span>
     </div>
     <div class="uk-position-bottom-right uk-padding-large uk-text-right">
-      <strong>Get In Touch</strong><br>
-      541 Melville Ave, Palo Alto, CA 94301,<br>
-      ask@ohio.clbthemes.com<br>
-      Ph: +1.831.705.5448
+      <strong>I'm Available</strong><br>
+      Find me on <a href="#" class="uk-text-decoration-none"><i class="fab fa-facebook-f"></i> Facebook</a><br>
+      Browse this project on <a href="{{app.url}}" class="uk-text-decoration-none">Github <i class="fab fa-github"></i></a>
     </div>
-    
   </div>
 </div>
