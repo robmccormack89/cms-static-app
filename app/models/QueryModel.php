@@ -577,6 +577,8 @@ class QueryModel {
                 $post[$tax] = null;
                 $new_posts[$tax] = $terms;
                 $post['taxonomies'] = $new_posts;
+              } else {
+                $post['taxonomies'] = null;
               }
             }
           }

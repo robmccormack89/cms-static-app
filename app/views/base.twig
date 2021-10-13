@@ -186,13 +186,12 @@
           width: calc(100% + 60px);
           visibility: hidden;
           opacity: 0;
-          transition: visibility 0.3s linear, opacity 0.3s linear;
-          transition-delay: .05s;
+          transition: visibility 0.3s linear, opacity 0.3s linear; /* transition speed on/off for subnav */
         }
         .modal-nav li.uk-position-relative:hover .uk-nav-sub {
           visibility:visible;
           opacity:1;
-          transition-delay: 0s;
+          transition-delay: .2s; /* delays the displaying of the subnav by this amount */
         }
         
         /* hover effects */
@@ -202,7 +201,7 @@
         .modal-nav .uk-nav-sub li .uk-h1,
         .uk-modal-full .uk-modal-close-full,
         .modal-nav li.with-subs>a .uk-width-auto {
-          transition: all 0.5s ease;
+          transition: all 0.5s ease; /* transition speed on/off for hover effects (jump right) */
         }
         
         .modal-nav li.with-subs>a span.menu-item-number {

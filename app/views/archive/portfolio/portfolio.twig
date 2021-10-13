@@ -60,22 +60,23 @@
   <div class="archive-main portfolio" data-template="portfolio.twig" data-template-extends="archive.twig" uk-filter="target: .posts-grid">
     
     {% if archive.posts %}
-      <div class="portfolio-tech-filters uk-margin-medium uk-margin-medium-top" uk-grid>
-      <div class="uk-width-auto uk-flex uk-flex-middle">Filter by</div>
-      <div class="uk-width-expand">
-        <ul class="uk-subnav uk-subnav-divider">
-          <li class="uk-active uk-inline" uk-filter-control><a class="uk-text-capitalize" href="#">All<span class="small-count uk-position-top-right">{{ (archive.pagination.results_count < 10) ? 0 : '' }}{{ (archive.pagination.results_count) ? archive.pagination.results_count : '' }}</span></a></li>
-          {% set filter_technologies = get_terms('technology') %}
-          {% for tech in filter_technologies %}
-            {% if tech.posts_count > 0  %}
-              {% if tech.slug != get.technologies and tech.slug not in get.technologies and tech.slug not in get.url %}
-                <li uk-filter-control=".tech-{{tech.slug}}"><a class="uk-text-capitalize" href="#">{{tech.title}}<span class="small-count uk-position-top-right">{{ (tech.posts_count < 10) ? 0 : '' }}{{tech.posts_count}}</span></a></li>
+      <!-- portfolio filters -->
+      <div class="portfolio-cat-filters uk-margin-medium uk-margin-medium-top" uk-grid>
+        <div class="uk-width-auto uk-flex uk-flex-middle">Filter by</div>
+        <div class="uk-width-expand">
+          <ul class="uk-subnav uk-subnav-divider">
+            <li class="uk-active uk-inline" uk-filter-control><a class="uk-text-capitalize" href="#">All<span class="small-count uk-position-top-right">{{ (archive.pagination.results_count < 10) ? 0 : '' }}{{ (archive.pagination.results_count) ? archive.pagination.results_count : '' }}</span></a></li>
+            {% set filter_categories = get_terms('category') %}
+            {% for cat in filter_categories %}
+              {% if cat.posts_count > 0  %}
+                {% if cat.slug != get.categories and cat.slug not in get.categories and cat.slug not in get.url %}
+                  <li uk-filter-control=".cat-{{cat.slug}}"><a class="uk-text-capitalize" href="#">{{cat.title}}<span class="small-count uk-position-top-right">{{ (cat.posts_count < 10) ? 0 : '' }}{{cat.posts_count}}</span></a></li>
+                {% endif %}
               {% endif %}
-            {% endif %}
-          {% endfor %}
-        </ul>
+            {% endfor %}
+          </ul>
+        </div>
       </div>
-    </div>
     {% endif %}
       
     <!-- portfolio projects -->
@@ -85,7 +86,8 @@
       <div class="posts-grid uk-child-width-1-3@m uk-grid-large" uk-grid="">
         {% if archive.posts %}
           {% for post in archive.posts %}
-            <article class="the-project {{(loop.index == 2 or (loop.index - 2) is divisible by(5)) ? 'uk-width-2-3@m ' : ''}} {{post.taxonomies.technologies|map(key => 'tech-' ~ key.slug)|join(' ')}}">
+            <article class="the-project{{(post.taxonomies.categories) ? post.taxonomies.categories|map(cat => ' cat-' ~ cat.slug)|join(' ') : ''}}{{(loop.index == 2 or (loop.index - 2) is divisible by(5)) ? ' uk-width-2-3@m' : ''}}{{(post.taxonomies.technologies) ? post.taxonomies.technologies|map(tech => ' tech-' ~ tech.slug)|join(' ') : ''}}">
+
               <!-- tease featured -->
               {% if post.featured_img %}
                 <figure class="blog-grid-image">
@@ -94,10 +96,12 @@
                   </a>
                 </figure>
               {% endif %}
+              
               <!-- tease title -->
               <h3 class="blog-grid-headline uk-margin-remove uk-h4">
                 <a class="uk-link-heading" href="{{post.link}}">{{post.title}}.</a>
               </h3>
+              
               <!-- tease meta -->
               {% if post.taxonomies.technologies or post.read_time %}
                 <div class="post-details uk-margin uk-margin-small-top">
@@ -114,10 +118,12 @@
                   {% endif %}
                 </div>
               {% endif %}
+              
               <!-- tease link -->
               <a class="style-btn uk-text-capitalize uk-animation-toggle" href="{{post.link}}" tabindex="0">
                 Read more <i class="fas fa-arrow-right uk-margin-small-left uk-animation-slide-left"></i>
               </a>
+              
             </article>
           {% endfor %}
         {% else %}
@@ -126,33 +132,9 @@
       </div>
       
       <!-- portfolio pagination -->
-      {% if (archive.pagination.next or archive.pagination.prev) %}
-        <div class="archive-pagination uk-section">
-          <ul class="uk-pagination">
-            {% if archive.pagination.prev %}
-              <li>
-                <a class="prev style-btn uk-text-capitalize uk-animation-toggle" href="{{archive.pagination.prev}}" tabindex="0">
-                  <i class="fas fa-arrow-left uk-margin-small-right uk-animation-slide-right"></i> Previous
-                </a>
-              </li>
-            {% endif %}
-            {% for page in archive.pagination.pages %}
-              {% if page.class == 'uk-active' %}
-                <li class="{{page.class}}"><span>{{page.title}}</span></li>
-              {% else %}
-                <li class="{{page.class}}"><a class="style-btn" href="{{page.link}}">{{page.title}}</a></li>
-              {% endif %}
-            {% endfor %}
-            {% if archive.pagination.next %}
-              <li>
-                <a class="next style-btn uk-text-capitalize uk-animation-toggle" href="{{archive.pagination.next}}" tabindex="0">
-                  Next <i class="fas fa-arrow-right uk-margin-small-left uk-animation-slide-left"></i>
-                </a>
-              </li>
-            {% endif %}
-          </ul>
-        </div>
-      {% endif %}
+      {% block archive_pagi %}
+        {{parent()}}
+      {% endblock %}
       
     </section>
 

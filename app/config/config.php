@@ -60,10 +60,9 @@ $config['php_minify'] = false;
 * Json data Locations
 *
 */
-
 $config['json_data'] = '../public/json/data.min.json';
-$config['json_secret'] = '../public/json/_secret.json';
-// $config['json_secret'] = '../public/json/secret.json';
+$config['json_secret'] = '../public/json/_secret.json'; // this is blank
+// $config['json_secret'] = '../public/json/secret.json'; // this is real but excluded in gitignore
 
 /*
 *
@@ -105,7 +104,6 @@ $config['twig_templates_locations'] = array(
 * These global settings get used in various places throughout the app, particaulary for creating urls for different archives & links etc 
 * Non-archived content_type 'page' is built-in & does not need to be added here
 * At the moment, all archived content_types need to be registered here
-* In future, it might be better to include archived content_type's meta information here too, instead of in Json
 * Also I could try to allow for new, non-archived content_types to also be registered here also, instead of just having pages built-in
 * Likewise, I could try to allow for things like non-public content types, non-archived & non-singular types together etc, which would never need to be even routed
 *
@@ -122,6 +120,7 @@ $config['types']['blog'] = array(
   'key'  => 'blog', // used as main key/main archive url
   'items' => 'posts', // used as post items key/in singular urls
   'single' => 'post', // used as singular key such as in queries
+  'per_page' => 7,
   'meta' => array(
     'title'  => 'My Blog', // MainIndexArchive title
     'description' => 'Something more descriptive goes here...', // MainIndexArchive description
@@ -169,9 +168,10 @@ $config['types']['portfolio'] = array(
   'key'  => 'portfolio',
   'items' => 'projects',
   'single' => 'project',
+  'per_page' => 10,
   'meta' => array(
     'title'  => 'Portfolio',
-    'description' => 'Handshake release assets validation metrics first mover advantage ownership prototype',
+    'description' => 'Check out my latest web software development portfolio projects.',
     'meta_title' => '',
     'meta_description' => '',
   ),
@@ -183,13 +183,23 @@ $config['types']['portfolio'] = array(
 *
 */
 
-$config['types']['portfolio']['taxes_in_meta'] = array('technologies');
+$config['types']['portfolio']['taxes_in_meta'] = array('technologies', 'categories');
 $config['types']['portfolio']['taxonomies'] = array();
 $config['types']['portfolio']['taxonomies']['technologies'] = array(
   'key'  => 'technologies',
   'single'  => 'technology',
   'meta' => array(
     'title'  => 'Technologies',
+    'description' => 'Handshake release assets validation metrics first mover advantage ownership prototype',
+    'meta_title' => '',
+    'meta_description' => '',
+  ),
+);
+$config['types']['portfolio']['taxonomies']['categories'] = array(
+  'key'  => 'categories',
+  'single'  => 'category',
+  'meta' => array(
+    'title'  => 'Categories',
     'description' => 'Handshake release assets validation metrics first mover advantage ownership prototype',
     'meta_title' => '',
     'meta_description' => '',
