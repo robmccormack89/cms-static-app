@@ -1,0 +1,88 @@
+ROUTES (routes.php)
+------
+
+  HOMEPAGE
+  --------
+
+    -> homepage -> SingleController('page', 'index') -> getSingle
+    -> homepage (queried) -> ArchiveController -> querySite($params['query'])
+    -> homepage (contact) -> SingleController('page', 'index') -> getContact
+
+  CONTACT PAGE
+  ------------
+
+    -> contact -> SingleController('page', 'contact') -> getContact
+
+  SINGLE PAGES
+  ------------
+
+    -> single pages -> SingleController('page', $slug) -> getSingle
+
+  ARCHIVED ROUTES (routes.archived.php)
+  ---------------
+  
+    *Notes
+    ------
+    
+    - Archived routes
+
+      **Archived routes are gotten from $config['types'] in config.php
+
+      **4 types of routes exist for this data: MainIndexArchive, TaxTermArchive, TaxCollectionArchive & Singular Items
+
+      **MainIndexArchive = Main Archive for a content type. E.g: The 'Blog' or 'Portfolio' Pages
+      **TaxTermArchive = Taxonomy Term Archive showing posts belonging to a particular term within a content-type. E.g: 'Posts' in 'News' or 'Projects' in 'Design'
+      **TaxCollectionArchive = Taxonomy Archive showing terms (not posts) within a content-type. These Terms are linked to the TaxTermArchives. E.g: 'Categories' or 'Technologies'
+      
+    - Queried Archived routes
+
+      **All 3 Archived routes have an additional sub-route for query parameters. E.g: queryMainIndexArchive, queryTaxTermArchive etc.
+      **This is to allow for additional queries onto any given archive. E.g: 'blog?categories=events&tags=css&p=2'
+      
+    - Errors for Archived routes (to be continued...)
+    
+      **for each 'type' (if 'type' doesnt exist, error is thrown in SingleController -> render)
+        - getMainIndexArchive
+        - for each 'taxes_in_meta' in 'type' (if 'tax' doesnt exist here, error is thrown in SingleController -> render)
+          - getTaxTermArchive based on given 'term' in url (if 'term' doesnt exist, error is thrown in ArchiveController -> getTaxTermArchive
+          - getTaxCollectionArchive
+        
+      **because of this, errors written into ArchiveController -> getMainIndexArchive & getTaxCollectionArchive appear to be redundant
+      **because routes for MainIndexArchive & TaxCollectionArchive are created from config.php data, urls with no existent items in json for 'type' & 'tax' are being treated by the SingleController
+      **question whether this is desirable or whether it is better to get 'type' & 'tax' from the given URL when generating MainIndexArchive & TaxCollectionArchive routes, & fire the error downstream like getTaxTermArchive
+      **or get the 'term' from the config.php data instead of the given url, thereby forcing all errors thru the SingleController  
+    
+    MainIndexArchive
+    ------
+
+      -> MainIndexArchive -> ArchiveController($key) -> getMainIndexArchive
+      -> MainIndexArchive (queried) -> ArchiveController($key) -> queryMainIndexArchive($params['query'])
+      
+      $key = 'blog' or 'portfolio'
+      $params['query'] = query parameters from parsed url, if they exist
+    
+    TaxTermArchive
+    ------
+
+      -> TaxTermArchive -> ArchiveController($key) -> getTaxTermArchive($tax, $term)
+      -> TaxTermArchive (queried) -> ArchiveController($key) -> queryTaxTermArchive($params['query'], $tax, $term)
+      
+      $key = 'blog' or 'portfolio'
+      $tax = value from $config['types']['blog']['taxes_in_meta'] like 'categories' or 'tags'
+      $term = is the given term in the url like 'news' (blog/categories/news)
+      $params['query'] = query parameters from parsed url, if they exist
+    
+    TaxCollectionArchive
+    ------
+
+      -> TaxCollectionArchive -> ArchiveController($key) -> queryTaxCollectionArchive($params['query'], $tax)
+      -> TaxCollectionArchive (queried) -> ArchiveController($key) -> getTaxCollectionArchive($tax)
+      
+      $key = 'blog' or 'portfolio'
+      $tax = value from $config['types']['blog']['taxes_in_meta'] like 'categories' or 'tags'
+      $params['query'] = query parameters from parsed url, if they exist
+    
+    Single
+    ------
+
+      -> single items -> SingleController($key, $slug) -> getSingle

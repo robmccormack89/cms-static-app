@@ -114,7 +114,11 @@ function typeSettingByKey($key, $value, $return_key) {
   global $config;
   $data = '';
   foreach ($config['types'] as $type_setting) if ($type_setting[$key] == $value) {
-    $data = $type_setting[$return_key];
+    if(array_key_exists($return_key, $type_setting)){
+      $data = $type_setting[$return_key];
+    } else {
+      $data = null;
+    }
   }
   return $data;
 }

@@ -1,6 +1,8 @@
 <?php
 namespace Rmcc;
 
+// For querying terms (like news, events), via query string or array
+// to display terms listings rather than posts listings
 class QueryTermsModel {
   
   /*
@@ -34,39 +36,65 @@ class QueryTermsModel {
     $this->term_count = $this->getTermsPerPage(); // The number of posts being displayed. per page
     $this->found_terms = $this->getTermsCount(); // The total number of posts found matching the current query parameters
     $this->max_num_pages = $this->getTermsMaxPages(); // The total number of pages. Is the result of $found_posts / $posts_per_page
-    // $this->init();
+    $this->pagination = $this->getTermsPaginationData(); // the pagination data for the returned terms 
+    // $this->test();
   }
-  public function init() {}
+  public function test() {
+    print_r($this->max_num_pages);
+  }
+  
+  public function getTermsPaginationData() {
+    $data = (new PaginationModel($this->found_terms))->getPagination();
+    return $data;
+  }
   
   /*
   *
   * The Queried Object (archive meta)
   *
   */
+  
+  // decide which meta to get based on global $_context variables. get the term archive meta using getCollectionMeta
   private function getQueriedObject() {
     $data = $this->getCollectionMeta();
     return $data;
   }
+  
   // get the term archive meta
   private function getCollectionMeta() {
     global $_context;
-    $the_type = $_context['type'];
     global $config;
-    if($this->taxonomyKey() && taxSettingByKey($_context['type'], 'single', $this->taxonomyKey(), 'key')) {
-      // get taxonomy meta from $config
-      $_tax = taxSettingByKey($_context['type'], 'single', $this->taxonomyKey(), 'key');
-      $data = $config['types'][$the_type]['taxonomies'][$_tax]['meta'];
-    } else {
-      // get base meta if no tax key
-      $q = new Json($config['json_data']);
-      $data = $q->from('site.content_types.'.$_context['type'].'.meta')->get();
+    $the_type = $_context['type'];
+    
+    if(array_key_exists('single', $_context)) {
+      $data = '';
     }
+    
+    elseif(array_key_exists('archive', $_context)){
+      
+      // get taxonomy meta from $config
+      if($this->taxonomyKey() && taxSettingByKey($_context['type'], 'single', $this->taxonomyKey(), 'key')) {
+        $_tax = taxSettingByKey($_context['type'], 'single', $this->taxonomyKey(), 'key');
+        $data = $config['types'][$the_type]['taxonomies'][$_tax]['meta'];
+      }
+      
+      // get base meta if no tax key
+      else {
+        $q = new Json($config['json_data']);
+        $data = $q->from('site.content_types.'.$_context['type'].'.meta')->get();
+      }
+      
+    }
+    
     return $data;
   }
   
   /*
   *
-  * Set $this->query & $this->query_vars
+  * Set $this->query & $this->query_vars in __construct
+  *
+  * getString - checks if the class input is a string, if it is, then returns it, otherwise returns empty
+  * getArray - if getString is not empty, converts that string to an array using paramsToArgs & returns that. Else If class input IS an array already, returns that. 
   *
   */
   private function getString() {
@@ -82,7 +110,7 @@ class QueryTermsModel {
       $data = $this->paramsToArgs();
     }
     
-    if(is_array($this->args)) {
+    elseif(is_array($this->args)) {
       $data = $this->args;
     }
     
@@ -91,7 +119,7 @@ class QueryTermsModel {
   
   /*
   *
-  * String Params dissection
+  * String-only params dissection. Class input of a string must be validated first then converted into an array
   *
   */
   private function paramsDissect() {
@@ -132,7 +160,7 @@ class QueryTermsModel {
   
   /*
   *
-  * Posts Stuff
+  * Terms Stuff
   *
   */
   private function getTermsQuery() {
@@ -148,6 +176,10 @@ class QueryTermsModel {
     $q = new Json($config['json_data']);
     
     $terms = new Json();
+    
+    if($this->typeKey()){
+      $_context['type'] = $this->typeKey();
+    }
     
     if($this->taxonomyKey() && taxSettingByKey($_context['type'], 'single', $this->taxonomyKey(), 'key')) {
       $_tax = taxSettingByKey($_context['type'], 'single', $this->taxonomyKey(), 'key');
@@ -225,7 +257,7 @@ class QueryTermsModel {
   
   /*
   *
-  * Posts Tease Stuff
+  * Terms Tease Stuff
   *
   */
   private function setTermTeaseData($terms) {
@@ -241,9 +273,7 @@ class QueryTermsModel {
     }
     return $data;
   }
-  
-  
-  
+
   /*
   *
   * Paged stuff
@@ -268,9 +298,14 @@ class QueryTermsModel {
   
   /*
   *
-  * Various string params to check for. If string, string -> array
+  * Various string params to check for if input to class is string
   *
   */
+  private function typeParam() {
+    $string_args = $this->paramsDissect();
+    if(array_key_exists('type', $string_args)) return $string_args['type'];
+    return false;
+  }
   private function taxonomyParam() {
     $string_args = $this->paramsDissect();
     if(array_key_exists('taxonomy', $string_args)) return $string_args['taxonomy'];
@@ -304,9 +339,13 @@ class QueryTermsModel {
   
   /*
   *
-  * Various keys to check for. If array
+  * Various keys to check for in the args array
   *
   */
+  private function typeKey() {
+    if($this->query_vars && array_key_exists('type', $this->query_vars)) return $this->query_vars['type'];
+    return false;
+  }
   private function taxonomyKey() {
     if($this->query_vars && array_key_exists('taxonomy', $this->query_vars)) return $this->query_vars['taxonomy'];
     return false;
@@ -335,10 +374,12 @@ class QueryTermsModel {
   /*
   *
   * Properties Configuration
+  * $this->max_num_pages
   *
   */
   private function getTermsPerPage() {
-    $per_page = $this->perPageKey() ? $this->perPageKey() : 4;
+    global $_context;
+    $per_page = $this->perPageKey() ? $this->perPageKey() : $_context['per_page'];
     return $per_page;
   }
   private function getTermsMaxPages() {

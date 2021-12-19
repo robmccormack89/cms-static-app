@@ -1,8 +1,9 @@
 <?php
 namespace Rmcc;
 
+// For querying posts, via query string or array
 class QueryModel {
-  
+
   /*
   *
   * Examples of inputs into this class
@@ -50,7 +51,7 @@ class QueryModel {
     'p' => 1,
     'show_all' => true
   );
-      
+  
   /*
   *
   * Properties based on https://developer.wordpress.org/reference/classes/wp_query/#properties
@@ -62,63 +63,81 @@ class QueryModel {
     $this->query_vars = $this->getArray(); // An associative array containing the dissected $query: an array of the query variables and their respective values.
     $this->queried_object = $this->getQueriedObject(); // Can hold information on the requested category, author, post or Page, archive etc.,.
     $this->posts = $this->getPosts(); // Gets filled with the requested posts
-    $this->post_count = $this->getPostsPerPage(); // The number of posts being displayed. per page
+    $this->post_count = $this->perPageKey(); // The number of posts being displayed. per page
     $this->found_posts = $this->getPostsCount(); // The total number of posts found matching the current query parameters
     $this->max_num_pages = $this->getPostsMaxPages(); // The total number of pages. Is the result of $found_posts / $posts_per_page
-    // $this->init();
+    $this->pagination = $this->getPaginationData(); // the pagination data for the returned posts 
+    // $this->test();
   }
-  public function init() {
+  public function test() {
     print_r($this->found_posts);
+  }
+  
+  public function getPaginationData() {
+    $data = (new PaginationModel($this->found_posts))->getPagination();
+    return $data;
   }
   
   /*
   *
-  * The Queried Object (archive meta)
+  * The Queried Object stuff (archive meta)
   *
   */
+  
+  // decide which meta to get based on global $_context variables
   private function getQueriedObject() {
     global $_context;
+    
+    // start with the base meta (site meta), if all else fails...
     $data = $this->getBaseMeta();
-    if(isset($_context['type']) && !isset($_context['term'])) $data = $this->getArchiveMeta();
-    if(isset($_context['term'])) $data = $this->getTermMeta();
+    
+    // if IS a query on archives, global $type IS set & global $term IS NOT set (a main archive)
+    if(array_key_exists('archive', $_context) && isset($_context['type']) && !isset($_context['term'])) $data = $this->getArchiveMeta();
+    
+    // if IS a query on archives, & global $term IS set (a term archive)
+    if(array_key_exists('archive', $_context) && isset($_context['term'])) $data = $this->getTermMeta();
+    
+    // if global $type IS NOT set but the type query param IS set (a search query), just the title from $this->typeParam()
     if(!isset($_context['type']) && $this->typeParam()){
       $data['title'] = 'Query: '.$this->typeParam();
     }
+    
+    // if IS a query on single, like a custom query, set $data to empty
+    if(array_key_exists('single', $_context)) {
+      $data = '';
+    }
+    
     return $data;
   }
-  // Site Meta
   private function getBaseMeta() {
     global $config;
     $q = new Json($config['json_data']);
     $data = $q->from('site.meta')->get();
     return $data;
   }
-  // Type Meta
   private function getArchiveMeta() {
     global $_context;
-    $the_type = $_context['type'];
     global $config;
+    $the_type = $_context['type'];
     $data = $config['types'][$the_type]['meta'];
     return $data;
   }
-  // Term Meta
   private function getTermMeta() {
     global $_context;
-    $the_type = $_context['type'];
     global $config;
-    if($_context['term']) {
-      $q = new Json($config['json_data']);
-      $data = $q->from('site.content_types.'.$_context['type'].'.taxonomies.'.$_context['tax'])
-      ->where('slug', '=', $_context['term'])->first();
-    } else {
-      $data = $config['types'][$the_type]['meta'];
-    }
+    $the_type = $_context['type'];
+    $q = new Json($config['json_data']);
+    $data = $q->from('site.content_types.'.$_context['type'].'.taxonomies.'.$_context['tax'])
+    ->where('slug', '=', $_context['term'])->first();
     return $data;
   }
   
   /*
   *
-  * Set $this->query & $this->query_vars
+  * Set $this->query & $this->query_vars in __construct
+  *
+  * getString - checks if the class input is a string, if it is, then returns it, otherwise returns empty
+  * getArray - if getString is not empty, converts that string to an array using paramsToArgs & returns that. Else If class input IS an array already, returns that. 
   *
   */
   private function getString() {
@@ -134,7 +153,7 @@ class QueryModel {
       $data = $this->paramsToArgs();
     }
     
-    if(is_array($this->args)) {
+    elseif(is_array($this->args)) {
       $data = $this->args;
     }
     
@@ -143,12 +162,13 @@ class QueryModel {
   
   /*
   *
-  * String Params dissection
+  * String-only params dissection. Class input of a string must be validated first then converted into an array
   *
   */
   private function paramsDissect() {
     $thestring = $this->query;
-    $string_array = parse_str($thestring, $output);
+    // $string_array = parse_str($thestring, $output);
+    parse_str($thestring, $output);
     return $output;
   }
   private function paramsToArgs() {
@@ -488,7 +508,7 @@ class QueryModel {
     */
     if($this->isPaged() && $posts->exists()){
       $posts = new Json($posts);
-      $paged_posts = $posts->chunk($this->getPostsPerPage());
+      $paged_posts = $posts->chunk($this->perPageKey());
       $posts = $this->getPagedPosts($paged_posts); // returns an array
     }
     
@@ -615,7 +635,7 @@ class QueryModel {
   
   /*
   *
-  * Various string params to check for. If string, string -> array
+  * Various string params to check for if input to class is string
   *
   */
   private function typeParam() {
@@ -691,7 +711,7 @@ class QueryModel {
   
   /*
   *
-  * Various keys to check for. If array
+  * Various keys to check for in the args array
   *
   */
   private function typeKey() {
@@ -762,12 +782,9 @@ class QueryModel {
   /*
   *
   * Properties Configuration
+  * $this->max_num_pages
   *
   */
-  private function getPostsPerPage() {
-    $per_page = $this->perPageKey() ? $this->perPageKey() : 4;
-    return $per_page;
-  }
   private function getPostsMaxPages() {
     $max_pages = $this->found_posts / $this->post_count;
     return ceil($max_pages);

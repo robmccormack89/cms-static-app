@@ -70,7 +70,7 @@ $config['json_secret'] = '../public/json/_secret.json'; // this is blank
 * First set the base location (relative), then set an array with subsequent folders to look in
 *
 */
-$config['twig_templates_base_location'] = '../app/views/';
+$config['twig_templates_base_location'] = '../public/views/';
 $config['twig_templates_locations'] = array(
   'parts',
   'parts/archive',
@@ -120,7 +120,7 @@ $config['types']['blog'] = array(
   'key'  => 'blog', // used as main key/main archive url
   'items' => 'posts', // used as post items key/in singular urls
   'single' => 'post', // used as singular key such as in queries
-  'per_page' => 7,
+  'per_page' => 2,
   'meta' => array(
     'title'  => 'My Blog', // MainIndexArchive title
     'description' => 'Something more descriptive goes here...', // MainIndexArchive description
