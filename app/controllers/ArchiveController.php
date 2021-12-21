@@ -36,8 +36,14 @@ class ArchiveController extends CoreController {
    * These are relatively straight-forward
    *
    */
-  
-  // 'blog'
+
+  /**
+   * 'blog'
+   *
+   * errors in any term in the url here will result in error thrown from SingleController - treated as invalid singular URL - this is normal behaviour
+   * only query functions for MainIndexArchive will themselves throw errors
+   *
+   */
   public function getMainIndexArchive() {
     
     // get the global _context variables
@@ -59,6 +65,10 @@ class ArchiveController extends CoreController {
   
   /**
    * 'blog/categories/news'
+   *
+   * if 'blog' or 'categories' terms in url are invalid, error will be thrown thru SingleController (treated as invalid singular URL)
+   * if 'news' is invalid, the archive.title will fail to be created, & we will throw an error in this function based on that (see below)
+   * else, we render the context. the idea being that if a term is not valid, the archive.title wont be set at all. thi is desired behaviour for now
    *
    * @param string $tax - taxonomy e.g: 'categories'
    * @param string $term - taxonomy term e.g: 'news'
@@ -82,13 +92,15 @@ class ArchiveController extends CoreController {
     $context['context'] = $_context;
     
     // render the archive object content ONLY if archive.title exists, else throw an error
-    // the idea here being that if a term is not valid, the archive.title wont be set at all
     isset($context['archive']['title']) ? $this->render($context) : $this->error();
     
   }
   
   /**
    * 'blog/categories'
+   *
+   * errors in any term in the url here will result in error thrown from SingleController - treated as invalid singular URL - this is normal behaviour
+   * only query functions for TaxCollectionArchive will themselves throw errors
    *
    * @param string $tax - taxonomy e.g: 'categories'
    */
@@ -122,6 +134,12 @@ class ArchiveController extends CoreController {
    * These are more complicated than standard non-queriable archives
    *
    */
+   
+  /**
+    *
+    * This needs to be checked
+    *
+    */
   
   // '?type=blog&categories=news&p=2'
   public function querySite($params) {
@@ -206,82 +224,72 @@ class ArchiveController extends CoreController {
     }
   }
   
-  // 'blog?categories=news&p=2'
+  /**
+   *
+   * Query the MainIndexArchive - This seems working. Double-check
+   *
+   * WORKING URLS
+   * 'blog?categories=news&p=2'
+   * 'blog?categories=events&show_all'
+   * 'blog?categories=events,news&tags=javascript,twig&s=handshake&year=2021&month=4&day=4&name=wordpress'
+   * 'blog?categories=events&tags=twig&year=2021&month=4&day=4&show_all'
+   * 'blog?categories=events&tags=twig&year=2021&month=4&day=4&per_page=3&p=2'
+   *
+   * 'events?categories=sport&p=2'
+   * 'events?categories=awards&show_all'
+   * 'events?categories=awards,sport&locations=dublin&s=handshake&year=2021&month=4&day=4&name=wordpress'
+   * 'events?categories=awards&locations=dublin&year=2021&month=4&day=4&show_all'
+   *
+   * @param array $params - $params have been checked for valid $params in routes.archived with queryParamsExists()
+   *
+   * This function will render the given data thru a twig template via render()
+   *
+   */
   public function queryMainIndexArchive($params) {
     
+    // get the global _context variables
     global $_context;
-
-    /*
-    *
-    * set the _context archive
-    *
-    */
+    
+    // reset the global _context variable for 'archive' to 'MainIndexArchive'
     $_context['archive'] = 'MainIndexArchive';
     
-    /*
-    *
-    * parse the params string into an array (the params have been filtered for relevant ones only in routes)
-    *
-    */
+    // parse the params string into an array (the params_array has been filtered for relevant ones only in routes)
     parse_str($params, $params_array);
     
-    /*
-    *
-    * set the type based on the type given in routes.
-    * this will be fed into the query string; type= filtering is not supposed to be used on MainIndexArchives as they are already a 'type'
-    *
-    */
-    $params_array['type'] = typeSettingByKey('key', $this->type, 'single');
+    // set the type based on the type given in routes
+    // this will be fed into the query string; type= filtering is not supposed to be used on MainIndexArchives as they are already a 'type'
+    $params_array['type'] = typeSettingByKey('key', $this->type, 'single'); // must use the singular label here e.g: 'post'
     
-    /*
-    *
-    * set the pagination values in the params array
-    *
-    */
-    if(isset($params_array['p'])) $_context['page'] = $params_array['p'];
-    if(isset($params_array['show_all'])) $_context['paged'] = false;
-    if(isset($params_array['per_page'])) $_context['per_page'] = $params_array['per_page'];
-    if(!isset($params_array['per_page'])) $params_array['per_page'] = $_context['per_page'];
+    // we overwrite the global _context values here relevant to the pagination
+    // this is because we want valid query params to override the overall archive params when they exist in the query string
+    if(isset($params_array['p'])) $_context['page'] = $params_array['p']; // if params HAS 'p', global $page = params 'p'
+    if(isset($params_array['show_all'])) $_context['paged'] = false; // if params HAS 'show_all', global $paged = false
+    if(isset($params_array['per_page'])) $_context['per_page'] = $params_array['per_page']; // if params HAS 'per_page', global $per_page = params 'per_page'
+    if(!isset($params_array['per_page'])) $params_array['per_page'] = $_context['per_page']; // if params DOESNT HAVE 'per_page', params 'per_page' = global $per_page
     
-    /*
-    *
-    * rebuild the params array into a query string
-    *
-    */
+    // rebuild the params array into a new query string
     $pre_params = http_build_query($params_array);
     
-    /*
-    *
-    * comma-separated items in the string: commas get changed into '%2C' after http_build_query
-    * this changes fixes this.
-    * cosmetic really
-    *
-    */
+    // comma-separated items in the string: commas get changed into '%2C' after http_build_query
+    // this changes fixes this.
+    // cosmetic really
     $pre_params = str_replace("%2C", ",", $pre_params);
     
-    /*
-    *
-    * when show_all does't have a value, it ends up with an = sign at the end after http_build_query
-    * this code just removes the = from the show_all param
-    * cosmetic really
-    *
-    */
-    $new_params = showAllParamFix($pre_params);
+    // when show_all does't have a value, it ends up with an = sign at the end after http_build_query
+    // this code just removes the = from the show_all param
+    // cosmetic really
+    $post_params = showAllParamFix($pre_params);
     
-    /*
-    *
-    * _context->string_params is what the query will be running off. so we set it here to out rebuilt string above
-    *
-    */
-    $_context['string_params'] = $new_params;
+    // add the new params string to the global _context array
+    $_context['string_params'] = $post_params;
     
-    /*
-    *
-    * finally, set the archive obj context for twig to render
-    *
-    */
+    // get the archive object context from ArchiveModel -> getQueriedArchive() for twig to render
     $context['archive'] = (new ArchiveModel())->getQueriedArchive();
+    
+    // add the global _content variables to the archive object context
     $context['context'] = $_context;
+    
+    // render the context. if the data queried doesnt produce an archive title, i.e its not valid data or request, throw the error
     if(isset($context['archive']['title'])) {
       $this->render($context);
     } else {
@@ -289,174 +297,160 @@ class ArchiveController extends CoreController {
     }
   }
   
-  // 'blog/categories/news?p=2'
+  /**
+   *
+   * Query the TaxTermArchive - This seems working. Double-check
+   *
+   * WORKING URLS
+   * 'events/category/sport'
+   * 'events/category/sport?show_all'
+   * 'events/category/sport?per_page=3&p=2'
+   * 'events/category/sport?locations=lisbon'
+   * 'events/category/sport?locations=dublin&s=handshake&year=2021&month=4&day=4&name=wordpress'
+   *
+   * DO NOT WORK
+   * 'events/category/sport?categories=awards' - querying term archives by additional terms of same taxonomy does not currently work. this could be made to work
+   *
+   * ERRORS
+   * Non-valid params dont affect query at all, which is probably desirable. querying term archives by additional terms of same taxonomy is treated as non-valid. also probably desirable
+   *
+   * @param array $params - $params have been checked for valid $params in routes.archived with queryParamsExists()
+   * @param string $tax - taxonomy string e.g: 'blog'
+   * @param string $term - term string e.g: 'news'
+   *
+   * This function will render the given data thru a twig template via render()
+   *
+   */
   public function queryTaxTermArchive($params, $tax, $term) {
     
+    // get the global _context variables
     global $_context;
     
-    /*
-    *
-    * set the _context archive
-    *
-    */
+    // reset the global _context variable for 'archive' to 'TaxTermArchive'
     $_context['archive'] = 'TaxTermArchive';
     
-    /*
-    *
-    * parse the params string into an array (the params have been filtered for relevant ones only in routes)
-    *
-    */
+    // parse the params string into an array (the params_array has been filtered for relevant ones only in routes)
     parse_str($params, $params_array);
     
-    /*
-    *
-    * set the type & tax => term based on the data given in routes.
-    * this will be fed into the query string...
-    *
-    */
-    $params_array['type'] = typeSettingByKey('key', $this->type, 'single');
+    // set the type & tax->term data here based on the type, tax & term given in routes
+    $params_array['type'] = typeSettingByKey('key', $this->type, 'single');  // must use the singular label here e.g: 'post'
     $params_array[$tax] = $term;
     
-    /*
-    *
-    * add tax & term to the _context array
-    *
-    */
+    // we set the global tax & term values from the given tax & term
     $_context['tax'] = $tax;
     $_context['term'] = $term;
     
-    /*
-    *
-    * set the pagination values in the params array
-    *
-    */
+    // we overwrite the global _context values here relevant to the pagination
+    // this is because we want valid query params to override the overall archive params when they exist in the query string
     if(isset($params_array['p'])) $_context['page'] = $params_array['p'];
     if(isset($params_array['show_all'])) $_context['paged'] = false;
     if(isset($params_array['per_page'])) $_context['per_page'] = $params_array['per_page'];
     if(!isset($params_array['per_page'])) $params_array['per_page'] = $_context['per_page'];
     
-    /*
-    *
-    * rebuild the params array into a query string
-    *
-    */
+    // rebuild the params array into a new query string
     $pre_params = http_build_query($params_array);
     
-    /*
-    *
-    * comma-separated items in the string: commas get changed into '%2C' after http_build_query
-    * this changes fixes this.
-    * cosmetic really
-    *
-    */
+    // comma-separated items in the string: commas get changed into '%2C' after http_build_query
+    // this changes fixes this.
+    // cosmetic really
     $pre_params = str_replace("%2C", ",", $pre_params);
     
-    /*
-    *
-    * when show_all does't have a value, it ends up with an = sign at the end after http_build_query
-    * this code just removes the = from the show_all param
-    * cosmetic really
-    *
-    */
+    // when show_all does't have a value, it ends up with an = sign at the end after http_build_query
+    // this code just removes the = from the show_all param
+    // cosmetic really
     $new_params = showAllParamFix($pre_params);
     
-    
-    /*
-    *
-    * _context->string_params is what the query will be running off. so we set it here to out rebuilt string above
-    *
-    */
+    // add the new params string to the global _context array
     $_context['string_params'] = $new_params;
     
-    // set the archive obj context for twig to render
+    // get the archive object context from ArchiveModel -> getQueriedArchive() for twig to render
     $context['archive'] = (new ArchiveModel())->getQueriedArchive();
+    
+    // add the global _content variables to the archive object context
     $context['context'] = $_context;
+    
+    // render the context. if the data queried doesnt produce an archive title, i.e its not valid data or request, throw the error
     if(isset($context['archive']['title'])) {
       $this->render($context);
     } else {
       $this->error();
     }
   }
-  
-  // 'blog/categories?p=2'
+
+  /**
+   *
+   * Query the TaxCollectionArchive - This seems working. Double-check
+   *
+   * WORKING URLS
+   * 'events/categories'
+   * 'events/categories?show_all'
+   * 'events/categories?per_page=1&p=2'
+   * 'events/categories?order=asc&orderby=title'
+   * 'events/categories?order=asc&orderby=title&per_page=1&p=2'
+   *
+   * DOES NOT WORK
+   * 'events/categories?taxonomy=location'
+   * querying tax archives by additional taxes does not work. the global $tax is already set & fed into the query string below. 
+   * when querying tax archives with an additional 'taxonomy' param, the additional param will not affect the query. this is desirable
+   * '?taxonomy=' query string parameter is designed mainly to allow for both string & array inputs into the QueryTermsModel. In terms of querying tax archives, 'taxonomy' in the string is a non-event
+   * the params that will currently work to query tax archives are: 'orderby', 'order', 'per_page', 'p' & 'show_all'
+   *
+   * ERRORS
+   * Non-valid params dont affect query at all, which is probably desirable. querying term archives by additional terms of same taxonomy is treated as non-valid. also probably desirable
+   *
+   * @param array $params - $params have been checked for valid $params in routes.archived with queryParamsExists()
+   * @param string $tax - taxonomy key string e.g: 'blog'
+   *
+   * This function will render the given data thru a twig template via render()
+   *
+   */
   public function queryTaxCollectionArchive($params, $tax) {
     
+    // get the global _context variables
     global $_context;
 
-    /*
-    *
-    * set the _context archive
-    *
-    */
+    // reset the global _context variable for 'archive' to 'TaxCollectionArchive'
     $_context['archive'] = 'TaxCollectionArchive';
     
-    /*
-    *
-    * parse the params string into an array (the params have been filtered for relevant ones only in routes)
-    *
-    */
+    // parse the params string into an array (the params_array has been filtered for relevant ones only in routes)
     parse_str($params, $params_array);
     
-    /*
-    *
-    * set the type & tax => term based on the data given in routes.
-    * this will be fed into the query string...
-    *
-    */
-    $params_array['taxonomy'] = taxSettingByKey($this->type, 'key', $tax, 'single');
+    // set the taxonomy data here based on the given tax
+    $params_array['taxonomy'] = taxSettingByKey($this->type, 'key', $tax, 'single'); //  // must use the singular label here e.g: 'category'
     
-    /*
-    *
-    * add tax & term to the _context array
-    *
-    */
+    // we set the global tax values from the given tax
     $_context['tax'] = $tax;
     
-    /*
-    *
-    * set the pagination values in the params array
-    *
-    */
+    // we overwrite the global _context values here relevant to the pagination
+    // this is because we want valid query params to override the overall archive params when they exist in the query string
     if(isset($params_array['p'])) $_context['page'] = $params_array['p'];
     if(isset($params_array['show_all'])) $_context['paged'] = false;
     if(isset($params_array['per_page'])) $_context['per_page'] = $params_array['per_page'];
     if(!isset($params_array['per_page'])) $params_array['per_page'] = $_context['per_page'];
     
-    /*
-    *
-    * rebuild the params array into a query string
-    *
-    */
+    // rebuild the params array into a new query string
     $pre_params = http_build_query($params_array);
     
-    /*
-    *
-    * comma-separated items in the string: commas get changed into '%2C' after http_build_query
-    * this changes fixes this.
-    * cosmetic really
-    *
-    */
+    // comma-separated items in the string: commas get changed into '%2C' after http_build_query
+    // this changes fixes this.
+    // cosmetic really
     $pre_params = str_replace("%2C", ",", $pre_params);
     
-    /*
-    *
-    * when show_all does't have a value, it ends up with an = sign at the end after http_build_query
-    * this code just removes the = from the show_all param
-    * cosmetic really
-    *
-    */
+    // when show_all does't have a value, it ends up with an = sign at the end after http_build_query
+    // this code just removes the = from the show_all param
+    // cosmetic really
     $new_params = showAllParamFix($pre_params);
     
-    /*
-    *
-    * _context->string_params is what the query will be running off. so we set it here to out rebuilt string above
-    *
-    */
+    // add the new params string to the global _context array
     $_context['string_params'] = $new_params;   
       
-    // set the archive obj context for twig to render
+    // get the archive object context from ArchiveModel -> getQueriedTaxonomyArchive() for twig to render
     $context['archive'] = (new ArchiveModel())->getQueriedTaxonomyArchive();
+    
+    // add the global _content variables to the archive object context
     $context['context'] = $_context;
+    
+    // render the context. if the data queried doesnt produce an archive title, i.e its not valid data or request, throw the error
     if(isset($context['archive']['title'])) {
       $this->render($context);
     } else {
@@ -477,6 +471,8 @@ class ArchiveController extends CoreController {
    * if global $_context['archive'] is not one of the above, render archive.twig
    * 'blog/categories'
    *
+   *  This function will render the given data context a twig template via render() in Core
+   *
    * @param object|array $context - the context for twig to render
    */
   protected function render($context) {
@@ -488,27 +484,63 @@ class ArchiveController extends CoreController {
     $_tax = (isset($_context['tax']) && isset($_context['type'])) ? $_context['tax'] : null;
     $_term = (isset($_context['term']) && isset($_context['tax'])) ? $_context['term'] : null;
     
-    // TaxTermArchive
-    if($_context['archive'] = 'TaxTermArchive' && $this->twig->getLoader()->exists($_tax.'-'.$_term.'.twig')) {
-      $this->templateRender($_tax.'-'.$_term.'.twig', $context); // categories-news.twig
-      exit();
-    }
-    
-    // TaxCollectionArchive
-    elseif($_context['archive'] = 'TaxCollectionArchive' && $this->twig->getLoader()->exists($_type.'-'.$_tax.'.twig')) {
-      $this->templateRender($_type.'-'.$_tax.'.twig', $context); // blog-categories.twig
-      exit();
-    }
-    
-    // MainIndexArchive
-    elseif($_context['archive'] = 'MainIndexArchive' && $this->twig->getLoader()->exists($_type.'.twig')) {
-      $this->templateRender($_type.'.twig', $context); // blog.twig
-      exit();
-    }
-    
-    // All else
-    else {
-      $this->templateRender('archive.twig', $context);
+    switch ($_context['archive']) {
+      
+      case 'MainIndexArchive':
+      
+        // if blog.twig exists, use it
+        if($this->twig->getLoader()->exists($_type.'.twig')){
+          $this->templateRender($_type.'.twig', $context);
+        }
+      
+        // else, use archive.twig
+        else {
+          $this->templateRender('archive.twig', $context);
+        }
+        
+        break;
+          
+      case 'TaxTermArchive':
+      
+        // if blog-categories-news.twig exists, use it
+        if($this->twig->getLoader()->exists($_type.'-'.$_tax.'-'.$_term.'.twig')){
+          $this->templateRender($_tax.'-'.$_term.'.twig', $context);
+        }
+      
+        // else if blog.twig exists, use that
+        elseif($this->twig->getLoader()->exists($_type.'.twig')) {
+          $this->templateRender($_type.'.twig', $context);
+        }
+      
+        // else, use archive.twig
+        else {
+          $this->templateRender('archive.twig', $context);
+        }
+        
+        break;
+          
+      case 'TaxCollectionArchive':
+      
+        // if blog-categories.twig exists, use it
+        if($this->twig->getLoader()->exists($_type.'-'.$_tax.'.twig')){
+          $this->templateRender($_type.'-'.$_tax.'.twig', $context);
+        }
+      
+        // else if blog.twig exists, use that
+        elseif($this->twig->getLoader()->exists($_type.'.twig')) {
+          $this->templateRender($_type.'.twig', $context);
+        }
+      
+        // else, use archive.twig
+        else {
+          $this->templateRender('archive.twig', $context);
+        }
+        
+        break;
+        
+      default:
+        $this->templateRender('archive.twig', $context);
+        
     }
     
   }

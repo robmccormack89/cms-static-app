@@ -37,8 +37,8 @@ foreach($config['types'] as $key => $value) {
   });
   
   // create a MainIndexArchive route with $key, $items & the $slug (slug comes from the URL)
-  $items = typeSettingByKey('key', $key , 'items'); // this gets the single item plural for a given 'type' e.g: 'posts' or 'projects'
-  $router->get('/'.$key.'/'.$items.'/{slug}', function($slug) use ($key) {
+  $single = typeSettingByKey('key', $key , 'single'); // this gets the single item plural for a given 'type' e.g: 'posts' or 'projects'
+  $router->get('/'.$key.'/'.$single.'/{slug}', function($slug) use ($key) {
     Cache::cacheServe(function() use ($key, $slug) { 
       (new SingleController($key, $slug))->getSingle();
     });
@@ -48,12 +48,13 @@ foreach($config['types'] as $key => $value) {
   foreach($value['taxes_in_meta'] as $tax) {
     
     // create a TaxTermArchive route with $key, $tax & the $term (term comes from the URL)
-    $router->get('/'.$key.'/'.$tax.'/{term}/', function($term) use ($key, $tax){
+    $single_tax = taxSettingByKey($key, 'key', $tax , 'single'); // this gets the single item plural for a given 'tax' e.g: 'category' or 'location'
+    $router->get('/'.$key.'/'.$single_tax.'/{term}/', function($term) use ($key, $tax){
       
       $params = parse_url($_SERVER['REQUEST_URI']);
       
       // if valid query params exist...
-      if (isset($params['query']) && queryTaxTermArchive($params['query'])) {
+      if (isset($params['query']) && queryParamsExists($params['query'])) {
         
         // do a redirect for requests of '?p=1' to the main page as these are the same thing
         // parse_str($params['query'], $params_array);

@@ -79,6 +79,17 @@
                             {% endfor %}
                           </div>
                         {% endif %}
+                        {% if post.taxonomies.locations %}
+                          <div class="taxonomy-holder uk-inline">
+                            {% for loc in post.taxonomies.locations %}
+                              {% if not loop.last %}
+                                <a class="taxonomy uk-link-reset" title="{{loc.title}}" href="{{loc.link}}">{{loc.title}}</a>,
+                              {% else %}
+                                <a class="taxonomy uk-link-reset" title="{{loc.title}}" href="{{loc.link}}">{{loc.title}}</a>
+                              {% endif %}
+                            {% endfor %}
+                          </div>
+                        {% endif %}
                         {% if post.read_time %}
                           <span class="post-meta-estimate">{{post.read_time}} read</span>
                         {% endif %}

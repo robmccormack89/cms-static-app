@@ -40,6 +40,15 @@
           {% endif %}
         {% endfor %}
       {% endif %}
+      {% if post.taxonomies.locations %}
+        Technology used: {% for loc in post.taxonomies.locations %}
+          {% if not loop.last %}
+            <a title="{{loc.title}}" href="{{loc.link}}">{{loc.title}}</a>,
+          {% else %}
+            <a title="{{loc.title}}" href="{{loc.link}}">{{loc.title}}</a>.
+          {% endif %}
+        {% endfor %}
+      {% endif %}
       {% if post.date_time %}
         Published: {{post.date_time|date("F j, Y")}}
       {% endif %}

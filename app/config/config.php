@@ -83,7 +83,8 @@ $config['twig_templates_locations'] = array(
   'archive/blog/categories',
   'archive/blog/tags',
   'archive/portfolio',
-  'archive/portfolio/technologies',
+  // 'archive/portfolio/technologies',
+  'archive/events',
   'single',
   'single/page',
   'single/page/content',
@@ -120,7 +121,7 @@ $config['types']['blog'] = array(
   'key'  => 'blog', // used as main key/main archive url
   'items' => 'posts', // used as post items key/in singular urls
   'single' => 'post', // used as singular key such as in queries
-  'per_page' => 2,
+  'per_page' => 5,
   'meta' => array(
     'title'  => 'My Blog', // MainIndexArchive title
     'description' => 'Something more descriptive goes here...', // MainIndexArchive description
@@ -168,7 +169,7 @@ $config['types']['portfolio'] = array(
   'key'  => 'portfolio',
   'items' => 'projects',
   'single' => 'project',
-  'per_page' => 10,
+  'per_page' => 2,
   'meta' => array(
     'title'  => 'Portfolio',
     'description' => 'Check out my latest web software development portfolio projects.',
@@ -196,6 +197,54 @@ $config['types']['portfolio']['taxonomies']['technologies'] = array(
   ),
 );
 $config['types']['portfolio']['taxonomies']['categories'] = array(
+  'key'  => 'categories',
+  'single'  => 'category',
+  'meta' => array(
+    'title'  => 'Categories',
+    'description' => 'Handshake release assets validation metrics first mover advantage ownership prototype',
+    'meta_title' => '',
+    'meta_description' => '',
+  ),
+);
+
+/*
+*
+* Events registration
+*
+*/
+
+$config['types']['events'] = array(
+  'key'  => 'events',
+  'items' => 'events',
+  'single' => 'event',
+  'per_page' => 4,
+  'meta' => array(
+    'title'  => 'Our Events',
+    'description' => 'Check out our latest & upcoming Events.',
+    'meta_title' => '',
+    'meta_description' => '',
+  ),
+);
+
+/*
+*
+* Events taxonomies registration (locations)
+*
+*/
+
+$config['types']['events']['taxes_in_meta'] = array('locations', 'categories');
+$config['types']['events']['taxonomies'] = array();
+$config['types']['events']['taxonomies']['locations'] = array(
+  'key'  => 'locations',
+  'single'  => 'location',
+  'meta' => array(
+    'title'  => 'Locations',
+    'description' => 'Handshake release assets validation metrics first mover advantage ownership prototype',
+    'meta_title' => '',
+    'meta_description' => '',
+  ),
+);
+$config['types']['events']['taxonomies']['categories'] = array(
   'key'  => 'categories',
   'single'  => 'category',
   'meta' => array(

@@ -568,7 +568,7 @@ class QueryModel {
             $post['link'] = '/'.$post['slug'];
           }
         } else {
-          $post['link'] = '/'.typeSettingByKey('single', $post['type'], 'key').'/'.typeSettingByKey('single', $post['type'], 'items').'/'.$post['slug'];
+          $post['link'] = '/'.typeSettingByKey('single', $post['type'], 'key').'/'.$post['type'].'/'.$post['slug'];
         }
         $data[] = $post;
       }
@@ -589,7 +589,7 @@ class QueryModel {
                 $terms = $post[$tax];
                 foreach ($terms as &$term) {
                   $term = array(
-                    'link' => '/'.$type_key.'/'.$tax.'/'.$term,
+                    'link' => '/'.$type_key.'/'.taxSettingByKey($type_key, 'key', $tax, 'single').'/'.$term,
                     'slug' => $term,
                     'title' => term_title_from_slug($type_key, $tax, $term)
                   );

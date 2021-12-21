@@ -110,7 +110,7 @@ class ArchiveModel {
     $archive['posts'] = $terms_obj->terms;
   
     // 4. Set the archive pagination data.
-    if($_context['paged'] && !empty($archive['posts'])){
+    if(!empty($archive['posts'])){
   
       // We use PaginationModel->getPagination to set the pagination data
       $archive['pagination'] = (new PaginationModel($terms_obj->found_terms))->getPagination();
@@ -131,43 +131,27 @@ class ArchiveModel {
   
   public function getQueriedArchive() {
     
+    // get the global $_context variables. these will be used to create the $args for the QueryModel
     global $_context;
     
-    /*
-    *
-    * 1. Use the QueryModel to get the posts object using the string_params
-    *
-    */
+    // 1. Use the QueryModel to get the posts object using the global _context $string_params (query methods in ArchiveController)
     $posts_obj = new QueryModel($_context['string_params']);
     
-    /*
-    *
-    * 2. Set the archive data; the meta data for the archive
-    * We can get the data from the $posts_obj->queried_object
-    * Also, if the requested paged page is greater than 1, we modify the archive title to reflect the paged page
-    *
-    */
+    // 2. Set the archive data; the meta data for the archive. We get the data from the $posts_obj->queried_object
     $archive = $posts_obj->queried_object;
     
-    /*
-    *
-    * 3. Set the archive posts data
-    * We can get the data from the $posts_obj->posts
-    *
-    */
+    // 3. Set the archive posts data. We can get the data from the $posts_obj->posts
     $archive['posts'] = $posts_obj->posts;
     
-    /*
-    *
-    * 4. Set the archive pagination data
-    * We use a new PaginationModel->getPagination() object to set the pagination data
-    *
-    * This may be incorporated into QueryModel as a returned property like $posts_obj->pagination
-    *
-    */
+    // 4. Set the archive pagination data. Only if there are posts tho
     if(!empty($archive['posts'])){
-      $archive['pagination'] = (new PaginationModel($posts_obj->found_posts))->getPagination();
+      
+      // We use PaginationModel->getPagination to set the pagination data
+      $archive['pagination'] = $posts_obj->pagination;
+      
+      // archives that have been paged require the archive title to be modified to reflect the paged page (queried archives only)
       if($_context['page'] > 1) $archive['title'] = $archive['title'].' (Page '.$_context['page'].')';
+      
     }
     
     return $archive;
@@ -175,44 +159,27 @@ class ArchiveModel {
   
   public function getQueriedTaxonomyArchive() {
   
+    // get the global $_context variables. these will be used to create the $args for the QueryModel
     global $_context;
   
-    /*
-    *
-    * 1. Use the QueryModel to get the posts object using the string_params
-    *
-    */
+    // 1. Use the QueryTermsModel to get the terms object using the global _context $string_params (query methods in ArchiveController)
     $terms_obj = new QueryTermsModel($_context['string_params']);
   
-    /*
-    *
-    * 2. Set the archive data; the meta data for the archive
-    * We can get the data from the $posts_obj->queried_object
-    * Also, if the requested paged page is greater than 1, we modify the archive title to reflect the paged page
-    *
-    */
+    // 2. Set the archive data; the meta data for the archive. We get the data from the $terms_obj->queried_object
     $archive = $terms_obj->queried_object;
-  
-    /*
-    *
-    * 3. Set the archive posts data
-    * We can get the data from the $posts_obj->posts
-    *
-    */
+    
+    // 3. Set the archive terms data. We can get the data from the $terms_obj->terms
     $archive['posts'] = $terms_obj->terms;
-  
-    /*
-    *
-    * 4. Set the archive pagination data
-    * We use a new PaginationModel->getPagination() object to set the pagination data
-    *
-    * This may be incorporated into QueryModel as a returned property like $posts_obj->pagination
-    *
-    */
-  
-    if($_context['paged'] && !empty($archive['posts'])){
-      $archive['pagination'] = (new PaginationModel($terms_obj->found_terms))->getPagination();
+    
+    // 4. Set the archive pagination data. Only if there are posts tho
+    if(!empty($archive['posts'])){
+      
+      // We use PaginationModel->getPagination to set the pagination data
+      $archive['pagination'] = $terms_obj->pagination;
+      
+      // archives that have been paged require the archive title to be modified to reflect the paged page (queried archives only)
       if($_context['page'] > 1) $archive['title'] = $archive['title'].' (Page '.$_context['page'].')';
+      
     }
   
     return $archive;

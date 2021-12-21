@@ -40,7 +40,7 @@ class QueryTermsModel {
     // $this->test();
   }
   public function test() {
-    print_r($this->max_num_pages);
+    print_r($this->query);
   }
   
   public function getTermsPaginationData() {
@@ -266,7 +266,7 @@ class QueryTermsModel {
   }
   private function setTermTeaseLinkData($terms) {
     foreach ($terms as $term) {
-      $term['link'] = '/'.$term['type'].'/'.$term['tax'].'/'.$term['slug'];
+      $term['link'] = '/'.$term['type'].'/'.taxSettingByKey($term['type'], 'key', $term['tax'], 'single').'/'.$term['slug'];
       $term['excerpt'] = $term['description'];
       $term['posts_count'] = getPostsCountFromATerm($term['type'], $term['tax'], $term['slug']);
       $data[] = $term;
