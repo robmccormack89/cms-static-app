@@ -33,7 +33,7 @@ class QueryTermsModel {
     $this->query_vars = $this->getArray(); // An associative array containing the dissected $query: an array of the query variables and their respective values.
     $this->queried_object = $this->getQueriedObject(); // Can hold information on the requested category, author, post or Page, archive etc.,.
     $this->terms = $this->getTerms(); // Gets filled with the requested posts
-    $this->term_count = $this->getTermsPerPage(); // The number of posts being displayed. per page
+    $this->term_count = $this->perPageKey(); // The number of posts being displayed. per page
     $this->found_terms = $this->getTermsCount(); // The total number of posts found matching the current query parameters
     $this->max_num_pages = $this->getTermsMaxPages(); // The total number of pages. Is the result of $found_posts / $posts_per_page
     $this->pagination = $this->getTermsPaginationData(); // the pagination data for the returned terms 
@@ -44,27 +44,29 @@ class QueryTermsModel {
   }
   
   public function getTermsPaginationData() {
-    // we used to get the global _context variables in the PaginationModel to get this data, but its not been very robust or stable
-    // a better approach is to use the query_vars generated from the QueryModel to get the right values to fill into the PaginationModel
-    // the values that PaginationModel now requires are: $count(int), $page(int), $paged(bool) & $per_page(int)
+
     if(isset($this->query_vars['show_all']) && $this->query_vars['show_all'] == true){
       $paged = false;
     } else {
       $paged = true;
     }
 
-    if(!isset($this->query_vars['p'])){
-      $p = 1;
-    } else {
+    if(isset($this->query_vars['p'])){
       $p = $this->query_vars['p'];
+    } else {
+      $p = 1;
     }
     
-    $per_page = null;
-    if(isset($this->query_vars['type'])){
+    if(isset($this->query_vars['type']) && !isset($this->query_vars['per_page'])){
       $per_page = typeSettingByKey('single', $this->query_vars['type'], 'per_page');
     }
-    if(isset($this->query_vars['per_page'])){
+    
+    elseif(isset($this->query_vars['per_page'])){
       $per_page = $this->query_vars['per_page'];
+    }
+    
+    else {
+      $per_page = null;
     }
     
     $data = (new PaginationModel($this->found_terms, $paged, $p, $per_page))->getPagination();
@@ -239,7 +241,7 @@ class QueryTermsModel {
     */
     if($this->isPaged() && $terms->exists()){
       $terms = new Json($terms);
-      $paged_terms = $terms->chunk($this->getTermsPerPage());
+      $paged_terms = $terms->chunk($this->perPageKey());
       $terms = $this->getPagedTerms($paged_terms); // returns an array
     }
     
@@ -400,11 +402,6 @@ class QueryTermsModel {
   * $this->max_num_pages
   *
   */
-  private function getTermsPerPage() {
-    global $_context;
-    $per_page = $this->perPageKey() ? $this->perPageKey() : $_context['per_page'];
-    return $per_page;
-  }
   private function getTermsMaxPages() {
     if($this->term_count > 0){
       $max_pages = $this->found_terms / $this->term_count;

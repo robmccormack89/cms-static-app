@@ -3,88 +3,84 @@ namespace Rmcc;
 
 class ArchiveModel {
   
+  public function __construct() {
+    $this->page = 1;
+    $this->per_page = 7;
+    $this->paged = true;
+  }
+  
   /**
    *
-   * Archive functions
-   * 
-   * 3 types of archive for the app: MainIndexArchive(getArchive), TaxTermArchive(getTermArchive) & TaxCollectionArchive(getTaxonomyArchive)
-   *
-   * @return object|array - will return the archive object for rendering in ArchiveController
+   * Standard (non-queried) Archive functions
    *
    */
    
-  public function getArchive() {
+  public function getMainArchive() {
     
-    // get the global $_context variables. these will be used to create the $args for the QueryModel
     global $_context;
     
-    // 1. build the $args for the QueryModel using the global $_context variables
+    if(typeSettingByKey('key', $_context['type'], 'per_page')) {
+      $this->per_page = typeSettingByKey('key', $_context['type'], 'per_page');
+    } else {
+      $this->paged = false;
+      $this->per_page = null;
+    }
+    
     $args = array(
-      'type' => typeSettingByKey('key', $_context['type'], 'single'), // we use the singular label for 'type' in queries
-      'per_page' => $_context['per_page'], // use the global, reset in ArchiveController->getMainIndexArchive
-      'p' => $_context['page'], // use the global, will be 1
-      'show_all' => ($_context['paged']) ? false : true // if paged is false, set show_all to true
+      'type' => typeSettingByKey('key', $_context['type'], 'single'),
+      'per_page' => $this->per_page,
+      'p' => $this->page,
+      'show_all' => ($this->paged) ? false : true
     );
-    // get the posts object using the QueryModel
+    
     $posts_obj = new QueryModel($args);
     
-    // 2. Set the archive data; the meta data for the archive. We get the data from the $posts_obj->queried_object
     $archive = $posts_obj->queried_object;
     
-    // 3. Set the archive posts data. We can get the data from the $posts_obj->posts
     $archive['posts'] = $posts_obj->posts;
     
-    // 4. Set the archive pagination data. Only if there are posts tho
     if(!empty($archive['posts'])){
-    
-      // We use PaginationModel->getPagination to set the pagination data
       $archive['pagination'] = $posts_obj->pagination;
-    
     }
 
-    // 5. Finally, we return the newly-created archive object
     return $archive;
   }
   
   public function getTermArchive() {
     
-    // get the global $_context variables. these will be used to create the $args for the QueryModel
     global $_context;
     
-    // 1. build the $args for the QueryModel using the global $_context variables
+    if(typeSettingByKey('key', $_context['type'], 'per_page')) {
+      $this->per_page = typeSettingByKey('key', $_context['type'], 'per_page');
+    } else {
+      $this->paged = false;
+      $this->per_page = null;
+    }
+
     $args = array(
-      'type' => typeSettingByKey('key', $_context['type'], 'single'), // must use the singular label here e.g: 'post'
+      'type' => typeSettingByKey('key', $_context['type'], 'single'),
       'tax_query' => array(
-        // relation is required for now as there are checks based the iteration of the first array in this sequence, which should be 2nd when relation exists
-        'relation' => 'AND', // working: 'AND', 'OR'. Deaults to 'AND'.
+        'relation' => 'AND',
         array(
-          'taxonomy' => taxSettingByKey($_context['type'], 'key', $_context['tax'], 'single'), // working. takes taxonomy string taxSettingByKey($type_archive, 'single', $value['taxonomy'], 'key');
-          'terms' => array($_context['term']), // working. takes array
-          'operator' => 'AND' // 'AND', 'IN', 'NOT IN'. 'IN' is default. AND means posts must have all terms in the array. In means just one.
+          'taxonomy' => taxSettingByKey($_context['type'], 'key', $_context['tax'], 'single'),
+          'terms' => array($_context['term']),
+          'operator' => 'AND'
         ),
       ),
-      'per_page' => $_context['per_page'],
-      'p' => $_context['page'], // will be 1
-      'show_all' => ($_context['paged']) ? false : true // if paged is false, set show_all to true
+      'per_page' => $this->per_page,
+      'p' => $this->page,
+      'show_all' => ($this->paged) ? false : true
     );
-    // get the posts object using the QueryModel
     $posts_obj = new QueryModel($args);
     
-    // 2. Set the archive data; the meta data for the archive. We get the data from the $posts_obj->queried_object
     $archive = $posts_obj->queried_object;
-    
-    // 3. Set the archive posts data. We can get the data from the $posts_obj->posts
+
     $archive['posts'] = $posts_obj->posts;
     
-    // 4. Set the archive pagination data.
     if(!empty($archive['posts'])){
-      
-      // We use PaginationModel->getPagination to set the pagination data
       $archive['pagination'] = $posts_obj->pagination;
-      
     }
-    
-    // 5. Finally, we return the newly-created archive object
+
     return $archive;
   }
   
@@ -92,13 +88,21 @@ class ArchiveModel {
   
     // get the global $_context variables. these will be used to create the $args for the QueryModel
     global $_context;
+    
+    // if type's 'per_page' setting exists, set 'per_page' to it
+    if(typeSettingByKey('key', $_context['type'], 'per_page')) {
+      $this->per_page = typeSettingByKey('key', $_context['type'], 'per_page');
+    } else {
+      $this->paged = false; // else paged is false
+      $this->per_page = null; // and et per_page to null
+    }
   
     // 1. build the $args for the QueryModel using the global $_context variables
     $args = array(
       'taxonomy' => taxSettingByKey($_context['type'], 'key', $_context['tax'], 'single'), // must use the singular label here e.g: 'category'
-      'per_page' => $_context['per_page'],
-      'p' => $_context['page'], // will be 1
-      'show_all' => ($_context['paged']) ? false : true // if paged is false, set show_all to true
+      'per_page' => $this->per_page,
+      'p' => $this->page,
+      'show_all' => ($this->paged) ? false : true // if paged is false, set show_all to true
     );
     // get the terms object using the QueryModel
     $terms_obj = new QueryTermsModel($args);
@@ -123,63 +127,105 @@ class ArchiveModel {
   
   /**
    *
-   * Queried Archive functions
-   *
-   * @return object|array - will return the archive object for rendering in ArchiveController
+   * Query Archive functions
    *
    */
   
-  public function getQueriedArchive() {
+  public function getQueriedArchive($params) {
     
-    // get the global $_context variables. these will be used to create the $args for the QueryModel
     global $_context;
+
+    parse_str($params, $params_array);
+
+    if(array_key_exists('type', $_context) && typeSettingByKey('key', $_context['type'], 'single')){
+      $params_array['type'] = typeSettingByKey('key', $_context['type'], 'single');
+    }
     
-    // 1. Use the QueryModel to get the posts object using the global _context $string_params (query methods in ArchiveController)
-    $posts_obj = new QueryModel($_context['string_params']);
+    if(array_key_exists('tax', $_context) && array_key_exists('term', $_context)){
+      $params_array[$_context['tax']] = $_context['term'];
+    }
     
-    // 2. Set the archive data; the meta data for the archive. We get the data from the $posts_obj->queried_object
+    if(array_key_exists('type', $_context) && typeSettingByKey('key', $_context['type'], 'per_page')) {
+      $this->per_page  = typeSettingByKey('key', $_context['type'], 'per_page');
+    }
+    
+    if(!isset($params_array['per_page'])) {
+      
+      if(isset($params_array['type']) && typeSettingByKey('single', $params_array['type'], 'per_page')){
+        $params_array['per_page'] = typeSettingByKey('single', $params_array['type'], 'per_page');
+      }
+      
+      elseif(isset($params_array['type']) && !typeSettingByKey('single', $params_array['type'], 'per_page')) {
+        $params_array['show_all'] = '';
+      }
+      
+      else {
+        $params_array['per_page'] = $this->per_page;
+      }
+      
+    }
+    
+    if(!isset($params_array['p'])) {
+      $params_array['p'] = $this->page;
+    }
+    
+    if(isset($params_array['show_all']) && $params_array['p'] > 1){
+      $instance = new CoreController();
+      $instance->error();
+      exit();
+    }
+    
+    $params_string = paramsArrayToString($params_array);
+
+    $posts_obj = new QueryModel($params_string);
+    
     $archive = $posts_obj->queried_object;
     
-    // 3. Set the archive posts data. We can get the data from the $posts_obj->posts
     $archive['posts'] = $posts_obj->posts;
     
-    // 4. Set the archive pagination data. Only if there are posts tho
-    if(!empty($archive['posts'])){
-      
-      // We use PaginationModel->getPagination to set the pagination data
+    if(!empty($archive['posts'])) {
       $archive['pagination'] = $posts_obj->pagination;
-      
-      // archives that have been paged require the archive title to be modified to reflect the paged page (queried archives only)
-      if($_context['page'] > 1) $archive['title'] = $archive['title'].' (Page '.$_context['page'].')';
-      
+      if($params_array['p'] > 1) $archive['title'] = $archive['title'].' (Page '.$params_array['p'].')';
     }
     
     return $archive;
   }
   
-  public function getQueriedTaxonomyArchive() {
+  public function getQueriedTaxonomyArchive($params) {
   
-    // get the global $_context variables. these will be used to create the $args for the QueryModel
     global $_context;
+    
+    parse_str($params, $params_array);
+    
+    if(array_key_exists('type', $_context) && typeSettingByKey('key', $_context['type'], 'single')){
+      $params_array['type'] = typeSettingByKey('key', $_context['type'], 'single');
+    }
+    
+    $params_array['taxonomy'] = taxSettingByKey($_context['type'], 'key', $_context['tax'], 'single');
+    
+    if(array_key_exists('type', $_context) && typeSettingByKey('key', $_context['type'], 'per_page')) {
+      $this->per_page  = typeSettingByKey('key', $_context['type'], 'per_page');
+    }
+    
+    if(!isset($params_array['per_page'])) {
+      $params_array['per_page'] = $this->per_page;
+    }
+    
+    if(!isset($params_array['p'])) {
+      $params_array['p'] = $this->page;
+    }
+    
+    $params_string = paramsArrayToString($params_array);
   
-    // 1. Use the QueryTermsModel to get the terms object using the global _context $string_params (query methods in ArchiveController)
-    $terms_obj = new QueryTermsModel($_context['string_params']);
+    $terms_obj = new QueryTermsModel($params_string);
   
-    // 2. Set the archive data; the meta data for the archive. We get the data from the $terms_obj->queried_object
     $archive = $terms_obj->queried_object;
     
-    // 3. Set the archive terms data. We can get the data from the $terms_obj->terms
     $archive['posts'] = $terms_obj->terms;
     
-    // 4. Set the archive pagination data. Only if there are posts tho
     if(!empty($archive['posts'])){
-      
-      // We use PaginationModel->getPagination to set the pagination data
       $archive['pagination'] = $terms_obj->pagination;
-      
-      // archives that have been paged require the archive title to be modified to reflect the paged page (queried archives only)
-      if($_context['page'] > 1) $archive['title'] = $archive['title'].' (Page '.$_context['page'].')';
-      
+      if($params_array['p'] > 1) $archive['title'] = $archive['title'].' (Page '.$params_array['p'].')';
     }
   
     return $archive;

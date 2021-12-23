@@ -22,7 +22,7 @@ foreach($config['types'] as $key => $value) {
         exit();
       }
       // do the queryMainIndexArchive route
-      (new ArchiveController($key))->queryMainIndexArchive($params['query']);
+      (new ArchiveController())->queryMainIndexArchive($key, $params['query']);
       
     } 
     
@@ -30,7 +30,7 @@ foreach($config['types'] as $key => $value) {
     else {
       // do the standard getMainIndexArchive route, Cached
       Cache::cacheServe(function() use ($key){ 
-        (new ArchiveController($key))->getMainIndexArchive();
+        (new ArchiveController())->getMainIndexArchive($key);
       });
     }
     
@@ -63,7 +63,7 @@ foreach($config['types'] as $key => $value) {
           exit();
         }
         // do the queryMainIndexArchive route
-        (new ArchiveController($key))->queryTaxTermArchive($params['query'], $tax, $term);
+        (new ArchiveController())->queryTaxTermArchive($key, $tax, $term, $params['query']);
         
       }
       
@@ -71,7 +71,7 @@ foreach($config['types'] as $key => $value) {
       else {
         // do the standard getTaxTermArchive route, Cached
         Cache::cacheServe(function() use ($key, $tax, $term) { 
-          (new ArchiveController($key))->getTaxTermArchive($tax, $term);
+          (new ArchiveController())->getTaxTermArchive($key, $tax, $term);
         });
       } 
       
@@ -92,7 +92,7 @@ foreach($config['types'] as $key => $value) {
           exit();
         }
         // do the queryTaxCollectionArchive route
-        (new ArchiveController($key))->queryTaxCollectionArchive($params['query'], $tax);
+        (new ArchiveController())->queryTaxCollectionArchive($key, $tax, $params['query']);
         
       }
       
@@ -100,7 +100,7 @@ foreach($config['types'] as $key => $value) {
       else {
         // do the standard getTaxCollectionArchive route, Cached
         Cache::cacheServe(function() use ($key, $tax){ 
-          (new ArchiveController($key))->getTaxCollectionArchive($tax);
+          (new ArchiveController())->getTaxCollectionArchive($key, $tax);
         });
       }
       
