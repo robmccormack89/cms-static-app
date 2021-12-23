@@ -99,6 +99,10 @@ class CoreController {
   }
   
   protected function templateRender($template, $context) {
+    
+    // print_r($context);
+    // die();
+    
     Cache::cacheRender($this->twig->render($template, $context));
   }
   

@@ -40,11 +40,34 @@ class QueryTermsModel {
     // $this->test();
   }
   public function test() {
-    print_r($this->query);
+    // print_r($this->query_vars);
   }
   
   public function getTermsPaginationData() {
-    $data = (new PaginationModel($this->found_terms))->getPagination();
+    // we used to get the global _context variables in the PaginationModel to get this data, but its not been very robust or stable
+    // a better approach is to use the query_vars generated from the QueryModel to get the right values to fill into the PaginationModel
+    // the values that PaginationModel now requires are: $count(int), $page(int), $paged(bool) & $per_page(int)
+    if(isset($this->query_vars['show_all']) && $this->query_vars['show_all'] == true){
+      $paged = false;
+    } else {
+      $paged = true;
+    }
+
+    if(!isset($this->query_vars['p'])){
+      $p = 1;
+    } else {
+      $p = $this->query_vars['p'];
+    }
+    
+    $per_page = null;
+    if(isset($this->query_vars['type'])){
+      $per_page = typeSettingByKey('single', $this->query_vars['type'], 'per_page');
+    }
+    if(isset($this->query_vars['per_page'])){
+      $per_page = $this->query_vars['per_page'];
+    }
+    
+    $data = (new PaginationModel($this->found_terms, $paged, $p, $per_page))->getPagination();
     return $data;
   }
   
@@ -383,7 +406,11 @@ class QueryTermsModel {
     return $per_page;
   }
   private function getTermsMaxPages() {
-    $max_pages = $this->found_terms / $this->term_count;
+    if($this->term_count > 0){
+      $max_pages = $this->found_terms / $this->term_count;
+    } else {
+      $max_pages = 0;
+    }
     return ceil($max_pages);
   }
   

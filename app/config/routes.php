@@ -33,15 +33,26 @@ if ($config['enable_https']) {
 
 $router->get('/', function() {
   
+  // parse the url to be checked for valid query parameters
   $params = parse_url($_SERVER['REQUEST_URI']);
+  
+  // if valid query params exist...
   if (isset($params['query']) && queryParamsExists($params['query'])) {
-    parse_str($params['query'], $params_array);
+    
+    // do a redirect for requests of '?p=1' to the main page as these are the same thing
+    // parse_str($params['query'], $params_array);
     if($_SERVER['REQUEST_URI'] === '?p=1' || $_SERVER['REQUEST_URI'] === '/?p=1'){
       header('Location: /', true, 301);
       exit();
     }
+    
     (new ArchiveController())->querySite($params['query']);
-  } else {
+    
+  }
+  
+  // if no valid query params
+  else {
+    // do the standard getSingle route, Cached
     Cache::cacheServe(function() { 
       (new SingleController('page', 'index'))->getSingle();
     });

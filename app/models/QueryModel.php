@@ -67,14 +67,60 @@ class QueryModel {
     $this->found_posts = $this->getPostsCount(); // The total number of posts found matching the current query parameters
     $this->max_num_pages = $this->getPostsMaxPages(); // The total number of pages. Is the result of $found_posts / $posts_per_page
     $this->pagination = $this->getPaginationData(); // the pagination data for the returned posts 
-    // $this->test();
+    $this->test();
   }
   public function test() {
-    print_r($this->found_posts);
+    // print_r($this->query_vars);
+    // die();
   }
   
   public function getPaginationData() {
-    $data = (new PaginationModel($this->found_posts))->getPagination();
+    // we used to get the global _context variables in the PaginationModel to get this data, but its not been very robust or stable
+    // a better approach is to use the query_vars generated from the QueryModel to get the right values to fill into the PaginationModel
+    // query_vars gets from getArray(), which gets (an array) from either $this->args or paramsToArgs
+    // so for pagination on queried archives(with a query string), we just make sure we set the params args correctly
+    // for non-queried archives, we set a params array (instead of query string) via ArchiveModel using global _context values
+    // 
+    // the values that PaginationModel now requires are: $count(int), $page(int), $paged(bool) & $per_page(int)
+    //
+    // ideally, if values for per_page are null, this shouldnt matter to PaginationModel, as paged will be false in this case anyways, & pagination wont get processed
+    
+    // if 'show_all' exists & is true, set $paged to false
+    if(isset($this->query_vars['show_all']) && $this->query_vars['show_all'] == true){
+      $paged = false;
+    } else {
+      $paged = true; // else it is true
+    }
+    
+    // if 'p' exists, set $p to it
+    if(isset($this->query_vars['p'])){
+      $p = $this->query_vars['p'];
+    } else {
+      $p = 1; // else $p is 1
+    }
+    
+    // if 'type' is set in the QueryModel input args & 'per_page' is not
+    if(isset($this->query_vars['type']) && !isset($this->query_vars['per_page'])){
+      $per_page = typeSettingByKey('single', $this->query_vars['type'], 'per_page'); // set $per_page based on 'type'
+    }
+    
+    // else if 'per_page' IS set in the QueryModel input args
+    elseif(isset($this->query_vars['per_page'])){
+      $per_page = $this->query_vars['per_page']; // set $per_page based on that instead
+    }
+    
+    // else it can be null
+    else {
+      $per_page = null;
+    }
+    
+    // send the values to the pagination model, including $this->found_posts which is the actual post count.
+    // it should be okay if $this->found_posts is zero, this will just show no pagination links & 'No results to display' text
+    // per_page can be null
+    // p will be an integer or be 1 & paged is bool
+    $data = (new PaginationModel($this->found_posts, $paged, $p, $per_page))->getPagination();
+    
+    
     return $data;
   }
   
@@ -100,6 +146,10 @@ class QueryModel {
     // if global $type IS NOT set but the type query param IS set (a search query), just the title from $this->typeParam()
     if(!isset($_context['type']) && $this->typeParam()){
       $data['title'] = 'Query: '.$this->typeParam();
+    }
+    
+    if(!isset($_context['type']) && !$this->typeParam()){
+      $data['title'] = 'Query';
     }
     
     // if IS a query on single, like a custom query, set $data to empty
@@ -274,6 +324,7 @@ class QueryModel {
     */
     if($this->typeKey()) {
       
+      $_location = null;
       if($this->typeKey() == 'page') {
         $_location = 'site.content_types.page'; // if given type is page, set $_location based on this. 
       } else {
@@ -580,6 +631,8 @@ class QueryModel {
     $data = null;
     if($posts){
       foreach ($posts as $post) {
+        
+        // if type isnt page
         if($post['type'] !== 'page') {
           $type_key = typeSettingByKey('single', $post['type'], 'key'); // returns 'blog' or 'portfolio'
           $taxonomies = (isset($config['types'][$type_key]['taxes_in_meta'])) ? $config['types'][$type_key]['taxes_in_meta'] : null;
@@ -602,9 +655,13 @@ class QueryModel {
               }
             }
           }
-        } else {
+        }
+        
+        else {
           $post = $post;
         }
+        
+        
         $data[] = $post;
       }
     }
@@ -617,7 +674,7 @@ class QueryModel {
   *
   */
   private function isPaged() {
-    if(!$this->showAllKey()) return true;
+    if(!$this->showAllKey() && $this->perPageKey()) return true;
   }
   private function getPagedPosts($posts) {
     $data = false;
@@ -786,7 +843,11 @@ class QueryModel {
   *
   */
   private function getPostsMaxPages() {
-    $max_pages = $this->found_posts / $this->post_count;
+    if($this->post_count > 0){
+      $max_pages = $this->found_posts / $this->post_count;
+    } else {
+      $max_pages = 0;
+    }
     return ceil($max_pages);
   }
   

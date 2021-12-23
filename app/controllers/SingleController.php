@@ -180,6 +180,24 @@ class SingleController extends CoreController {
     global $_context;
     $context['single'] = (new SingleModel($this->type, $this->slug))->single;
     $context['context'] = $_context;
+    
+    // if homepage, we will get some posts from json to display on homepage, like a products grid
+    // these posts are essentially like a private cpt on wordpress, they can be displayed but are not routed or archived
+    // if archived routes were enabled, this cpt would become live.. perhaps non-public cpts can be defined in config, then checked against in archived routes
+    // so as to not create routes for that cpt, thereby making it private (non-routed but displayable) 
+    if($this->slug == 'index') {
+      
+      $blogposts_args_array = array(
+        // working. takes string & content type singular label (post, project etc...)
+        'type' => 'post',
+        'show_all' => 1
+      );
+      $blogposts_obj = new QueryModel($blogposts_args_array);
+      $blogposts = $blogposts_obj->posts;
+      $context['blogposts'] = $blogposts;
+      
+    }
+    
     $this->render($context);
   }
   

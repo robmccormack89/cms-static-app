@@ -1,5 +1,30 @@
 <?php
 
+function paramsArrayToString($params_array) {
+  /**
+   *
+   * Step 1 - rebuild the params array into a new query string
+   *
+   */
+  $pre_params = http_build_query($params_array);
+  
+  /**
+   *
+   * Step 2 - Fix: comma-separated items in the string; commas get changed into '%2C' after http_build_query. cosmetic
+   *
+   */
+  $pre_params = str_replace("%2C", ",", $pre_params);
+  
+  /**
+   *
+   * Step 3 - Fix: when show_all does't have a value, it ends up with an = sign at the end after http_build_query. cosmetic
+   *
+   */
+  $post_params = showAllParamFix($pre_params);
+  
+  return $post_params;
+}
+
 function pathToURL($path) {
   
   $path = str_replace("C:/xampp/htdocs/robertmccormack.com", "", realpath($path));
@@ -112,7 +137,7 @@ function queryParamsExists($params) {
 // string $return_key // key of the value to return. e.g 'items_route' 
 function typeSettingByKey($key, $value, $return_key) {
   global $config;
-  $data = '';
+  $data = null;
   foreach ($config['types'] as $type_setting) if ($type_setting[$key] == $value) {
     if(array_key_exists($return_key, $type_setting)){
       $data = $type_setting[$return_key];

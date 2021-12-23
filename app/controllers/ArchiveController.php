@@ -3,12 +3,10 @@ namespace Rmcc;
 
 class ArchiveController extends CoreController {
   
-  public function __construct($type = null, $posts_per_page = 7) {
+  public function __construct($type = null) {
     parent::__construct();
     $this->type = $type;
-    $this->posts_per_page = typeSettingByKey('key', $this->type, 'per_page') ?? $posts_per_page;
-    $this->paged = $this->paged = typeSettingByKey('key', $this->type, 'per_page') ? true : false;
-    $this->init(); // init some globals
+    $this->init(); // init globals
   }
   
   /**
@@ -21,10 +19,10 @@ class ArchiveController extends CoreController {
     global $_context;
     $_context = array(
       'archive' => 'Archive', // this will be overriden for specific archive types below
-      'type' => $this->type, // should be a string with term like 'blog' or 'portfolio'. will be the $key variable in routes.archived.php
+      'type' => $this->type, // $key variable in routes.archived, should be a string like 'blog' or 'portfolio'. if type is not inputted into class, will need to set the global type in the relevant method (like querySite)
       'page' => 1, // queried archives will deal with pagination, so only the query functions will need override this value. so default to 1
-      'per_page' => $this->posts_per_page,// if 'per_page' in $config is not set, $this->posts_per_page will default to 7 (see above) & $this->paged will be set to false
-      'paged' => $this->paged, // this is the desired behaviour for now. it is okay to leave 'per_page' defraulting to 7 whilst 'paged' is set to false. 'paged' will override 'per_page' & produce a non-paged archive
+      'per_page' => 7, // this will be overriden below, should be gotten from the type's meta & if not existing there, set $paged to false
+      'paged' => true, // this will be overriden below...
     );
   }
   
@@ -49,8 +47,16 @@ class ArchiveController extends CoreController {
     // get the global _context variables
     global $_context;
     
-    // reset the global _context variable for 'archive' to 'MainIndexArchive'
+    // reset the global _context variables
     $_context['archive'] = 'MainIndexArchive';
+    
+    // if type's 'per_page' setting exists, set global 'per_page' to it, else set global 'paged' to false (per_page will be 7 otherwise & paged will be true)
+    if(typeSettingByKey('key', $this->type, 'per_page')) {
+       $_context['per_page'] = typeSettingByKey('key', $this->type, 'per_page');
+    } else {
+      $_context['per_page'] = null; // might as well set this to null? per_page shoould be okay at null if pagwed is false
+      $_context['paged'] = false;
+    }
     
     // get the archive object context from ArchiveModel -> getArchive() for twig to render
     $context['archive'] = (new ArchiveModel())->getArchive();
@@ -80,6 +86,13 @@ class ArchiveController extends CoreController {
     
     // reset the global _context variable for 'archive' to 'TaxTermArchive'
     $_context['archive'] = 'TaxTermArchive';
+    
+    // if type's 'per_page' setting exists, set global 'per_page' to it, else set global 'paged' to false (per_page will be 7 otherwise & paged will be true)
+    if(typeSettingByKey('key', $this->type, 'per_page')) {
+       $_context['per_page'] = typeSettingByKey('key', $this->type, 'per_page');
+    } else {
+      $_context['paged'] = false;
+    }
     
     // add 'tax' & 'term' to global _context variables
     $_context['tax'] = $tax;
@@ -112,6 +125,13 @@ class ArchiveController extends CoreController {
     // reset the global _context variable for 'archive' to 'TaxCollectionArchive'
     $_context['archive'] = 'TaxCollectionArchive';
     
+    // if type's 'per_page' setting exists, set global 'per_page' to it, else set global 'paged' to false (per_page will be 7 otherwise & paged will be true)
+    if(typeSettingByKey('key', $this->type, 'per_page')) {
+       $_context['per_page'] = typeSettingByKey('key', $this->type, 'per_page');
+    } else {
+      $_context['paged'] = false;
+    }
+    
     // add 'tax' to global _context variables
     $_context['tax'] = $tax;
     
@@ -134,95 +154,6 @@ class ArchiveController extends CoreController {
    * These are more complicated than standard non-queriable archives
    *
    */
-   
-  /**
-    *
-    * This needs to be checked
-    *
-    */
-  
-  // '?type=blog&categories=news&p=2'
-  public function querySite($params) {
-    
-    global $_context;
-
-    /*
-    *
-    * set the _context archive
-    *
-    */
-    $_context['archive'] = 'SiteQuery';
-    
-    /*
-    *
-    * parse the params string into an array (the params have been filtered for relevant ones only in routes)
-    *
-    */
-    parse_str($params, $params_array);
-    
-    /*
-    *
-    * set the type based on the type given in routes.
-    * this will be fed into the query string; type= filtering is not supposed to be used on MainIndexArchives as they are already a 'type'
-    *
-    */
-    // $params_array['type'] = typeSettingByKey('key', $this->type, 'single');
-    
-    /*
-    *
-    * set the pagination values in the params array
-    *
-    */
-    if(isset($params_array['p'])) $_context['page'] = $params_array['p'];
-    if(isset($params_array['show_all'])) $_context['paged'] = false;
-    if(isset($params_array['per_page'])) $_context['per_page'] = $params_array['per_page'];
-    if(!isset($params_array['per_page'])) $params_array['per_page'] = $_context['per_page'];
-    
-    /*
-    *
-    * rebuild the params array into a query string
-    *
-    */
-    $pre_params = http_build_query($params_array);
-    
-    /*
-    *
-    * comma-separated items in the string: commas get changed into '%2C' after http_build_query
-    * this changes fixes this.
-    * cosmetic really
-    *
-    */
-    $pre_params = str_replace("%2C", ",", $pre_params);
-    
-    /*
-    *
-    * when show_all does't have a value, it ends up with an = sign at the end after http_build_query
-    * this code just removes the = from the show_all param
-    * cosmetic really
-    *
-    */
-    $new_params = showAllParamFix($pre_params);
-    
-    /*
-    *
-    * _context->string_params is what the query will be running off. so we set it here to out rebuilt string above
-    *
-    */
-    $_context['string_params'] = $new_params;
-    
-    /*
-    *
-    * finally, set the archive obj context for twig to render
-    *
-    */
-    $context['archive'] = (new ArchiveModel())->getQueriedArchive();
-    $context['context'] = $_context;
-    if(isset($context['archive']['title'])) {
-      $this->render($context);
-    } else {
-      $this->error();
-    }
-  }
   
   /**
    *
@@ -247,49 +178,102 @@ class ArchiveController extends CoreController {
    */
   public function queryMainIndexArchive($params) {
     
-    // get the global _context variables
+    /**
+     *
+     * Step 1 - get the global _context variables
+     *
+     */
     global $_context;
     
-    // reset the global _context variable for 'archive' to 'MainIndexArchive'
+    /**
+     *
+     * Step 2 - reset the global _context variable for 'archive' to 'MainIndexArchive'
+     *
+     */
     $_context['archive'] = 'MainIndexArchive';
     
-    // parse the params string into an array (the params_array has been filtered for relevant ones only in routes)
+    /**
+     *
+     * Step 3 - parse the params string into an array (the params_array has been filtered for relevant ones only in routes)
+     *
+     */
     parse_str($params, $params_array);
     
-    // set the type based on the type given in routes
-    // this will be fed into the query string; type= filtering is not supposed to be used on MainIndexArchives as they are already a 'type'
+    /**
+     *
+     * Step 4 - set the $params_array type based on $this->type. queryMainIndexArchive will have type impliciit thru class
+     *
+     */
     $params_array['type'] = typeSettingByKey('key', $this->type, 'single'); // must use the singular label here e.g: 'post'
     
-    // we overwrite the global _context values here relevant to the pagination
-    // this is because we want valid query params to override the overall archive params when they exist in the query string
-    if(isset($params_array['p'])) $_context['page'] = $params_array['p']; // if params HAS 'p', global $page = params 'p'
-    if(isset($params_array['show_all'])) $_context['paged'] = false; // if params HAS 'show_all', global $paged = false
-    if(isset($params_array['per_page'])) $_context['per_page'] = $params_array['per_page']; // if params HAS 'per_page', global $per_page = params 'per_page'
-    if(!isset($params_array['per_page'])) $params_array['per_page'] = $_context['per_page']; // if params DOESNT HAVE 'per_page', params 'per_page' = global $per_page
+    /**
+     *
+     * Step 5 - overwrite global _context values here relevant to the pagination
+     * this is because we want valid query params to override the overall archive params when they exist in the query string
+     *
+     */
     
-    // rebuild the params array into a new query string
-    $pre_params = http_build_query($params_array);
+    // if type's 'per_page' setting exists, set global 'per_page' to it, else set global 'paged' to false (per_page will be 7 otherwise & paged will be true)
+    if(typeSettingByKey('key', $this->type, 'per_page')) {
+      $_context['per_page'] = typeSettingByKey('key', $this->type, 'per_page');
+    }
     
-    // comma-separated items in the string: commas get changed into '%2C' after http_build_query
-    // this changes fixes this.
-    // cosmetic really
-    $pre_params = str_replace("%2C", ",", $pre_params);
+    // else {
+    //   $_context['per_page'] = null; // might as well set this to null? per_page shoould be okay at null if pagwed is false
+    //   $_context['paged'] = false;
+    // }
     
-    // when show_all does't have a value, it ends up with an = sign at the end after http_build_query
-    // this code just removes the = from the show_all param
-    // cosmetic really
-    $post_params = showAllParamFix($pre_params);
+    /**
+     *
+     * Step 6 - set new params array values based on globals where relevant. for paged archives to work
+     * we will try to keep the global _context & params_array values for pagination-things matching
+     *
+     */
     
-    // add the new params string to the global _context array
-    $_context['string_params'] = $post_params;
+    // if(isset($params_array['p'])) $_context['page'] = $params_array['p']; // if params_array HAS 'p', set global 'page' to it
+    // if(isset($params_array['show_all'])) $_context['paged'] = false; // if params_array HAS 'show_all', set global 'paged' = false
     
-    // get the archive object context from ArchiveModel -> getQueriedArchive() for twig to render
+    // if params has 'per_page' setting
+    if(isset($params_array['per_page'])) {
+      // $_context['per_page'] = $params_array['per_page']; // reset global 'per_page' to it
+    } else {
+      $params_array['per_page'] = $_context['per_page']; // else, set it to match the global (which is set according to type).
+    }
+    
+    /**
+     *
+     * Step 7 - paramsArrayToString - turns params array back to a string with fixes (helpers.php)
+     *
+     */
+    
+    $new_params_string = paramsArrayToString($params_array);
+    
+    /**
+     *
+     * Step 7 - add the new params string to the global _context
+     *
+     */
+    $_context['string_params'] = $new_params_string;
+    
+    /**
+     *
+     * Step 8 - get the archive object context from ArchiveModel -> getQueriedArchive() for twig to render
+     *
+     */
     $context['archive'] = (new ArchiveModel())->getQueriedArchive();
     
-    // add the global _content variables to the archive object context
+    /**
+     *
+     * Step 9 - add the global _content variables to the archive object context
+     *
+     */
     $context['context'] = $_context;
     
-    // render the context. if the data queried doesnt produce an archive title, i.e its not valid data or request, throw the error
+    /**
+     *
+     * Step 10 - render the context. if the data queried doesnt produce an archive title, i.e its not valid data or request, throw the error
+     *
+     */
     if(isset($context['archive']['title'])) {
       $this->render($context);
     } else {
@@ -323,53 +307,109 @@ class ArchiveController extends CoreController {
    */
   public function queryTaxTermArchive($params, $tax, $term) {
     
-    // get the global _context variables
+    /**
+     *
+     * Step 1 - get the global _context variables
+     *
+     */
     global $_context;
     
-    // reset the global _context variable for 'archive' to 'TaxTermArchive'
+    /**
+     *
+     * Step 2 - reset the global _context variable for 'archive' to 'TaxTermArchive'
+     *
+     */
     $_context['archive'] = 'TaxTermArchive';
     
-    // parse the params string into an array (the params_array has been filtered for relevant ones only in routes)
+    /**
+     *
+     * Step 3 - parse the params string into an array (the params_array has been filtered for relevant ones only in routes)
+     *
+     */
     parse_str($params, $params_array);
     
-    // set the type & tax->term data here based on the type, tax & term given in routes
+    /**
+     *
+     * Step 4 - set the type & tax->term data here based on the given type, & tax & term given in routes
+     *
+     */
     $params_array['type'] = typeSettingByKey('key', $this->type, 'single');  // must use the singular label here e.g: 'post'
     $params_array[$tax] = $term;
     
-    // we set the global tax & term values from the given tax & term
+    /**
+     *
+     * Step 5 - set the global tax & term values from the given tax & term
+     *
+     */
     $_context['tax'] = $tax;
     $_context['term'] = $term;
     
-    // we overwrite the global _context values here relevant to the pagination
-    // this is because we want valid query params to override the overall archive params when they exist in the query string
-    if(isset($params_array['p'])) $_context['page'] = $params_array['p'];
-    if(isset($params_array['show_all'])) $_context['paged'] = false;
-    if(isset($params_array['per_page'])) $_context['per_page'] = $params_array['per_page'];
-    if(!isset($params_array['per_page'])) $params_array['per_page'] = $_context['per_page'];
+    /**
+     *
+     * Step 6 - overwrite global _context values here relevant to the pagination
+     * this is because we want valid query params to override the overall archive params when they exist in the query string
+     *
+     */
     
-    // rebuild the params array into a new query string
-    $pre_params = http_build_query($params_array);
+    // if type's 'per_page' setting exists, set global 'per_page' to it, else set global 'paged' to false (per_page will be 7 otherwise & paged will be true)
+    if(typeSettingByKey('key', $this->type, 'per_page')) {
+      $_context['per_page'] = typeSettingByKey('key', $this->type, 'per_page'); // set global 'per_page' to it
+    } else {
+      $_context['per_page'] = null; // might as well set this to null? per_page shoould be okay at null if pagwed is false
+      $_context['paged'] = false;
+    }
     
-    // comma-separated items in the string: commas get changed into '%2C' after http_build_query
-    // this changes fixes this.
-    // cosmetic really
-    $pre_params = str_replace("%2C", ",", $pre_params);
+    /**
+     *
+     * Step 7 - set new params array values based on globals where relevant. for paged archives to work
+     * we will try to keep the global _context & params_array values for pagination-things matching
+     *
+     */
+
+    if(isset($params_array['p'])) $_context['page'] = $params_array['p']; // if params_array HAS 'p', set global 'page' to it
+    if(isset($params_array['show_all'])) $_context['paged'] = false; // if params_array HAS 'show_all', set global 'paged' = false
+
+    // if params has 'per_page' setting
+    if(isset($params_array['per_page'])) {
+      $_context['per_page'] = $params_array['per_page']; // reset global 'per_page' to it
+    } else {
+      $params_array['per_page'] = $_context['per_page']; // else, set it to match the global
+    }
     
-    // when show_all does't have a value, it ends up with an = sign at the end after http_build_query
-    // this code just removes the = from the show_all param
-    // cosmetic really
-    $new_params = showAllParamFix($pre_params);
+    /**
+     *
+     * Step 8 - paramsArrayToString - turns params array back to a string with fixes (helpers.php)
+     *
+     */
     
-    // add the new params string to the global _context array
-    $_context['string_params'] = $new_params;
+    $new_params_string = paramsArrayToString($params_array);
     
-    // get the archive object context from ArchiveModel -> getQueriedArchive() for twig to render
+    /**
+     *
+     * Step 9 - add the new params string to the global _context
+     *
+     */
+    $_context['string_params'] = $new_params_string;
+    
+    /**
+     *
+     * Step 10 - get the archive object context from ArchiveModel -> getQueriedArchive() for twig to render
+     *
+     */
     $context['archive'] = (new ArchiveModel())->getQueriedArchive();
     
-    // add the global _content variables to the archive object context
+    /**
+     *
+     * Step 11 - add the global _content variables to the archive object context
+     *
+     */
     $context['context'] = $_context;
     
-    // render the context. if the data queried doesnt produce an archive title, i.e its not valid data or request, throw the error
+    /**
+     *
+     * Step 12 - render the context. if the data queried doesnt produce an archive title, i.e its not valid data or request, throw the error
+     *
+     */
     if(isset($context['archive']['title'])) {
       $this->render($context);
     } else {
@@ -406,51 +446,238 @@ class ArchiveController extends CoreController {
    */
   public function queryTaxCollectionArchive($params, $tax) {
     
-    // get the global _context variables
+    /**
+     *
+     * Step 1 - get the global _context variables
+     *
+     */
     global $_context;
 
-    // reset the global _context variable for 'archive' to 'TaxCollectionArchive'
+    /**
+     *
+     * Step 2 - reset the global _context variable for 'archive' to 'TaxCollectionArchive'
+     *
+     */
     $_context['archive'] = 'TaxCollectionArchive';
     
-    // parse the params string into an array (the params_array has been filtered for relevant ones only in routes)
+    /**
+     *
+     * Step 3 - parse the params string into an array (the params_array has been filtered for relevant ones only in routes)
+     *
+     */
     parse_str($params, $params_array);
     
-    // set the taxonomy data here based on the given tax
+    /**
+     *
+     * Step 4 - set the params_array 'taxonomy' here based on the given tax
+     *
+     */
     $params_array['taxonomy'] = taxSettingByKey($this->type, 'key', $tax, 'single'); //  // must use the singular label here e.g: 'category'
     
-    // we set the global tax values from the given tax
+    /**
+     *
+     * Step 5 - set the global tax value from the given tax
+     *
+     */
     $_context['tax'] = $tax;
     
-    // we overwrite the global _context values here relevant to the pagination
-    // this is because we want valid query params to override the overall archive params when they exist in the query string
-    if(isset($params_array['p'])) $_context['page'] = $params_array['p'];
-    if(isset($params_array['show_all'])) $_context['paged'] = false;
-    if(isset($params_array['per_page'])) $_context['per_page'] = $params_array['per_page'];
-    if(!isset($params_array['per_page'])) $params_array['per_page'] = $_context['per_page'];
+    /**
+     *
+     * Step 6 - overwrite global _context values here relevant to the pagination
+     * this is because we want valid query params to override the overall archive params when they exist in the query string
+     *
+     */
     
-    // rebuild the params array into a new query string
-    $pre_params = http_build_query($params_array);
+    // if type's 'per_page' setting exists, set global 'per_page' to it, else set global 'paged' to false (per_page will be 7 otherwise & paged will be true)
+    if(typeSettingByKey('key', $this->type, 'per_page')) {
+      $_context['per_page'] = typeSettingByKey('key', $this->type, 'per_page'); // set global 'per_page' to it
+    } else {
+      $_context['per_page'] = null; // might as well set this to null? per_page shoould be okay at null if pagwed is false
+      $_context['paged'] = false;
+    }
     
-    // comma-separated items in the string: commas get changed into '%2C' after http_build_query
-    // this changes fixes this.
-    // cosmetic really
-    $pre_params = str_replace("%2C", ",", $pre_params);
+    /**
+     *
+     * Step 7 - set new params array values based on globals where relevant. for paged archives to work
+     * we will try to keep the global _context & params_array values for pagination-things matching
+     *
+     */
+
+    if(isset($params_array['p'])) $_context['page'] = $params_array['p']; // if params_array HAS 'p', set global 'page' to it
+    if(isset($params_array['show_all'])) $_context['paged'] = false; // if params_array HAS 'show_all', set global 'paged' = false
+
+    // if params has 'per_page' setting
+    if(isset($params_array['per_page'])) {
+      $_context['per_page'] = $params_array['per_page']; // reset global 'per_page' to it
+    } else {
+      $params_array['per_page'] = $_context['per_page']; // else, set it to match the global
+    }
     
-    // when show_all does't have a value, it ends up with an = sign at the end after http_build_query
-    // this code just removes the = from the show_all param
-    // cosmetic really
-    $new_params = showAllParamFix($pre_params);
+    /**
+     *
+     * Step 8 - paramsArrayToString - turns params array back to a string with fixes (helpers.php)
+     *
+     */
+    $new_params_string = paramsArrayToString($params_array);
     
-    // add the new params string to the global _context array
-    $_context['string_params'] = $new_params;   
+    /**
+     *
+     * Step 9 - add the new params string to the global _context
+     *
+     */
+    $_context['string_params'] = $new_params_string;  
       
-    // get the archive object context from ArchiveModel -> getQueriedTaxonomyArchive() for twig to render
+    /**
+     *
+     * Step 10 - get the archive object context from ArchiveModel -> getQueriedTaxonomyArchive() for twig to render
+     *
+     */
     $context['archive'] = (new ArchiveModel())->getQueriedTaxonomyArchive();
     
-    // add the global _content variables to the archive object context
+    /**
+     *
+     * Step 11 - add the global _content variables to the archive object context
+     *
+     */
     $context['context'] = $_context;
     
-    // render the context. if the data queried doesnt produce an archive title, i.e its not valid data or request, throw the error
+    /**
+     *
+     * Step 12 - render the context. if the data queried doesnt produce an archive title, i.e its not valid data or request, throw the error
+     *
+     */
+    if(isset($context['archive']['title'])) {
+      $this->render($context);
+    } else {
+      $this->error();
+    }
+  }
+  
+  /**
+   *
+   * Query the Site (like search queries) - Seems working
+   *
+   * WORKING URLS
+   * '?type=post'
+   * '?type=post&s=creativo'
+   * '?type=event&per_page=2&p=1&s=creativo'
+   * '?s=handshake&p=2'
+   *
+   * DO NOT WORK
+   * '?type=post,project' - only one type works. for now
+   * maybe can make work with mutiple types later. would require joining types together in QueryModel.
+   *
+   * @param array $params - $params have been checked for valid $params in routes.archived with queryParamsExists()
+   *
+   * This function will render the given data thru a twig template via render()
+   *
+   */
+  public function querySite($params) {
+    
+    /**
+     *
+     * Step 1 - get the global _context variables
+     *
+     */
+    global $_context;
+
+    /**
+     *
+     * Step 2 - reset the global _context variable for 'archive' to 'SiteQuery'
+     *
+     */
+    $_context['archive'] = 'SiteQuery';
+    
+    /**
+     *
+     * Step 3 - parse the params string into an array (the params_array has been filtered for relevant ones only in routes)
+     *
+     */
+    parse_str($params, $params_array);
+
+    // if(!isset($params_array['type'])) {
+    //   $this->error();
+    //   exit();
+    // }
+     
+    /**
+      *
+      * Step 5 - overwrite global _context values here relevant to the pagination
+      * this is because we want valid query params to override the overall archive params when they exist in the query string
+      *
+      */
+      
+      /**
+       *
+       * Step 7 - set new params array values based on globals where relevant. for paged archives to work
+       * we will try to keep the global _context & params_array values for pagination-things matching
+       *
+       */
+    
+    if(isset($params_array['p'])) $_context['page'] = $params_array['p']; // if params_array HAS 'p', set global 'page' to it
+    if(isset($params_array['show_all'])) $_context['paged'] = false; // if params_array HAS 'show_all', set global 'paged' = false
+    
+    // $new_per_page = $_context['per_page']; // starts out as the global per_page
+    
+    // if params array doesnt have a per_page, 
+    if(!isset($params_array['per_page'])) {
+      
+      
+      // but it does have a type & that type has its own per_page setting
+      if(isset($params_array['type']) && typeSettingByKey('single', $params_array['type'], 'per_page')){
+        $params_array['per_page'] = typeSettingByKey('single', $params_array['type'], 'per_page'); // set the new per_page to that
+      }
+      
+      else {
+        $params_array['per_page'] = $_context['per_page']; // starts out as the global per_page
+      }
+    }
+    
+    // // else if params array DOES have a per_page,
+    // else {
+    //   $new_per_page = $params_array['per_page']; // set the new per_page to that
+    // }
+    // 
+    // $params_array['per_page'] = $new_per_page;
+    
+    // if global paged is set to false, we should add show_all to the params
+    if($_context['paged'] == false){
+      $params_array['show_all'] = ''; // add 'show_all' to the params
+    }
+    
+    /**
+     *
+     * Step 8 - paramsArrayToString - turns params array back to a string with fixes (helpers.php)
+     *
+     */
+    $new_params_string = paramsArrayToString($params_array);
+    
+    /**
+     *
+     * Step 9 - add the new params string to the global _context
+     *
+     */
+    $_context['string_params'] = $new_params_string;  
+    
+    /**
+     *
+     * Step 10 - get the archive object context from ArchiveModel -> getQueriedArchive() for twig to render
+     *
+     */
+    $context['archive'] = (new ArchiveModel())->getQueriedArchive();
+    
+    /**
+     *
+     * Step 11 - add the global _content variables to the archive object context
+     *
+     */
+    $context['context'] = $_context;
+    
+    /**
+     *
+     * Step 12 - render the context. if the data queried doesnt produce an archive title, i.e its not valid data or request, throw the error
+     *
+     */
     if(isset($context['archive']['title'])) {
       $this->render($context);
     } else {
@@ -529,6 +756,25 @@ class ArchiveController extends CoreController {
         // else if blog.twig exists, use that
         elseif($this->twig->getLoader()->exists($_type.'.twig')) {
           $this->templateRender($_type.'.twig', $context);
+        }
+      
+        // else, use archive.twig
+        else {
+          $this->templateRender('archive.twig', $context);
+        }
+        
+        break;
+        
+      case 'SiteQuery':
+      
+        // if blog-search.twig exists, use it
+        if($this->twig->getLoader()->exists($_type.'-search.twig')){
+          $this->templateRender($_type.'-search.twig', $context);
+        }
+      
+        // else if search.twig exists, use that
+        elseif($this->twig->getLoader()->exists('search.twig')) {
+          $this->templateRender('search.twig', $context);
         }
       
         // else, use archive.twig

@@ -20,9 +20,9 @@ class ArchiveModel {
     
     // 1. build the $args for the QueryModel using the global $_context variables
     $args = array(
-      'type' => typeSettingByKey('key', $_context['type'], 'single'), // must use the singular label here e.g: 'post'
-      'per_page' => $_context['per_page'],
-      'p' => $_context['page'], // will be 1
+      'type' => typeSettingByKey('key', $_context['type'], 'single'), // we use the singular label for 'type' in queries
+      'per_page' => $_context['per_page'], // use the global, reset in ArchiveController->getMainIndexArchive
+      'p' => $_context['page'], // use the global, will be 1
       'show_all' => ($_context['paged']) ? false : true // if paged is false, set show_all to true
     );
     // get the posts object using the QueryModel
@@ -36,10 +36,10 @@ class ArchiveModel {
     
     // 4. Set the archive pagination data. Only if there are posts tho
     if(!empty($archive['posts'])){
-      
+    
       // We use PaginationModel->getPagination to set the pagination data
       $archive['pagination'] = $posts_obj->pagination;
-      
+    
     }
 
     // 5. Finally, we return the newly-created archive object
@@ -113,7 +113,7 @@ class ArchiveModel {
     if(!empty($archive['posts'])){
   
       // We use PaginationModel->getPagination to set the pagination data
-      $archive['pagination'] = (new PaginationModel($terms_obj->found_terms))->getPagination();
+      $archive['pagination'] = $terms_obj->pagination;
   
     }
   
