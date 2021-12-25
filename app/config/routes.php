@@ -31,36 +31,39 @@ if ($config['enable_https']) {
 *
 */
 
+// create the Homepage route
 $router->get('/', function() {
   
-  // parse the url to be checked for valid query parameters
+  // parse the url, to be checked for valid query parameters
   $params = parse_url($_SERVER['REQUEST_URI']);
   
-  // if valid query params exist...
+  // if valid query params exist, we will do a query of the Site
   if (isset($params['query']) && queryParamsExists($params['query'])) {
     
-    // do a redirect for requests of '?p=1' to the main page as these are the same thing
-    // parse_str($params['query'], $params_array);
+    // here we do a redirect for requests of '?p=1' to the main page as these are the same thing
     if($_SERVER['REQUEST_URI'] === '?p=1' || $_SERVER['REQUEST_URI'] === '/?p=1'){
       header('Location: /', true, 301);
       exit();
     }
     
+    // then we do the Site query route
     (new ArchiveController())->querySite($params['query']);
     
   }
   
-  // if no valid query params
+  // else, if no valid query params, we do a regular Single route for the Homepage
   else {
-    // do the standard getSingle route, Cached
+    
+    // do the standard Single route for Homepage, with Cached
     Cache::cacheServe(function() { 
       (new SingleController('page', 'index'))->getSingle();
     });
+    
   }
   
 });
 
-// contact form post route, Homepage!
+// contact form post route, for the Homepage! allows entering the contact form on homepage
 $router->post('/', function() {
   (new SingleController('page', 'index'))->getContact();
 });
@@ -79,7 +82,7 @@ include('routes.archived.php');
 *
 */
 
-// contact form post route, contact page!
+// contact form post route, contact page!  allows entering the contact form on contact page
 $router->post('/contact', function() {
   (new SingleController('page', 'contact'))->getContact();
 });

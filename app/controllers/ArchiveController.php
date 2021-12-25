@@ -10,8 +10,21 @@ class ArchiveController extends CoreController {
   
   /**
    *
-   * initialize the _context variable. this is used to hold data about the archive such as archive-type, content-type, taxonomy & taxonomy-term
-   * On queried-archives, dont need to have the content-type, taxonomy & taxonomy-term, can instead include the query string or diseccted args
+   * initialize the global _context variable.
+   * this will be used to hold data about the archive such as archive-type(archive), content-type(type), taxonomy(tax) & taxonomy-term(term)
+   * 
+   * We should be careful about what methods downstream rely on global _context variables & what variables they need
+   *
+   * Currently, in QueryModel(), only the meta methods (for queried object data), rely on the global _context type, tax & term variables
+   * PaginationModel() has been freed from dependency of _context variables. This now uses class inputs
+   * $this->render() relies on global _context's archive, type, tax & term values
+   *
+   * On querySite archives, we dont need to have type, taxonomy & term
+   * we can instead include the query string or dissected args in the global _context
+   * or we can take the type, tax or term from the query string, if they exist, & add them to the _context downstream
+   * only problem is that term can be an array(comma-separated values) in the query string. maybe this can be added as 'terms' instead to the global _context
+   *
+   * only TaxTerm (maybe querySite) archives require to throw the error() if archive.title not set. all rest willhave errors thru SingleController->SingleModel
    *
    */
   
@@ -30,15 +43,15 @@ class ArchiveController extends CoreController {
 
   public function getMainIndexArchive($type) {
 
-    global $_context;
+    global $_context; // get the global _context
     
-    $_context['archive'] = 'MainIndexArchive';
-    $_context['type'] = $type;
+    $_context['archive'] = 'MainIndexArchive'; // reset 'archive' in _context
+    $_context['type'] = $type; // add the type to _context
     
-    $data['context'] = $_context;
-    $data['archive'] = (new ArchiveModel())->getMainArchive($type);
+    $data['context'] = $_context; // add the _context data to the render data
+    $data['archive'] = (new ArchiveModel())->getMainArchive(); // add the archive data to the render data using ArchiveModel())->getMainArchive()
     
-    $this->render($data);
+    $this->render($data); // render the data. see render() below for template hierarchy
     
   }
   
@@ -48,12 +61,13 @@ class ArchiveController extends CoreController {
     
     $_context['archive'] = 'TaxTermArchive';
     $_context['type'] = $type;
-    $_context['tax'] = $tax;
-    $_context['term'] = $term;
+    $_context['tax'] = $tax; // add the tax to _context (needed for TaxTerm & Collection archives)
+    $_context['term'] = $term; // add the term to _context (needed for TaxTerm archives only)
     
     $data['context'] = $_context;
-    $data['archive'] = (new ArchiveModel())->getTermArchive($type, $tax, $term);
+    $data['archive'] = (new ArchiveModel())->getTermArchive();
     
+    // this is if $term is invalid. invalid $type & $tax in url get treated as invalid single-page urls & errors happen thru SingleController->SingleModel
     isset($data['archive']['title']) ? $this->render($data) : $this->error();
     
   }
@@ -64,7 +78,7 @@ class ArchiveController extends CoreController {
     
     $_context['archive'] = 'TaxCollectionArchive';
     $_context['type'] = $type;
-    $_context['tax'] = $tax;
+    $_context['tax'] = $tax; // Collection archives only need $type & $tax
     
     $data['context'] = $_context;
     $data['archive'] = (new ArchiveModel())->getTaxonomyArchive();
@@ -76,6 +90,9 @@ class ArchiveController extends CoreController {
   /**
    *
    * Query Archive functions
+   *
+   * $params is the query string provided thru archived.routes
+   * $params has been checked for valid parameters, but has not been sanitized in any way...
    *
    */
   
@@ -89,7 +106,7 @@ class ArchiveController extends CoreController {
     $data['context'] = $_context;
     $data['archive'] = (new ArchiveModel())->getQueriedArchive($params);
     
-    isset($data['archive']['title']) ? $this->render($data) : $this->error();
+    $this->render($data);
     
   }
   
@@ -120,7 +137,7 @@ class ArchiveController extends CoreController {
     $data['context'] = $_context;
     $data['archive'] = (new ArchiveModel())->getQueriedTaxonomyArchive($params);
     
-    isset($data['archive']['title']) ? $this->render($data) : $this->error();
+    $this->render($data);
     
   }
 
@@ -140,6 +157,10 @@ class ArchiveController extends CoreController {
   /**
    *
    * Render archives thru twig templates according to a template hierarchy
+   *
+   * Uses the global _context's archive, type, tax & term values
+   * Differenciates between MainIndex, TaxTerm, TaxCollection & SiteQuery archives
+   * See switch statement to see the template hierarchy for each archive-type
    *
    */
 

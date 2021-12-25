@@ -189,12 +189,15 @@ class SingleController extends CoreController {
       
       $blogposts_args_array = array(
         // working. takes string & content type singular label (post, project etc...)
-        'type' => 'post',
-        'show_all' => 1
+        'type' => 'event',
+        'per_page' => 1,
+        'page' => 1
       );
       $blogposts_obj = new QueryModel($blogposts_args_array);
       $blogposts = $blogposts_obj->posts;
       $context['blogposts'] = $blogposts;
+      
+      // print_r($context['blogposts']);
       
     }
     

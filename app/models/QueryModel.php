@@ -274,47 +274,58 @@ class QueryModel {
   *
   */
   private function getPostsQuery() {
+    
+    // access the global config variables
     global $config;
-    /*
-    *
-    * 1. set the initial location
-    *
-    */
+    
+    // the initial location of the json data, take from config
     $q = new Json($config['json_data']);
     
-    /*
-    *
-    * 2. get all single posts from all content types
-    * This serves as our start query, minus all other queries, we return all posts
-    * $posts is set with the posts, and per each modifying query below, we query off $posts & then reset it with the new results
-    *
-    */
-    $content_types = $q->find('site.content_types')->toArray(); // all content types as an array
-    $new_content_types = array(); // creating new array by looping thru each of the content types
-    foreach($content_types as $key => $value) {
-      $types_array = $q->copy()->reset()->find('site.content_types.'.$key.'.'.typeSettingByKey('key', $key, 'items'))->toArray();
-      if($key == 'page') $types_array = $q->copy()->reset()->find('site.content_types.'.$key)->toArray();
-      $new_content_types[] = $types_array;
+    // if type IS NOT present, get $posts from all content_types in json & join them together
+    if(!$this->typeKey()) {
+      
+      $content_types = $q->find('site.content_types')->toArray(); // all items from json's content_types, as an array
+      
+      $joined_content_types = array(); // an empty array for the new joined_content_types
+      
+      foreach($content_types as $key => $value) {
+        
+        // if 'type' IS NOT 'page' & it is set to be public via config
+        if($key !== 'page') {
+          if(typeSettingByKey('single', $key, 'visibility') == 'public' OR typeSettingByKey('single', $key, 'visibility') == 'private'){
+            $types_array = $q->copy()->reset()->find('site.content_types.'.$key.'.'.typeSettingByKey('key', $key, 'items'))->toArray(); // archived content types
+          }
+        }
+        
+        // then if 'type' is 'page'...
+        else {
+          $types_array = $q->copy()->reset()->find('site.content_types.'.$key)->toArray(); // add them to the array as well
+        }
+        
+        $joined_content_types[] = $types_array; // join all the content_types back up
+        
+      }
+      
+      //  finally we merge all the posts from the different content types together in a new Json object using Json->collect() & php's array_merge()
+      $posts = (new Json())->collect(array_merge(...$joined_content_types));
     }
-    //  finally we merge all the posts from the different content types together in a new Json object using Json->collect() & php's array_merge()
-    $posts = (new Json())->collect(array_merge(...$new_content_types));
     
-    /*
-    *
-    * If type key exists, we need to modifiy $posts according to that
-    *
-    */
-    if($this->typeKey()) {
+    // else if type IS present, get posts from that specific content type
+    else {
       
       $_location = null;
-      if($this->typeKey() == 'page') {
-        $_location = 'site.content_types.page'; // if given type is page, set $_location based on this. 
-      } else {
-        // else set $_location based on the registered content types using the given type
-        $type_plural = typeSettingByKey('single', $this->typeKey(), 'items'); // returns 'posts' or 'projects', or null...
-        $type_archive = typeSettingByKey('single', $this->typeKey(), 'key'); // returns 'blog' or 'portfolio', or null...
-        if($type_plural && $type_archive) $_location = 'site.content_types.'.$type_archive.'.'.$type_plural;
-      };
+      
+      if($this->typeKey() !== 'page') {
+        if(typeSettingByKey('single', $this->typeKey(), 'visibility') == 'public' OR typeSettingByKey('single', $this->typeKey(), 'visibility') == 'private'){
+          $type_plural = typeSettingByKey('single', $this->typeKey(), 'items'); // returns 'posts' or 'projects', or null...
+          $type_archive = typeSettingByKey('single', $this->typeKey(), 'key'); // returns 'blog' or 'portfolio', or null...
+          if($type_plural && $type_archive) $_location = 'site.content_types.'.$type_archive.'.'.$type_plural;
+        }
+      }
+      
+      else {
+        $_location = 'site.content_types.page';
+      }
     
       // if $_location indeed exists, query posts using it, else set $posts as empty Json object
       // if the initial type results in a faulty location, we want the result to be empty so this makes sense
@@ -525,14 +536,18 @@ class QueryModel {
       }
     }
     
+    $count = 0;
+    
     /*
     *
     * we need to get() the $posts BEFORE paged stuff
     * we need to set the latest $count BEFORE paged stuff
     *
     */
-    $posts = $posts->get();
-    $count = $posts->count();
+    if($posts->exists()) {
+      $posts = $posts->get();
+      $count = $posts->count();
+    }
     
     /*
     *
@@ -557,7 +572,7 @@ class QueryModel {
     * which is harder to check against. e.g: if($posts) or if(count($posts) > 2) etc....
     *
     */
-    if(is_object($posts)) $posts = $posts->toArray(); // If $posts is a Json object, convert it to an array
+    if(is_object($posts) && $posts->exists()) $posts = $posts->toArray(); // If $posts is a Json object, convert it to an array
     
     // oh yeah, if $posts count is more than 0, set the post tease data to the $posts....
     $posts = ($count > 0) ? $this->setPostsTeaseData($posts) : null;

@@ -52,8 +52,8 @@ $config['charset'] = 'UTF-8';
 * Set these to enable php caching & minification
 *
 */
-$config['php_cache'] = false;
-$config['php_minify'] = false;
+$config['php_cache'] = true;
+$config['php_minify'] = true;
 
 /*
 *
@@ -121,7 +121,8 @@ $config['types']['blog'] = array(
   'key'  => 'blog', // used as main key/main archive url
   'items' => 'posts', // used as post items key/in singular urls
   'single' => 'post', // used as singular key such as in queries
-  // 'per_page' => 2,
+  'visibility' => 'public',
+  'per_page' => 2,
   'meta' => array(
     'title'  => 'My Blog', // MainIndexArchive title
     'description' => 'Something more descriptive goes here...', // MainIndexArchive description
@@ -169,6 +170,7 @@ $config['types']['portfolio'] = array(
   'key'  => 'portfolio',
   'items' => 'projects',
   'single' => 'project',
+  'visibility' => 'public',
   'per_page' => 2,
   'meta' => array(
     'title'  => 'Portfolio',
@@ -217,7 +219,8 @@ $config['types']['events'] = array(
   'key'  => 'events',
   'items' => 'events',
   'single' => 'event',
-  'per_page' => 3,
+  'visibility' => 'private',
+  'per_page' => 5,
   'meta' => array(
     'title'  => 'Our Events',
     'description' => 'Check out our latest & upcoming Events.',
