@@ -1,0 +1,52 @@
+{% block single_cover %}
+  <section id="MainSingleCover" class="uk-background-cover uk-flex uk-flex-center uk-flex-middle {{ (single.featured_img) ? 'uk-light' : '' }}" style="{{ (single.featured_img) ? 'background-image: url(' ~ single.featured_img.src|resize(1920, 600, 'center') ~ ');' : '' }}">
+    <div class="{{ (single.featured_img) ? 'uk-section uk-overlay-primary' : 'uk-background-pink uk-section' }} uk-width-1-1">
+      {% block single_cover_content %}
+        <div class="uk-container uk-container-medium">
+          <div class="single-cover-details uk-width-1-1">
+            {% if single.taxonomies.categories or single.read_time %}
+              <div class="post-details uk-margin uk-margin-small-bottom">
+                {% if single.taxonomies.categories %}
+                  <div class="taxonomy-holder uk-inline">
+                    {% for cat in single.taxonomies.categories %}
+                      {% if not loop.last %}
+                        <a class="taxonomy uk-link-reset" title="{{cat.title}}" href="{{cat.link}}">{{cat.title}}</a>,
+                      {% else %}
+                        <a class="taxonomy uk-link-reset" title="{{cat.title}}" href="{{cat.link}}">{{cat.title}}</a>
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                {% endif %}
+                {% if single.read_time %}
+                  <span class="post-meta-estimate">{{single.read_time}} read</span>
+                {% endif %}
+              </div>
+            {% endif %}
+            <h1 class="uk-heading-large uk-margin-remove-top">{{single.title}}.</h1>
+            {% if single.author or single.date_time %}
+              <div class="uk-margin-medium">
+                <div class="uk-child-width-auto" uk-grid>
+                  <div class="uk-text-emphasis">
+                    Author<br>
+                    <strong>{{single.author}}</strong>
+                  </div>
+                  <div class="uk-text-emphasis">
+                    Published<br>
+                    <strong>{{single.date_time|date("F j, Y")}}</strong>
+                  </div>
+                  <div></div>
+                </div>
+              </div>
+            {% endif %}
+            {% include (single.featured_img.frame_src and (single.format == 'video' or single.format == 'audio')) ? '_post_featured_frame.twig' ignore missing  %}
+            {% if single.featured_img.frame_src and (single.format == 'video' or single.format == 'audio') %}
+              <figure class="blog-grid-image uk-cover-container uk-height-large">
+                <iframe src="{{single.featured_img.frame_src}}" class="object-fitting" frameborder="0" allowfullscreen></iframe>
+              </figure>
+            {% endif %}
+          </div>
+        </div>
+      {% endblock %}
+    </div>
+  </section>
+{% endblock %}

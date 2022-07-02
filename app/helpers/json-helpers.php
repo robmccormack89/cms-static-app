@@ -35,5 +35,8 @@ function term_title_from_slug($type, $tax, $slug) {
   $term = $q->from('site.content_types.'.$type.'.taxonomies.'.$tax)
   ->where('slug', '=', $slug)
   ->first();
+  if(!$term){
+    return null;
+  }
   return $term['title'];
 }

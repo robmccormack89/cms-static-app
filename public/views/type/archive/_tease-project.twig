@@ -1,0 +1,53 @@
+{% extends '_tease.twig' %}
+
+{% block tease_content %}
+  {% set cats_class = (post.taxonomies.categories) ? post.taxonomies.categories|map(cat => ' cat-' ~ cat.slug)|join(' ') %}
+  {% set width_class = (loop.index == 2 or (loop.index - 2) is divisible by(5)) ? 'uk-width-2-3@m' %}
+  {% set techs_class = (post.taxonomies.technologies) ? post.taxonomies.technologies|map(tech => 'tech-' ~ tech.slug)|join(' ') %}
+  <article class="the-project {{ cats_class }} {{ width_class }} {{ techs_class }}">
+
+    {% block tease_img %}
+      {% if post.featured_img %}
+        <figure class="blog-grid-image">
+          <a class="uk-inline uk-link-reset hover-grow-wrap uk-width-1-1" href="{{post.link}}">
+            <img 
+            class="uk-border-rounded uk-height-large uk-width-1-1 object-fit-cover" 
+            data-src="{{ ( loop.index == 2 or (loop.index - 2) is divisible by(5) ) ? post.featured_img.src|resize(900) : post.featured_img.src|resize(400) }}" 
+            data-width data-height 
+            alt="{{post.featured_img.alt}}" 
+            uk-img>
+          </a>
+        </figure>
+      {% endif %}
+    {% endblock %}
+    
+    {% block tease_title %}
+      <h3 class="blog-grid-headline uk-margin-remove uk-h4">
+        <a class="uk-link-heading" href="{{post.link}}">{{post.title}}.</a>
+      </h3>
+    {% endblock %}
+    
+    {% block tease_meta %}
+      {% if post.taxonomies.technologies or post.read_time %}
+        <div class="post-details uk-margin uk-margin-small-top">
+          {% if post.taxonomies.technologies %}
+            <div class="technology-holder uk-inline">
+              {% for tech in post.taxonomies.technologies %}
+                {% if not loop.last %}
+                  <a class="technology uk-link-reset" title="{{tech.title}}" href="{{tech.link}}">{{tech.title}}</a>,
+                {% else %}
+                  <a class="technology uk-link-reset" title="{{tech.title}}" href="{{tech.link}}">{{tech.title}}</a>
+                {% endif %}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+      {% endif %}
+    {% endblock %}
+    
+    {% block tease_link %}
+      {{ parent() }}
+    {% endblock %}
+    
+  </article>
+{% endblock %}

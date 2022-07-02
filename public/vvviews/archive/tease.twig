@@ -1,0 +1,83 @@
+<article class="the-post">
+  
+  <!-- tease featured -->
+  {% if post.featured_img %}
+    {% if post.format == 'audio' or post.format == 'video' %}
+      {% if post.featured_img.frame_src %}
+        <figure class="blog-grid-image uk-cover-container uk-height-medium">
+          <iframe src="{{post.featured_img.frame_src}}" class="object-fitting uk-border-rounded" frameborder="0" allowfullscreen></iframe>
+        </figure>
+      {% endif %}
+    {% else %}
+      <figure class="blog-grid-image">
+        <a class="uk-inline uk-link-reset hover-grow-wrap uk-border-rounded" href="{{post.link}}">
+          <img class="uk-border-rounded" data-src="{{post.featured_img.src|resize(500)}}" data-width data-height alt="{{post.featured_img.alt}}" uk-img>
+        </a>
+      </figure>
+    {% endif %}
+  {% endif %}
+  
+  <!-- tease meta -->
+  {% if post.taxonomies.categories or post.taxonomies.technologies or post.read_time %}
+    <div class="post-details uk-margin uk-margin-small-bottom">
+      {% if post.taxonomies.categories %}
+        <div class="taxonomy-holder uk-inline">
+          {% for cat in post.taxonomies.categories %}
+            {% if not loop.last %}
+              <a class="taxonomy uk-link-reset" title="{{cat.title}}" href="{{cat.link}}">{{cat.title}}</a>,
+            {% else %}
+              <a class="taxonomy uk-link-reset" title="{{cat.title}}" href="{{cat.link}}">{{cat.title}}</a>
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% endif %}
+      {% if post.taxonomies.technologies %}
+        <div class="taxonomy-holder uk-inline">
+          {% for tech in post.taxonomies.technologies %}
+            {% if not loop.last %}
+              <a class="taxonomy uk-link-reset" title="{{tech.title}}" href="{{tech.link}}">{{tech.title}}</a>,
+            {% else %}
+              <a class="taxonomy uk-link-reset" title="{{tech.title}}" href="{{tech.link}}">{{tech.title}}</a>
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% endif %}
+      {% if post.taxonomies.locations %}
+        <div class="taxonomy-holder uk-inline">
+          {% for loc in post.taxonomies.locations %}
+            {% if not loop.last %}
+              <a class="taxonomy uk-link-reset" title="{{loc.title}}" href="{{loc.link}}">{{loc.title}}</a>,
+            {% else %}
+              <a class="taxonomy uk-link-reset" title="{{loc.title}}" href="{{loc.link}}">{{loc.title}}</a>
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% endif %}
+      {% if post.read_time %}
+        <span class="post-meta-estimate">{{post.read_time}} read</span>
+      {% endif %}
+    </div>
+  {% endif %}
+  
+  <!-- tease title -->
+  <h3 class="post-headline uk-margin-remove">
+    <a class="uk-link-heading" href="{{post.link}}">{{post.title}}.</a>
+  </h3>
+  
+  <!-- tease excerpt -->
+  {% if post.excerpt %}
+    {% if post.format == 'quote' %}
+      <blockquote cite="#">
+        <p class="uk-margin-remove">{{post.excerpt|raw}}</p>
+      </blockquote>
+    {% else %}
+      <p class="post-excerpt uk-margin-small-top">{{post.excerpt|raw}}....</p>
+    {% endif %}
+  {% endif %}
+  
+  <!-- tease link -->
+  <a class="style-btn uk-text-capitalize uk-animation-toggle" href="{{post.link}}" tabindex="0">
+    Read more <i class="fas fa-arrow-right uk-margin-small-left uk-animation-slide-left"></i>
+  </a>
+  
+</article>

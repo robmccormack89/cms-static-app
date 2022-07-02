@@ -179,6 +179,8 @@ class SingleController extends CoreController {
   public function getSingle() {
     global $_context;
     $context['single'] = (new SingleModel($this->type, $this->slug))->single;
+    // print_r($this->type);
+    // die();
     $context['context'] = $_context;
     
     // if homepage, we will get some posts from json to display on homepage, like a products grid
@@ -210,11 +212,12 @@ class SingleController extends CoreController {
   *
   */
   protected function render($context) {
-    $is_published = ($context['single']['status'] == 'published');
-    $is_draft = ($context['single']['status'] == 'draft');
-    $is_author_ip = ($_SERVER['REMOTE_ADDR'] == $this->secret['local_ip']);
     
-    if ($context['single'] && (($is_draft && $is_author_ip) || $is_published)) {
+    $is_published = (isset($context['single']) && $context['single']['status'] == 'published');
+    $is_draft = (isset($context['single']) && $context['single']['status'] == 'draft');
+    $is_author_ip = (isset($context['single']) && $_SERVER['REMOTE_ADDR'] == $this->secret['local_ip']);
+    
+    if (($is_draft && $is_author_ip) || $is_published) {
       
       $_type = (isset($context['single']['type'])) ? $context['single']['type'] : $this->name;
       $_format = (isset($context['single']['format'])) ? $context['single']['format'] : 'default';
@@ -246,6 +249,7 @@ class SingleController extends CoreController {
       
     } else {
       $this->error();
-    }
+    }  
+    
   }
 }

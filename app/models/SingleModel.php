@@ -29,7 +29,7 @@ class SingleModel {
     ->where('slug', '=', $this->slug)
     ->first();
     
-    if($single['type'] !== 'page') {
+    if(isset($single['type']) && $single['type'] !== 'page') {
       $type_key = typeSettingByKey('single', $single['type'], 'key'); // returns 'blog' or 'portfolio'
       $taxonomies = (isset($config['types'][$type_key]['taxes_in_meta'])) ? $config['types'][$type_key]['taxes_in_meta'] : null;
       if($taxonomies) {
@@ -50,6 +50,12 @@ class SingleModel {
         }
       }
     }
+    
+    // if($single){
+    //   $data = $single;
+    // } else {
+    //   $data = null;
+    // }
     
     return $single;
   }

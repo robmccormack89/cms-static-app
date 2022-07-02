@@ -1,0 +1,53 @@
+{% extends "page.twig" %}
+
+{% block styles %}
+  {{ parent() }}
+  <style>
+    .uk-background-muted {
+      background-color: #fff;
+    }
+    .uk-background-muted-light {
+      background-color: #f8f8f8;
+    }
+    body.uk-light {
+      background: #17161a;
+    }
+    .uk-light .uk-background-muted-light {
+      background-color: #1a191d;
+    }
+    
+    #MainSingleContent.uk-container {
+      max-width: 900px;
+    }
+  </style>
+{% endblock %}
+
+{% block _content %}
+  <div class="uk-margin-medium-bottom">
+    <p>I live & work near Mullingar, Co. Westmeath. At my day job, I develop WordPress websites & cross-platform mobile apps. I also freelance when I can, mostly building custom websites and apps that you can’t get from a template.</p>
+    <p>The reason I enjoy doing what I do is because I see each new project as an opportunity to create something from nothing. I have gained particular experience in ground-up development, from database design & mvc architecturing to designing templates with the latest front-end technologies. I do get particular satisfaction from taking what are intially abstract ideas & turning them into something tangible, as well as the knowledge of all the moving parts that go into making a quality end-product. I am always seeking ways that I can improve my methodologies for both end-product performance & to increase my own productivity. I therefore do enjoy & have plenty of expereince in bug testing & performance optimzation.</p>
+    <p>My formal education in History & Geography was one of the things the initiallty piqued my interest in web & digital; namely how to source & differenciate between good & bad information online. A big part of that is often how the information is presented, & one of the main reasons I got into this industry is to learn how people go about organizing & displaying the large & complex amounts of data contained within a typical website, in such a easy-to use & publically accessible way.</p>
+    <p>While my focus is mobile-first responsive websites with HTML, JavaScript, Twig, SCSS, PHP & MySQL (often on top of WordPress or Codeigniter), I also do bash scripting & linux server administration. I am very well versed in popular templating languages like Twig(symfony, drupal) & Liquid(shopify).</p>
+    <p>I am always experimenting, always learning, and never bored.</p>
+  </div>
+{% endblock %}
+
+{% block footer_top %}
+  <div id="TopFooter" class="footer-project uk-section uk-section-large uk-background-muted uk-background-muted-light">
+  <div class="uk-container">
+    <p class="uk-text-meta uk-text-uppercase uk-text-bold uk-margin-small-bottom">Let’s collaborate</p>
+    <div class="uk-grid-collapse uk-flex uk-flex-middle" uk-grid>
+      <div class="uk-width-expand">
+        <h3 class="uk-heading-medium uk-margin-remove-top">Got a project?</h3>
+      </div>
+      <div class="uk-width-auto">
+        <a href="/contact" class="uk-button uk-button-secondary uk-border-rounded uk-button-small uk-text-capitalize">Get in Touch <i class="fas fa-arrow-right"></i></a>
+      </div>
+    </div>
+    <hr>
+    <div class="uk-width-1-2@m">
+      <p>If you have an idea for a new project & need some more information about where to get started, why not drop me a message?</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

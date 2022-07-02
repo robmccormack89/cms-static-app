@@ -192,7 +192,7 @@ class ArchiveController extends CoreController {
       
         // if blog-categories-news.twig exists, use it
         if($this->twig->getLoader()->exists($_type.'-'.$_tax.'-'.$_term.'.twig')){
-          $this->templateRender($_tax.'-'.$_term.'.twig', $context);
+          $this->templateRender($_type.'-'.$_tax.'-'.$_term.'.twig', $context);
         }
       
         // else if blog.twig exists, use that

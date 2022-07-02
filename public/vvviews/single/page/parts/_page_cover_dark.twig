@@ -1,0 +1,11 @@
+{% extends "_page_cover.twig" %}
+
+{% block single_cover %}
+  <section id="MainSingleCover" class="uk-background-cover uk-flex uk-flex-center uk-flex-middle uk-light">
+    <div class="uk-section uk-width-1-1" style="{{ (single.style.color) ? 'background-color: ' ~ single.style.color ~ ';' : 'background-color: #17161a;' }}">
+      {% block single_cover_content %}
+        {{parent()}}
+      {% endblock %}
+    </div>
+  </section>
+{% endblock %}

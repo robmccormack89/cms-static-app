@@ -1,0 +1,203 @@
+<nav class="main-navbar uk-container uk-container-expand" uk-navbar>
+  <div class="mobile-menu uk-navbar-left">
+    <ul class="mobile-menu-toggle uk-navbar-nav">
+      <li>
+        <a class="uk-navbar-toggle" href="#modal-full" uk-toggle>
+          <i class="fas fa-bars"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div class="main-menu-logo uk-navbar-center">
+    <div class="uk-navbar-center-left">
+      <div>
+        <ul class="main-menu-nav uk-navbar-nav uk-visible@m">
+          {% if main_menu %}
+            {% for item in main_menu_first %}
+              <li class="menu-item {{item.class}}">
+                <a href="{{item.link}}"><p class="uk-text-small">0{{loop.index}}</p>{{item.title}}</a>
+                {% if item.children %}
+                  <div class="uk-navbar-dropdown">
+                    <ul class="uk-nav uk-navbar-dropdown-nav">
+                      {% for child_item in item.children %}
+                        <li class="menu-item {{child_item.class}}">
+                          <a href="{{child_item.link}}">{{child_item.title}}</a>
+                          {% if child_item.children %}
+                            <div class="third-drop uk-navbar-dropdown">
+                              <ul class="uk-nav uk-navbar-dropdown-nav">
+                                {% for third_item in child_item.children %}
+                                  <li class="menu-item {{third_item.class}}"><a href="{{third_item.link}}">{{third_item.title}}</a></li>
+                                {% endfor %}
+                              </ul>
+                            </div>
+                          {% endif %}
+                        </li>
+                      {% endfor %}  
+                    </ul>
+                  </div>
+                {% endif %}
+              </li>
+            {% endfor %}  
+          {% else %}
+            <li class="menu-item">Add a menu with the slug main-menu to data.json</li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+    <div class="logo-item uk-navbar-item uk-position-relative">
+      <a class="site-logo uk-link-reset uk-margin-remove" href="/">
+        web<br>
+        designer<br>
+        developer<br>
+      </a>
+      <span class="uk-text-small uk-margin-remove uk-text-italic by-rmcc-text">
+        robmccormack89
+      </span>
+    </div>
+    <div class="uk-navbar-center-right">
+      <div>
+        <ul class="main-menu-nav uk-navbar-nav uk-visible@m">
+          {% if main_menu %}
+            {% for item in main_menu_second %}
+              <li class="menu-item {{item.class}}">
+                <a href="{{item.link}}"><p class="uk-text-small">0{{loop.index + main_menu_first|length}}</p>{{item.title}}</a>
+                {% if item.children %}
+                  <div class="uk-navbar-dropdown">
+                    <ul class="uk-nav uk-navbar-dropdown-nav">
+                      {% for child_item in item.children %}
+                        <li class="menu-item {{child_item.class}}">
+                          <a href="{{child_item.link}}">{{child_item.title}}</a>
+                          {% if child_item.children %}
+                            <div class="third-drop uk-navbar-dropdown">
+                              <ul class="uk-nav uk-navbar-dropdown-nav">
+                                {% for third_item in child_item.children %}
+                                  <li class="menu-item {{third_item.class}}"><a href="{{third_item.link}}">{{third_item.title}}</a></li>
+                                {% endfor %}
+                              </ul>
+                            </div>
+                          {% endif %}
+                        </li>
+                      {% endfor %}  
+                    </ul>
+                  </div>
+                {% endif %}
+              </li>
+            {% endfor %}  
+          {% else %}
+            <li class="menu-item">Add a menu with the slug main-menu to data.json</li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="darklight uk-navbar-right">
+    <ul class="dark-light-switcher pull-right-15 uk-navbar-nav">
+      <li>
+        <a class="">
+          <i class="fas fa-search"></i>
+        </a>
+      </li>
+      <li>
+        <a id="DarkSwitch" class="uk-navbar-toggle darklight-switch" {{dark_light_def.moon_link_show_hide}}>
+          <i class="far fa-moon"></i>
+        </a>
+      </li>
+      <li>
+        <a id="LightSwitch" class="uk-navbar-toggle darklight-switch" {{dark_light_def.sun_link_show_hide}}>
+          <i class="fas fa-sun"></i>
+        </a>
+      </li>
+    </ul>
+    <a href="#" class="uk-button uk-button-primary uk-button-small uk-button-tertiary uk-border-rounded uk-text-capitalize uk-margin-left uk-visible@m">Download my CV <i class="fas fa-download"></i></a>
+  </div>
+</nav>
+<div id="modal-full" class="uk-modal-full uk-light" uk-modal>
+  <div class="uk-modal-dialog uk-padding-large uk-position-relative">
+    <a class="uk-modal-close-full uk-position-top-left uk-padding-large"><i class="fas fa-times fa-2x"></i></a>
+    <div class="uk-position-center-left uk-padding-large uk-padding-remove-vertical">
+      <ul class="modal-nav uk-nav uk-nav-default pull-up-80">
+        <li class="with-subs uk-active uk-position-relative">
+          <a href="#">
+            <div class="uk-grid uk-flex uk-flex-middle" uk-grid>
+              <div class="uk-width-medium">
+                <span class="menu-item-number uk-text-meta uk-text-top">01</span><span class="uk-h1">Pages</span>
+              </div>
+              <div class="uk-width-auto"><i class="fas fa-plus"></i></div>
+            </div>
+          </a>
+          <ul class="uk-nav-sub">
+            <li><a href="#"><span class="uk-h1">About</span></a></li>
+            <li><a href="#"><span class="uk-h1">Contact</span></a></li>
+            <li><a href="#"><span class="uk-h1">404 page</span></a></li>
+            <li><a href="#"><span class="uk-h1">Coming Soon</span></a></li>
+          </ul>
+        </li>
+        <li class="with-subs uk-position-relative">
+          <a href="#">
+            <div class="uk-grid uk-flex uk-flex-middle" uk-grid>
+              <div class="uk-width-medium">
+                <span class="menu-item-number uk-text-meta uk-text-top">02</span><span class="uk-h1">Projects</span>
+              </div>
+              <div class="uk-width-auto"><i class="fas fa-plus"></i></div>
+            </div>
+          </a>
+          <ul class="uk-nav-sub">
+            <li><a href="#"><span class="uk-h1">Grid view</span></a></li>
+            <li><a href="#"><span class="uk-h1">List View</span></a></li>
+            <li><a href="#"><span class="uk-h1">Single</span></a></li>
+          </ul>
+        </li>
+        <li class="with-subs uk-position-relative">
+          <a href="#">
+            <div class="uk-grid uk-flex uk-flex-middle" uk-grid>
+              <div class="uk-width-medium">
+                <span class="menu-item-number uk-text-meta uk-text-top">03</span><span class="uk-h1">Blog</span>
+              </div>
+              <div class="uk-width-auto"><i class="fas fa-plus"></i></div>
+            </div>
+          </a>
+          <ul class="uk-nav-sub">
+            <li><a href="#"><span class="uk-h1">About</span></a></li>
+            <li><a href="#"><span class="uk-h1">Contact</span></a></li>
+            <li><a href="#"><span class="uk-h1">404 page</span></a></li>
+            <li><a href="#"><span class="uk-h1">Coming Soon</span></a></li>
+          </ul>
+        </li>
+        <li class="with-subs uk-position-relative">
+          <a href="#">
+            <div class="uk-grid uk-flex uk-flex-middle" uk-grid>
+              <div class="uk-width-medium">
+                <span class="menu-item-number uk-text-meta uk-text-top">04</span><span class="uk-h1">Shop</span>
+              </div>
+              <div class="uk-width-auto"><i class="fas fa-plus"></i></div>
+            </div>
+          </a>
+          <ul class="uk-nav-sub">
+            <li><a href="#"><span class="uk-h1">Buy now</span></a></li>
+            <li><a href="#"><span class="uk-h1">Grid</span></a></li>
+            <li><a href="#"><span class="uk-h1">List</span></a></li>
+            <li><a href="#"><span class="uk-h1">Product</span></a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#">
+            <span class="menu-item-number uk-text-meta uk-text-top">05</span><span class="uk-h1">Purchase</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div class="uk-position-bottom-left uk-padding-large uk-visible@m">
+      <strong>Get In Touch</strong><br>
+      Mullingar, Co. Westmeath, Ireland<br>
+      info@robertmccormack.com
+    </div>
+    <div class="uk-position-bottom-center uk-padding-large uk-visible@m">
+      © 2021 <span class="uk-text-bold uk-text-emphasis">{{site.title}}</span>
+    </div>
+    <div class="uk-position-bottom-right uk-padding-large uk-text-right uk-visible@m">
+      <strong>I'm Available</strong><br>
+      Find me on <a href="#" class="uk-text-decoration-none"><i class="fab fa-facebook-f"></i> Facebook</a><br>
+      Browse this project on <a href="{{app.url}}" class="uk-text-decoration-none">Github <i class="fab fa-github"></i></a>
+    </div>
+  </div>
+</div>

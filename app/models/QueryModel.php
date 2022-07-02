@@ -67,7 +67,7 @@ class QueryModel {
     $this->found_posts = $this->getPostsCount(); // The total number of posts found matching the current query parameters
     $this->max_num_pages = $this->getPostsMaxPages(); // The total number of pages. Is the result of $found_posts / $posts_per_page
     $this->pagination = $this->getPaginationData(); // the pagination data for the returned posts 
-    $this->test();
+    // $this->test();
   }
   public function test() {
     // print_r($this->query_vars);
@@ -638,11 +638,13 @@ class QueryModel {
               if(isset($post[$tax])){
                 $terms = $post[$tax];
                 foreach ($terms as &$term) {
-                  $term = array(
-                    'link' => '/'.$type_key.'/'.taxSettingByKey($type_key, 'key', $tax, 'single').'/'.$term,
-                    'slug' => $term,
-                    'title' => term_title_from_slug($type_key, $tax, $term)
-                  );
+                  if(term_title_from_slug($type_key, $tax, $term)){
+                    $term = array(
+                      'link' => '/'.$type_key.'/'.taxSettingByKey($type_key, 'key', $tax, 'single').'/'.$term,
+                      'slug' => $term,
+                      'title' => term_title_from_slug($type_key, $tax, $term)
+                    );
+                  };
                 }
                 $post[$tax] = null;
                 $new_posts[$tax] = $terms;

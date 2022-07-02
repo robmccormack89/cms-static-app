@@ -144,4 +144,11 @@ foreach($config['types'] as $key => $value) {
     
   }
   
+  // else if its private type, throw an error for these requests. hopefully there isnt also a page named the same as this post type !
+  elseif($config['types'][$key]['visibility'] == 'private') {
+    $instance = new CoreController(); // we fire error() here then bail as paged pages shouldnt work when showing all posts
+    $instance->error(); // otherwise, queries like '?show_all&p=2' will show results & be wrong (wrong pagination etc)
+    exit(); // so best to throw the error in these situations
+  }
+  
 }
