@@ -14,5 +14,3 @@ beautify.html
 app/cache/compilation/*
 !app/cache/compilation/.gitkeep
 public/json/secret.json
-to_do.txt
-content.txt
