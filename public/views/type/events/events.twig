@@ -1,0 +1,165 @@
+{% extends "archive.twig" %}
+
+{% block archive_content %}
+  {% if archive.posts %}
+    <div id="EventsToolbar" class="">
+      
+      <form method="GET" action="/events" id="ArchiveFilters">
+        {% for key, val in get %}
+          {% if key == 'show_all' %}
+            <input type="hidden" name="{{key|escape}}" />
+          {% endif %}
+          {% if key != 'url' and key != 'show_all' and key != 'categories' and key != 'locations' %}
+            <input type="hidden" name="{{key|escape}}" value="{{val|escape}}" />
+          {% endif %}
+        {% endfor %}
+      </form>
+
+      <form method="GET" action="/events" id="ArchiveFiltersMobile">
+        {% for key, val in get %}
+          {% if key == 'show_all' %}
+            <input type="hidden" name="{{key|escape}}" />
+          {% endif %}
+          {% if key != 'url' and key != 'show_all' and key != 'categories' and key != 'locations' %}
+            <input type="hidden" name="{{key|escape}}" value="{{val|escape}}" />
+          {% endif %}
+        {% endfor %}
+      </form>
+
+      <nav class="archive-toolbar uk-grid uk-grid-match uk-flex uk-flex-middle uk-grid-collapse" uk-grid>
+        <div class="events-breads uk-width-expand">
+          {% include 'breads.twig' %}
+        </div>
+        <div class="events-filters uk-width-auto">
+          <div class="filter-button uk-hidden@m" uk-grid>
+            <a href="#offcanvas-usage" uk-toggle class="uk-button uk-button-secondary uk-border-rounded uk-button-small uk-text-capitalize"><i class="fas fa-filter"></i> Filter</a>
+            <div id="offcanvas-usage" uk-offcanvas="overlay: true">
+              <div class="uk-offcanvas-bar">
+                <a class="uk-offcanvas-close uk-padding-remove"><i class="fas fa-times"></i></a>
+                <ul class="uk-nav uk-nav-default">
+                  <li class="uk-nav-header uk-text-bold">
+                    {% if archive.pagination.results %}
+                      {{archive.pagination.results}}
+                    {% endif %}
+                  </li>
+                  <li class="uk-margin-small">
+                    <div class="cats-dropdown">
+                      <div class="select-inline">
+                        <div class="select-holder">
+                          {% set categories = get_terms('category') %}
+                          <select class="uk-select uk-border-rounded" name="categories" id="categories" autocomplete="off" form="ArchiveFiltersMobile" onchange="this.form.submit();">
+                            <option {% if get.categories == '' %}selected{% endif %} disabled hidden>Categories</option>
+                            {% for cat in categories %}
+                              {% if cat.posts_count > 0  %}
+                                <option value="{{cat.slug}}" {% if get.categories == cat.slug or cat.slug in get.url %}selected{% endif %}>{{cat.title}}</option>
+                              {% endif %}
+                            {% endfor %}
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="uk-margin-small">
+                    <div class="locations-dropdown">
+                      <div class="select-inline">
+                        <div class="select-holder">
+                          {% set locations = get_terms('location') %}
+                          <select class="uk-select uk-border-rounded" name="locations" id="locations" autocomplete="off" form="ArchiveFiltersMobile" onchange="this.form.submit();">
+                            <option {% if get.locations == '' %}selected{% endif %} disabled hidden>Technologies</option>
+                            {% for location in locations %}
+                              {% if location.posts_count > 0  %}
+                                <option value="{{location.slug}}" {% if get.locations == location.slug or location.slug in get.url %}selected{% endif %}>{{location.title}}</option>
+                              {% endif %}
+                            {% endfor %}
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="desktop-filters uk-grid-match uk-flex uk-flex-middle uk-grid-small uk-visible@m uk-margin-remove" uk-grid>
+            <div class="results-count uk-width-auto">
+              <p class="uk-text-bold uk-text-emphasis uk-text-small">
+                {% if archive.pagination.results %}
+                  {{archive.pagination.results}}
+                {% endif %}
+              </p>
+            </div>
+            <div class="cats-dropdown uk-width-auto">
+              <div class="select-inline">
+                <div class="select-holder">
+                  {% set categories = get_terms('category') %}
+                  <select class="uk-select uk-border-rounded" name="categories" id="categories" autocomplete="off" form="ArchiveFilters" onchange="this.form.submit();">
+                    <option {% if get.categories == '' %}selected{% endif %} disabled hidden>Categories</option>
+                    {% for cat in categories %}
+                      {% if cat.posts_count > 0  %}
+                        <option value="{{cat.slug}}" {% if get.categories == cat.slug or cat.slug in get.url %}selected{% endif %}>{{cat.title}}</option>
+                      {% endif %}
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="locations-dropdown uk-width-auto">
+              <div class="select-inline">
+                <div class="select-holder">
+                  {% set locations = get_terms('location') %}
+                  <select class="uk-select uk-border-rounded" name="locations" id="locations" autocomplete="off" form="ArchiveFilters" onchange="this.form.submit();">
+                    <option {% if get.locations == '' %}selected{% endif %} disabled hidden>Technologies</option>
+                    {% for location in locations %}
+                      {% if location.posts_count > 0  %}
+                        <option value="{{location.slug}}" {% if get.locations == location.slug or location.slug in get.url %}selected{% endif %}>{{location.title}}</option>
+                      {% endif %}
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      
+    </div>
+  {% endif %}
+  {{ parent() }}
+{% endblock %}
+
+{% block archive_widgets %}
+  {{ parent() }}
+  {% if archive.posts %}
+    <div id="EventsWidgets" class="">
+      
+      <div class="widget events-cats-widget uk-margin-medium">
+        <h3 class="widget-title uk-h5">Categories</h3>
+        {% set widget_categories = get_terms('category') %}
+        <ul class="uk-list">
+          {% for cat in widget_categories %}
+            {% if cat.posts_count > 0  %}
+              <li class="{% if get.categories == cat.slug or cat.slug in get.url %}uk-active{% endif %}">
+                <a class="uk-link-text" href="{{cat.link}}">{{cat.title}} ({{cat.posts_count}})</a>
+              </li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div class="widget events-locations-widget uk-margin-medium">
+        <h3 class="widget-title uk-h5">Locations</h3>
+        {% set widget_locations = get_terms('location') %}
+        <ul class="uk-list">
+          {% for location in widget_locations %}
+            {% if location.posts_count > 0  %}
+              <li class="{% if get.locations == location.slug or location.slug in get.url %}uk-active{% endif %}">
+                <a class="uk-link-text" href="{{location.link}}">{{location.title}} ({{location.posts_count}})</a>
+              </li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+      </div>
+    
+    </div>
+  {% endif %}
+{% endblock %}

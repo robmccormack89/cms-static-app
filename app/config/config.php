@@ -4,7 +4,7 @@
 * Enable debug mode. Set to false for production
 *
 */
-$config['enable_debug_mode'] = true;
+$config['enable_debug_mode'] = false;
 
 /*
 *
@@ -71,37 +71,33 @@ $config['json_secret'] = '../public/json/_secret.json'; // this is blank
 *
 */
 $config['twig_templates_base_location'] = '../public/views/';
-// $config['twig_templates_locations'] = array(
-//   'parts',
-//   // 'parts/archive',
-//   // 'parts/email',
-//   // 'parts/footer',
-//   // 'parts/header',
-//   // 'parts/seo',
-//   'archive',
-//   'archive/blog',
-//   // 'archive/blog/categories',
-//   // 'archive/blog/tags',
-//   'archive/portfolio',
-//   // 'archive/portfolio/technologies',
-//   'archive/events',
-//   'single',
-//   'single/page',
-//   'single/page/content',
-//   'single/page/parts',
-//   'single/post',
-//   'single/post/content',
-//   'single/post/formats',
-//   'single/post/parts',
-//   'single/project',
-//   'single/project/content',
-//   'single/project/formats',
-//   'single/project/parts',
-// );
 $config['twig_templates_locations'] = array(
   'parts',
+  
   'type',
   'type/archive',
+  
+  'type/blog',
+  'type/blog/post',
+  'type/blog/post/content',
+  'type/blog/post/formats',
+  'type/blog/post/parts',
+  
+  'type/events',
+  'type/events/event',
+  'type/events/event/content',
+  // 'type/events/event/parts',
+  
+  'type/page',
+  'type/page/content',
+  'type/page/parts',
+  
+  'type/portfolio',
+  'type/portfolio/project',
+  'type/portfolio/project/content',
+  'type/portfolio/project/formats',
+  'type/portfolio/project/parts',
+  
   'type/single',
 );
 
@@ -128,7 +124,7 @@ $config['types']['blog'] = array(
   'items' => 'posts', // used as post items key/in singular urls
   'single' => 'post', // used as singular key such as in queries
   'visibility' => 'public',
-  'per_page' => 6,
+  'per_page' => 2,
   'meta' => array(
     'title'  => 'My Blog', // MainIndexArchive title
     'description' => 'Something more descriptive goes here...', // MainIndexArchive description
@@ -226,7 +222,7 @@ $config['types']['events'] = array(
   'items' => 'events',
   'single' => 'event',
   'visibility' => 'public',
-  'per_page' => 5,
+  'per_page' => 3,
   'meta' => array(
     'title'  => 'Our Events',
     'description' => 'Check out our latest & upcoming Events.',

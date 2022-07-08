@@ -130,7 +130,7 @@ class ArchiveController extends CoreController {
     
     global $_context;
     
-    $_context['archive'] = 'TaxTermArchive';
+    $_context['archive'] = 'TaxCollectionArchive';
     $_context['type'] = $type;
     $_context['tax'] = $tax;
 
@@ -228,8 +228,10 @@ class ArchiveController extends CoreController {
         
       case 'SiteQuery':
       
-        // if blog-search.twig exists, use it
+        // if blog-search.twig exists, use it. Type should not be available within SiteQuery; this is redundant
         if($this->twig->getLoader()->exists($_type.'-search.twig')){
+          print_r('hello');
+          die();
           $this->templateRender($_type.'-search.twig', $context);
         }
       

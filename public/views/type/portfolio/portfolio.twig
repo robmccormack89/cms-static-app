@@ -1,0 +1,102 @@
+{% extends "archive.twig" %}
+
+{% block styles %}
+  {{ parent() }}
+  <style>
+    img.uk-height-large {
+      height: 400px;
+    }
+    @media only screen and (max-width: 767px) {
+      img.uk-height-large {
+        height: 200px;
+      }
+    }
+    
+    .uk-subnav>*>:first-child {
+      font-size: 1rem;
+      font-weight: 500;
+      line-height: 1.785;
+    }
+    .uk-subnav-divider>:nth-child(n+2):not(.uk-first-column):before {
+      content: "/";
+    }
+    .uk-subnav-divider>:before {
+      border: none;
+      content: none;
+      height: 1.5em;
+      margin-left: 0;
+      margin-right: 20px;
+    }
+    .uk-subnav {
+      margin-left: -25px;
+    }
+    .uk-subnav>* {
+      padding-left: 25px;
+    }
+    
+    .uk-subnav>*>:first-child {
+      color: #1a191d;
+    }
+    .uk-light .uk-subnav>*>:first-child {
+      color: #fff;
+    }
+    .uk-subnav>.uk-active>a,
+    .uk-light .uk-subnav>.uk-active>a {
+      color: #d90a2c;
+    }
+    .uk-subnav>*>a:focus, .uk-subnav>*>a:hover,
+    .uk-light .uk-subnav>*>a:focus, .uk-light .uk-subnav>*>a:hover {
+      color: #d90a2c;
+    }
+    .small-count.uk-position-top-right {
+      top: -5px;
+      right: -15px;
+      font-size: 12px;
+    }
+  </style>
+{% endblock %}
+
+{% block archive_content %}
+  <div class="archive-main portfolio" data-template="portfolio.twig" data-template-extends="archive.twig" uk-filter="target: .posts-grid">
+    
+    {% if archive.posts %}
+      <div class="portfolio-cat-filters uk-margin-medium uk-margin-medium-top" uk-grid>
+        <div class="uk-width-auto uk-flex uk-flex-middle">Filter by</div>
+        <div class="uk-width-expand">
+          <ul class="uk-subnav uk-subnav-divider">
+            <li class="uk-active uk-inline" uk-filter-control><a class="uk-text-capitalize" href="#">All<span class="small-count uk-position-top-right">{{ (archive.pagination.results_count < 10) ? 0 : '' }}{{ (archive.pagination.results_count) ? archive.pagination.results_count : '' }}</span></a></li>
+            {% set filter_categories = get_terms('category') %}
+            {% for cat in filter_categories %}
+              {% if cat.posts_count > 0  %}
+                {% if cat.slug != get.categories and cat.slug not in get.categories and cat.slug not in get.url %}
+                  <li uk-filter-control=".cat-{{cat.slug}}"><a class="uk-text-capitalize" href="#">{{cat.title}}<span class="small-count uk-position-top-right">{{ (cat.posts_count < 10) ? 0 : '' }}{{cat.posts_count}}</span></a></li>
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    {% endif %}
+      
+    <section class="archive-posts uk-padding-large uk-padding-remove-horizontal uk-padding-remove-top">
+      
+      <div class="posts-grid uk-child-width-1-3@m uk-grid-large" uk-grid="">
+        {% block archive_posts_loop %}
+          {% if archive.posts %}
+            {% for post in archive.posts %}
+              {% include ['_tease-' ~ post.type ~ '.twig', '_tease.twig'] %}
+            {% endfor %}
+          {% else %}
+            <span class="uk-text-emphasis uk-margin-large-top">No projects found here...</span>
+          {% endif %}
+        {% endblock %}
+      </div>
+      
+      {% block archive_pagi %}
+        {{parent()}}
+      {% endblock %}
+      
+    </section>
+
+  </div>
+{% endblock %}

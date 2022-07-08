@@ -42,15 +42,16 @@
             {% block archive_posts_right %}
               <section class="archive-posts uk-margin-bottom uk-width-3-4@m">
               
-                {# blog posts grid #}
                 <div class="posts-grid uk-child-width-1-2@m uk-grid-column-medium uk-grid-row-large" uk-grid="masonry: true">
-                  {% if archive.posts %}
-                    {% for post in archive.posts %}
-                      {% include ['_tease-' ~ post.type ~ '.twig', '_tease.twig'] %}
-                    {% endfor %}
-                  {% else %}
-                    <span class="uk-text-emphasis">No posts found here...</span>
-                  {% endif %}
+                  {% block archive_posts_loop %}
+                    {% if archive.posts %}
+                      {% for post in archive.posts %}
+                        {% include ['_tease-' ~ post.type ~ '.twig', '_tease.twig'] %}
+                      {% endfor %}
+                    {% else %}
+                      <span class="uk-text-emphasis">No posts found here...</span>
+                    {% endif %}
+                  {% endblock %}
                 </div>
                 
                 {% block archive_pagi %}
